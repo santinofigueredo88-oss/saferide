@@ -280,6 +280,9 @@ summary:focus-visible {
 }
 
 .navbar .container {
+  /* El navbar necesita mas ancho que el resto del contenido para que los
+     links no se compriman y corten en varias lineas. */
+  max-width: 1320px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -305,15 +308,16 @@ summary:focus-visible {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 20px;
 }
 
 .nav-links a {
   font-weight: 500;
-  font-size: 0.96rem;
+  font-size: 0.94rem;
   color: var(--text-primary);
   position: relative;
   padding: 6px 2px;
+  white-space: nowrap;
 }
 
 .nav-links a::after {
@@ -442,7 +446,7 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   letter-spacing: 0.03em;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1239px) {
   .nav-links {
     position: fixed;
     top: var(--nav-height);
@@ -480,7 +484,7 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1240px) {
   .nav-toggle {
     display: none;
   }
