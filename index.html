@@ -1,0 +1,2518 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saferide — Tu información puede salvar tu vida</title>
+<style>
+/* =========================================================
+   SAFERIDE — estilos (idénticos al proyecto real, en línea
+   para que la vista previa funcione sin archivos externos)
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+:root {
+  --green-deep: #234b36;
+  --green-deep-dark: #16301f;
+  --green-deep-soft: #3e6e52;
+  --green-accent: #2e7d32;
+  --green-accent-dark: #256b29;
+  --green-accent-soft: #6fae74;
+  --white: #ffffff;
+  --green-pale: #eaf4ec;
+  --green-mid: #d3e6d8;
+  --text-muted: #4f5f55;
+  --success: #2e7d32;
+  --muted-mark: #93a69a;
+
+  --font-heading: "Poppins", system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --container-width: 1160px;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --nav-height: 76px;
+
+  --shadow-sm: 0 2px 8px rgba(35, 75, 54, 0.08);
+  --shadow-md: 0 12px 32px rgba(35, 75, 54, 0.12);
+  --shadow-lg: 0 24px 48px rgba(35, 75, 54, 0.16);
+
+  --transition: 0.25s ease;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--green-deep);
+  background: var(--white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 16px;
+  color: var(--green-deep);
+}
+
+p {
+  margin: 0 0 16px;
+  color: var(--text-muted);
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--green-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green-accent);
+  margin-bottom: 12px;
+}
+
+.section-heading {
+  max-width: 700px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.section-heading h2 {
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+}
+
+.section-heading p {
+  font-size: 1.05rem;
+  margin-top: 12px;
+}
+
+.bg-light {
+  background: var(--green-pale);
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  stroke-width: 2;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid transparent;
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+
+.navbar.scrolled {
+  box-shadow: var(--shadow-sm);
+  border-bottom-color: var(--green-mid);
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.logo .logo-safe {
+  color: var(--green-deep);
+}
+
+.logo .logo-ride {
+  color: var(--green-accent);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-links a {
+  font-weight: 500;
+  font-size: 0.96rem;
+  color: var(--green-deep);
+  position: relative;
+  padding: 6px 2px;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: var(--green-accent);
+  transition: width var(--transition);
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after {
+  width: 100%;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-cta {
+  display: none;
+}
+
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+}
+
+.nav-toggle:hover {
+  background: var(--green-pale);
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--green-deep);
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 899px) {
+  .nav-links {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: var(--white);
+    box-shadow: var(--shadow-md);
+    padding: 12px 24px 28px;
+    gap: 4px;
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform var(--transition), opacity var(--transition), visibility var(--transition);
+  }
+
+  .nav-links.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .nav-links a {
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--green-pale);
+    font-size: 1.02rem;
+  }
+
+  .nav-links .nav-cta {
+    display: inline-flex;
+    margin-top: 12px;
+  }
+}
+
+@media (min-width: 900px) {
+  .nav-toggle {
+    display: none;
+  }
+  .nav-actions .nav-cta {
+    display: inline-flex;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 26px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.98rem;
+  border: 2px solid transparent;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--green-accent);
+  color: var(--white);
+  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.28);
+}
+
+.btn-primary:hover {
+  background: var(--green-accent-dark);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--green-deep);
+  color: var(--green-deep);
+}
+
+.btn-outline:hover {
+  background: var(--green-deep);
+  color: var(--white);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.hero-actions,
+.cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero {
+  padding: calc(var(--nav-height) + 56px) 0 72px;
+  background: linear-gradient(180deg, var(--green-pale) 0%, var(--white) 100%);
+  overflow: hidden;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-text h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 6vw, 3.4rem);
+  margin-bottom: 4px;
+}
+
+.hero-text h1 .logo-safe {
+  color: var(--green-deep);
+}
+
+.hero-text h1 .logo-ride {
+  color: var(--green-accent);
+}
+
+.hero-tagline {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(1.2rem, 2.6vw, 1.5rem);
+  color: var(--green-accent);
+  margin-bottom: 18px;
+}
+
+.hero-text p.hero-desc {
+  font-size: 1.08rem;
+  max-width: 52ch;
+  margin-bottom: 28px;
+}
+
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-visual-glow {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(46, 125, 50, 0.14) 0%, rgba(35, 75, 54, 0.06) 55%, transparent 75%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.qr-mock {
+  position: relative;
+  z-index: 1;
+  width: min(340px, 80vw);
+  filter: drop-shadow(var(--shadow-lg));
+}
+
+.section {
+  padding: 88px 0;
+}
+
+.section-narrow p {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 1.08rem;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  position: relative;
+}
+
+.timeline-step {
+  display: flex;
+  gap: 20px;
+  background: var(--white);
+  border: 1px solid var(--green-mid);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.timeline-step-number {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--green-deep);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.timeline-step-icon {
+  width: 26px;
+  height: 26px;
+  color: var(--green-accent);
+  margin-bottom: 10px;
+}
+
+.timeline-step h3 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.timeline-step p {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
+@media (min-width: 700px) {
+  .timeline {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1080px) {
+  .timeline {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 620px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .card-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .card-grid.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--green-mid);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  background: var(--green-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green-accent);
+  margin-bottom: 16px;
+}
+
+.card-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.benefit-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.benefit-card .card-icon {
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.story-card {
+  position: relative;
+  background: var(--green-deep);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 48px 32px;
+  max-width: 820px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.story-card::before {
+  content: "\201C";
+  position: absolute;
+  top: -10px;
+  left: 24px;
+  font-family: var(--font-heading);
+  font-size: 8rem;
+  color: var(--green-accent-soft);
+  opacity: 0.35;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.story-card blockquote {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.story-card blockquote p {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.story-card blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.story-card footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--green-accent-soft);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.split-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 800px) {
+  .split-panel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.panel {
+  background: var(--white);
+  border: 1px solid var(--green-mid);
+  border-radius: var(--radius-md);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.panel h2 {
+  font-size: 1.5rem;
+}
+
+.stats-section {
+  background: var(--green-deep);
+  color: var(--white);
+}
+
+.stats-section .section-heading h2,
+.stats-section .section-heading p {
+  color: var(--white);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-number {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 32ch;
+  margin: 0 auto;
+}
+
+.stats-source {
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 32px;
+}
+
+.stats-closing {
+  text-align: center;
+  max-width: 620px;
+  margin: 28px auto 0;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.comparativa-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--green-mid);
+  box-shadow: var(--shadow-sm);
+}
+
+.comparativa-table {
+  min-width: 560px;
+}
+
+.comparativa-table th,
+.comparativa-table td {
+  padding: 18px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--green-mid);
+  font-size: 0.95rem;
+}
+
+.comparativa-table thead th {
+  background: var(--green-deep);
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.comparativa-table th:first-child,
+.comparativa-table td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--green-deep);
+}
+
+.comparativa-table thead th:first-child {
+  color: var(--white);
+}
+
+.comparativa-table tbody tr:last-child {
+  background: rgba(46, 125, 50, 0.06);
+}
+
+.comparativa-table tbody tr:last-child td:first-child {
+  color: var(--green-accent);
+  font-weight: 700;
+}
+
+.comparativa-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.mark-yes {
+  color: var(--green-accent);
+}
+
+.mark-no {
+  color: var(--muted-mark);
+}
+
+.comparativa-note {
+  text-align: center;
+  max-width: 620px;
+  margin: 28px auto 0;
+  font-weight: 600;
+  color: var(--green-deep);
+  font-size: 1.05rem;
+}
+
+.demo-panel {
+  max-width: 620px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.demo-panel .btn {
+  margin-top: 8px;
+}
+
+.demo-result {
+  margin-top: 32px;
+  text-align: left;
+  display: none;
+}
+
+.demo-result.visible {
+  display: block;
+}
+
+.demo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff4e6;
+  color: #a65a00;
+  border: 1px solid #ffdca8;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 8px 16px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.demo-card {
+  background: var(--white);
+  border: 2px solid var(--green-deep);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.demo-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--green-mid);
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.demo-card-header .icon {
+  width: 28px;
+  height: 28px;
+  color: var(--green-accent);
+}
+
+.demo-card-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.demo-card-header span {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.demo-field {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--green-mid);
+  font-size: 0.95rem;
+}
+
+.demo-field:last-child {
+  border-bottom: none;
+}
+
+.demo-field dt {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.demo-field dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--green-deep);
+  text-align: right;
+}
+
+.faq-list {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--green-mid);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: none;
+  border: none;
+  padding: 22px 4px;
+  text-align: left;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.02rem;
+  color: var(--green-deep);
+  min-height: 44px;
+}
+
+.faq-question .icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--green-accent);
+  transition: transform var(--transition);
+}
+
+.faq-item.open .faq-question .icon {
+  transform: rotate(180deg);
+}
+
+.faq-answer-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.faq-item.open .faq-answer-wrap {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer {
+  overflow: hidden;
+}
+
+.faq-answer p {
+  margin: 0 4px 22px;
+  font-size: 0.97rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(20, 40, 56, 0.55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: auto;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 40px 32px 32px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: var(--green-pale);
+  color: var(--green-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), color var(--transition);
+}
+
+.modal-close:hover {
+  background: var(--green-accent);
+  color: var(--white);
+}
+
+.modal-body .eyebrow {
+  display: block;
+}
+
+.modal-body h2 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.modal-body > div > p {
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 520px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--green-deep);
+}
+
+.form-field input,
+.form-field select {
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--green-mid);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--green-deep);
+  background: var(--white);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-field input::placeholder {
+  color: #9aa5b1;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: var(--green-accent);
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.12);
+}
+
+.form-field input:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: var(--green-accent);
+}
+
+.modal-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 16px 0 0;
+}
+
+.modal-disclaimer .icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--green-deep-soft);
+}
+
+.demo-badge-ok {
+  background: #eaf6ef;
+  color: var(--success);
+  border-color: #b9e4c9;
+}
+
+#prototypeResultView .btn {
+  margin-top: 20px;
+}
+
+.cta-final {
+  background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-deep-dark) 100%);
+  color: var(--white);
+  text-align: center;
+}
+
+.cta-final h2 {
+  color: var(--white);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  max-width: 700px;
+  margin: 0 auto 28px;
+}
+
+.cta-final .cta-actions {
+  justify-content: center;
+}
+
+.site-footer {
+  background: var(--green-deep-dark);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 48px 0 28px;
+}
+
+.footer-top {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (min-width: 700px) {
+  .footer-top {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.footer-brand .logo {
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.footer-brand .logo .logo-safe {
+  color: var(--white);
+}
+
+.footer-slogan {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 32ch;
+  margin: 0;
+}
+
+.footer-contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-social a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.footer-social a:hover {
+  background: var(--green-accent);
+  transform: translateY(-2px);
+}
+
+.footer-social svg {
+  width: 18px;
+  height: 18px;
+  color: var(--white);
+}
+
+.footer-bottom {
+  padding-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+@media (min-width: 700px) {
+  .footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+section[id],
+[id="futuro"],
+[id="proyecto"] {
+  scroll-margin-top: var(--nav-height);
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 64px 0;
+  }
+  .hero {
+    padding-top: calc(var(--nav-height) + 32px);
+  }
+  .hero-actions,
+  .cta-actions {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
+  }
+}
+
+.preview-banner {
+  background: #16301f;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  font-size: 0.82rem;
+  padding: 10px 16px;
+}
+
+.preview-banner strong {
+  color: #ffffff;
+}
+</style>
+</head>
+<body>
+<!-- Sprite de íconos SVG en línea (reemplaza a la librería de íconos externa) -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="icon-user-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/>
+</symbol>
+<symbol id="icon-heart-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21l8.84-8.61a5.5 5.5 0 0 0 0-7.78z"/>
+</symbol>
+<symbol id="icon-qr-code" viewBox="0 0 24 24" fill="currentColor">
+  <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+  <rect x="14" y="14" width="3" height="3" rx="0.5"/><rect x="18" y="14" width="3" height="3" rx="0.5"/><rect x="14" y="18" width="3" height="3" rx="0.5"/><rect x="18" y="18" width="3" height="3" rx="0.5"/>
+</symbol>
+<symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+</symbol>
+<symbol id="icon-siren" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 2a5 5 0 0 0-5 5v4H3v2h18v-2h-4V7a5 5 0 0 0-5-5z"/><rect x="10" y="20" width="4" height="2" rx="1"/><line x1="12" y1="0.5" x2="12" y2="2"/>
+</symbol>
+<symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+</symbol>
+<symbol id="icon-shield-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 2 3 7v6c0 5 4 9 9 9s9-4 9-9V7l-9-5z"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+</symbol>
+<symbol id="icon-user-round" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+</symbol>
+<symbol id="icon-bike" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="6" cy="17" r="3.5"/><circle cx="18" cy="17" r="3.5"/><path d="M6 17 10 9h4l4 8"/><path d="M9 9h4"/>
+</symbol>
+<symbol id="icon-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 11 6.5 6h11L19 11"/><rect x="3" y="11" width="18" height="6" rx="2"/><circle cx="7.5" cy="19" r="1.8"/><circle cx="16.5" cy="19" r="1.8"/>
+</symbol>
+<symbol id="icon-baby" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="6" r="3.5"/><path d="M8 20v-5a4 4 0 0 1 8 0v5"/><path d="M9 20h6"/>
+</symbol>
+<symbol id="icon-refresh-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+</symbol>
+<symbol id="icon-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+</symbol>
+<symbol id="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20.59 13.41 13 21l-9-9V3h9l7.59 7.59a2 2 0 0 1 0 2.82z"/><circle cx="7.5" cy="7.5" r="1.5"/>
+</symbol>
+<symbol id="icon-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 2 3 7v6c0 5 4 9 9 9s9-4 9-9V7l-9-5z"/><polyline points="8.5 12 11 14.5 15.5 9.5"/>
+</symbol>
+<symbol id="icon-alert-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+</symbol>
+<symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <polyline points="6 9 12 15 18 9"/>
+</symbol>
+<symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+</symbol>
+<symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <polyline points="20 6 9 17 4 12"/>
+</symbol>
+<symbol id="icon-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+</symbol>
+<symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/>
+</symbol>
+<symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+</symbol>
+<symbol id="icon-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+</symbol>
+<symbol id="icon-nfc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M9 7a7 7 0 0 1 0 10"/><path d="M13 4a11 11 0 0 1 0 16"/>
+</symbol>
+<symbol id="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+</symbol>
+<symbol id="icon-package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><line x1="12" y1="13" x2="12" y2="21"/>
+</symbol>
+</defs>
+</svg>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="container">
+    <a href="#top" class="logo" aria-label="Saferide, ir al inicio">
+      <span class="logo-safe">Safe</span><span class="logo-ride">ride</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks" aria-label="Navegación principal">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#formatos">Formatos</a>
+      <a href="#para-quien">Para quién es</a>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#comparativa">Comparativa</a>
+      <a href="#pedido">Pedí tu pulsera</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contacto">Contacto</a>
+      <button type="button" class="btn btn-primary nav-cta" data-prototype-trigger>Creá tu ficha</button>
+    </nav>
+
+    <div class="nav-actions">
+      <button type="button" class="btn btn-primary nav-cta" data-prototype-trigger>Creá tu ficha</button>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-label="Presentación de Saferide">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <h1><span class="logo-safe">Safe</span><span class="logo-ride">ride</span></h1>
+        <p class="hero-tagline">Tu información puede salvar tu vida.</p>
+        <p class="hero-desc">
+          Una pulsera QR y una medalla NFC con tus datos médicos esenciales,
+          siempre con vos. Para que, ante cualquier emergencia y en cualquier
+          parte del mundo, el personal de salud tenga tu información clave
+          apenas ingresás a una guardia, hospital o clínica.
+        </p>
+        <div class="hero-actions">
+          <a href="#como-funciona" class="btn btn-primary">Ver cómo funciona</a>
+          <button type="button" class="btn btn-outline" data-prototype-trigger>Creá tu ficha</button>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <span class="hero-visual-glow" aria-hidden="true"></span>
+        <svg class="qr-mock" viewBox="0 0 340 340" role="img" aria-labelledby="qrMockTitle">
+          <title id="qrMockTitle">Ilustración de una pulsera con un colgante de código QR</title>
+          <circle cx="170" cy="150" r="112" fill="none" stroke="#234B36" stroke-width="24" />
+          <circle cx="170" cy="150" r="112" fill="none" stroke="#3E6E52" stroke-width="4" stroke-dasharray="2 10" opacity="0.6" />
+          <rect x="150" y="228" width="40" height="34" rx="8" fill="#234B36" />
+          <rect x="85" y="175" width="170" height="170" rx="20" fill="#FFFFFF" stroke="#D3E6D8" stroke-width="2" />
+          <g>
+            <rect x="100" y="190" width="34" height="34" fill="#234B36" />
+            <rect x="107" y="197" width="20" height="20" fill="#FFFFFF" />
+            <rect x="113" y="203" width="8" height="8" fill="#234B36" />
+            <rect x="206" y="190" width="34" height="34" fill="#234B36" />
+            <rect x="213" y="197" width="20" height="20" fill="#FFFFFF" />
+            <rect x="219" y="203" width="8" height="8" fill="#234B36" />
+            <rect x="100" y="296" width="34" height="34" fill="#234B36" />
+            <rect x="107" y="303" width="20" height="20" fill="#FFFFFF" />
+            <rect x="113" y="309" width="8" height="8" fill="#234B36" />
+          </g>
+          <g id="qrDataModules" aria-hidden="true"></g>
+          <circle cx="255" cy="180" r="20" fill="#2E7D32" stroke="#FFFFFF" stroke-width="3" />
+          <rect x="249" y="171" width="12" height="18" rx="2" fill="#FFFFFF" />
+          <rect x="246" y="174" width="18" height="12" rx="2" fill="#FFFFFF" />
+          <circle cx="55" cy="80" r="5" fill="#2E7D32" opacity="0.5" />
+          <circle cx="300" cy="90" r="4" fill="#3E6E52" opacity="0.5" />
+          <circle cx="290" cy="290" r="6" fill="#2E7D32" opacity="0.35" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EL PROBLEMA ============ -->
+  <section class="section" id="problema" aria-labelledby="problema-title">
+    <div class="container section-narrow reveal">
+      <div class="section-heading">
+        <span class="eyebrow">El problema</span>
+        <h2 id="problema-title">Cuando más se necesita, es cuando menos se tiene</h2>
+      </div>
+      <p>
+        En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico:
+        si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar —
+        ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica,
+        en cualquier país. Las pulseras grabadas y las tarjetas de emergencia ayudan, pero se
+        quedan cortas: no se pueden actualizar y tienen espacio limitado. Saferide combina un
+        accesorio simple con una plataforma digital que se actualiza cuando vos quieras, pensada
+        para cualquier persona, no solo para quienes andan en moto.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ CÓMO FUNCIONA ============ -->
+  <section class="section bg-light" id="como-funciona" aria-labelledby="como-funciona-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Paso a paso</span>
+        <h2 id="como-funciona-title">Cómo funciona</h2>
+        <p>De la carga de tus datos a la lectura del QR, en seis pasos simples.</p>
+      </div>
+
+      <ol class="timeline">
+        <li class="timeline-step reveal">
+          <div class="timeline-step-number" aria-hidden="true">1</div>
+          <div>
+            <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-user-plus"></use></svg>
+            <h3>Registrate con tu mail</h3>
+            <p>Sin contraseñas: solo tu mail, para identificarte y avisarte novedades.</p>
+          </div>
+        </li>
+        <li class="timeline-step reveal">
+          <div class="timeline-step-number" aria-hidden="true">2</div>
+          <div>
+            <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
+            <h3>Cargá tus datos médicos</h3>
+            <p>Grupo sanguíneo, alergias, medicación y un contacto de emergencia.</p>
+          </div>
+        </li>
+        <li class="timeline-step reveal">
+          <div class="timeline-step-number" aria-hidden="true">3</div>
+          <div>
+            <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
+            <h3>Generá tu QR</h3>
+            <p>El sistema arma tu código único al instante.</p>
+          </div>
+        </li>
+        <li class="timeline-step reveal">
+          <div class="timeline-step-number" aria-hidden="true">4</div>
+          <div>
+            <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+            <h3>Imprimilo o descargalo</h3>
+            <p>En una pulsera, una tarjeta o el celular.</p>
+          </div>
+        </li>
+        <li class="timeline-step reveal">
+          <div class="timeline-step-number" aria-hidden="true">5</div>
+          <div>
+            <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-siren"></use></svg>
+            <h3>Listo para una emergencia</h3>
+            <p>Cualquiera puede escanearlo con la cámara, sin instalar nada.</p>
+          </div>
+        </li>
+        <li class="timeline-step reveal">
+          <div class="timeline-step-number" aria-hidden="true">6</div>
+          <div>
+            <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>
+            <h3>Tu información, al toque</h3>
+            <p>Se muestra solo lo esencial, en una página pública de solo lectura.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ DOS FORMATOS ============ -->
+  <section class="section" id="formatos" aria-labelledby="formatos-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Dos formatos, un mismo objetivo</span>
+        <h2 id="formatos-title">Pulsera QR o medalla NFC</h2>
+        <p>Elegí el que mejor te sirva, o pedí los dos juntos. Los dos guardan la misma información: solo cambia cómo se leen.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-qr-code"></use></svg></div>
+          <h3>Pulsera QR</h3>
+          <p>
+            Cualquiera la escanea con la cámara del celular y accede a tu
+            ficha completa en la página de Saferide. Necesita que el
+            celular que escanea tenga conexión a internet.
+          </p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-nfc"></use></svg></div>
+          <h3>Medalla NFC</h3>
+          <p>
+            Al acercar el celular, muestra al instante lo más importante
+            (grupo sanguíneo, alergias, medicación y contacto de emergencia)
+            sin necesitar internet: ideal para zonas sin señal o sin datos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARA QUIÉN ES ============ -->
+  <section class="section" id="para-quien" aria-labelledby="para-quien-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Para quién es</span>
+        <h2 id="para-quien-title">Pensado para cualquiera que quiera estar más seguro</h2>
+      </div>
+
+      <div class="card-grid cols-3">
+        <div class="card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-heart-pulse"></use></svg></div>
+          <h3>Personas con enfermedades crónicas</h3>
+          <p>Necesitan que el personal médico conozca su condición antes de intervenir.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-shield-alert"></use></svg></div>
+          <h3>Personas alérgicas</h3>
+          <p>Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-user-round"></use></svg></div>
+          <h3>Adultos mayores</h3>
+          <p>Sobre todo quienes viven solos o salen sin acompañante.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-bike"></use></svg></div>
+          <h3>Deportistas</h3>
+          <p>Ciclistas, runners, motociclistas, más expuestos a accidentes fuera de casa.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-car"></use></svg></div>
+          <h3>Conductores</h3>
+          <p>Protagonistas frecuentes de siniestros viales.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-baby"></use></svg></div>
+          <h3>Niños y niñas</h3>
+          <p>Con sus datos cargados por sus padres o tutores.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ POR QUÉ SAFERIDE ============ -->
+  <section class="section bg-light" id="beneficios" aria-labelledby="beneficios-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Beneficios</span>
+        <h2 id="beneficios-title">Por qué Saferide</h2>
+      </div>
+
+      <div class="card-grid cols-4">
+        <div class="card benefit-card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-refresh-cw"></use></svg></div>
+          <p>Se actualiza cuando vos quieras, a diferencia de una pulsera grabada.</p>
+        </div>
+        <div class="card benefit-card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-smartphone"></use></svg></div>
+          <p>Funciona con cualquier celular con cámara, sin instalar nada.</p>
+        </div>
+        <div class="card benefit-card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-tag"></use></svg></div>
+          <p>Económico y fácil de conseguir.</p>
+        </div>
+        <div class="card benefit-card reveal">
+          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-shield-check"></use></svg></div>
+          <p>Pensado para emergencias reales, no solo para guardar datos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UNA HISTORIA REAL ============ -->
+  <section class="section" id="historia" aria-labelledby="historia-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Un ejemplo</span>
+        <h2 id="historia-title">Una historia real</h2>
+      </div>
+
+      <div class="story-card reveal">
+        <blockquote>
+          <p>
+            Es una tarde de domingo y un ciclista sale a entrenar por una ruta que conoce
+            de memoria. En una bajada, pierde el control y cae. Nadie que pasa por ahí sabe
+            quién es, ni si tiene alguna alergia, ni a quién avisar.
+          </p>
+          <p>
+            Cuando llega el equipo médico, alguien nota la pulsera con el código QR en su
+            muñeca. La escanean con el celular y, en segundos, aparece lo que necesitan: su
+            grupo sanguíneo, una alergia a un analgésico común, y el teléfono de su hermana.
+          </p>
+          <p>
+            Ese dato evita que le administren un medicamento que podría haberle hecho mal,
+            y permite avisar a su familia mientras todavía está siendo trasladado.
+          </p>
+        </blockquote>
+        <footer>Situación ilustrativa, a modo de ejemplo</footer>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FUTURO + PROYECTO ============ -->
+  <section class="section bg-light" aria-label="Sobre el proyecto y su futuro">
+    <div class="container">
+      <div class="split-panel">
+        <div class="panel reveal" id="futuro">
+          <span class="eyebrow">Mirando hacia adelante</span>
+          <h2>Un proyecto pensado para crecer</h2>
+          <p>
+            Saferide no es solo una idea: viene con un modelo de negocio pensado para
+            sostenerse en el tiempo, con posibles alianzas con hospitales, clínicas, obras
+            sociales y clubes deportivos, y una hoja de ruta que incluye nuevas funciones
+            como historial de vacunas o turnos médicos.
+          </p>
+        </div>
+        <div class="panel reveal" id="proyecto">
+          <span class="eyebrow">Quiénes lo hacemos</span>
+          <h2>Sobre el proyecto</h2>
+          <p>
+            Saferide es un proyecto tecnológico desarrollado por estudiantes de la Escuela
+            Secundaria Técnica N.º 1 «Vuelta de Obligado», en Baradero.
+            <br /><em>[Espacio para nombres del equipo]</em>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LOS NÚMEROS NO MIENTEN ============ -->
+  <section class="section stats-section" id="estadisticas" aria-labelledby="estadisticas-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Contexto</span>
+        <h2 id="estadisticas-title">Los números no mienten</h2>
+        <p>Y esto no le pasa solo a quienes andan en moto: cualquier persona puede necesitar ayuda médica urgente, en cualquier lugar.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="reveal">
+          <div class="stat-number">11</div>
+          <p class="stat-label">personas mueren por día en siniestros viales en Argentina.</p>
+        </div>
+        <div class="reveal">
+          <div class="stat-number">4 de 10</div>
+          <p class="stat-label">víctimas fatales de siniestros viales iban en moto.</p>
+        </div>
+      </div>
+
+      <p class="stats-source">Fuente: Agencia Nacional de Seguridad Vial (ANSV), datos oficiales 2024.</p>
+
+      <p class="stats-closing reveal">
+        Detrás de cada cifra hay una persona a la que, muchas veces, nadie pudo identificar
+        a tiempo. Saferide busca achicar esa distancia.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ COMPARATIVA ============ -->
+  <section class="section" id="comparativa" aria-labelledby="comparativa-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Comparativa</span>
+        <h2 id="comparativa-title">¿Por qué Saferide y no otra opción?</h2>
+      </div>
+
+      <div class="comparativa-table-wrap reveal">
+        <table class="comparativa-table">
+          <caption class="sr-only">Comparación entre Saferide y otras alternativas de identificación médica</caption>
+          <thead>
+            <tr>
+              <th scope="col">Opción</th>
+              <th scope="col">Actualizable</th>
+              <th scope="col">Sin apps ni configuración</th>
+              <th scope="col">Sin límite de espacio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Pulsera grabada</th>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Tarjeta impresa</th>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
+            </tr>
+            <tr>
+              <th scope="row">App médica</th>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Saferide</th>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="comparativa-note reveal">Ninguna alternativa suma las tres cosas a la vez. Saferide sí.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROBÁ CÓMO FUNCIONA (DEMO) ============ -->
+  <section class="section bg-light" id="demo" aria-labelledby="demo-title">
+    <div class="container demo-panel">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Vista previa</span>
+        <h2 id="demo-title">Mirá cómo se ve en una emergencia</h2>
+        <p>Así es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.</p>
+      </div>
+
+      <button class="btn btn-primary" id="demoToggleBtn" aria-expanded="false" aria-controls="demoResult">
+        <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
+        <span class="btn-label">Ver ejemplo</span>
+      </button>
+
+      <div class="demo-result" id="demoResult">
+        <span class="demo-badge">
+          <svg class="icon" aria-hidden="true"><use href="#icon-alert-triangle"></use></svg>
+          Ejemplo — datos ficticios
+        </span>
+
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <svg class="icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
+            <div>
+              <h3>Ficha médica de emergencia</h3>
+              <span>Generada por Saferide</span>
+            </div>
+          </div>
+          <dl>
+            <div class="demo-field"><dt>Grupo sanguíneo</dt><dd>0+</dd></div>
+            <div class="demo-field"><dt>Alergias</dt><dd>Penicilina</dd></div>
+            <div class="demo-field"><dt>Medicación habitual</dt><dd>Ninguna</dd></div>
+            <div class="demo-field"><dt>Contacto de emergencia</dt><dd>Ana Pérez — 011 5555-0123</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PEDÍ TU PULSERA ============ -->
+  <section class="section bg-light" id="pedido" aria-labelledby="pedido-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> Enviamos a cualquier parte del mundo</span>
+        <h2 id="pedido-title">Pedí tu pulsera o medalla</h2>
+        <p>Completá tus datos de envío y te llega a domicilio. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.</p>
+      </div>
+
+      <div class="demo-panel">
+        <div id="orderFormView">
+          <form id="orderForm" novalidate>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="orderName">Nombre completo</label>
+                <input type="text" id="orderName" name="fullName" required placeholder="Ej: Juan Gómez" autocomplete="name" />
+              </div>
+              <div class="form-field">
+                <label for="orderEmail">Mail</label>
+                <input type="email" id="orderEmail" name="email" required placeholder="tu@mail.com" autocomplete="email" />
+              </div>
+              <div class="form-field">
+                <label for="orderPhone">Teléfono</label>
+                <input type="tel" id="orderPhone" name="phone" required placeholder="Ej: 011 4444-5566" autocomplete="tel" />
+              </div>
+              <div class="form-field">
+                <label for="orderProduct">Producto</label>
+                <select id="orderProduct" name="product" required>
+                  <option value="Pulsera QR" selected>Pulsera QR</option>
+                  <option value="Medalla NFC">Medalla NFC</option>
+                  <option value="Pack (pulsera + medalla)">Pack (pulsera + medalla)</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="orderQty">Cantidad</label>
+                <select id="orderQty" name="quantity" required>
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="orderAddress">Dirección (calle y número)</label>
+                <input type="text" id="orderAddress" name="address" required placeholder="Ej: Av. Siempre Viva 742" autocomplete="street-address" />
+              </div>
+              <div class="form-field">
+                <label for="orderCity">Ciudad</label>
+                <input type="text" id="orderCity" name="city" required placeholder="Ej: Baradero" autocomplete="address-level2" />
+              </div>
+              <div class="form-field">
+                <label for="orderState">Provincia / Estado</label>
+                <input type="text" id="orderState" name="state" placeholder="Ej: Buenos Aires" autocomplete="address-level1" />
+              </div>
+              <div class="form-field">
+                <label for="orderZip">Código postal</label>
+                <input type="text" id="orderZip" name="zip" required placeholder="Ej: 2942" autocomplete="postal-code" />
+              </div>
+              <div class="form-field">
+                <label for="orderCountry">País</label>
+                <input type="text" id="orderCountry" name="country" required placeholder="Ej: Argentina" autocomplete="country-name" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              <svg class="icon" aria-hidden="true"><use href="#icon-package"></use></svg>
+              Confirmar pedido
+            </button>
+
+            <p class="modal-disclaimer">
+              <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
+              Usamos tu mail únicamente para avisarte por correo las novedades de tu envío.
+            </p>
+          </form>
+        </div>
+
+        <div id="orderResultView" hidden>
+          <span class="demo-badge demo-badge-ok">
+            <svg class="icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg>
+            Pedido confirmado
+          </span>
+
+          <div class="demo-card">
+            <div class="demo-card-header">
+              <svg class="icon" aria-hidden="true"><use href="#icon-package"></use></svg>
+              <div>
+                <h3 id="orderResultName">Pedido Saferide</h3>
+                <span id="orderResultSubtitle">—</span>
+              </div>
+            </div>
+            <dl>
+              <div class="demo-field"><dt>Producto</dt><dd id="orderResultProduct">—</dd></div>
+              <div class="demo-field"><dt>Cantidad</dt><dd id="orderResultQty">—</dd></div>
+              <div class="demo-field"><dt>Enviar a</dt><dd id="orderResultAddress">—</dd></div>
+              <div class="demo-field"><dt>Teléfono</dt><dd id="orderResultPhone">—</dd></div>
+            </dl>
+          </div>
+
+          <p class="modal-disclaimer">
+            Te avisamos por mail las novedades de tu envío. Guardá o descargá este comprobante.
+          </p>
+
+          <button type="button" class="btn btn-primary btn-block" id="orderDownloadBtn">
+            <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+            Descargar comprobante
+          </button>
+          <button type="button" class="btn btn-outline btn-block" id="orderEditBtn">
+            <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
+            Hacer otro pedido
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Dudas frecuentes</span>
+        <h2 id="faq-title">Preguntas frecuentes</h2>
+      </div>
+
+      <div class="faq-list reveal">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            ¿Mis datos médicos quedan públicos?
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>No. Solo se muestra lo esencial para una emergencia (grupo sanguíneo, alergias, medicación, contacto). El resto de tu perfil queda privado y solo vos podés editarlo.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            ¿Qué pasa si pierdo la pulsera?
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>Podés generar un código nuevo cuando quieras desde tu cuenta; el anterior deja de estar activo.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            ¿Necesito internet para que funcione?
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>Con la pulsera QR, quien te escanea necesita conexión para ver tu ficha completa. Con la medalla NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            ¿Cualquier celular puede leer el QR?
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>Sí, alcanza con la cámara. No hace falta instalar ninguna aplicación.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            ¿Tiene algún costo?
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>La versión básica es gratuita. A futuro habrá funciones adicionales opcionales.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            ¿Puedo actualizar mis datos cuando quiera?
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>Sí, las veces que necesites, desde tu cuenta.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ CTA FINAL + FOOTER ============ -->
+<section class="section cta-final" id="contacto" aria-labelledby="cta-final-title">
+  <div class="container">
+    <h2 id="cta-final-title">¿Querés tener tu información siempre a mano?</h2>
+    <div class="cta-actions">
+      <button type="button" class="btn btn-primary" data-prototype-trigger>Generar mi QR</button>
+      <a href="#pedido" class="btn btn-outline" style="color:#fff;border-color:#fff">Pedí tu pulsera</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-safe">Safe</span><span class="logo-ride">ride</span></div>
+        <p class="footer-slogan">Tu información puede salvar tu vida.</p>
+      </div>
+
+      <div class="footer-contact">
+        <a href="mailto:contacto@saferide.com">
+          <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
+          contacto@saferide.com
+        </a>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/saferide.baradero?igsh=MWZ2Zjk5c2FrenF6MQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Saferide en Instagram (se abre en una pestaña nueva)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Saferide</span>
+      <span>Proyecto escolar — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MODAL: PROBAR EL PROTOTIPO ============ -->
+<div class="modal-overlay" id="prototypeModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="prototypeModalTitle">
+    <button type="button" class="modal-close" id="prototypeModalClose" aria-label="Cerrar">
+      <svg class="icon" aria-hidden="true"><use href="#icon-x"></use></svg>
+    </button>
+
+    <div class="modal-body">
+      <div id="prototypeFormView">
+        <span class="eyebrow">Creá tu cuenta</span>
+        <h2 id="prototypeModalTitle">Creá tu ficha de emergencia</h2>
+        <p>
+          Completá estos datos para generar tu ficha y tu código QR.
+          Solo necesitás tu mail — no hace falta contraseña — así podemos
+          identificarte y avisarte novedades por correo.
+        </p>
+
+        <form id="prototypeForm" novalidate>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="protoName">Nombre completo</label>
+              <input type="text" id="protoName" name="fullName" required placeholder="Ej: Juan Gómez" autocomplete="off" />
+            </div>
+            <div class="form-field">
+              <label for="protoEmail">Mail</label>
+              <input type="email" id="protoEmail" name="email" required placeholder="tu@mail.com" autocomplete="off" />
+            </div>
+            <div class="form-field">
+              <label for="protoBirthdate">Fecha de nacimiento</label>
+              <input type="date" id="protoBirthdate" name="birthdate" required />
+            </div>
+            <div class="form-field">
+              <label for="protoDni">DNI</label>
+              <input type="text" id="protoDni" name="dni" placeholder="Ej: 40123456" inputmode="numeric" />
+            </div>
+            <div class="form-field">
+              <label for="protoBlood">Grupo sanguíneo</label>
+              <select id="protoBlood" name="blood" required>
+                <option value="" disabled selected>Elegí una opción</option>
+                <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="protoConditions">Enfermedades / condiciones preexistentes</label>
+              <input type="text" id="protoConditions" name="conditions" placeholder="Ej: Diabetes tipo 1, o «Ninguna»" />
+            </div>
+            <div class="form-field">
+              <label for="protoAllergies">Alergias</label>
+              <input type="text" id="protoAllergies" name="allergies" placeholder="Ej: Penicilina, o «Ninguna»" />
+            </div>
+            <div class="form-field">
+              <label for="protoMeds">Medicación habitual</label>
+              <input type="text" id="protoMeds" name="meds" placeholder="Ej: Ninguna" />
+            </div>
+            <div class="form-field">
+              <label for="protoInsurance">Obra social / cobertura médica</label>
+              <input type="text" id="protoInsurance" name="insurance" placeholder="Ej: Sin cobertura" />
+            </div>
+            <div class="form-field">
+              <label for="protoPhone">Teléfono propio</label>
+              <input type="tel" id="protoPhone" name="ownPhone" placeholder="Ej: 011 4444-5566" />
+            </div>
+            <div class="form-field">
+              <label for="protoContactName">Contacto de emergencia (nombre)</label>
+              <input type="text" id="protoContactName" name="contactName" required placeholder="Ej: Ana Pérez" />
+            </div>
+            <div class="form-field">
+              <label for="protoContactPhone">Contacto de emergencia (teléfono)</label>
+              <input type="tel" id="protoContactPhone" name="contactPhone" required placeholder="Ej: 011 5555-0123" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
+            Generar mi QR
+          </button>
+
+          <p class="modal-disclaimer">
+            <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
+            Tus datos se procesan en este dispositivo. Al generar tu QR
+            vas a poder descargar tu ficha para guardarla o imprimirla.
+          </p>
+        </form>
+      </div>
+
+      <div id="prototypeResultView" hidden>
+        <span class="demo-badge demo-badge-ok">
+          <svg class="icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg>
+          Simulación generada
+        </span>
+
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <svg class="icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
+            <div>
+              <h3 id="protoResultName">Ficha médica de emergencia</h3>
+              <span id="protoResultSubtitle">—</span>
+            </div>
+          </div>
+          <dl>
+            <div class="demo-field"><dt>Fecha de nacimiento</dt><dd id="protoResultBirthdate">—</dd></div>
+            <div class="demo-field"><dt>DNI</dt><dd id="protoResultDni">—</dd></div>
+            <div class="demo-field"><dt>Grupo sanguíneo</dt><dd id="protoResultBlood">—</dd></div>
+            <div class="demo-field"><dt>Enfermedades / condiciones</dt><dd id="protoResultConditions">—</dd></div>
+            <div class="demo-field"><dt>Alergias</dt><dd id="protoResultAllergies">—</dd></div>
+            <div class="demo-field"><dt>Medicación habitual</dt><dd id="protoResultMeds">—</dd></div>
+            <div class="demo-field"><dt>Obra social / cobertura</dt><dd id="protoResultInsurance">—</dd></div>
+            <div class="demo-field"><dt>Teléfono propio</dt><dd id="protoResultOwnPhone">—</dd></div>
+            <div class="demo-field"><dt>Contacto de emergencia</dt><dd id="protoResultContact">—</dd></div>
+          </dl>
+        </div>
+
+        <p class="modal-disclaimer">
+          Así se ve tu ficha pública al escanear el QR o acercar la medalla NFC.
+          Descargala para guardarla en tu celular o imprimirla junto con tu pedido.
+        </p>
+
+        <button type="button" class="btn btn-primary btn-block" id="prototypeDownloadBtn">
+          <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+          Descargar mi ficha
+        </button>
+        <button type="button" class="btn btn-outline btn-block" id="prototypeEditBtn">
+          <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
+          Editar datos
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initMobileNav();
+  initNavbarScroll();
+  initRevealOnScroll();
+  initFaqAccordion();
+  initDemoToggle();
+  buildQrPattern();
+  initPrototypeModal();
+  initOrderForm();
+  initDownloads();
+});
+
+function initMobileNav() {
+  const toggle = document.getElementById("navToggle");
+  const links = document.getElementById("navLinks");
+  if (!toggle || !links) return;
+
+  const closeMenu = () => {
+    toggle.setAttribute("aria-expanded", "false");
+    links.classList.remove("open");
+  };
+
+  toggle.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    links.classList.toggle("open", !isOpen);
+  });
+
+  links.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+}
+
+function initNavbarScroll() {
+  const navbar = document.getElementById("navbar");
+  if (!navbar) return;
+
+  const updateNavbar = () => {
+    navbar.classList.toggle("scrolled", window.scrollY > 8);
+  };
+
+  updateNavbar();
+  window.addEventListener("scroll", updateNavbar, { passive: true });
+}
+
+function initRevealOnScroll() {
+  const items = document.querySelectorAll(".reveal");
+  if (!items.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    items.forEach((el) => el.classList.add("in-view"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+  );
+
+  items.forEach((el) => observer.observe(el));
+}
+
+function initFaqAccordion() {
+  const faqItems = document.querySelectorAll(".faq-item");
+  if (!faqItems.length) return;
+
+  faqItems.forEach((item) => {
+    const question = item.querySelector(".faq-question");
+    if (!question) return;
+
+    question.addEventListener("click", () => {
+      const isOpen = item.classList.contains("open");
+      item.classList.toggle("open", !isOpen);
+      question.setAttribute("aria-expanded", String(!isOpen));
+    });
+  });
+}
+
+function initDemoToggle() {
+  const btn = document.getElementById("demoToggleBtn");
+  const result = document.getElementById("demoResult");
+  if (!btn || !result) return;
+
+  btn.addEventListener("click", () => {
+    const isVisible = result.classList.contains("visible");
+    result.classList.toggle("visible", !isVisible);
+    btn.setAttribute("aria-expanded", String(!isVisible));
+
+    const label = btn.querySelector(".btn-label");
+    if (label) {
+      label.textContent = isVisible ? "Ver ejemplo" : "Ocultar ejemplo";
+    }
+
+    if (!isVisible) {
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  });
+}
+
+function buildQrPattern() {
+  const svgNS = "http://www.w3.org/2000/svg";
+  const group = document.getElementById("qrDataModules");
+  if (!group) return;
+
+  const cols = 10;
+  const rows = 10;
+  const cell = 14;
+  const gap = 2.5;
+  const originX = 100;
+  const originY = 190;
+
+  const isInFinderZone = (col, row) => {
+    const topLeft = col <= 2 && row <= 2;
+    const topRight = col >= 7 && row <= 2;
+    const bottomLeft = col <= 2 && row >= 7;
+    return topLeft || topRight || bottomLeft;
+  };
+
+  const isFilled = (col, row) => (col * 3 + row * 5) % 7 < 3;
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (isInFinderZone(col, row)) continue;
+      if (!isFilled(col, row)) continue;
+
+      const rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("x", originX + col * cell + gap / 2);
+      rect.setAttribute("y", originY + row * cell + gap / 2);
+      rect.setAttribute("width", cell - gap);
+      rect.setAttribute("height", cell - gap);
+      rect.setAttribute("rx", 1.5);
+      rect.setAttribute("fill", "#234b36");
+      group.appendChild(rect);
+    }
+  }
+}
+
+function initPrototypeModal() {
+  const overlay = document.getElementById("prototypeModal");
+  const closeBtn = document.getElementById("prototypeModalClose");
+  const formView = document.getElementById("prototypeFormView");
+  const resultView = document.getElementById("prototypeResultView");
+  const form = document.getElementById("prototypeForm");
+  const editBtn = document.getElementById("prototypeEditBtn");
+  const triggers = document.querySelectorAll("[data-prototype-trigger]");
+
+  if (!overlay || !form) return;
+
+  let lastFocused = null;
+
+  const showFormView = () => {
+    formView.hidden = false;
+    resultView.hidden = true;
+  };
+
+  const showResultView = () => {
+    formView.hidden = true;
+    resultView.hidden = false;
+  };
+
+  const openModal = (trigger) => {
+    lastFocused = trigger || document.activeElement;
+    overlay.hidden = false;
+    document.body.style.overflow = "hidden";
+    showFormView();
+    const firstField = document.getElementById("protoName");
+    if (firstField) firstField.focus();
+  };
+
+  const closeModal = () => {
+    overlay.hidden = true;
+    document.body.style.overflow = "";
+    if (lastFocused && typeof lastFocused.focus === "function") {
+      lastFocused.focus();
+    }
+  };
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => openModal(trigger));
+  });
+
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !overlay.hidden) closeModal();
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const data = new FormData(form);
+    const getText = (field, fallback) => {
+      const value = (data.get(field) || "").toString().trim();
+      return value || fallback;
+    };
+
+    const birthdateRaw = data.get("birthdate");
+    let birthdateLabel = "—";
+    if (birthdateRaw) {
+      const [year, month, day] = birthdateRaw.split("-").map(Number);
+      const parsedDate = new Date(Date.UTC(year, month - 1, day));
+      birthdateLabel = parsedDate.toLocaleDateString("es-AR", { timeZone: "UTC" });
+    }
+
+    document.getElementById("protoResultName").textContent = getText("fullName", "Ficha médica de emergencia");
+    document.getElementById("protoResultSubtitle").textContent = data.get("email");
+    document.getElementById("protoResultBirthdate").textContent = birthdateLabel;
+    document.getElementById("protoResultDni").textContent = getText("dni", "No especificado");
+    document.getElementById("protoResultBlood").textContent = data.get("blood");
+    document.getElementById("protoResultConditions").textContent = getText("conditions", "Ninguna especificada");
+    document.getElementById("protoResultAllergies").textContent = getText("allergies", "Ninguna especificada");
+    document.getElementById("protoResultMeds").textContent = getText("meds", "Ninguna");
+    document.getElementById("protoResultInsurance").textContent = getText("insurance", "No especificada");
+    document.getElementById("protoResultOwnPhone").textContent = getText("ownPhone", "No especificado");
+    document.getElementById("protoResultContact").textContent =
+      `${data.get("contactName")} — ${data.get("contactPhone")}`;
+
+    showResultView();
+  });
+
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      showFormView();
+      const firstField = document.getElementById("protoName");
+      if (firstField) firstField.focus();
+    });
+  }
+}
+
+function initOrderForm() {
+  const form = document.getElementById("orderForm");
+  const formView = document.getElementById("orderFormView");
+  const resultView = document.getElementById("orderResultView");
+  const editBtn = document.getElementById("orderEditBtn");
+  if (!form || !formView || !resultView) return;
+
+  const showFormView = () => {
+    formView.hidden = false;
+    resultView.hidden = true;
+  };
+
+  const showResultView = () => {
+    formView.hidden = true;
+    resultView.hidden = false;
+    resultView.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const data = new FormData(form);
+    const getText = (field, fallback) => {
+      const value = (data.get(field) || "").toString().trim();
+      return value || fallback;
+    };
+
+    const addressParts = [
+      getText("address", ""),
+      getText("city", ""),
+      getText("state", ""),
+      getText("zip", ""),
+      getText("country", ""),
+    ].filter(Boolean);
+
+    document.getElementById("orderResultName").textContent = getText("fullName", "Pedido Saferide");
+    document.getElementById("orderResultSubtitle").textContent = data.get("email");
+    document.getElementById("orderResultProduct").textContent = data.get("product");
+    document.getElementById("orderResultQty").textContent = data.get("quantity");
+    document.getElementById("orderResultAddress").textContent = addressParts.join(", ");
+    document.getElementById("orderResultPhone").textContent = getText("phone", "No especificado");
+
+    showResultView();
+  });
+
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      showFormView();
+      const firstField = document.getElementById("orderName");
+      if (firstField) firstField.focus();
+    });
+  }
+}
+
+function initDownloads() {
+  const offerDownload = (filename, text) => {
+    try {
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+      /* la descarga no está disponible en este navegador */
+    }
+  };
+
+  const getText = (id, fallback) =>
+    document.getElementById(id)?.textContent?.trim() || fallback;
+
+  const downloadFichaBtn = document.getElementById("prototypeDownloadBtn");
+  if (downloadFichaBtn) {
+    downloadFichaBtn.addEventListener("click", () => {
+      const lines = [
+        "FICHA DE EMERGENCIA — SAFERIDE",
+        "================================",
+        `Nombre: ${getText("protoResultName", "—")}`,
+        `Mail: ${getText("protoResultSubtitle", "—")}`,
+        `Fecha de nacimiento: ${getText("protoResultBirthdate", "—")}`,
+        `DNI: ${getText("protoResultDni", "—")}`,
+        `Grupo sanguíneo: ${getText("protoResultBlood", "—")}`,
+        `Enfermedades / condiciones: ${getText("protoResultConditions", "—")}`,
+        `Alergias: ${getText("protoResultAllergies", "—")}`,
+        `Medicación habitual: ${getText("protoResultMeds", "—")}`,
+        `Obra social / cobertura: ${getText("protoResultInsurance", "—")}`,
+        `Teléfono propio: ${getText("protoResultOwnPhone", "—")}`,
+        `Contacto de emergencia: ${getText("protoResultContact", "—")}`,
+        "",
+        "Generado con Saferide.",
+      ];
+      offerDownload("ficha-saferide.txt", lines.join("\n"));
+    });
+  }
+
+  const downloadOrderBtn = document.getElementById("orderDownloadBtn");
+  if (downloadOrderBtn) {
+    downloadOrderBtn.addEventListener("click", () => {
+      const lines = [
+        "COMPROBANTE DE PEDIDO — SAFERIDE",
+        "================================",
+        `Nombre: ${getText("orderResultName", "—")}`,
+        `Mail: ${getText("orderResultSubtitle", "—")}`,
+        `Producto: ${getText("orderResultProduct", "—")}`,
+        `Cantidad: ${getText("orderResultQty", "—")}`,
+        `Enviar a: ${getText("orderResultAddress", "—")}`,
+        `Teléfono: ${getText("orderResultPhone", "—")}`,
+        "",
+        "Te avisamos por mail cuando despachemos tu pedido.",
+      ];
+      offerDownload("pedido-saferide.txt", lines.join("\n"));
+    });
+  }
+}
+</script>
+
+</body>
+</html>
