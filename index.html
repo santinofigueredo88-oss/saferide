@@ -1413,9 +1413,21 @@ section[id],
 .preview-banner strong {
   color: #ffffff;
 }
+
+.page-frame {
+  /* Marco verde fijo alrededor de toda la pagina, encima de todo
+     (navbar incluido) pero sin bloquear clicks. */
+  position: fixed;
+  inset: 0;
+  border: 6px solid var(--accent-fg);
+  z-index: 3000;
+  pointer-events: none;
+  transition: border-color var(--transition);
+}
 </style>
 </head>
 <body>
+<div class="page-frame" aria-hidden="true"></div>
 <!-- Sprite de íconos SVG en línea (reemplaza a la librería de íconos externa) -->
 <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
 <defs>
