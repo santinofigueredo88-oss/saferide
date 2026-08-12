@@ -3,7 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Saferide — Tu información puede salvar tu vida</title>
+<title data-i18n="meta.title">Saferide — Tu información puede salvar tu vida</title>
+<script>
+// Aplica tema e idioma guardados ANTES de pintar la página, para que no
+// se vea un parpadeo (flash) del tema o idioma equivocado al cargar.
+(function () {
+  try {
+    var savedTheme = localStorage.getItem("saferide-theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+    var savedLang = localStorage.getItem("saferide-lang");
+    if (!savedLang) {
+      savedLang = (navigator.language || "es").toLowerCase().startsWith("en") ? "en" : "es";
+    }
+    document.documentElement.setAttribute("lang", savedLang);
+    document.documentElement.setAttribute("data-lang", savedLang);
+  } catch (e) {
+    /* localStorage puede fallar en navegación privada; seguimos con los valores por defecto */
+  }
+})();
+</script>
 <style>
 /* =========================================================
    SAFERIDE — estilos (idénticos al proyecto real, en línea
@@ -65,6 +85,24 @@ table {
   --success: #2e7d32;
   --muted-mark: #93a69a;
 
+  /* Tokens de superficie/texto: son los que cambian entre modo claro y oscuro */
+  --surface-page: var(--white);
+  --surface: var(--white);
+  --surface-alt: var(--green-pale);
+  --surface-border: var(--green-mid);
+  --surface-border-strong: var(--green-deep);
+  --surface-translucent: rgba(255, 255, 255, 0.92);
+  --text-primary: var(--green-deep);
+  --text-secondary: var(--text-muted);
+  --placeholder-color: #9aa5b1;
+  --accent-fg: var(--green-accent);
+
+  --warning-bg: #fff4e6;
+  --warning-text: #a65a00;
+  --warning-border: #ffdca8;
+  --success-bg: #eaf6ef;
+  --success-border: #b9e4c9;
+
   --font-heading: "Poppins", system-ui, -apple-system, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
@@ -81,12 +119,67 @@ table {
   --transition: 0.25s ease;
 }
 
+/* ===== Modo oscuro =====
+   Se activa con [data-theme="dark"] en <html> (elegido a mano) o, si el
+   usuario no eligió nada todavía, con prefers-color-scheme. */
+html[data-theme="dark"] {
+  --surface-page: #10190f;
+  --surface: #17221a;
+  --surface-alt: #1d2b21;
+  --surface-border: #2b3d31;
+  --surface-border-strong: var(--green-accent-soft);
+  --surface-translucent: rgba(16, 25, 15, 0.88);
+  --text-primary: #eaf4ec;
+  --text-secondary: #a7bfae;
+  --placeholder-color: #6f8577;
+  --accent-fg: var(--green-accent-soft);
+
+  --warning-bg: rgba(255, 180, 77, 0.12);
+  --warning-text: #ffb44d;
+  --warning-border: rgba(255, 180, 77, 0.35);
+  --success-bg: rgba(111, 174, 116, 0.14);
+  --success-border: rgba(111, 174, 116, 0.4);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.38);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.48);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) {
+    --surface-page: #10190f;
+    --surface: #17221a;
+    --surface-alt: #1d2b21;
+    --surface-border: #2b3d31;
+    --surface-border-strong: var(--green-accent-soft);
+    --surface-translucent: rgba(16, 25, 15, 0.88);
+    --text-primary: #eaf4ec;
+    --text-secondary: #a7bfae;
+    --placeholder-color: #6f8577;
+
+    --warning-bg: rgba(255, 180, 77, 0.12);
+    --warning-text: #ffb44d;
+    --warning-border: rgba(255, 180, 77, 0.35);
+    --success-bg: rgba(111, 174, 116, 0.14);
+    --success-border: rgba(111, 174, 116, 0.4);
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.38);
+    --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.48);
+
+    color-scheme: dark;
+  }
+}
+
 body {
   font-family: var(--font-body);
-  color: var(--green-deep);
-  background: var(--white);
+  color: var(--text-primary);
+  background: var(--surface-page);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  transition: background var(--transition), color var(--transition);
 }
 
 h1, h2, h3, h4 {
@@ -94,18 +187,18 @@ h1, h2, h3, h4 {
   font-weight: 700;
   line-height: 1.2;
   margin: 0 0 16px;
-  color: var(--green-deep);
+  color: var(--text-primary);
 }
 
 p {
   margin: 0 0 16px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 a:focus-visible,
 button:focus-visible,
 summary:focus-visible {
-  outline: 3px solid var(--green-accent);
+  outline: 3px solid var(--accent-fg);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -136,7 +229,7 @@ summary:focus-visible {
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--green-accent);
+  color: var(--accent-fg);
   margin-bottom: 12px;
 }
 
@@ -156,7 +249,7 @@ summary:focus-visible {
 }
 
 .bg-light {
-  background: var(--green-pale);
+  background: var(--surface-alt);
 }
 
 .icon {
@@ -174,16 +267,16 @@ summary:focus-visible {
   height: var(--nav-height);
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--surface-translucent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid transparent;
-  transition: box-shadow var(--transition), border-color var(--transition);
+  transition: box-shadow var(--transition), border-color var(--transition), background var(--transition);
 }
 
 .navbar.scrolled {
   box-shadow: var(--shadow-sm);
-  border-bottom-color: var(--green-mid);
+  border-bottom-color: var(--surface-border);
 }
 
 .navbar .container {
@@ -202,11 +295,11 @@ summary:focus-visible {
 }
 
 .logo .logo-safe {
-  color: var(--green-deep);
+  color: var(--text-primary);
 }
 
 .logo .logo-ride {
-  color: var(--green-accent);
+  color: var(--accent-fg);
 }
 
 .nav-links {
@@ -218,7 +311,7 @@ summary:focus-visible {
 .nav-links a {
   font-weight: 500;
   font-size: 0.96rem;
-  color: var(--green-deep);
+  color: var(--text-primary);
   position: relative;
   padding: 6px 2px;
 }
@@ -245,7 +338,10 @@ summary:focus-visible {
   gap: 12px;
 }
 
-.nav-cta {
+.nav-links .nav-cta,
+.nav-actions .nav-cta {
+  /* Selector reforzado (dos clases) para ganarle en especificidad a .btn,
+     que se define más abajo y si no, deja este botón visible por error. */
   display: none;
 }
 
@@ -263,14 +359,14 @@ summary:focus-visible {
 }
 
 .nav-toggle:hover {
-  background: var(--green-pale);
+  background: var(--surface-alt);
 }
 
 .nav-toggle span {
   display: block;
   width: 22px;
   height: 2px;
-  background: var(--green-deep);
+  background: var(--text-primary);
   transition: transform var(--transition), opacity var(--transition);
 }
 
@@ -286,6 +382,66 @@ summary:focus-visible {
   transform: translateY(-7px) rotate(-45deg);
 }
 
+.pref-toggles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pref-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.pref-toggle:hover {
+  background: var(--surface-alt);
+  border-color: var(--surface-border-strong);
+}
+
+.pref-toggle .icon {
+  width: 19px;
+  height: 19px;
+}
+
+.pref-toggle .icon-moon {
+  display: none;
+}
+
+html[data-theme="dark"] .pref-toggle .icon-sun {
+  display: none;
+}
+
+html[data-theme="dark"] .pref-toggle .icon-moon {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .pref-toggle .icon-sun {
+    display: none;
+  }
+  html:not([data-theme="light"]):not([data-theme="dark"]) .pref-toggle .icon-moon {
+    display: block;
+  }
+}
+
+.lang-toggle {
+  width: auto;
+  min-width: 40px;
+  padding: 0 10px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+
 @media (max-width: 899px) {
   .nav-links {
     position: fixed;
@@ -294,7 +450,7 @@ summary:focus-visible {
     right: 0;
     flex-direction: column;
     align-items: stretch;
-    background: var(--white);
+    background: var(--surface);
     box-shadow: var(--shadow-md);
     padding: 12px 24px 28px;
     gap: 4px;
@@ -314,7 +470,7 @@ summary:focus-visible {
 
   .nav-links a {
     padding: 14px 4px;
-    border-bottom: 1px solid var(--green-pale);
+    border-bottom: 1px solid var(--surface-border);
     font-size: 1.02rem;
   }
 
@@ -365,8 +521,8 @@ summary:focus-visible {
 
 .btn-outline {
   background: transparent;
-  border-color: var(--green-deep);
-  color: var(--green-deep);
+  border-color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .btn-outline:hover {
@@ -387,7 +543,7 @@ summary:focus-visible {
 
 .hero {
   padding: calc(var(--nav-height) + 56px) 0 72px;
-  background: linear-gradient(180deg, var(--green-pale) 0%, var(--white) 100%);
+  background: linear-gradient(180deg, var(--surface-alt) 0%, var(--surface-page) 100%);
   overflow: hidden;
 }
 
@@ -405,18 +561,18 @@ summary:focus-visible {
 }
 
 .hero-text h1 .logo-safe {
-  color: var(--green-deep);
+  color: var(--text-primary);
 }
 
 .hero-text h1 .logo-ride {
-  color: var(--green-accent);
+  color: var(--accent-fg);
 }
 
 .hero-tagline {
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: clamp(1.2rem, 2.6vw, 1.5rem);
-  color: var(--green-accent);
+  color: var(--accent-fg);
   margin-bottom: 18px;
 }
 
@@ -470,8 +626,8 @@ summary:focus-visible {
 .timeline-step {
   display: flex;
   gap: 20px;
-  background: var(--white);
-  border: 1px solid var(--green-mid);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
   padding: 24px;
   box-shadow: var(--shadow-sm);
@@ -495,7 +651,7 @@ summary:focus-visible {
 .timeline-step-icon {
   width: 26px;
   height: 26px;
-  color: var(--green-accent);
+  color: var(--accent-fg);
   margin-bottom: 10px;
 }
 
@@ -543,11 +699,11 @@ summary:focus-visible {
 }
 
 .card {
-  background: var(--white);
-  border: 1px solid var(--green-mid);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
   padding: 28px 24px;
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
 }
 
 .card:hover {
@@ -559,11 +715,11 @@ summary:focus-visible {
   width: 52px;
   height: 52px;
   border-radius: var(--radius-sm);
-  background: var(--green-pale);
+  background: var(--surface-alt);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--green-accent);
+  color: var(--accent-fg);
   margin-bottom: 16px;
 }
 
@@ -658,8 +814,8 @@ summary:focus-visible {
 }
 
 .panel {
-  background: var(--white);
-  border: 1px solid var(--green-mid);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
   padding: 36px 32px;
   box-shadow: var(--shadow-sm);
@@ -729,7 +885,7 @@ summary:focus-visible {
 .comparativa-table-wrap {
   overflow-x: auto;
   border-radius: var(--radius-md);
-  border: 1px solid var(--green-mid);
+  border: 1px solid var(--surface-border);
   box-shadow: var(--shadow-sm);
 }
 
@@ -741,7 +897,7 @@ summary:focus-visible {
 .comparativa-table td {
   padding: 18px 16px;
   text-align: center;
-  border-bottom: 1px solid var(--green-mid);
+  border-bottom: 1px solid var(--surface-border);
   font-size: 0.95rem;
 }
 
@@ -757,7 +913,7 @@ summary:focus-visible {
 .comparativa-table td:first-child {
   text-align: left;
   font-weight: 600;
-  color: var(--green-deep);
+  color: var(--text-primary);
 }
 
 .comparativa-table thead th:first-child {
@@ -765,11 +921,12 @@ summary:focus-visible {
 }
 
 .comparativa-table tbody tr:last-child {
-  background: rgba(46, 125, 50, 0.06);
+  background: rgba(46, 125, 50, 0.1);
 }
 
-.comparativa-table tbody tr:last-child td:first-child {
-  color: var(--green-accent);
+.comparativa-table tbody tr:last-child :first-child {
+  /* la primera celda de la fila es un <th scope="row">, no un <td> */
+  color: var(--accent-fg);
   font-weight: 700;
 }
 
@@ -778,7 +935,7 @@ summary:focus-visible {
 }
 
 .mark-yes {
-  color: var(--green-accent);
+  color: var(--accent-fg);
 }
 
 .mark-no {
@@ -790,7 +947,7 @@ summary:focus-visible {
   max-width: 620px;
   margin: 28px auto 0;
   font-weight: 600;
-  color: var(--green-deep);
+  color: var(--text-primary);
   font-size: 1.05rem;
 }
 
@@ -818,9 +975,9 @@ summary:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #fff4e6;
-  color: #a65a00;
-  border: 1px solid #ffdca8;
+  background: var(--warning-bg);
+  color: var(--warning-text);
+  border: 1px solid var(--warning-border);
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 0.82rem;
@@ -830,8 +987,8 @@ summary:focus-visible {
 }
 
 .demo-card {
-  background: var(--white);
-  border: 2px solid var(--green-deep);
+  background: var(--surface);
+  border: 2px solid var(--surface-border-strong);
   border-radius: var(--radius-md);
   padding: 28px;
   box-shadow: var(--shadow-md);
@@ -841,7 +998,7 @@ summary:focus-visible {
   display: flex;
   align-items: center;
   gap: 12px;
-  border-bottom: 1px solid var(--green-mid);
+  border-bottom: 1px solid var(--surface-border);
   padding-bottom: 16px;
   margin-bottom: 16px;
 }
@@ -849,7 +1006,7 @@ summary:focus-visible {
 .demo-card-header .icon {
   width: 28px;
   height: 28px;
-  color: var(--green-accent);
+  color: var(--accent-fg);
 }
 
 .demo-card-header h3 {
@@ -860,7 +1017,7 @@ summary:focus-visible {
 .demo-card-header span {
   display: block;
   font-size: 0.82rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -869,7 +1026,7 @@ summary:focus-visible {
   justify-content: space-between;
   gap: 12px;
   padding: 12px 0;
-  border-bottom: 1px dashed var(--green-mid);
+  border-bottom: 1px dashed var(--surface-border);
   font-size: 0.95rem;
 }
 
@@ -878,14 +1035,14 @@ summary:focus-visible {
 }
 
 .demo-field dt {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
 .demo-field dd {
   margin: 0;
   font-weight: 600;
-  color: var(--green-deep);
+  color: var(--text-primary);
   text-align: right;
 }
 
@@ -895,7 +1052,7 @@ summary:focus-visible {
 }
 
 .faq-item {
-  border-bottom: 1px solid var(--green-mid);
+  border-bottom: 1px solid var(--surface-border);
 }
 
 .faq-question {
@@ -911,7 +1068,7 @@ summary:focus-visible {
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 1.02rem;
-  color: var(--green-deep);
+  color: var(--text-primary);
   min-height: 44px;
 }
 
@@ -919,7 +1076,7 @@ summary:focus-visible {
   flex-shrink: 0;
   width: 20px;
   height: 20px;
-  color: var(--green-accent);
+  color: var(--accent-fg);
   transition: transform var(--transition);
 }
 
@@ -967,7 +1124,7 @@ summary:focus-visible {
   width: 100%;
   max-width: 560px;
   margin: auto;
-  background: var(--white);
+  background: var(--surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 40px 32px 32px;
@@ -981,8 +1138,8 @@ summary:focus-visible {
   height: 44px;
   border: none;
   border-radius: 50%;
-  background: var(--green-pale);
-  color: var(--green-deep);
+  background: var(--surface-alt);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1031,35 +1188,35 @@ summary:focus-visible {
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 0.85rem;
-  color: var(--green-deep);
+  color: var(--text-primary);
 }
 
 .form-field input,
 .form-field select {
   min-height: 46px;
   padding: 10px 14px;
-  border: 1.5px solid var(--green-mid);
+  border: 1.5px solid var(--surface-border);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: var(--green-deep);
-  background: var(--white);
+  color: var(--text-primary);
+  background: var(--surface);
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
 .form-field input::placeholder {
-  color: #9aa5b1;
+  color: var(--placeholder-color);
 }
 
 .form-field input:focus,
 .form-field select:focus {
   outline: none;
-  border-color: var(--green-accent);
+  border-color: var(--accent-fg);
   box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.12);
 }
 
 .form-field input:invalid:not(:placeholder-shown):not(:focus) {
-  border-color: var(--green-accent);
+  border-color: var(--accent-fg);
 }
 
 .modal-disclaimer {
@@ -1067,7 +1224,7 @@ summary:focus-visible {
   align-items: flex-start;
   gap: 8px;
   font-size: 0.82rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin: 16px 0 0;
 }
 
@@ -1076,13 +1233,13 @@ summary:focus-visible {
   width: 16px;
   height: 16px;
   margin-top: 2px;
-  color: var(--green-deep-soft);
+  color: var(--accent-fg);
 }
 
 .demo-badge-ok {
-  background: #eaf6ef;
-  color: var(--success);
-  border-color: #b9e4c9;
+  background: var(--success-bg);
+  color: var(--accent-fg);
+  border-color: var(--success-border);
 }
 
 #prototypeResultView .btn {
@@ -1337,31 +1494,46 @@ section[id],
 <symbol id="icon-package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><line x1="12" y1="13" x2="12" y2="21"/>
 </symbol>
+<symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="4"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+</symbol>
+<symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+</symbol>
 </defs>
 </svg>
 
 <!-- ============ NAVBAR ============ -->
 <header class="navbar" id="navbar">
   <div class="container">
-    <a href="#top" class="logo" aria-label="Saferide, ir al inicio">
+    <a href="#top" class="logo" aria-label="Saferide, ir al inicio" data-i18n-aria-label="nav.logoAria">
       <span class="logo-safe">Safe</span><span class="logo-ride">ride</span>
     </a>
 
-    <nav class="nav-links" id="navLinks" aria-label="Navegación principal">
-      <a href="#como-funciona">Cómo funciona</a>
-      <a href="#formatos">Formatos</a>
-      <a href="#para-quien">Para quién es</a>
-      <a href="#beneficios">Beneficios</a>
-      <a href="#comparativa">Comparativa</a>
-      <a href="#pedido">Pedí tu pulsera</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contacto">Contacto</a>
-      <button type="button" class="btn btn-primary nav-cta" data-prototype-trigger>Creá tu ficha</button>
+    <nav class="nav-links" id="navLinks" aria-label="Navegación principal" data-i18n-aria-label="nav.mainAria">
+      <a href="#como-funciona" data-i18n="nav.comoFunciona">Cómo funciona</a>
+      <a href="#formatos" data-i18n="nav.formatos">Formatos</a>
+      <a href="#para-quien" data-i18n="nav.paraQuien">Para quién es</a>
+      <a href="#beneficios" data-i18n="nav.beneficios">Beneficios</a>
+      <a href="#comparativa" data-i18n="nav.comparativa">Comparativa</a>
+      <a href="#pedido" data-i18n="nav.pedido">Pedí tu pulsera</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
+      <button type="button" class="btn btn-primary nav-cta" data-prototype-trigger data-i18n="nav.creaTuFicha">Creá tu ficha</button>
     </nav>
 
     <div class="nav-actions">
-      <button type="button" class="btn btn-primary nav-cta" data-prototype-trigger>Creá tu ficha</button>
-      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="navLinks">
+      <button type="button" class="btn btn-primary nav-cta" data-prototype-trigger data-i18n="nav.creaTuFicha">Creá tu ficha</button>
+      <div class="pref-toggles">
+        <button type="button" class="pref-toggle" id="themeToggle" aria-label="Cambiar a modo oscuro" data-i18n-aria-label="nav.themeToggleAria">
+          <svg class="icon icon-sun" aria-hidden="true"><use href="#icon-sun"></use></svg>
+          <svg class="icon icon-moon" aria-hidden="true"><use href="#icon-moon"></use></svg>
+        </button>
+        <button type="button" class="pref-toggle lang-toggle" id="langToggle" aria-label="Switch to English" data-i18n-aria-label="nav.langToggleAria">
+          <span id="langToggleLabel">EN</span>
+        </button>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="navLinks" data-i18n-aria-label="nav.menuToggleAria">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -1375,23 +1547,23 @@ section[id],
     <div class="container hero-inner">
       <div class="hero-text">
         <h1><span class="logo-safe">Safe</span><span class="logo-ride">ride</span></h1>
-        <p class="hero-tagline">Tu información puede salvar tu vida.</p>
-        <p class="hero-desc">
+        <p class="hero-tagline" data-i18n="hero.tagline">Tu información puede salvar tu vida.</p>
+        <p class="hero-desc" data-i18n="hero.desc">
           Una pulsera QR y una medalla NFC con tus datos médicos esenciales,
           siempre con vos. Para que, ante cualquier emergencia y en cualquier
           parte del mundo, el personal de salud tenga tu información clave
           apenas ingresás a una guardia, hospital o clínica.
         </p>
         <div class="hero-actions">
-          <a href="#como-funciona" class="btn btn-primary">Ver cómo funciona</a>
-          <button type="button" class="btn btn-outline" data-prototype-trigger>Creá tu ficha</button>
+          <a href="#como-funciona" class="btn btn-primary" data-i18n="hero.ctaPrimary">Ver cómo funciona</a>
+          <button type="button" class="btn btn-outline" data-prototype-trigger data-i18n="hero.ctaSecondary">Creá tu ficha</button>
         </div>
       </div>
 
       <div class="hero-visual reveal">
         <span class="hero-visual-glow" aria-hidden="true"></span>
         <svg class="qr-mock" viewBox="0 0 340 340" role="img" aria-labelledby="qrMockTitle">
-          <title id="qrMockTitle">Ilustración de una pulsera con un colgante de código QR</title>
+          <title id="qrMockTitle" data-i18n="hero.qrIllustration">Ilustración de una pulsera con un colgante de código QR</title>
           <circle cx="170" cy="150" r="112" fill="none" stroke="#234B36" stroke-width="24" />
           <circle cx="170" cy="150" r="112" fill="none" stroke="#3E6E52" stroke-width="4" stroke-dasharray="2 10" opacity="0.6" />
           <rect x="150" y="228" width="40" height="34" rx="8" fill="#234B36" />
@@ -1423,10 +1595,10 @@ section[id],
   <section class="section" id="problema" aria-labelledby="problema-title">
     <div class="container section-narrow reveal">
       <div class="section-heading">
-        <span class="eyebrow">El problema</span>
-        <h2 id="problema-title">Cuando más se necesita, es cuando menos se tiene</h2>
+        <span class="eyebrow" data-i18n="problema.eyebrow">El problema</span>
+        <h2 id="problema-title" data-i18n="problema.title">Cuando más se necesita, es cuando menos se tiene</h2>
       </div>
-      <p>
+      <p data-i18n="problema.body">
         En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico:
         si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar —
         ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica,
@@ -1442,9 +1614,9 @@ section[id],
   <section class="section bg-light" id="como-funciona" aria-labelledby="como-funciona-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Paso a paso</span>
-        <h2 id="como-funciona-title">Cómo funciona</h2>
-        <p>De la carga de tus datos a la lectura del QR, en seis pasos simples.</p>
+        <span class="eyebrow" data-i18n="comoFunciona.eyebrow">Paso a paso</span>
+        <h2 id="como-funciona-title" data-i18n="comoFunciona.title">Cómo funciona</h2>
+        <p data-i18n="comoFunciona.subtitle">De la carga de tus datos a la lectura del QR, en seis pasos simples.</p>
       </div>
 
       <ol class="timeline">
@@ -1452,48 +1624,48 @@ section[id],
           <div class="timeline-step-number" aria-hidden="true">1</div>
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-user-plus"></use></svg>
-            <h3>Registrate con tu mail</h3>
-            <p>Sin contraseñas: solo tu mail, para identificarte y avisarte novedades.</p>
+            <h3 data-i18n="comoFunciona.step1.title">Registrate con tu mail</h3>
+            <p data-i18n="comoFunciona.step1.desc">Sin contraseñas: solo tu mail, para identificarte y avisarte novedades.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
           <div class="timeline-step-number" aria-hidden="true">2</div>
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
-            <h3>Cargá tus datos médicos</h3>
-            <p>Grupo sanguíneo, alergias, medicación y un contacto de emergencia.</p>
+            <h3 data-i18n="comoFunciona.step2.title">Cargá tus datos médicos</h3>
+            <p data-i18n="comoFunciona.step2.desc">Grupo sanguíneo, alergias, medicación y un contacto de emergencia.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
           <div class="timeline-step-number" aria-hidden="true">3</div>
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
-            <h3>Generá tu QR</h3>
-            <p>El sistema arma tu código único al instante.</p>
+            <h3 data-i18n="comoFunciona.step3.title">Generá tu QR</h3>
+            <p data-i18n="comoFunciona.step3.desc">El sistema arma tu código único al instante.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
           <div class="timeline-step-number" aria-hidden="true">4</div>
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
-            <h3>Imprimilo o descargalo</h3>
-            <p>En una pulsera, una tarjeta o el celular.</p>
+            <h3 data-i18n="comoFunciona.step4.title">Imprimilo o descargalo</h3>
+            <p data-i18n="comoFunciona.step4.desc">En una pulsera, una tarjeta o el celular.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
           <div class="timeline-step-number" aria-hidden="true">5</div>
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-siren"></use></svg>
-            <h3>Listo para una emergencia</h3>
-            <p>Cualquiera puede escanearlo con la cámara, sin instalar nada.</p>
+            <h3 data-i18n="comoFunciona.step5.title">Listo para una emergencia</h3>
+            <p data-i18n="comoFunciona.step5.desc">Cualquiera puede escanearlo con la cámara, sin instalar nada.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
           <div class="timeline-step-number" aria-hidden="true">6</div>
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>
-            <h3>Tu información, al toque</h3>
-            <p>Se muestra solo lo esencial, en una página pública de solo lectura.</p>
+            <h3 data-i18n="comoFunciona.step6.title">Tu información, al toque</h3>
+            <p data-i18n="comoFunciona.step6.desc">Se muestra solo lo esencial, en una página pública de solo lectura.</p>
           </div>
         </li>
       </ol>
@@ -1504,16 +1676,16 @@ section[id],
   <section class="section" id="formatos" aria-labelledby="formatos-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Dos formatos, un mismo objetivo</span>
-        <h2 id="formatos-title">Pulsera QR o medalla NFC</h2>
-        <p>Elegí el que mejor te sirva, o pedí los dos juntos. Los dos guardan la misma información: solo cambia cómo se leen.</p>
+        <span class="eyebrow" data-i18n="formatos.eyebrow">Dos formatos, un mismo objetivo</span>
+        <h2 id="formatos-title" data-i18n="formatos.title">Pulsera QR o medalla NFC</h2>
+        <p data-i18n="formatos.subtitle">Elegí el que mejor te sirva, o pedí los dos juntos. Los dos guardan la misma información: solo cambia cómo se leen.</p>
       </div>
 
       <div class="card-grid">
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-qr-code"></use></svg></div>
-          <h3>Pulsera QR</h3>
-          <p>
+          <h3 data-i18n="formatos.qr.title">Pulsera QR</h3>
+          <p data-i18n="formatos.qr.desc">
             Cualquiera la escanea con la cámara del celular y accede a tu
             ficha completa en la página de Saferide. Necesita que el
             celular que escanea tenga conexión a internet.
@@ -1521,8 +1693,8 @@ section[id],
         </div>
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-nfc"></use></svg></div>
-          <h3>Medalla NFC</h3>
-          <p>
+          <h3 data-i18n="formatos.nfc.title">Medalla NFC</h3>
+          <p data-i18n="formatos.nfc.desc">
             Al acercar el celular, muestra al instante lo más importante
             (grupo sanguíneo, alergias, medicación y contacto de emergencia)
             sin necesitar internet: ideal para zonas sin señal o sin datos.
@@ -1536,40 +1708,40 @@ section[id],
   <section class="section" id="para-quien" aria-labelledby="para-quien-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Para quién es</span>
-        <h2 id="para-quien-title">Pensado para cualquiera que quiera estar más seguro</h2>
+        <span class="eyebrow" data-i18n="paraQuien.eyebrow">Para quién es</span>
+        <h2 id="para-quien-title" data-i18n="paraQuien.title">Pensado para cualquiera que quiera estar más seguro</h2>
       </div>
 
       <div class="card-grid cols-3">
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-heart-pulse"></use></svg></div>
-          <h3>Personas con enfermedades crónicas</h3>
-          <p>Necesitan que el personal médico conozca su condición antes de intervenir.</p>
+          <h3 data-i18n="paraQuien.cronicas.title">Personas con enfermedades crónicas</h3>
+          <p data-i18n="paraQuien.cronicas.desc">Necesitan que el personal médico conozca su condición antes de intervenir.</p>
         </div>
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-shield-alert"></use></svg></div>
-          <h3>Personas alérgicas</h3>
-          <p>Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas.</p>
+          <h3 data-i18n="paraQuien.alergicas.title">Personas alérgicas</h3>
+          <p data-i18n="paraQuien.alergicas.desc">Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas.</p>
         </div>
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-user-round"></use></svg></div>
-          <h3>Adultos mayores</h3>
-          <p>Sobre todo quienes viven solos o salen sin acompañante.</p>
+          <h3 data-i18n="paraQuien.mayores.title">Adultos mayores</h3>
+          <p data-i18n="paraQuien.mayores.desc">Sobre todo quienes viven solos o salen sin acompañante.</p>
         </div>
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-bike"></use></svg></div>
-          <h3>Deportistas</h3>
-          <p>Ciclistas, runners, motociclistas, más expuestos a accidentes fuera de casa.</p>
+          <h3 data-i18n="paraQuien.deportistas.title">Deportistas</h3>
+          <p data-i18n="paraQuien.deportistas.desc">Ciclistas, runners, motociclistas, más expuestos a accidentes fuera de casa.</p>
         </div>
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-car"></use></svg></div>
-          <h3>Conductores</h3>
-          <p>Protagonistas frecuentes de siniestros viales.</p>
+          <h3 data-i18n="paraQuien.conductores.title">Conductores</h3>
+          <p data-i18n="paraQuien.conductores.desc">Protagonistas frecuentes de siniestros viales.</p>
         </div>
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-baby"></use></svg></div>
-          <h3>Niños y niñas</h3>
-          <p>Con sus datos cargados por sus padres o tutores.</p>
+          <h3 data-i18n="paraQuien.ninos.title">Niños y niñas</h3>
+          <p data-i18n="paraQuien.ninos.desc">Con sus datos cargados por sus padres o tutores.</p>
         </div>
       </div>
     </div>
@@ -1579,26 +1751,26 @@ section[id],
   <section class="section bg-light" id="beneficios" aria-labelledby="beneficios-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Beneficios</span>
-        <h2 id="beneficios-title">Por qué Saferide</h2>
+        <span class="eyebrow" data-i18n="beneficios.eyebrow">Beneficios</span>
+        <h2 id="beneficios-title" data-i18n="beneficios.title">Por qué Saferide</h2>
       </div>
 
       <div class="card-grid cols-4">
         <div class="card benefit-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-refresh-cw"></use></svg></div>
-          <p>Se actualiza cuando vos quieras, a diferencia de una pulsera grabada.</p>
+          <p data-i18n="beneficios.actualizable">Se actualiza cuando vos quieras, a diferencia de una pulsera grabada.</p>
         </div>
         <div class="card benefit-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-smartphone"></use></svg></div>
-          <p>Funciona con cualquier celular con cámara, sin instalar nada.</p>
+          <p data-i18n="beneficios.cualquierCelular">Funciona con cualquier celular con cámara, sin instalar nada.</p>
         </div>
         <div class="card benefit-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-tag"></use></svg></div>
-          <p>Económico y fácil de conseguir.</p>
+          <p data-i18n="beneficios.economico">Económico y fácil de conseguir.</p>
         </div>
         <div class="card benefit-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-shield-check"></use></svg></div>
-          <p>Pensado para emergencias reales, no solo para guardar datos.</p>
+          <p data-i18n="beneficios.emergenciasReales">Pensado para emergencias reales, no solo para guardar datos.</p>
         </div>
       </div>
     </div>
@@ -1608,28 +1780,28 @@ section[id],
   <section class="section" id="historia" aria-labelledby="historia-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Un ejemplo</span>
-        <h2 id="historia-title">Una historia real</h2>
+        <span class="eyebrow" data-i18n="historia.eyebrow">Un ejemplo</span>
+        <h2 id="historia-title" data-i18n="historia.title">Una historia real</h2>
       </div>
 
       <div class="story-card reveal">
         <blockquote>
-          <p>
+          <p data-i18n="historia.p1">
             Es una tarde de domingo y un ciclista sale a entrenar por una ruta que conoce
             de memoria. En una bajada, pierde el control y cae. Nadie que pasa por ahí sabe
             quién es, ni si tiene alguna alergia, ni a quién avisar.
           </p>
-          <p>
+          <p data-i18n="historia.p2">
             Cuando llega el equipo médico, alguien nota la pulsera con el código QR en su
             muñeca. La escanean con el celular y, en segundos, aparece lo que necesitan: su
             grupo sanguíneo, una alergia a un analgésico común, y el teléfono de su hermana.
           </p>
-          <p>
+          <p data-i18n="historia.p3">
             Ese dato evita que le administren un medicamento que podría haberle hecho mal,
             y permite avisar a su familia mientras todavía está siendo trasladado.
           </p>
         </blockquote>
-        <footer>Situación ilustrativa, a modo de ejemplo</footer>
+        <footer data-i18n="historia.footer">Situación ilustrativa, a modo de ejemplo</footer>
       </div>
     </div>
   </section>
@@ -1639,9 +1811,9 @@ section[id],
     <div class="container">
       <div class="split-panel">
         <div class="panel reveal" id="futuro">
-          <span class="eyebrow">Mirando hacia adelante</span>
-          <h2>Un proyecto pensado para crecer</h2>
-          <p>
+          <span class="eyebrow" data-i18n="futuro.eyebrow">Mirando hacia adelante</span>
+          <h2 data-i18n="futuro.title">Un proyecto pensado para crecer</h2>
+          <p data-i18n="futuro.body">
             Saferide no es solo una idea: viene con un modelo de negocio pensado para
             sostenerse en el tiempo, con posibles alianzas con hospitales, clínicas, obras
             sociales y clubes deportivos, y una hoja de ruta que incluye nuevas funciones
@@ -1649,9 +1821,9 @@ section[id],
           </p>
         </div>
         <div class="panel reveal" id="proyecto">
-          <span class="eyebrow">Quiénes lo hacemos</span>
-          <h2>Sobre el proyecto</h2>
-          <p>
+          <span class="eyebrow" data-i18n="proyecto.eyebrow">Quiénes lo hacemos</span>
+          <h2 data-i18n="proyecto.title">Sobre el proyecto</h2>
+          <p data-i18n-html="proyecto.body">
             Saferide es un proyecto tecnológico desarrollado por estudiantes de la Escuela
             Secundaria Técnica N.º 1 «Vuelta de Obligado», en Baradero.
             <br /><em>[Espacio para nombres del equipo]</em>
@@ -1665,25 +1837,25 @@ section[id],
   <section class="section stats-section" id="estadisticas" aria-labelledby="estadisticas-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Contexto</span>
-        <h2 id="estadisticas-title">Los números no mienten</h2>
-        <p>Y esto no le pasa solo a quienes andan en moto: cualquier persona puede necesitar ayuda médica urgente, en cualquier lugar.</p>
+        <span class="eyebrow" data-i18n="stats.eyebrow">Contexto</span>
+        <h2 id="estadisticas-title" data-i18n="stats.title">Los números no mienten</h2>
+        <p data-i18n="stats.subtitle">Y esto no le pasa solo a quienes andan en moto: cualquier persona puede necesitar ayuda médica urgente, en cualquier lugar.</p>
       </div>
 
       <div class="stats-grid">
         <div class="reveal">
           <div class="stat-number">11</div>
-          <p class="stat-label">personas mueren por día en siniestros viales en Argentina.</p>
+          <p class="stat-label" data-i18n="stats.stat1">personas mueren por día en siniestros viales en Argentina.</p>
         </div>
         <div class="reveal">
-          <div class="stat-number">4 de 10</div>
-          <p class="stat-label">víctimas fatales de siniestros viales iban en moto.</p>
+          <div class="stat-number" data-i18n="stats.stat2Number">4 de 10</div>
+          <p class="stat-label" data-i18n="stats.stat2">víctimas fatales de siniestros viales iban en moto.</p>
         </div>
       </div>
 
-      <p class="stats-source">Fuente: Agencia Nacional de Seguridad Vial (ANSV), datos oficiales 2024.</p>
+      <p class="stats-source" data-i18n="stats.source">Fuente: Agencia Nacional de Seguridad Vial (ANSV), datos oficiales 2024.</p>
 
-      <p class="stats-closing reveal">
+      <p class="stats-closing reveal" data-i18n="stats.closing">
         Detrás de cada cifra hay una persona a la que, muchas veces, nadie pudo identificar
         a tiempo. Saferide busca achicar esa distancia.
       </p>
@@ -1694,51 +1866,51 @@ section[id],
   <section class="section" id="comparativa" aria-labelledby="comparativa-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Comparativa</span>
-        <h2 id="comparativa-title">¿Por qué Saferide y no otra opción?</h2>
+        <span class="eyebrow" data-i18n="comparativa.eyebrow">Comparativa</span>
+        <h2 id="comparativa-title" data-i18n="comparativa.title">¿Por qué Saferide y no otra opción?</h2>
       </div>
 
       <div class="comparativa-table-wrap reveal">
         <table class="comparativa-table">
-          <caption class="sr-only">Comparación entre Saferide y otras alternativas de identificación médica</caption>
+          <caption class="sr-only" data-i18n="comparativa.caption">Comparación entre Saferide y otras alternativas de identificación médica</caption>
           <thead>
             <tr>
-              <th scope="col">Opción</th>
-              <th scope="col">Actualizable</th>
-              <th scope="col">Sin apps ni configuración</th>
-              <th scope="col">Sin límite de espacio</th>
+              <th scope="col" data-i18n="comparativa.colOpcion">Opción</th>
+              <th scope="col" data-i18n="comparativa.colActualizable">Actualizable</th>
+              <th scope="col" data-i18n="comparativa.colSinApps">Sin apps ni configuración</th>
+              <th scope="col" data-i18n="comparativa.colSinLimite">Sin límite de espacio</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th scope="row">Pulsera grabada</th>
-              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
-              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
-              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
+              <th scope="row" data-i18n="comparativa.rowPulsera">Pulsera grabada</th>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only" data-i18n="comparativa.no">No</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only" data-i18n="comparativa.no">No</span></td>
             </tr>
             <tr>
-              <th scope="row">Tarjeta impresa</th>
-              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
-              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
-              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
+              <th scope="row" data-i18n="comparativa.rowTarjeta">Tarjeta impresa</th>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only" data-i18n="comparativa.no">No</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only" data-i18n="comparativa.no">No</span></td>
             </tr>
             <tr>
-              <th scope="row">App médica</th>
-              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
-              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only">No</span></td>
-              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+              <th scope="row" data-i18n="comparativa.rowApp">App médica</th>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
+              <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only" data-i18n="comparativa.no">No</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
             </tr>
             <tr>
               <th scope="row">Saferide</th>
-              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
-              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
-              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only">Sí</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
+              <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <p class="comparativa-note reveal">Ninguna alternativa suma las tres cosas a la vez. Saferide sí.</p>
+      <p class="comparativa-note reveal" data-i18n="comparativa.note">Ninguna alternativa suma las tres cosas a la vez. Saferide sí.</p>
     </div>
   </section>
 
@@ -1746,35 +1918,35 @@ section[id],
   <section class="section bg-light" id="demo" aria-labelledby="demo-title">
     <div class="container demo-panel">
       <div class="section-heading reveal">
-        <span class="eyebrow">Vista previa</span>
-        <h2 id="demo-title">Mirá cómo se ve en una emergencia</h2>
-        <p>Así es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.</p>
+        <span class="eyebrow" data-i18n="demo.eyebrow">Vista previa</span>
+        <h2 id="demo-title" data-i18n="demo.title">Mirá cómo se ve en una emergencia</h2>
+        <p data-i18n="demo.subtitle">Así es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.</p>
       </div>
 
       <button class="btn btn-primary" id="demoToggleBtn" aria-expanded="false" aria-controls="demoResult">
         <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
-        <span class="btn-label">Ver ejemplo</span>
+        <span class="btn-label" id="demoToggleLabel" data-i18n="demo.verEjemplo">Ver ejemplo</span>
       </button>
 
       <div class="demo-result" id="demoResult">
         <span class="demo-badge">
           <svg class="icon" aria-hidden="true"><use href="#icon-alert-triangle"></use></svg>
-          Ejemplo — datos ficticios
+          <span data-i18n="demo.badge">Ejemplo — datos ficticios</span>
         </span>
 
         <div class="demo-card">
           <div class="demo-card-header">
             <svg class="icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
             <div>
-              <h3>Ficha médica de emergencia</h3>
-              <span>Generada por Saferide</span>
+              <h3 data-i18n="demo.fichaTitle">Ficha médica de emergencia</h3>
+              <span data-i18n="demo.generadaPor">Generada por Saferide</span>
             </div>
           </div>
           <dl>
-            <div class="demo-field"><dt>Grupo sanguíneo</dt><dd>0+</dd></div>
-            <div class="demo-field"><dt>Alergias</dt><dd>Penicilina</dd></div>
-            <div class="demo-field"><dt>Medicación habitual</dt><dd>Ninguna</dd></div>
-            <div class="demo-field"><dt>Contacto de emergencia</dt><dd>Ana Pérez — 011 5555-0123</dd></div>
+            <div class="demo-field"><dt data-i18n="field.grupoSanguineo">Grupo sanguíneo</dt><dd>0+</dd></div>
+            <div class="demo-field"><dt data-i18n="field.alergias">Alergias</dt><dd data-i18n="demo.penicilina">Penicilina</dd></div>
+            <div class="demo-field"><dt data-i18n="field.medicacion">Medicación habitual</dt><dd data-i18n="field.ninguna">Ninguna</dd></div>
+            <div class="demo-field"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd>Ana Pérez — 011 5555-0123</dd></div>
           </dl>
         </div>
       </div>
@@ -1785,9 +1957,9 @@ section[id],
   <section class="section bg-light" id="pedido" aria-labelledby="pedido-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> Enviamos a cualquier parte del mundo</span>
-        <h2 id="pedido-title">Pedí tu pulsera o medalla</h2>
-        <p>Completá tus datos de envío y te llega a domicilio. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.</p>
+        <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> <span data-i18n="pedido.eyebrow">Enviamos a cualquier parte del mundo</span></span>
+        <h2 id="pedido-title" data-i18n="pedido.title">Pedí tu pulsera o medalla</h2>
+        <p data-i18n="pedido.subtitle">Completá tus datos de envío y te llega a domicilio. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.</p>
       </div>
 
       <div class="demo-panel">
@@ -1795,27 +1967,27 @@ section[id],
           <form id="orderForm" novalidate>
             <div class="form-grid">
               <div class="form-field">
-                <label for="orderName">Nombre completo</label>
-                <input type="text" id="orderName" name="fullName" required placeholder="Ej: Juan Gómez" autocomplete="name" />
+                <label for="orderName" data-i18n="field.nombreCompleto">Nombre completo</label>
+                <input type="text" id="orderName" name="fullName" required placeholder="Ej: Juan Gómez" data-i18n-placeholder="ph.nombre" autocomplete="name" />
               </div>
               <div class="form-field">
-                <label for="orderEmail">Mail</label>
+                <label for="orderEmail" data-i18n="field.mail">Mail</label>
                 <input type="email" id="orderEmail" name="email" required placeholder="tu@mail.com" autocomplete="email" />
               </div>
               <div class="form-field">
-                <label for="orderPhone">Teléfono</label>
-                <input type="tel" id="orderPhone" name="phone" required placeholder="Ej: 011 4444-5566" autocomplete="tel" />
+                <label for="orderPhone" data-i18n="field.telefono">Teléfono</label>
+                <input type="tel" id="orderPhone" name="phone" required placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" autocomplete="tel" />
               </div>
               <div class="form-field">
-                <label for="orderProduct">Producto</label>
+                <label for="orderProduct" data-i18n="field.producto">Producto</label>
                 <select id="orderProduct" name="product" required>
-                  <option value="Pulsera QR" selected>Pulsera QR</option>
-                  <option value="Medalla NFC">Medalla NFC</option>
-                  <option value="Pack (pulsera + medalla)">Pack (pulsera + medalla)</option>
+                  <option value="qr" selected data-i18n="product.qr">Pulsera QR</option>
+                  <option value="nfc" data-i18n="product.nfc">Medalla NFC</option>
+                  <option value="pack" data-i18n="product.pack">Pack (pulsera + medalla)</option>
                 </select>
               </div>
               <div class="form-field">
-                <label for="orderQty">Cantidad</label>
+                <label for="orderQty" data-i18n="field.cantidad">Cantidad</label>
                 <select id="orderQty" name="quantity" required>
                   <option value="1" selected>1</option>
                   <option value="2">2</option>
@@ -1825,35 +1997,35 @@ section[id],
                 </select>
               </div>
               <div class="form-field">
-                <label for="orderAddress">Dirección (calle y número)</label>
-                <input type="text" id="orderAddress" name="address" required placeholder="Ej: Av. Siempre Viva 742" autocomplete="street-address" />
+                <label for="orderAddress" data-i18n="field.direccion">Dirección (calle y número)</label>
+                <input type="text" id="orderAddress" name="address" required placeholder="Ej: Av. Siempre Viva 742" data-i18n-placeholder="ph.direccion" autocomplete="street-address" />
               </div>
               <div class="form-field">
-                <label for="orderCity">Ciudad</label>
-                <input type="text" id="orderCity" name="city" required placeholder="Ej: Baradero" autocomplete="address-level2" />
+                <label for="orderCity" data-i18n="field.ciudad">Ciudad</label>
+                <input type="text" id="orderCity" name="city" required placeholder="Ej: Baradero" data-i18n-placeholder="ph.ciudad" autocomplete="address-level2" />
               </div>
               <div class="form-field">
-                <label for="orderState">Provincia / Estado</label>
-                <input type="text" id="orderState" name="state" placeholder="Ej: Buenos Aires" autocomplete="address-level1" />
+                <label for="orderState" data-i18n="field.provincia">Provincia / Estado</label>
+                <input type="text" id="orderState" name="state" placeholder="Ej: Buenos Aires" data-i18n-placeholder="ph.provincia" autocomplete="address-level1" />
               </div>
               <div class="form-field">
-                <label for="orderZip">Código postal</label>
-                <input type="text" id="orderZip" name="zip" required placeholder="Ej: 2942" autocomplete="postal-code" />
+                <label for="orderZip" data-i18n="field.codigoPostal">Código postal</label>
+                <input type="text" id="orderZip" name="zip" required placeholder="Ej: 2942" data-i18n-placeholder="ph.codigoPostal" autocomplete="postal-code" />
               </div>
               <div class="form-field">
-                <label for="orderCountry">País</label>
-                <input type="text" id="orderCountry" name="country" required placeholder="Ej: Argentina" autocomplete="country-name" />
+                <label for="orderCountry" data-i18n="field.pais">País</label>
+                <input type="text" id="orderCountry" name="country" required placeholder="Ej: Argentina" data-i18n-placeholder="ph.pais" autocomplete="country-name" />
               </div>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">
               <svg class="icon" aria-hidden="true"><use href="#icon-package"></use></svg>
-              Confirmar pedido
+              <span data-i18n="pedido.confirmar">Confirmar pedido</span>
             </button>
 
             <p class="modal-disclaimer">
               <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
-              Usamos tu mail únicamente para avisarte por correo las novedades de tu envío.
+              <span data-i18n="pedido.disclaimer">Usamos tu mail únicamente para avisarte por correo las novedades de tu envío.</span>
             </p>
           </form>
         </div>
@@ -1861,7 +2033,7 @@ section[id],
         <div id="orderResultView" hidden>
           <span class="demo-badge demo-badge-ok">
             <svg class="icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg>
-            Pedido confirmado
+            <span data-i18n="pedido.confirmado">Pedido confirmado</span>
           </span>
 
           <div class="demo-card">
@@ -1873,24 +2045,24 @@ section[id],
               </div>
             </div>
             <dl>
-              <div class="demo-field"><dt>Producto</dt><dd id="orderResultProduct">—</dd></div>
-              <div class="demo-field"><dt>Cantidad</dt><dd id="orderResultQty">—</dd></div>
-              <div class="demo-field"><dt>Enviar a</dt><dd id="orderResultAddress">—</dd></div>
-              <div class="demo-field"><dt>Teléfono</dt><dd id="orderResultPhone">—</dd></div>
+              <div class="demo-field"><dt data-i18n="field.producto">Producto</dt><dd id="orderResultProduct">—</dd></div>
+              <div class="demo-field"><dt data-i18n="field.cantidad">Cantidad</dt><dd id="orderResultQty">—</dd></div>
+              <div class="demo-field"><dt data-i18n="pedido.enviarA">Enviar a</dt><dd id="orderResultAddress">—</dd></div>
+              <div class="demo-field"><dt data-i18n="field.telefono">Teléfono</dt><dd id="orderResultPhone">—</dd></div>
             </dl>
           </div>
 
-          <p class="modal-disclaimer">
+          <p class="modal-disclaimer" data-i18n="pedido.avisoMail">
             Te avisamos por mail las novedades de tu envío. Guardá o descargá este comprobante.
           </p>
 
           <button type="button" class="btn btn-primary btn-block" id="orderDownloadBtn">
             <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
-            Descargar comprobante
+            <span data-i18n="pedido.descargarComprobante">Descargar comprobante</span>
           </button>
           <button type="button" class="btn btn-outline btn-block" id="orderEditBtn">
             <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
-            Hacer otro pedido
+            <span data-i18n="pedido.otroPedido">Hacer otro pedido</span>
           </button>
         </div>
       </div>
@@ -1901,63 +2073,63 @@ section[id],
   <section class="section" id="faq" aria-labelledby="faq-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Dudas frecuentes</span>
-        <h2 id="faq-title">Preguntas frecuentes</h2>
+        <span class="eyebrow" data-i18n="faq.eyebrow">Dudas frecuentes</span>
+        <h2 id="faq-title" data-i18n="faq.title">Preguntas frecuentes</h2>
       </div>
 
       <div class="faq-list reveal">
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            ¿Mis datos médicos quedan públicos?
+            <span data-i18n="faq.q1">¿Mis datos médicos quedan públicos?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>No. Solo se muestra lo esencial para una emergencia (grupo sanguíneo, alergias, medicación, contacto). El resto de tu perfil queda privado y solo vos podés editarlo.</p>
+            <p data-i18n="faq.a1">No. Solo se muestra lo esencial para una emergencia (grupo sanguíneo, alergias, medicación, contacto). El resto de tu perfil queda privado y solo vos podés editarlo.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            ¿Qué pasa si pierdo la pulsera?
+            <span data-i18n="faq.q2">¿Qué pasa si pierdo la pulsera?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>Podés generar un código nuevo cuando quieras desde tu cuenta; el anterior deja de estar activo.</p>
+            <p data-i18n="faq.a2">Podés generar un código nuevo cuando quieras desde tu cuenta; el anterior deja de estar activo.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            ¿Necesito internet para que funcione?
+            <span data-i18n="faq.q3">¿Necesito internet para que funcione?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>Con la pulsera QR, quien te escanea necesita conexión para ver tu ficha completa. Con la medalla NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.</p>
+            <p data-i18n="faq.a3">Con la pulsera QR, quien te escanea necesita conexión para ver tu ficha completa. Con la medalla NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            ¿Cualquier celular puede leer el QR?
+            <span data-i18n="faq.q4">¿Cualquier celular puede leer el QR?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>Sí, alcanza con la cámara. No hace falta instalar ninguna aplicación.</p>
+            <p data-i18n="faq.a4">Sí, alcanza con la cámara. No hace falta instalar ninguna aplicación.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            ¿Tiene algún costo?
+            <span data-i18n="faq.q5">¿Tiene algún costo?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>La versión básica es gratuita. A futuro habrá funciones adicionales opcionales.</p>
+            <p data-i18n="faq.a5">La versión básica es gratuita. A futuro habrá funciones adicionales opcionales.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            ¿Puedo actualizar mis datos cuando quiera?
+            <span data-i18n="faq.q6">¿Puedo actualizar mis datos cuando quiera?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>Sí, las veces que necesites, desde tu cuenta.</p>
+            <p data-i18n="faq.a6">Sí, las veces que necesites, desde tu cuenta.</p>
           </div></div>
         </div>
       </div>
@@ -1969,10 +2141,10 @@ section[id],
 <!-- ============ CTA FINAL + FOOTER ============ -->
 <section class="section cta-final" id="contacto" aria-labelledby="cta-final-title">
   <div class="container">
-    <h2 id="cta-final-title">¿Querés tener tu información siempre a mano?</h2>
+    <h2 id="cta-final-title" data-i18n="ctaFinal.title">¿Querés tener tu información siempre a mano?</h2>
     <div class="cta-actions">
-      <button type="button" class="btn btn-primary" data-prototype-trigger>Generar mi QR</button>
-      <a href="#pedido" class="btn btn-outline" style="color:#fff;border-color:#fff">Pedí tu pulsera</a>
+      <button type="button" class="btn btn-primary" data-prototype-trigger data-i18n="ctaFinal.generarQr">Generar mi QR</button>
+      <a href="#pedido" class="btn btn-outline" style="color:#fff;border-color:#fff" data-i18n="nav.pedido">Pedí tu pulsera</a>
     </div>
   </div>
 </section>
@@ -1982,7 +2154,7 @@ section[id],
     <div class="footer-top">
       <div class="footer-brand">
         <div class="logo"><span class="logo-safe">Safe</span><span class="logo-ride">ride</span></div>
-        <p class="footer-slogan">Tu información puede salvar tu vida.</p>
+        <p class="footer-slogan" data-i18n="hero.tagline">Tu información puede salvar tu vida.</p>
       </div>
 
       <div class="footer-contact">
@@ -1991,7 +2163,7 @@ section[id],
           contacto@saferide.com
         </a>
         <div class="footer-social">
-          <a href="https://www.instagram.com/saferide.baradero?igsh=MWZ2Zjk5c2FrenF6MQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Saferide en Instagram (se abre en una pestaña nueva)">
+          <a href="https://www.instagram.com/saferide.baradero?igsh=MWZ2Zjk5c2FrenF6MQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Saferide en Instagram (se abre en una pestaña nueva)" data-i18n-aria-label="footer.instagramAria">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -2004,7 +2176,7 @@ section[id],
 
     <div class="footer-bottom">
       <span>© 2026 Saferide</span>
-      <span>Proyecto escolar — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero</span>
+      <span data-i18n="footer.escolar">Proyecto escolar — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero</span>
     </div>
   </div>
 </footer>
@@ -2012,15 +2184,15 @@ section[id],
 <!-- ============ MODAL: PROBAR EL PROTOTIPO ============ -->
 <div class="modal-overlay" id="prototypeModal" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="prototypeModalTitle">
-    <button type="button" class="modal-close" id="prototypeModalClose" aria-label="Cerrar">
+    <button type="button" class="modal-close" id="prototypeModalClose" aria-label="Cerrar" data-i18n-aria-label="modal.cerrar">
       <svg class="icon" aria-hidden="true"><use href="#icon-x"></use></svg>
     </button>
 
     <div class="modal-body">
       <div id="prototypeFormView">
-        <span class="eyebrow">Creá tu cuenta</span>
-        <h2 id="prototypeModalTitle">Creá tu ficha de emergencia</h2>
-        <p>
+        <span class="eyebrow" data-i18n="modal.eyebrow">Creá tu cuenta</span>
+        <h2 id="prototypeModalTitle" data-i18n="modal.title">Creá tu ficha de emergencia</h2>
+        <p data-i18n="modal.intro">
           Completá estos datos para generar tu ficha y tu código QR.
           Solo necesitás tu mail — no hace falta contraseña — así podemos
           identificarte y avisarte novedades por correo.
@@ -2029,68 +2201,68 @@ section[id],
         <form id="prototypeForm" novalidate>
           <div class="form-grid">
             <div class="form-field">
-              <label for="protoName">Nombre completo</label>
-              <input type="text" id="protoName" name="fullName" required placeholder="Ej: Juan Gómez" autocomplete="off" />
+              <label for="protoName" data-i18n="field.nombreCompleto">Nombre completo</label>
+              <input type="text" id="protoName" name="fullName" required placeholder="Ej: Juan Gómez" data-i18n-placeholder="ph.nombre" autocomplete="off" />
             </div>
             <div class="form-field">
-              <label for="protoEmail">Mail</label>
+              <label for="protoEmail" data-i18n="field.mail">Mail</label>
               <input type="email" id="protoEmail" name="email" required placeholder="tu@mail.com" autocomplete="off" />
             </div>
             <div class="form-field">
-              <label for="protoBirthdate">Fecha de nacimiento</label>
+              <label for="protoBirthdate" data-i18n="field.fechaNacimiento">Fecha de nacimiento</label>
               <input type="date" id="protoBirthdate" name="birthdate" required />
             </div>
             <div class="form-field">
-              <label for="protoDni">DNI</label>
-              <input type="text" id="protoDni" name="dni" placeholder="Ej: 40123456" inputmode="numeric" />
+              <label for="protoDni" data-i18n="field.dni">DNI</label>
+              <input type="text" id="protoDni" name="dni" placeholder="Ej: 40123456" data-i18n-placeholder="ph.dni" inputmode="numeric" />
             </div>
             <div class="form-field">
-              <label for="protoBlood">Grupo sanguíneo</label>
+              <label for="protoBlood" data-i18n="field.grupoSanguineo">Grupo sanguíneo</label>
               <select id="protoBlood" name="blood" required>
-                <option value="" disabled selected>Elegí una opción</option>
+                <option value="" disabled selected data-i18n="field.elegiOpcion">Elegí una opción</option>
                 <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
                 <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
               </select>
             </div>
             <div class="form-field">
-              <label for="protoConditions">Enfermedades / condiciones preexistentes</label>
-              <input type="text" id="protoConditions" name="conditions" placeholder="Ej: Diabetes tipo 1, o «Ninguna»" />
+              <label for="protoConditions" data-i18n="field.condiciones">Enfermedades / condiciones preexistentes</label>
+              <input type="text" id="protoConditions" name="conditions" placeholder="Ej: Diabetes tipo 1, o «Ninguna»" data-i18n-placeholder="ph.condiciones" />
             </div>
             <div class="form-field">
-              <label for="protoAllergies">Alergias</label>
-              <input type="text" id="protoAllergies" name="allergies" placeholder="Ej: Penicilina, o «Ninguna»" />
+              <label for="protoAllergies" data-i18n="field.alergias">Alergias</label>
+              <input type="text" id="protoAllergies" name="allergies" placeholder="Ej: Penicilina, o «Ninguna»" data-i18n-placeholder="ph.alergias" />
             </div>
             <div class="form-field">
-              <label for="protoMeds">Medicación habitual</label>
-              <input type="text" id="protoMeds" name="meds" placeholder="Ej: Ninguna" />
+              <label for="protoMeds" data-i18n="field.medicacion">Medicación habitual</label>
+              <input type="text" id="protoMeds" name="meds" placeholder="Ej: Ninguna" data-i18n-placeholder="ph.ninguna" />
             </div>
             <div class="form-field">
-              <label for="protoInsurance">Obra social / cobertura médica</label>
-              <input type="text" id="protoInsurance" name="insurance" placeholder="Ej: Sin cobertura" />
+              <label for="protoInsurance" data-i18n="field.obraSocial">Obra social / cobertura médica</label>
+              <input type="text" id="protoInsurance" name="insurance" placeholder="Ej: Sin cobertura" data-i18n-placeholder="ph.sinCobertura" />
             </div>
             <div class="form-field">
-              <label for="protoPhone">Teléfono propio</label>
-              <input type="tel" id="protoPhone" name="ownPhone" placeholder="Ej: 011 4444-5566" />
+              <label for="protoPhone" data-i18n="field.telefonoPropio">Teléfono propio</label>
+              <input type="tel" id="protoPhone" name="ownPhone" placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" />
             </div>
             <div class="form-field">
-              <label for="protoContactName">Contacto de emergencia (nombre)</label>
-              <input type="text" id="protoContactName" name="contactName" required placeholder="Ej: Ana Pérez" />
+              <label for="protoContactName" data-i18n="field.contactoNombre">Contacto de emergencia (nombre)</label>
+              <input type="text" id="protoContactName" name="contactName" required placeholder="Ej: Ana Pérez" data-i18n-placeholder="ph.contactoNombre" />
             </div>
             <div class="form-field">
-              <label for="protoContactPhone">Contacto de emergencia (teléfono)</label>
-              <input type="tel" id="protoContactPhone" name="contactPhone" required placeholder="Ej: 011 5555-0123" />
+              <label for="protoContactPhone" data-i18n="field.contactoTelefono">Contacto de emergencia (teléfono)</label>
+              <input type="tel" id="protoContactPhone" name="contactPhone" required placeholder="Ej: 011 5555-0123" data-i18n-placeholder="ph.telefono" />
             </div>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">
             <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
-            Generar mi QR
+            <span data-i18n="modal.generarQr">Generar mi QR</span>
           </button>
 
           <p class="modal-disclaimer">
             <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
-            Tus datos se procesan en este dispositivo. Al generar tu QR
-            vas a poder descargar tu ficha para guardarla o imprimirla.
+            <span data-i18n="modal.disclaimer">Tus datos se procesan en este dispositivo. Al generar tu QR
+            vas a poder descargar tu ficha para guardarla o imprimirla.</span>
           </p>
         </form>
       </div>
@@ -2098,7 +2270,7 @@ section[id],
       <div id="prototypeResultView" hidden>
         <span class="demo-badge demo-badge-ok">
           <svg class="icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg>
-          Simulación generada
+          <span data-i18n="modal.simulacion">Simulación generada</span>
         </span>
 
         <div class="demo-card">
@@ -2110,30 +2282,30 @@ section[id],
             </div>
           </div>
           <dl>
-            <div class="demo-field"><dt>Fecha de nacimiento</dt><dd id="protoResultBirthdate">—</dd></div>
-            <div class="demo-field"><dt>DNI</dt><dd id="protoResultDni">—</dd></div>
-            <div class="demo-field"><dt>Grupo sanguíneo</dt><dd id="protoResultBlood">—</dd></div>
-            <div class="demo-field"><dt>Enfermedades / condiciones</dt><dd id="protoResultConditions">—</dd></div>
-            <div class="demo-field"><dt>Alergias</dt><dd id="protoResultAllergies">—</dd></div>
-            <div class="demo-field"><dt>Medicación habitual</dt><dd id="protoResultMeds">—</dd></div>
-            <div class="demo-field"><dt>Obra social / cobertura</dt><dd id="protoResultInsurance">—</dd></div>
-            <div class="demo-field"><dt>Teléfono propio</dt><dd id="protoResultOwnPhone">—</dd></div>
-            <div class="demo-field"><dt>Contacto de emergencia</dt><dd id="protoResultContact">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.fechaNacimiento">Fecha de nacimiento</dt><dd id="protoResultBirthdate">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.dni">DNI</dt><dd id="protoResultDni">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.grupoSanguineo">Grupo sanguíneo</dt><dd id="protoResultBlood">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.condicionesCortas">Enfermedades / condiciones</dt><dd id="protoResultConditions">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.alergias">Alergias</dt><dd id="protoResultAllergies">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.medicacion">Medicación habitual</dt><dd id="protoResultMeds">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.obraSocialCorta">Obra social / cobertura</dt><dd id="protoResultInsurance">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.telefonoPropio">Teléfono propio</dt><dd id="protoResultOwnPhone">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd id="protoResultContact">—</dd></div>
           </dl>
         </div>
 
-        <p class="modal-disclaimer">
+        <p class="modal-disclaimer" data-i18n="modal.resultDisclaimer">
           Así se ve tu ficha pública al escanear el QR o acercar la medalla NFC.
           Descargala para guardarla en tu celular o imprimirla junto con tu pedido.
         </p>
 
         <button type="button" class="btn btn-primary btn-block" id="prototypeDownloadBtn">
           <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
-          Descargar mi ficha
+          <span data-i18n="modal.descargarFicha">Descargar mi ficha</span>
         </button>
         <button type="button" class="btn btn-outline btn-block" id="prototypeEditBtn">
           <svg class="icon" aria-hidden="true"><use href="#icon-pencil"></use></svg>
-          Editar datos
+          <span data-i18n="modal.editarDatos">Editar datos</span>
         </button>
       </div>
     </div>
@@ -2141,7 +2313,595 @@ section[id],
 </div>
 
 <script>
+// ============ TRADUCCIONES (ES / EN) ============
+const translations = {
+  es: {
+    meta: { title: "Saferide — Tu información puede salvar tu vida" },
+    nav: {
+      logoAria: "Saferide, ir al inicio",
+      mainAria: "Navegación principal",
+      comoFunciona: "Cómo funciona",
+      formatos: "Formatos",
+      paraQuien: "Para quién es",
+      beneficios: "Beneficios",
+      comparativa: "Comparativa",
+      pedido: "Pedí tu pulsera",
+      faq: "FAQ",
+      contacto: "Contacto",
+      creaTuFicha: "Creá tu ficha",
+      themeToggleAria: "Cambiar a modo oscuro",
+      themeToggleAriaDark: "Cambiar a modo claro",
+      langToggleAria: "Switch to English",
+      menuToggleAria: "Abrir menú de navegación",
+    },
+    hero: {
+      tagline: "Tu información puede salvar tu vida.",
+      desc: "Una pulsera QR y una medalla NFC con tus datos médicos esenciales, siempre con vos. Para que, ante cualquier emergencia y en cualquier parte del mundo, el personal de salud tenga tu información clave apenas ingresás a una guardia, hospital o clínica.",
+      ctaPrimary: "Ver cómo funciona",
+      ctaSecondary: "Creá tu ficha",
+      qrIllustration: "Ilustración de una pulsera con un colgante de código QR",
+    },
+    problema: {
+      eyebrow: "El problema",
+      title: "Cuando más se necesita, es cuando menos se tiene",
+      body: "En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico: si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar — ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica, en cualquier país. Las pulseras grabadas y las tarjetas de emergencia ayudan, pero se quedan cortas: no se pueden actualizar y tienen espacio limitado. Saferide combina un accesorio simple con una plataforma digital que se actualiza cuando vos quieras, pensada para cualquier persona, no solo para quienes andan en moto.",
+    },
+    comoFunciona: {
+      eyebrow: "Paso a paso",
+      title: "Cómo funciona",
+      subtitle: "De la carga de tus datos a la lectura del QR, en seis pasos simples.",
+      step1: { title: "Registrate con tu mail", desc: "Sin contraseñas: solo tu mail, para identificarte y avisarte novedades." },
+      step2: { title: "Cargá tus datos médicos", desc: "Grupo sanguíneo, alergias, medicación y un contacto de emergencia." },
+      step3: { title: "Generá tu QR", desc: "El sistema arma tu código único al instante." },
+      step4: { title: "Imprimilo o descargalo", desc: "En una pulsera, una tarjeta o el celular." },
+      step5: { title: "Listo para una emergencia", desc: "Cualquiera puede escanearlo con la cámara, sin instalar nada." },
+      step6: { title: "Tu información, al toque", desc: "Se muestra solo lo esencial, en una página pública de solo lectura." },
+    },
+    formatos: {
+      eyebrow: "Dos formatos, un mismo objetivo",
+      title: "Pulsera QR o medalla NFC",
+      subtitle: "Elegí el que mejor te sirva, o pedí los dos juntos. Los dos guardan la misma información: solo cambia cómo se leen.",
+      qr: { title: "Pulsera QR", desc: "Cualquiera la escanea con la cámara del celular y accede a tu ficha completa en la página de Saferide. Necesita que el celular que escanea tenga conexión a internet." },
+      nfc: { title: "Medalla NFC", desc: "Al acercar el celular, muestra al instante lo más importante (grupo sanguíneo, alergias, medicación y contacto de emergencia) sin necesitar internet: ideal para zonas sin señal o sin datos." },
+    },
+    paraQuien: {
+      eyebrow: "Para quién es",
+      title: "Pensado para cualquiera que quiera estar más seguro",
+      cronicas: { title: "Personas con enfermedades crónicas", desc: "Necesitan que el personal médico conozca su condición antes de intervenir." },
+      alergicas: { title: "Personas alérgicas", desc: "Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas." },
+      mayores: { title: "Adultos mayores", desc: "Sobre todo quienes viven solos o salen sin acompañante." },
+      deportistas: { title: "Deportistas", desc: "Ciclistas, runners, motociclistas, más expuestos a accidentes fuera de casa." },
+      conductores: { title: "Conductores", desc: "Protagonistas frecuentes de siniestros viales." },
+      ninos: { title: "Niños y niñas", desc: "Con sus datos cargados por sus padres o tutores." },
+    },
+    beneficios: {
+      eyebrow: "Beneficios",
+      title: "Por qué Saferide",
+      actualizable: "Se actualiza cuando vos quieras, a diferencia de una pulsera grabada.",
+      cualquierCelular: "Funciona con cualquier celular con cámara, sin instalar nada.",
+      economico: "Económico y fácil de conseguir.",
+      emergenciasReales: "Pensado para emergencias reales, no solo para guardar datos.",
+    },
+    historia: {
+      eyebrow: "Un ejemplo",
+      title: "Una historia real",
+      p1: "Es una tarde de domingo y un ciclista sale a entrenar por una ruta que conoce de memoria. En una bajada, pierde el control y cae. Nadie que pasa por ahí sabe quién es, ni si tiene alguna alergia, ni a quién avisar.",
+      p2: "Cuando llega el equipo médico, alguien nota la pulsera con el código QR en su muñeca. La escanean con el celular y, en segundos, aparece lo que necesitan: su grupo sanguíneo, una alergia a un analgésico común, y el teléfono de su hermana.",
+      p3: "Ese dato evita que le administren un medicamento que podría haberle hecho mal, y permite avisar a su familia mientras todavía está siendo trasladado.",
+      footer: "Situación ilustrativa, a modo de ejemplo",
+    },
+    futuro: {
+      eyebrow: "Mirando hacia adelante",
+      title: "Un proyecto pensado para crecer",
+      body: "Saferide no es solo una idea: viene con un modelo de negocio pensado para sostenerse en el tiempo, con posibles alianzas con hospitales, clínicas, obras sociales y clubes deportivos, y una hoja de ruta que incluye nuevas funciones como historial de vacunas o turnos médicos.",
+    },
+    proyecto: {
+      eyebrow: "Quiénes lo hacemos",
+      title: "Sobre el proyecto",
+      body: 'Saferide es un proyecto tecnológico desarrollado por estudiantes de la Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», en Baradero.<br /><em>[Espacio para nombres del equipo]</em>',
+    },
+    stats: {
+      eyebrow: "Contexto",
+      title: "Los números no mienten",
+      subtitle: "Y esto no le pasa solo a quienes andan en moto: cualquier persona puede necesitar ayuda médica urgente, en cualquier lugar.",
+      stat1: "personas mueren por día en siniestros viales en Argentina.",
+      stat2Number: "4 de 10",
+      stat2: "víctimas fatales de siniestros viales iban en moto.",
+      source: "Fuente: Agencia Nacional de Seguridad Vial (ANSV), datos oficiales 2024.",
+      closing: "Detrás de cada cifra hay una persona a la que, muchas veces, nadie pudo identificar a tiempo. Saferide busca achicar esa distancia.",
+    },
+    comparativa: {
+      eyebrow: "Comparativa",
+      title: "¿Por qué Saferide y no otra opción?",
+      caption: "Comparación entre Saferide y otras alternativas de identificación médica",
+      colOpcion: "Opción",
+      colActualizable: "Actualizable",
+      colSinApps: "Sin apps ni configuración",
+      colSinLimite: "Sin límite de espacio",
+      rowPulsera: "Pulsera grabada",
+      rowTarjeta: "Tarjeta impresa",
+      rowApp: "App médica",
+      no: "No",
+      si: "Sí",
+      note: "Ninguna alternativa suma las tres cosas a la vez. Saferide sí.",
+    },
+    demo: {
+      eyebrow: "Vista previa",
+      title: "Mirá cómo se ve en una emergencia",
+      subtitle: "Así es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.",
+      verEjemplo: "Ver ejemplo",
+      ocultarEjemplo: "Ocultar ejemplo",
+      badge: "Ejemplo — datos ficticios",
+      fichaTitle: "Ficha médica de emergencia",
+      generadaPor: "Generada por Saferide",
+      penicilina: "Penicilina",
+    },
+    field: {
+      grupoSanguineo: "Grupo sanguíneo",
+      alergias: "Alergias",
+      medicacion: "Medicación habitual",
+      contactoEmergencia: "Contacto de emergencia",
+      ninguna: "Ninguna",
+      nombreCompleto: "Nombre completo",
+      mail: "Mail",
+      telefono: "Teléfono",
+      producto: "Producto",
+      cantidad: "Cantidad",
+      direccion: "Dirección (calle y número)",
+      ciudad: "Ciudad",
+      provincia: "Provincia / Estado",
+      codigoPostal: "Código postal",
+      pais: "País",
+      fechaNacimiento: "Fecha de nacimiento",
+      dni: "DNI",
+      elegiOpcion: "Elegí una opción",
+      condiciones: "Enfermedades / condiciones preexistentes",
+      condicionesCortas: "Enfermedades / condiciones",
+      obraSocial: "Obra social / cobertura médica",
+      obraSocialCorta: "Obra social / cobertura",
+      telefonoPropio: "Teléfono propio",
+      contactoNombre: "Contacto de emergencia (nombre)",
+      contactoTelefono: "Contacto de emergencia (teléfono)",
+    },
+    ph: {
+      nombre: "Ej: Juan Gómez",
+      telefono: "Ej: 011 4444-5566",
+      direccion: "Ej: Av. Siempre Viva 742",
+      ciudad: "Ej: Baradero",
+      provincia: "Ej: Buenos Aires",
+      codigoPostal: "Ej: 2942",
+      pais: "Ej: Argentina",
+      dni: "Ej: 40123456",
+      condiciones: "Ej: Diabetes tipo 1, o «Ninguna»",
+      alergias: "Ej: Penicilina, o «Ninguna»",
+      ninguna: "Ej: Ninguna",
+      sinCobertura: "Ej: Sin cobertura",
+      contactoNombre: "Ej: Ana Pérez",
+    },
+    product: {
+      qr: "Pulsera QR",
+      nfc: "Medalla NFC",
+      pack: "Pack (pulsera + medalla)",
+    },
+    pedido: {
+      eyebrow: "Enviamos a cualquier parte del mundo",
+      title: "Pedí tu pulsera o medalla",
+      subtitle: "Completá tus datos de envío y te llega a domicilio. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.",
+      confirmar: "Confirmar pedido",
+      disclaimer: "Usamos tu mail únicamente para avisarte por correo las novedades de tu envío.",
+      confirmado: "Pedido confirmado",
+      pedidoSaferide: "Pedido Saferide",
+      enviarA: "Enviar a",
+      avisoMail: "Te avisamos por mail las novedades de tu envío. Guardá o descargá este comprobante.",
+      descargarComprobante: "Descargar comprobante",
+      otroPedido: "Hacer otro pedido",
+    },
+    faq: {
+      eyebrow: "Dudas frecuentes",
+      title: "Preguntas frecuentes",
+      q1: "¿Mis datos médicos quedan públicos?",
+      a1: "No. Solo se muestra lo esencial para una emergencia (grupo sanguíneo, alergias, medicación, contacto). El resto de tu perfil queda privado y solo vos podés editarlo.",
+      q2: "¿Qué pasa si pierdo la pulsera?",
+      a2: "Podés generar un código nuevo cuando quieras desde tu cuenta; el anterior deja de estar activo.",
+      q3: "¿Necesito internet para que funcione?",
+      a3: "Con la pulsera QR, quien te escanea necesita conexión para ver tu ficha completa. Con la medalla NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.",
+      q4: "¿Cualquier celular puede leer el QR?",
+      a4: "Sí, alcanza con la cámara. No hace falta instalar ninguna aplicación.",
+      q5: "¿Tiene algún costo?",
+      a5: "La versión básica es gratuita. A futuro habrá funciones adicionales opcionales.",
+      q6: "¿Puedo actualizar mis datos cuando quiera?",
+      a6: "Sí, las veces que necesites, desde tu cuenta.",
+    },
+    ctaFinal: {
+      title: "¿Querés tener tu información siempre a mano?",
+      generarQr: "Generar mi QR",
+    },
+    footer: {
+      instagramAria: "Saferide en Instagram (se abre en una pestaña nueva)",
+      escolar: "Proyecto escolar — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero",
+    },
+    modal: {
+      cerrar: "Cerrar",
+      eyebrow: "Creá tu cuenta",
+      title: "Creá tu ficha de emergencia",
+      intro: "Completá estos datos para generar tu ficha y tu código QR. Solo necesitás tu mail — no hace falta contraseña — así podemos identificarte y avisarte novedades por correo.",
+      generarQr: "Generar mi QR",
+      disclaimer: "Tus datos se procesan en este dispositivo. Al generar tu QR vas a poder descargar tu ficha para guardarla o imprimirla.",
+      simulacion: "Simulación generada",
+      resultDisclaimer: "Así se ve tu ficha pública al escanear el QR o acercar la medalla NFC. Descargala para guardarla en tu celular o imprimirla junto con tu pedido.",
+      descargarFicha: "Descargar mi ficha",
+      editarDatos: "Editar datos",
+    },
+    fallback: {
+      noEspecificado: "No especificado",
+      noEspecificada: "No especificada",
+      ningunaEspecificada: "Ninguna especificada",
+    },
+    download: {
+      dateLocale: "es-AR",
+      fichaHeader: "FICHA DE EMERGENCIA — SAFERIDE",
+      pedidoHeader: "COMPROBANTE DE PEDIDO — SAFERIDE",
+      nombre: "Nombre",
+      mail: "Mail",
+      fechaNacimiento: "Fecha de nacimiento",
+      dni: "DNI",
+      grupoSanguineo: "Grupo sanguíneo",
+      condiciones: "Enfermedades / condiciones",
+      alergias: "Alergias",
+      medicacion: "Medicación habitual",
+      obraSocial: "Obra social / cobertura",
+      telefonoPropio: "Teléfono propio",
+      contactoEmergencia: "Contacto de emergencia",
+      generadoCon: "Generado con Saferide.",
+      producto: "Producto",
+      cantidad: "Cantidad",
+      enviarA: "Enviar a",
+      telefono: "Teléfono",
+      avisoDespacho: "Te avisamos por mail cuando despachemos tu pedido.",
+    },
+  },
+  en: {
+    meta: { title: "Saferide — Your information can save your life" },
+    nav: {
+      logoAria: "Saferide, go to homepage",
+      mainAria: "Main navigation",
+      comoFunciona: "How it works",
+      formatos: "Formats",
+      paraQuien: "Who it's for",
+      beneficios: "Benefits",
+      comparativa: "Comparison",
+      pedido: "Order your bracelet",
+      faq: "FAQ",
+      contacto: "Contact",
+      creaTuFicha: "Create your ID",
+      themeToggleAria: "Switch to dark mode",
+      themeToggleAriaDark: "Switch to light mode",
+      langToggleAria: "Cambiar a español",
+      menuToggleAria: "Open navigation menu",
+    },
+    hero: {
+      tagline: "Your information can save your life.",
+      desc: "A QR bracelet and an NFC medal with your essential medical data, always with you. So that, in any emergency and anywhere in the world, medical staff have your key information the moment you arrive at an ER, hospital or clinic.",
+      ctaPrimary: "See how it works",
+      ctaSecondary: "Create your ID",
+      qrIllustration: "Illustration of a bracelet with a QR code charm",
+    },
+    problema: {
+      eyebrow: "The problem",
+      title: "When it's needed most is when it's hardest to find",
+      body: "In an emergency, every minute counts. But that's exactly when the most basic information is missing: whether the person has an allergy, what medication they take, their blood type, or who to call — whether it happens on the street, at home, or at the ER of a hospital or clinic, in any country. Engraved bracelets and emergency cards help, but they fall short: they can't be updated and have limited space. Saferide combines a simple accessory with a digital platform you can update anytime, designed for anyone — not just motorcycle riders.",
+    },
+    comoFunciona: {
+      eyebrow: "Step by step",
+      title: "How it works",
+      subtitle: "From loading your data to scanning the QR, in six simple steps.",
+      step1: { title: "Sign up with your email", desc: "No passwords: just your email, to identify you and send you updates." },
+      step2: { title: "Add your medical data", desc: "Blood type, allergies, medication, and an emergency contact." },
+      step3: { title: "Generate your QR", desc: "The system builds your unique code instantly." },
+      step4: { title: "Print or download it", desc: "On a bracelet, a card, or your phone." },
+      step5: { title: "Ready for an emergency", desc: "Anyone can scan it with their camera, no app needed." },
+      step6: { title: "Your information, in a tap", desc: "Only the essentials are shown, on a public read-only page." },
+    },
+    formatos: {
+      eyebrow: "Two formats, one goal",
+      title: "QR bracelet or NFC medal",
+      subtitle: "Pick whichever suits you best, or order both together. Both store the same information — only how they're read changes.",
+      qr: { title: "QR bracelet", desc: "Anyone can scan it with a phone camera and access your full ID on the Saferide page. The scanning phone needs an internet connection." },
+      nfc: { title: "NFC medal", desc: "Tapping a phone against it instantly shows the most important data (blood type, allergies, medication and emergency contact) with no internet needed: ideal for areas without signal or data." },
+    },
+    paraQuien: {
+      eyebrow: "Who it's for",
+      title: "Designed for anyone who wants to feel safer",
+      cronicas: { title: "People with chronic conditions", desc: "They need medical staff to know their condition before treating them." },
+      alergicas: { title: "People with allergies", desc: "A reaction to the wrong medication can be as serious as not being treated at all." },
+      mayores: { title: "Older adults", desc: "Especially those who live alone or go out unaccompanied." },
+      deportistas: { title: "Athletes", desc: "Cyclists, runners, motorcyclists — more exposed to accidents away from home." },
+      conductores: { title: "Drivers", desc: "Frequent protagonists of road accidents." },
+      ninos: { title: "Children", desc: "With their data entered by their parents or guardians." },
+    },
+    beneficios: {
+      eyebrow: "Benefits",
+      title: "Why Saferide",
+      actualizable: "Updates whenever you want, unlike an engraved bracelet.",
+      cualquierCelular: "Works with any phone that has a camera, no installs needed.",
+      economico: "Affordable and easy to get.",
+      emergenciasReales: "Built for real emergencies, not just for storing data.",
+    },
+    historia: {
+      eyebrow: "An example",
+      title: "A real story",
+      p1: "It's a Sunday afternoon, and a cyclist heads out to train on a route he knows by heart. Going downhill, he loses control and falls. No one passing by knows who he is, whether he has any allergies, or who to call.",
+      p2: "When the medical team arrives, someone notices the bracelet with the QR code on his wrist. They scan it with their phone and, within seconds, what they need appears: his blood type, an allergy to a common painkiller, and his sister's phone number.",
+      p3: "That piece of information keeps them from giving him a medication that could have harmed him, and lets them notify his family while he's still being transported.",
+      footer: "Illustrative scenario, for example purposes",
+    },
+    futuro: {
+      eyebrow: "Looking ahead",
+      title: "A project built to grow",
+      body: "Saferide isn't just an idea: it comes with a business model designed to be sustainable over time, with possible partnerships with hospitals, clinics, health insurers and sports clubs, and a roadmap that includes new features like vaccine records or medical appointments.",
+    },
+    proyecto: {
+      eyebrow: "Who's behind it",
+      title: "About the project",
+      body: 'Saferide is a technology project developed by students at Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», in Baradero, Argentina.<br /><em>[Space for team names]</em>',
+    },
+    stats: {
+      eyebrow: "Context",
+      title: "The numbers don't lie",
+      subtitle: "And this doesn't only happen to motorcycle riders: anyone can need urgent medical help, anywhere.",
+      stat1: "people die every day in road accidents in Argentina.",
+      stat2Number: "4 out of 10",
+      stat2: "fatal road accident victims were riding a motorcycle.",
+      source: "Source: Agencia Nacional de Seguridad Vial (ANSV), official 2024 data.",
+      closing: "Behind every number is a person who, many times, no one could identify in time. Saferide aims to close that gap.",
+    },
+    comparativa: {
+      eyebrow: "Comparison",
+      title: "Why Saferide and not another option?",
+      caption: "Comparison between Saferide and other medical identification alternatives",
+      colOpcion: "Option",
+      colActualizable: "Updatable",
+      colSinApps: "No apps or setup",
+      colSinLimite: "No space limit",
+      rowPulsera: "Engraved bracelet",
+      rowTarjeta: "Printed card",
+      rowApp: "Medical app",
+      no: "No",
+      si: "Yes",
+      note: "No other alternative combines all three at once. Saferide does.",
+    },
+    demo: {
+      eyebrow: "Preview",
+      title: "See what it looks like in an emergency",
+      subtitle: "This is the screen medical staff see when they scan the code. It's a fictional example, so you can see how it works.",
+      verEjemplo: "See example",
+      ocultarEjemplo: "Hide example",
+      badge: "Example — fictional data",
+      fichaTitle: "Emergency medical ID",
+      generadaPor: "Generated by Saferide",
+      penicilina: "Penicillin",
+    },
+    field: {
+      grupoSanguineo: "Blood type",
+      alergias: "Allergies",
+      medicacion: "Regular medication",
+      contactoEmergencia: "Emergency contact",
+      ninguna: "None",
+      nombreCompleto: "Full name",
+      mail: "Email",
+      telefono: "Phone",
+      producto: "Product",
+      cantidad: "Quantity",
+      direccion: "Address (street and number)",
+      ciudad: "City",
+      provincia: "State / Province",
+      codigoPostal: "ZIP / Postal code",
+      pais: "Country",
+      fechaNacimiento: "Date of birth",
+      dni: "National ID",
+      elegiOpcion: "Choose an option",
+      condiciones: "Chronic conditions / pre-existing conditions",
+      condicionesCortas: "Conditions",
+      obraSocial: "Health insurance / coverage",
+      obraSocialCorta: "Insurance / coverage",
+      telefonoPropio: "Own phone",
+      contactoNombre: "Emergency contact (name)",
+      contactoTelefono: "Emergency contact (phone)",
+    },
+    ph: {
+      nombre: "E.g.: John Smith",
+      telefono: "E.g.: +1 555 123 4567",
+      direccion: "E.g.: 123 Main St",
+      ciudad: "E.g.: Baradero",
+      provincia: "E.g.: Buenos Aires",
+      codigoPostal: "E.g.: 2942",
+      pais: "E.g.: United States",
+      dni: "E.g.: 40123456",
+      condiciones: "E.g.: Type 1 diabetes, or “None”",
+      alergias: "E.g.: Penicillin, or “None”",
+      ninguna: "E.g.: None",
+      sinCobertura: "E.g.: No coverage",
+      contactoNombre: "E.g.: Jane Smith",
+    },
+    product: {
+      qr: "QR bracelet",
+      nfc: "NFC medal",
+      pack: "Pack (bracelet + medal)",
+    },
+    pedido: {
+      eyebrow: "We ship anywhere in the world",
+      title: "Order your bracelet or medal",
+      subtitle: "Fill in your shipping details and it'll arrive at your door. We only ask for your email to notify you about your order — no password needed.",
+      confirmar: "Confirm order",
+      disclaimer: "We use your email only to notify you by mail about your shipment updates.",
+      confirmado: "Order confirmed",
+      pedidoSaferide: "Saferide Order",
+      enviarA: "Ship to",
+      avisoMail: "We'll notify you by mail about your shipment updates. Save or download this receipt.",
+      descargarComprobante: "Download receipt",
+      otroPedido: "Place another order",
+    },
+    faq: {
+      eyebrow: "Frequently asked questions",
+      title: "FAQ",
+      q1: "Is my medical data public?",
+      a1: "No. Only the essentials for an emergency are shown (blood type, allergies, medication, contact). The rest of your profile stays private and only you can edit it.",
+      q2: "What happens if I lose the bracelet?",
+      a2: "You can generate a new code anytime from your account; the old one stops working.",
+      q3: "Do I need internet for it to work?",
+      a3: "With the QR bracelet, whoever scans it needs a connection to see your full ID. With the NFC medal, no connection is needed: the most important data shows instantly, offline. You do need a connection to load or update your data.",
+      q4: "Can any phone read the QR?",
+      a4: "Yes, a camera is enough. No app needs to be installed.",
+      q5: "Does it cost anything?",
+      a5: "The basic version is free. Optional additional features will be available in the future.",
+      q6: "Can I update my data whenever I want?",
+      a6: "Yes, as many times as you need, from your account.",
+    },
+    ctaFinal: {
+      title: "Want to have your information always on hand?",
+      generarQr: "Generate my QR",
+    },
+    footer: {
+      instagramAria: "Saferide on Instagram (opens in a new tab)",
+      escolar: "School project — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero, Argentina",
+    },
+    modal: {
+      cerrar: "Close",
+      eyebrow: "Create your account",
+      title: "Create your emergency ID",
+      intro: "Fill in this information to generate your ID and QR code. You only need your email — no password needed — so we can identify you and send you updates by mail.",
+      generarQr: "Generate my QR",
+      disclaimer: "Your data is processed on this device. Once you generate your QR you'll be able to download your ID to save or print it.",
+      simulacion: "Simulation generated",
+      resultDisclaimer: "This is how your public ID looks when someone scans the QR or taps the NFC medal. Download it to save on your phone or print it with your order.",
+      descargarFicha: "Download my ID",
+      editarDatos: "Edit data",
+    },
+    fallback: {
+      noEspecificado: "Not specified",
+      noEspecificada: "Not specified",
+      ningunaEspecificada: "None specified",
+    },
+    download: {
+      dateLocale: "en-US",
+      fichaHeader: "EMERGENCY MEDICAL ID — SAFERIDE",
+      pedidoHeader: "ORDER RECEIPT — SAFERIDE",
+      nombre: "Name",
+      mail: "Email",
+      fechaNacimiento: "Date of birth",
+      dni: "National ID",
+      grupoSanguineo: "Blood type",
+      condiciones: "Conditions",
+      alergias: "Allergies",
+      medicacion: "Regular medication",
+      obraSocial: "Insurance / coverage",
+      telefonoPropio: "Own phone",
+      contactoEmergencia: "Emergency contact",
+      generadoCon: "Generated with Saferide.",
+      producto: "Product",
+      cantidad: "Quantity",
+      enviarA: "Ship to",
+      telefono: "Phone",
+      avisoDespacho: "We'll email you when we ship your order.",
+    },
+  },
+};
+
+let currentLang = document.documentElement.getAttribute("data-lang") || "es";
+
+function t(key) {
+  const dict = translations[currentLang] || translations.es;
+  const value = key.split(".").reduce((obj, part) => (obj && obj[part] !== undefined ? obj[part] : undefined), dict);
+  if (value !== undefined) return value;
+  // si falta la clave en el idioma actual, probamos con español como respaldo
+  const fallback = key.split(".").reduce((obj, part) => (obj && obj[part] !== undefined ? obj[part] : undefined), translations.es);
+  return fallback !== undefined ? fallback : key;
+}
+
+function applyTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.getAttribute("data-i18n"));
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+    el.innerHTML = t(el.getAttribute("data-i18n-html"));
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    el.setAttribute("placeholder", t(el.getAttribute("data-i18n-placeholder")));
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+    el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria-label")));
+  });
+
+  document.documentElement.setAttribute("lang", currentLang);
+  document.documentElement.setAttribute("data-lang", currentLang);
+
+  const demoBtn = document.getElementById("demoToggleBtn");
+  const demoLabel = document.getElementById("demoToggleLabel");
+  if (demoBtn && demoLabel) {
+    const isVisible = demoBtn.getAttribute("aria-expanded") === "true";
+    demoLabel.textContent = isVisible ? t("demo.ocultarEjemplo") : t("demo.verEjemplo");
+  }
+
+  const langLabel = document.getElementById("langToggleLabel");
+  if (langLabel) langLabel.textContent = currentLang === "es" ? "EN" : "ES";
+
+  const orderProductEl = document.getElementById("orderResultProduct");
+  if (orderProductEl && orderProductEl.dataset.productCode) {
+    orderProductEl.textContent = t("product." + orderProductEl.dataset.productCode);
+  }
+
+  const langToggle = document.getElementById("langToggle");
+  if (langToggle) langToggle.setAttribute("aria-label", t("nav.langToggleAria"));
+}
+
+function initLangToggle() {
+  const btn = document.getElementById("langToggle");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    currentLang = currentLang === "es" ? "en" : "es";
+    try {
+      localStorage.setItem("saferide-lang", currentLang);
+    } catch (e) {
+      /* localStorage no disponible */
+    }
+    applyTranslations();
+  });
+}
+
+// ============ MODO OSCURO / CLARO ============
+function initThemeToggle() {
+  const btn = document.getElementById("themeToggle");
+  if (!btn) return;
+
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const getCurrentTheme = () => {
+    const explicit = document.documentElement.getAttribute("data-theme");
+    if (explicit === "light" || explicit === "dark") return explicit;
+    return prefersDark ? "dark" : "light";
+  };
+
+  const updateAria = () => {
+    const isDark = getCurrentTheme() === "dark";
+    btn.setAttribute("aria-label", isDark ? t("nav.themeToggleAriaDark") : t("nav.themeToggleAria"));
+  };
+  updateAria();
+
+  btn.addEventListener("click", () => {
+    const nextTheme = getCurrentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    try {
+      localStorage.setItem("saferide-theme", nextTheme);
+    } catch (e) {
+      /* localStorage no disponible */
+    }
+    updateAria();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  applyTranslations();
+  initThemeToggle();
+  initLangToggle();
   initMobileNav();
   initNavbarScroll();
   initRevealOnScroll();
@@ -2242,7 +3002,7 @@ function initDemoToggle() {
 
     const label = btn.querySelector(".btn-label");
     if (label) {
-      label.textContent = isVisible ? "Ver ejemplo" : "Ocultar ejemplo";
+      label.textContent = isVisible ? t("demo.verEjemplo") : t("demo.ocultarEjemplo");
     }
 
     if (!isVisible) {
@@ -2362,19 +3122,19 @@ function initPrototypeModal() {
     if (birthdateRaw) {
       const [year, month, day] = birthdateRaw.split("-").map(Number);
       const parsedDate = new Date(Date.UTC(year, month - 1, day));
-      birthdateLabel = parsedDate.toLocaleDateString("es-AR", { timeZone: "UTC" });
+      birthdateLabel = parsedDate.toLocaleDateString(t("download.dateLocale"), { timeZone: "UTC" });
     }
 
-    document.getElementById("protoResultName").textContent = getText("fullName", "Ficha médica de emergencia");
+    document.getElementById("protoResultName").textContent = getText("fullName", t("demo.fichaTitle"));
     document.getElementById("protoResultSubtitle").textContent = data.get("email");
     document.getElementById("protoResultBirthdate").textContent = birthdateLabel;
-    document.getElementById("protoResultDni").textContent = getText("dni", "No especificado");
+    document.getElementById("protoResultDni").textContent = getText("dni", t("fallback.noEspecificado"));
     document.getElementById("protoResultBlood").textContent = data.get("blood");
-    document.getElementById("protoResultConditions").textContent = getText("conditions", "Ninguna especificada");
-    document.getElementById("protoResultAllergies").textContent = getText("allergies", "Ninguna especificada");
-    document.getElementById("protoResultMeds").textContent = getText("meds", "Ninguna");
-    document.getElementById("protoResultInsurance").textContent = getText("insurance", "No especificada");
-    document.getElementById("protoResultOwnPhone").textContent = getText("ownPhone", "No especificado");
+    document.getElementById("protoResultConditions").textContent = getText("conditions", t("fallback.ningunaEspecificada"));
+    document.getElementById("protoResultAllergies").textContent = getText("allergies", t("fallback.ningunaEspecificada"));
+    document.getElementById("protoResultMeds").textContent = getText("meds", t("field.ninguna"));
+    document.getElementById("protoResultInsurance").textContent = getText("insurance", t("fallback.noEspecificada"));
+    document.getElementById("protoResultOwnPhone").textContent = getText("ownPhone", t("fallback.noEspecificado"));
     document.getElementById("protoResultContact").textContent =
       `${data.get("contactName")} — ${data.get("contactPhone")}`;
 
@@ -2430,12 +3190,14 @@ function initOrderForm() {
       getText("country", ""),
     ].filter(Boolean);
 
-    document.getElementById("orderResultName").textContent = getText("fullName", "Pedido Saferide");
+    const productCode = data.get("product");
+    document.getElementById("orderResultName").textContent = getText("fullName", t("pedido.pedidoSaferide"));
     document.getElementById("orderResultSubtitle").textContent = data.get("email");
-    document.getElementById("orderResultProduct").textContent = data.get("product");
+    document.getElementById("orderResultProduct").textContent = t("product." + productCode) || productCode;
+    document.getElementById("orderResultProduct").dataset.productCode = productCode;
     document.getElementById("orderResultQty").textContent = data.get("quantity");
     document.getElementById("orderResultAddress").textContent = addressParts.join(", ");
-    document.getElementById("orderResultPhone").textContent = getText("phone", "No especificado");
+    document.getElementById("orderResultPhone").textContent = getText("phone", t("fallback.noEspecificado"));
 
     showResultView();
   });
@@ -2473,21 +3235,21 @@ function initDownloads() {
   if (downloadFichaBtn) {
     downloadFichaBtn.addEventListener("click", () => {
       const lines = [
-        "FICHA DE EMERGENCIA — SAFERIDE",
+        t("download.fichaHeader"),
         "================================",
-        `Nombre: ${getText("protoResultName", "—")}`,
-        `Mail: ${getText("protoResultSubtitle", "—")}`,
-        `Fecha de nacimiento: ${getText("protoResultBirthdate", "—")}`,
-        `DNI: ${getText("protoResultDni", "—")}`,
-        `Grupo sanguíneo: ${getText("protoResultBlood", "—")}`,
-        `Enfermedades / condiciones: ${getText("protoResultConditions", "—")}`,
-        `Alergias: ${getText("protoResultAllergies", "—")}`,
-        `Medicación habitual: ${getText("protoResultMeds", "—")}`,
-        `Obra social / cobertura: ${getText("protoResultInsurance", "—")}`,
-        `Teléfono propio: ${getText("protoResultOwnPhone", "—")}`,
-        `Contacto de emergencia: ${getText("protoResultContact", "—")}`,
+        `${t("download.nombre")}: ${getText("protoResultName", "—")}`,
+        `${t("download.mail")}: ${getText("protoResultSubtitle", "—")}`,
+        `${t("download.fechaNacimiento")}: ${getText("protoResultBirthdate", "—")}`,
+        `${t("download.dni")}: ${getText("protoResultDni", "—")}`,
+        `${t("download.grupoSanguineo")}: ${getText("protoResultBlood", "—")}`,
+        `${t("download.condiciones")}: ${getText("protoResultConditions", "—")}`,
+        `${t("download.alergias")}: ${getText("protoResultAllergies", "—")}`,
+        `${t("download.medicacion")}: ${getText("protoResultMeds", "—")}`,
+        `${t("download.obraSocial")}: ${getText("protoResultInsurance", "—")}`,
+        `${t("download.telefonoPropio")}: ${getText("protoResultOwnPhone", "—")}`,
+        `${t("download.contactoEmergencia")}: ${getText("protoResultContact", "—")}`,
         "",
-        "Generado con Saferide.",
+        t("download.generadoCon"),
       ];
       offerDownload("ficha-saferide.txt", lines.join("\n"));
     });
@@ -2497,16 +3259,16 @@ function initDownloads() {
   if (downloadOrderBtn) {
     downloadOrderBtn.addEventListener("click", () => {
       const lines = [
-        "COMPROBANTE DE PEDIDO — SAFERIDE",
+        t("download.pedidoHeader"),
         "================================",
-        `Nombre: ${getText("orderResultName", "—")}`,
-        `Mail: ${getText("orderResultSubtitle", "—")}`,
-        `Producto: ${getText("orderResultProduct", "—")}`,
-        `Cantidad: ${getText("orderResultQty", "—")}`,
-        `Enviar a: ${getText("orderResultAddress", "—")}`,
-        `Teléfono: ${getText("orderResultPhone", "—")}`,
+        `${t("download.nombre")}: ${getText("orderResultName", "—")}`,
+        `${t("download.mail")}: ${getText("orderResultSubtitle", "—")}`,
+        `${t("download.producto")}: ${getText("orderResultProduct", "—")}`,
+        `${t("download.cantidad")}: ${getText("orderResultQty", "—")}`,
+        `${t("download.enviarA")}: ${getText("orderResultAddress", "—")}`,
+        `${t("download.telefono")}: ${getText("orderResultPhone", "—")}`,
         "",
-        "Te avisamos por mail cuando despachemos tu pedido.",
+        t("download.avisoDespacho"),
       ];
       offerDownload("pedido-saferide.txt", lines.join("\n"));
     });
