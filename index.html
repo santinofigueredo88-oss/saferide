@@ -1051,6 +1051,137 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   font-size: 1.05rem;
 }
 
+/* ===== Pricing ===== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 1040px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(35, 75, 54, 0.1);
+}
+
+.pricing-card-featured {
+  border: 2px solid var(--accent-fg);
+  box-shadow: 0 12px 32px rgba(46, 125, 50, 0.15);
+  transform: scale(1.03);
+}
+
+.pricing-card-featured:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 20px 48px rgba(46, 125, 50, 0.2);
+}
+
+.pricing-popular {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--green-accent);
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 6px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.pricing-card-header {
+  margin-bottom: 20px;
+}
+
+.pricing-label {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-fg);
+  margin-bottom: 12px;
+}
+
+.pricing-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pricing-amount {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.8rem;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.pricing-period {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.pricing-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.pricing-desc {
+  font-size: 0.92rem;
+  margin-bottom: 24px;
+}
+
+.pricing-features {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  text-align: left;
+}
+
+.pricing-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--surface-border);
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.pricing-features li:last-child {
+  border-bottom: none;
+}
+
+.pricing-features .icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
 .demo-panel {
   max-width: 620px;
   margin: 0 auto;
@@ -1650,6 +1781,7 @@ section[id],
       <a href="#para-quien" data-i18n="nav.paraQuien">Para quién es</a>
       <a href="#beneficios" data-i18n="nav.beneficios">Beneficios</a>
       <a href="#comparativa" data-i18n="nav.comparativa">Comparativa</a>
+      <a href="#precios">Precios</a>
       <a href="#pedido" data-i18n="nav.pedido">Pedí tu pulsera</a>
       <a href="#faq" data-i18n="nav.faq">FAQ</a>
       <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
@@ -2075,6 +2207,80 @@ section[id],
       </div>
 
       <p class="comparativa-note reveal" data-i18n="comparativa.note">Ninguna alternativa suma las tres cosas a la vez. Saferide sí.</p>
+    </div>
+  </section>
+
+  <!-- ============ PRECIOS ============ -->
+  <section class="section bg-light" id="precios" aria-labelledby="precios-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Planes y precios</span>
+        <h2 id="precios-title">Elegí lo que necesitás</h2>
+        <p>Empezá gratis con tu ficha digital, o pedí el producto físico que más te sirva.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Plan gratuito -->
+        <div class="pricing-card reveal">
+          <div class="pricing-card-header">
+            <span class="pricing-label">Gratuito</span>
+            <div class="pricing-price">
+              <span class="pricing-amount">$0</span>
+              <span class="pricing-period">para siempre</span>
+            </div>
+          </div>
+          <h3>Ficha digital</h3>
+          <p class="pricing-desc">Generá tu código QR con tus datos médicos esenciales.</p>
+          <ul class="pricing-features">
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Ficha médica de emergencia</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Código QR único</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Actualizable cuando quieras</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Sin contraseña</li>
+          </ul>
+          <button type="button" class="btn btn-outline btn-block" data-prototype-trigger>Crear mi ficha gratis</button>
+        </div>
+
+        <!-- Pulsera QR -->
+        <div class="pricing-card pricing-card-featured reveal">
+          <div class="pricing-popular">Más popular</div>
+          <div class="pricing-card-header">
+            <span class="pricing-label">Pulsera QR</span>
+            <div class="pricing-price">
+              <span class="pricing-amount">$2.500</span>
+              <span class="pricing-period">cada una</span>
+            </div>
+          </div>
+          <h3>Pulsera con código QR</h3>
+          <p class="pricing-desc">Llevá tu ficha siempre en la muñeca, lista para escanear.</p>
+          <ul class="pricing-features">
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Todo lo del plan gratuito</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Pulsera resistente al agua</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Código QR grabado</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Envío a todo el país</li>
+          </ul>
+          <a href="#pedido" class="btn btn-primary btn-block">Pedir pulsera</a>
+        </div>
+
+        <!-- Pack completo -->
+        <div class="pricing-card reveal">
+          <div class="pricing-card-header">
+            <span class="pricing-label">Pack completo</span>
+            <div class="pricing-price">
+              <span class="pricing-amount">$4.000</span>
+              <span class="pricing-period">pulsera + medalla</span>
+            </div>
+          </div>
+          <h3>Pulsera QR + Medalla NFC</h3>
+          <p class="pricing-desc">La protección completa: QR para emergencias con internet, NFC para sin señal.</p>
+          <ul class="pricing-features">
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Todo lo de la pulsera QR</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Medalla NFC incluida</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Funciona sin internet</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Ahorrás $1.000</li>
+          </ul>
+          <a href="#pedido" class="btn btn-outline btn-block">Pedir pack</a>
+        </div>
+      </div>
     </div>
   </section>
 
