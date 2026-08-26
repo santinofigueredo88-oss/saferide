@@ -843,6 +843,28 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   flex-shrink: 0;
 }
 
+.persona-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.persona-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-fg), var(--green-accent-soft));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.persona-card:hover::after {
+  transform: scaleX(1);
+}
+
 .story-card {
   position: relative;
   background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-deep-dark) 100%);
@@ -1994,38 +2016,39 @@ section[id],
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="paraQuien.eyebrow">Para quién es</span>
         <h2 id="para-quien-title" data-i18n="paraQuien.title">Pensado para cualquiera que quiera estar más seguro</h2>
+        <p>No importa tu edad o actividad: si querés que tus datos médicos estén disponibles cuando más los necesitás, Saferide es para vos.</p>
       </div>
 
       <div class="card-grid cols-3">
-        <div class="card reveal">
+        <div class="card persona-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-heart-pulse"></use></svg></div>
           <h3 data-i18n="paraQuien.cronicas.title">Personas con enfermedades crónicas</h3>
-          <p data-i18n="paraQuien.cronicas.desc">Necesitan que el personal médico conozca su condición antes de intervenir.</p>
+          <p data-i18n="paraQuien.cronicas.desc">Diabetes, cardiopatías, epilepsia... El personal médico necesita conocer tu condición antes de intervenir. Con Saferide, esa información está al toque.</p>
         </div>
-        <div class="card reveal">
+        <div class="card persona-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-shield-alert"></use></svg></div>
           <h3 data-i18n="paraQuien.alergicas.title">Personas alérgicas</h3>
-          <p data-i18n="paraQuien.alergicas.desc">Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas.</p>
+          <p data-i18n="paraQuien.alergicas.desc">Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas. Tu alergia tiene que estar visible, siempre.</p>
         </div>
-        <div class="card reveal">
+        <div class="card persona-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-user-round"></use></svg></div>
           <h3 data-i18n="paraQuien.mayores.title">Adultos mayores</h3>
-          <p data-i18n="paraQuien.mayores.desc">Sobre todo quienes viven solos o salen sin acompañante.</p>
+          <p data-i18n="paraQuien.mayores.desc">Sobre todo quienes viven solos o salen sin acompañante. Una pulsera o medalla les da autonomía y tranquilidad a ellos y a su familia.</p>
         </div>
-        <div class="card reveal">
+        <div class="card persona-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-bike"></use></svg></div>
           <h3 data-i18n="paraQuien.deportistas.title">Deportistas</h3>
-          <p data-i18n="paraQuien.deportistas.desc">Ciclistas, runners, motociclistas, más expuestos a accidentes fuera de casa.</p>
+          <p data-i18n="paraQuien.deportistas.desc">Ciclistas, runners, motociclistas: más expuestos a accidentes fuera de casa y lejos de quien pueda identificarlos.</p>
         </div>
-        <div class="card reveal">
+        <div class="card persona-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-car"></use></svg></div>
           <h3 data-i18n="paraQuien.conductores.title">Conductores</h3>
-          <p data-i18n="paraQuien.conductores.desc">Protagonistas frecuentes de siniestros viales.</p>
+          <p data-i18n="paraQuien.conductores.desc">Protagonistas frecuentes de siniestros viales. En un choque, cada minuto sin información es un minuto de riesgo.</p>
         </div>
-        <div class="card reveal">
+        <div class="card persona-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-baby"></use></svg></div>
           <h3 data-i18n="paraQuien.ninos.title">Niños y niñas</h3>
-          <p data-i18n="paraQuien.ninos.desc">Con sus datos cargados por sus padres o tutores.</p>
+          <p data-i18n="paraQuien.ninos.desc">Con sus datos cargados por sus padres o tutores. Ideal para la escuela, campamentos o actividades deportivas.</p>
         </div>
       </div>
     </div>
