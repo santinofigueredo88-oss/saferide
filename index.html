@@ -106,7 +106,7 @@ table {
   --font-heading: "Poppins", system-ui, -apple-system, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --container-width: 1160px;
+  --container-width: 1200px;
   --radius-sm: 10px;
   --radius-md: 18px;
   --radius-lg: 28px;
@@ -200,6 +200,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   transition: background var(--transition), color var(--transition);
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4 {
@@ -272,6 +273,18 @@ summary:focus-visible {
 
 .bg-light {
   background: var(--surface-alt);
+}
+
+/* Animated gradient border for bg-light sections */
+.bg-light::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green-accent-soft), transparent);
+  opacity: 0.3;
 }
 
 .icon {
@@ -575,8 +588,8 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 }
 
 .hero {
-  padding: calc(var(--nav-height) + 72px) 0 88px;
-  background: linear-gradient(170deg, var(--surface-alt) 0%, var(--surface-page) 60%);
+  padding: calc(var(--nav-height) + 80px) 0 96px;
+  background: linear-gradient(170deg, var(--surface-alt) 0%, var(--surface-page) 50%);
   overflow: hidden;
   position: relative;
 }
@@ -584,12 +597,30 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 .hero::before {
   content: "";
   position: absolute;
-  top: 0;
-  right: -20%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(46, 125, 50, 0.06) 0%, transparent 70%);
+  top: -10%;
+  right: -15%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(46, 125, 50, 0.07) 0%, transparent 65%);
   pointer-events: none;
+  animation: float-glow 8s ease-in-out infinite;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(111, 174, 116, 0.05) 0%, transparent 65%);
+  pointer-events: none;
+  animation: float-glow 10s ease-in-out infinite reverse;
+}
+
+@keyframes float-glow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -20px) scale(1.05); }
 }
 
 .hero-inner {
@@ -670,23 +701,59 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 
 .hero-visual-glow {
   position: absolute;
-  width: 340px;
-  height: 340px;
-  background: radial-gradient(circle, rgba(46, 125, 50, 0.14) 0%, rgba(35, 75, 54, 0.06) 55%, transparent 75%);
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(46, 125, 50, 0.16) 0%, rgba(35, 75, 54, 0.06) 50%, transparent 75%);
   border-radius: 50%;
   z-index: 0;
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.8; }
 }
 
 .qr-mock {
   position: relative;
   z-index: 1;
-  width: min(340px, 80vw);
+  width: min(360px, 80vw);
   filter: drop-shadow(var(--shadow-lg));
+  animation: float-qr 6s ease-in-out infinite;
+}
+
+@keyframes float-qr {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
 .section {
-  padding: 96px 0;
+  padding: 100px 0;
+  position: relative;
 }
+
+/* Decorative floating shapes */
+.section::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(46, 125, 50, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#problema::before { top: -50px; right: -80px; }
+#formatos::before { bottom: -60px; left: -80px; }
+#para-quien::before { top: -40px; left: -60px; }
+#beneficios::before { bottom: -50px; right: -60px; }
+#historia::before { top: 10%; left: -100px; width: 400px; height: 400px; }
+#comparativa::before { bottom: -80px; right: -100px; width: 350px; height: 350px; }
+#precios::before { top: -60px; left: -80px; }
+#faq::before { bottom: -40px; right: -60px; }
+#demo::before { top: 10%; left: -80px; }
+#pedido::before { bottom: -60px; right: -80px; }
 
 .section-narrow p {
   max-width: 760px;
@@ -711,12 +778,30 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   border-radius: var(--radius-md);
   padding: 28px;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-step::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background: linear-gradient(180deg, var(--accent-fg), var(--green-accent-soft));
+  transition: height 0.4s ease;
+  border-radius: 0 2px 2px 0;
 }
 
 .timeline-step:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(35, 75, 54, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(35, 75, 54, 0.12);
+}
+
+.timeline-step:hover::before {
+  height: 100%;
 }
 
 .timeline-step-number {
@@ -870,10 +955,23 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-deep-dark) 100%);
   color: var(--white);
   border-radius: var(--radius-lg);
-  padding: 52px 40px;
-  max-width: 820px;
+  padding: 56px 44px;
+  max-width: 860px;
   margin: 0 auto;
   overflow: hidden;
+  box-shadow: 0 20px 50px rgba(35, 75, 54, 0.2);
+}
+
+.story-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(111, 174, 116, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  animation: float-glow 10s ease-in-out infinite;
 }
 
 .story-card::before {
@@ -949,6 +1047,32 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 .stats-section {
   background: var(--green-deep);
   color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-section::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(111, 174, 116, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  animation: float-glow 12s ease-in-out infinite;
+}
+
+.stats-section::after {
+  content: "";
+  position: absolute;
+  bottom: -150px;
+  left: -100px;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(46, 125, 50, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  animation: float-glow 10s ease-in-out infinite reverse;
 }
 
 .stats-section .section-heading h2,
@@ -1330,6 +1454,15 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   color: var(--accent-fg);
 }
 
+.faq-item {
+  border-bottom: 1px solid var(--surface-border);
+  transition: background 0.25s ease;
+}
+
+.faq-item:hover {
+  background: rgba(46, 125, 50, 0.02);
+}
+
 .faq-question .icon {
   flex-shrink: 0;
   width: 20px;
@@ -1471,6 +1604,7 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   outline: none;
   border-color: var(--accent-fg);
   box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.15);
+  transform: translateY(-1px);
 }
 
 .form-field input:invalid:not(:placeholder-shown):not(:focus) {
@@ -1517,10 +1651,23 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   position: absolute;
   top: -50%;
   left: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(111, 174, 116, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  animation: float-glow 14s ease-in-out infinite;
+}
+
+.cta-final::after {
+  content: "";
+  position: absolute;
+  bottom: -30%;
+  right: -15%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(111, 174, 116, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(46, 125, 50, 0.1) 0%, transparent 70%);
   pointer-events: none;
+  animation: float-glow 11s ease-in-out infinite reverse;
 }
 
 .cta-final h2 {
@@ -1550,7 +1697,18 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 .site-footer {
   background: var(--green-deep-dark);
   color: rgba(255, 255, 255, 0.75);
-  padding: 48px 0 28px;
+  padding: 56px 0 32px;
+  position: relative;
+}
+
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(111, 174, 116, 0.3), transparent);
 }
 
 .footer-top {
@@ -1640,14 +1798,29 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .reveal.in-view {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Staggered animation for cards */
+.card-grid .card:nth-child(1) { transition-delay: 0.05s; }
+.card-grid .card:nth-child(2) { transition-delay: 0.1s; }
+.card-grid .card:nth-child(3) { transition-delay: 0.15s; }
+.card-grid .card:nth-child(4) { transition-delay: 0.2s; }
+.card-grid .card:nth-child(5) { transition-delay: 0.25s; }
+.card-grid .card:nth-child(6) { transition-delay: 0.3s; }
+
+.timeline .timeline-step:nth-child(1) { transition-delay: 0.05s; }
+.timeline .timeline-step:nth-child(2) { transition-delay: 0.1s; }
+.timeline .timeline-step:nth-child(3) { transition-delay: 0.15s; }
+.timeline .timeline-step:nth-child(4) { transition-delay: 0.2s; }
+.timeline .timeline-step:nth-child(5) { transition-delay: 0.25s; }
+.timeline .timeline-step:nth-child(6) { transition-delay: 0.3s; }
 
 @media (prefers-reduced-motion: reduce) {
   html {
