@@ -993,6 +993,86 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   transform: scaleX(1);
 }
 
+/* ===== Beneficiary Grid ===== */
+.beneficiary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .beneficiary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .beneficiary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.beneficiary-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.beneficiary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(35, 75, 54, 0.1);
+}
+
+.beneficiary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 0;
+  background: linear-gradient(180deg, var(--accent-fg), var(--green-accent-soft));
+  transition: height 0.4s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+.beneficiary-card:hover::before {
+  height: 100%;
+}
+
+.beneficiary-icon {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--surface-alt) 0%, rgba(46, 125, 50, 0.08) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-fg);
+}
+
+.beneficiary-content h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.beneficiary-content p {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
 .story-card {
   position: relative;
   background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-deep-dark) 100%);
@@ -2360,45 +2440,78 @@ section[id],
   </section>
 
   <!-- ============ PARA QUIÉN ES ============ -->
-  <section class="section" id="para-quien" aria-labelledby="para-quien-title">
+  <section class="section bg-light" id="para-quien" aria-labelledby="para-quien-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="paraQuien.eyebrow">Para quién es</span>
-        <h2 id="para-quien-title" data-i18n="paraQuien.title">Pensado para cualquiera que quiera estar más seguro</h2>
-        <p>No importa tu edad o actividad: si querés que tus datos médicos estén disponibles cuando más los necesitás, Saferide es para vos.</p>
+        <span class="eyebrow">Beneficiarios</span>
+        <h2 id="para-quien-title">Ideal para quienes buscan protección médica</h2>
+        <p>Saferide fue diseñado para brindar tranquilidad y seguridad a personas en diferentes situaciones de vida. Si vos o alguien de tu entorno necesita tener sus datos médicos accesibles, este es tu producto.</p>
       </div>
 
-      <div class="card-grid cols-3">
-        <div class="card persona-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-heart-pulse"></use></svg></div>
-          <h3 data-i18n="paraQuien.cronicas.title">Personas con enfermedades crónicas</h3>
-          <p data-i18n="paraQuien.cronicas.desc">Diabetes, cardiopatías, epilepsia... El personal médico necesita conocer tu condición antes de intervenir. Con Saferide, esa información está al toque.</p>
+      <div class="beneficiary-grid">
+        <div class="beneficiary-card reveal">
+          <div class="beneficiary-icon">
+            <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-heart-pulse"></use></svg>
+          </div>
+          <div class="beneficiary-content">
+            <h3>Enfermedades crónicas</h3>
+            <p>Diabetes, cardiopatías, epilepsia, entre otras. El personal médico necesita conocer tu condición antes de intervenir.</p>
+          </div>
         </div>
-        <div class="card persona-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-shield-alert"></use></svg></div>
-          <h3 data-i18n="paraQuien.alergicas.title">Personas alérgicas</h3>
-          <p data-i18n="paraQuien.alergicas.desc">Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas. Tu alergia tiene que estar visible, siempre.</p>
+
+        <div class="beneficiary-card reveal">
+          <div class="beneficiary-icon">
+            <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-shield-alert"></use></svg>
+          </div>
+          <div class="beneficiary-content">
+            <h3>Alergias medicamentosas</h3>
+            <p>Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas. Tu alergia tiene que estar visible.</p>
+          </div>
         </div>
-        <div class="card persona-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-user-round"></use></svg></div>
-          <h3 data-i18n="paraQuien.mayores.title">Adultos mayores</h3>
-          <p data-i18n="paraQuien.mayores.desc">Sobre todo quienes viven solos o salen sin acompañante. Una pulsera o medalla les da autonomía y tranquilidad a ellos y a su familia.</p>
+
+        <div class="beneficiary-card reveal">
+          <div class="beneficiary-icon">
+            <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-user-round"></use></svg>
+          </div>
+          <div class="beneficiary-content">
+            <h3>Adultos mayores</h3>
+            <p>Sobre todo quienes viven solos o salen sin acompañante. Una pulsera o medalla les da autonomía y tranquilidad.</p>
+          </div>
         </div>
-        <div class="card persona-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-bike"></use></svg></div>
-          <h3 data-i18n="paraQuien.deportistas.title">Deportistas</h3>
-          <p data-i18n="paraQuien.deportistas.desc">Ciclistas, runners, motociclistas: más expuestos a accidentes fuera de casa y lejos de quien pueda identificarlos.</p>
+
+        <div class="beneficiary-card reveal">
+          <div class="beneficiary-icon">
+            <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-bike"></use></svg>
+          </div>
+          <div class="beneficiary-content">
+            <h3>Deportistas y ciclistas</h3>
+            <p>Más expuestos a accidentes fuera de casa y lejos de quien pueda identificarlos o contactar a su familia.</p>
+          </div>
         </div>
-        <div class="card persona-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-car"></use></svg></div>
-          <h3 data-i18n="paraQuien.conductores.title">Conductores</h3>
-          <p data-i18n="paraQuien.conductores.desc">Protagonistas frecuentes de siniestros viales. En un choque, cada minuto sin información es un minuto de riesgo.</p>
+
+        <div class="beneficiary-card reveal">
+          <div class="beneficiary-icon">
+            <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-car"></use></svg>
+          </div>
+          <div class="beneficiary-content">
+            <h3>Conductores</h3>
+            <p>Protagonistas frecuentes de siniestros viales. En un choque, cada minuto sin información es un minuto de riesgo.</p>
+          </div>
         </div>
-        <div class="card persona-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-baby"></use></svg></div>
-          <h3 data-i18n="paraQuien.ninos.title">Niños y niñas</h3>
-          <p data-i18n="paraQuien.ninos.desc">Con sus datos cargados por sus padres o tutores. Ideal para la escuela, campamentos o actividades deportivas.</p>
+
+        <div class="beneficiary-card reveal">
+          <div class="beneficiary-icon">
+            <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-baby"></use></svg>
+          </div>
+          <div class="beneficiary-content">
+            <h3>Niños y niñas</h3>
+            <p>Con sus datos cargados por sus padres o tutores. Ideal para la escuela, campamentos o actividades deportivas.</p>
+          </div>
         </div>
+      </div>
+
+      <div class="reveal" style="text-align:center;margin-top:48px">
+        <a href="#precios" class="btn btn-primary">Ver precios y planes</a>
       </div>
     </div>
   </section>
