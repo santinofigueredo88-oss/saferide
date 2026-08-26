@@ -1091,6 +1091,92 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   margin: 0;
 }
 
+/* ===== Benefits Grid ===== */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+}
+
+.benefit-item {
+  display: flex;
+  gap: 24px;
+  padding: 32px;
+  border-bottom: 1px solid var(--surface-border);
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+.benefit-item:hover {
+  background: rgba(46, 125, 50, 0.02);
+}
+
+.benefit-item::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 32px;
+  right: 32px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-fg), var(--green-accent-soft));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.benefit-item:hover::before {
+  transform: scaleX(1);
+}
+
+@media (min-width: 640px) {
+  .benefit-item:nth-child(2n+1) {
+    border-right: 1px solid var(--surface-border);
+  }
+  .benefit-item:nth-child(n+3) {
+    border-bottom: none;
+  }
+  .benefit-item:nth-child(2n+1)::before {
+    left: 32px;
+    right: 0;
+  }
+  .benefit-item:nth-child(2n)::before {
+    left: 0;
+    right: 32px;
+  }
+}
+
+.benefit-number {
+  flex-shrink: 0;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 2rem;
+  color: rgba(46, 125, 50, 0.12);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.benefit-content h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.benefit-content p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0;
+}
+
 .story-card {
   position: relative;
   background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-deep-dark) 100%);
@@ -2535,33 +2621,45 @@ section[id],
   </section>
 
   <!-- ============ POR QUÉ SAFERIDE ============ -->
-  <section class="section bg-light" id="beneficios" aria-labelledby="beneficios-title">
+  <section class="section" id="beneficios" aria-labelledby="beneficios-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="beneficios.eyebrow">Beneficios</span>
-        <h2 id="beneficios-title" data-i18n="beneficios.title">Por qué Saferide</h2>
+        <span class="eyebrow">Ventajas</span>
+        <h2 id="beneficios-title">¿Por qué elegir Saferide?</h2>
+        <p>Saferide combina simplicidad, accesibilidad y diseño pensado para emergencias reales.</p>
       </div>
 
-      <div class="card-grid cols-4">
-        <div class="card benefit-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-refresh-cw"></use></svg></div>
-          <h4 data-i18n="beneficios.actualizableTitle">100% actualizable</h4>
-            <p data-i18n="beneficios.actualizable">Cambialo cuando quieras: grupo sanguíneo, alergias, medicación o contacto de emergencia. A diferencia de una pulsera grabada, nunca queda desactualizada.</p>
+      <div class="benefits-grid">
+        <div class="benefit-item reveal">
+          <div class="benefit-number">01</div>
+          <div class="benefit-content">
+            <h3>Actualización permanente</h3>
+            <p>Cambialo cuando quieras: grupo sanguíneo, alergias, medicación o contacto de emergencia. A diferencia de una pulsera grabada, nunca queda desactualizada.</p>
+          </div>
         </div>
-        <div class="card benefit-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-smartphone"></use></svg></div>
-          <h4 data-i18n="beneficios.cualquierCelularTitle">Sin apps</h4>
-          <p data-i18n="beneficios.cualquierCelular">Funciona con cualquier celular con cámara, sin instalar nada. El personal de salud lo escanea y listo.</p>
+
+        <div class="benefit-item reveal">
+          <div class="benefit-number">02</div>
+          <div class="benefit-content">
+            <h3>Sin aplicaciones</h3>
+            <p>Funciona con cualquier celular con cámara, sin instalar nada. El personal de salud escanea y accede al instante.</p>
+          </div>
         </div>
-        <div class="card benefit-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-tag"></use></svg></div>
-          <h4 data-i18n="beneficios.economicoTitle">Accesible</h4>
-          <p data-i18n="beneficios.economico">Económico y fácil de conseguir. La versión básica es gratis y te permite generar tu ficha de emergencia al instante.</p>
+
+        <div class="benefit-item reveal">
+          <div class="benefit-number">03</div>
+          <div class="benefit-content">
+            <h3>Accesible para todos</h3>
+            <p>Económico y fácil de conseguir. La versión básica es gratis y te permite generar tu ficha de emergencia al instante.</p>
+          </div>
         </div>
-        <div class="card benefit-card reveal">
-          <div class="card-icon"><svg aria-hidden="true"><use href="#icon-shield-check"></use></svg></div>
-          <h4 data-i18n="beneficios.emergenciasRealesTitle">Diseñado para emergencias</h4>
-          <p data-i18n="beneficios.emergenciasReales">Pensado para emergencias reales: solo muestra lo esencial, en una página de solo lectura, optimizada para que el personal médico encuentre rápido lo que necesita.</p>
+
+        <div class="benefit-item reveal">
+          <div class="benefit-number">04</div>
+          <div class="benefit-content">
+            <h3>Diseñado para emergencias</h3>
+            <p>Solo muestra lo esencial en una página de solo lectura, optimizada para que el personal médico encuentre rápido lo que necesita.</p>
+          </div>
         </div>
       </div>
     </div>
