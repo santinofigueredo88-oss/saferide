@@ -86,15 +86,15 @@ table {
   --muted-mark: #93a69a;
 
   /* Tokens de superficie/texto: son los que cambian entre modo claro y oscuro */
-  --surface-page: var(--white);
+  --surface-page: #f8faf9;
   --surface: var(--white);
-  --surface-alt: var(--green-pale);
-  --surface-border: var(--green-mid);
+  --surface-alt: #eef5f0;
+  --surface-border: #d4e5d9;
   --surface-border-strong: var(--green-deep);
   --surface-translucent: rgba(255, 255, 255, 0.92);
   --text-primary: var(--green-deep);
-  --text-secondary: var(--text-muted);
-  --placeholder-color: #9aa5b1;
+  --text-secondary: #3d5a45;
+  --placeholder-color: #8fa598;
   --accent-fg: var(--green-accent);
 
   --warning-bg: #fff4e6;
@@ -197,6 +197,10 @@ body {
   font-family: var(--font-body);
   color: var(--text-primary);
   background: var(--surface-page);
+  background-image: 
+    radial-gradient(ellipse at 20% 50%, rgba(46, 125, 50, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(111, 174, 116, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(46, 125, 50, 0.02) 0%, transparent 50%);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   transition: background var(--transition), color var(--transition);
@@ -273,6 +277,7 @@ summary:focus-visible {
 
 .bg-light {
   background: var(--surface-alt);
+  position: relative;
 }
 
 /* Animated gradient border for bg-light sections */
@@ -284,7 +289,7 @@ summary:focus-visible {
   right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--green-accent-soft), transparent);
-  opacity: 0.3;
+  opacity: 0.4;
 }
 
 .icon {
@@ -613,7 +618,7 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 
 .hero {
   padding: calc(var(--nav-height) + 80px) 0 96px;
-  background: linear-gradient(170deg, var(--surface-alt) 0%, var(--surface-page) 50%);
+  background: linear-gradient(170deg, #e8f3eb 0%, #f0f7f2 40%, var(--surface-page) 100%);
   overflow: hidden;
   position: relative;
 }
@@ -700,8 +705,8 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(46, 125, 50, 0.08);
-  border: 1px solid rgba(46, 125, 50, 0.15);
+  background: rgba(46, 125, 50, 0.1);
+  border: 1px solid rgba(46, 125, 50, 0.2);
   color: var(--accent-fg);
   font-family: var(--font-heading);
   font-weight: 600;
@@ -916,6 +921,7 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
   padding: 32px 28px;
+  box-shadow: 0 2px 12px rgba(35, 75, 54, 0.05);
   transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease;
   position: relative;
   overflow: hidden;
@@ -923,7 +929,7 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 
 .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 48px rgba(35, 75, 54, 0.12);
+  box-shadow: 0 20px 48px rgba(35, 75, 54, 0.15);
   border-color: rgba(46, 125, 50, 0.3);
 }
 
@@ -1009,6 +1015,30 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 
 .persona-card:hover::after {
   transform: scaleX(1);
+}
+
+/* Light mode enhancements */
+@media (prefers-color-scheme: light) {
+  .card, .panel, .pricing-card, .beneficiary-card {
+    box-shadow: 0 4px 20px rgba(35, 75, 54, 0.06);
+  }
+  .card:hover, .panel:hover, .pricing-card:hover, .beneficiary-card:hover {
+    box-shadow: 0 20px 50px rgba(35, 75, 54, 0.12);
+  }
+}
+
+html:not([data-theme="dark"]) .card,
+html:not([data-theme="dark"]) .panel,
+html:not([data-theme="dark"]) .pricing-card,
+html:not([data-theme="dark"]) .beneficiary-card {
+  box-shadow: 0 4px 20px rgba(35, 75, 54, 0.06);
+}
+
+html:not([data-theme="dark"]) .card:hover,
+html:not([data-theme="dark"]) .panel:hover,
+html:not([data-theme="dark"]) .pricing-card:hover,
+html:not([data-theme="dark"]) .beneficiary-card:hover {
+  box-shadow: 0 20px 50px rgba(35, 75, 54, 0.12);
 }
 
 /* ===== Beneficiary Grid ===== */
