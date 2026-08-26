@@ -4183,13 +4183,21 @@ function initFloatingParticles() {
     }
   };
 
+  const isDark = () => document.documentElement.getAttribute("data-theme") === "dark" ||
+    (!document.documentElement.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+  const getColors = () => isDark()
+    ? { r: 111, g: 174, b: 116, opacityBase: 0.45, lineBase: 0.15 }
+    : { r: 46, g: 125, b: 50, opacityBase: 0.55, lineBase: 0.2 };
+
   const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const c = getColors();
 
     particles.forEach((p) => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(46, 125, 50, ${p.opacity})`;
+      ctx.fillStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${p.opacity * c.opacityBase})`;
       ctx.fill();
 
       p.x += p.speedX;
@@ -4210,7 +4218,7 @@ function initFloatingParticles() {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(46, 125, 50, ${0.12 * (1 - dist / 140)})`;
+          ctx.strokeStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${c.lineBase * (1 - dist / 140)})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }
@@ -4228,6 +4236,12 @@ function initFloatingParticles() {
     resize();
     createParticles();
   });
+
+  // Watch for theme changes
+  const observer = new MutationObserver(() => {
+    // Colors are computed dynamically in draw(), no restart needed
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 }
 
 function initFaqAccordion() {
