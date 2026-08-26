@@ -2191,6 +2191,33 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
     transform: none;
     transition: none;
   }
+  .particles-canvas {
+    display: none;
+  }
+}
+
+/* ===== Scroll Progress Bar ===== */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green-accent), var(--green-accent-soft));
+  z-index: 9999;
+  width: 0;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(46, 125, 50, 0.5);
+}
+
+/* ===== Particles Canvas ===== */
+.particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
 }
 
 section[id],
@@ -2733,19 +2760,19 @@ section[id],
 
       <div class="stats-grid">
         <div class="reveal">
-          <div class="stat-number">11</div>
+          <div class="stat-number" data-count="11">11</div>
           <p class="stat-label" data-i18n="stats.stat1">personas mueren por día en siniestros viales en Argentina.</p>
         </div>
         <div class="reveal">
-          <div class="stat-number" data-i18n="stats.stat2Number">4 de 10</div>
+          <div class="stat-number" data-count="4 de 10">4 de 10</div>
           <p class="stat-label" data-i18n="stats.stat2">víctimas fatales de siniestros viales iban en moto.</p>
         </div>
         <div class="reveal">
-          <div class="stat-number">24hs</div>
+          <div class="stat-number" data-count="24hs" data-prefix="" data-suffix="">24hs</div>
           <p class="stat-label">es la ventana crítica donde la información médica salva vidas.</p>
         </div>
         <div class="reveal">
-          <div class="stat-number">0</div>
+          <div class="stat-number" data-count="0">0</div>
           <p class="stat-label">apps necesitas para que cualquier persona escanee tu QR.</p>
         </div>
       </div>
@@ -3931,6 +3958,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileNav();
   initNavbarScroll();
   initParallaxHero();
+  initScrollProgress();
+  initAnimatedCounters();
+  initFloatingParticles();
   initRevealOnScroll();
   initFaqAccordion();
   initDemoToggle();
@@ -4051,6 +4081,157 @@ function initParallaxHero() {
       ticking = true;
     }
   }, { passive: true });
+}
+
+function initScrollProgress() {
+  const bar = document.createElement("div");
+  bar.className = "scroll-progress-bar";
+  document.body.appendChild(bar);
+
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.width = progress + "%";
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+}
+
+function initAnimatedCounters() {
+  const counters = document.querySelectorAll(".stat-number[data-count]");
+  if (!counters.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = el.dataset.count;
+          const prefix = el.dataset.prefix || "";
+          const suffix = el.dataset.suffix || "";
+          const isNumber = !isNaN(parseInt(target));
+
+          if (isNumber) {
+            const targetNum = parseInt(target);
+            const duration = 2000;
+            const startTime = performance.now();
+
+            const animate = (currentTime) => {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+              const current = Math.round(targetNum * eased);
+              el.textContent = prefix + current + suffix;
+
+              if (progress < 1) {
+                requestAnimationFrame(animate);
+              }
+            };
+            requestAnimationFrame(animate);
+          } else {
+            // Text animation
+            const chars = target.split("");
+            el.textContent = "";
+            chars.forEach((char, i) => {
+              setTimeout(() => {
+                el.textContent += char;
+              }, i * 50);
+            });
+          }
+
+          observer.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  counters.forEach((el) => observer.observe(el));
+}
+
+function initFloatingParticles() {
+  const hero = document.querySelector(".hero");
+  if (!hero) return;
+
+  const canvas = document.createElement("canvas");
+  canvas.className = "particles-canvas";
+  hero.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+
+  let particles = [];
+  let animFrame;
+
+  const resize = () => {
+    canvas.width = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+  };
+
+  const createParticles = () => {
+    particles = [];
+    const count = Math.min(30, Math.floor(canvas.width / 50));
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 1,
+        speedX: (Math.random() - 0.5) * 0.5,
+        speedY: (Math.random() - 0.5) * 0.5,
+        opacity: Math.random() * 0.3 + 0.1,
+      });
+    }
+  };
+
+  const draw = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach((p) => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(46, 125, 50, ${p.opacity})`;
+      ctx.fill();
+
+      p.x += p.speedX;
+      p.y += p.speedY;
+
+      if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+    });
+
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(46, 125, 50, ${0.08 * (1 - dist / 120)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+
+    animFrame = requestAnimationFrame(draw);
+  };
+
+  resize();
+  createParticles();
+  draw();
+
+  window.addEventListener("resize", () => {
+    resize();
+    createParticles();
+  });
 }
 
 function initFaqAccordion() {
