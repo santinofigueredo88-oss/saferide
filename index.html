@@ -306,7 +306,7 @@ summary:focus-visible {
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease, transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .navbar.scrolled {
@@ -550,7 +550,31 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 }
 
 .btn:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
+}
+
+/* Ripple effect on buttons */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.btn:active::after {
+  width: 300px;
+  height: 300px;
 }
 
 .btn-primary {
@@ -1594,7 +1618,12 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   font-size: 1.05rem;
   color: var(--text-primary);
   min-height: 48px;
-  transition: color 0.25s ease;
+  transition: color 0.25s ease, background 0.25s ease;
+  border-radius: var(--radius-sm);
+}
+
+.faq-question:hover {
+  background: rgba(46, 125, 50, 0.03);
 }
 
 .faq-question:hover {
@@ -3672,6 +3701,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initLangToggle();
   initMobileNav();
   initNavbarScroll();
+  initParallaxHero();
   initRevealOnScroll();
   initFaqAccordion();
   initDemoToggle();
@@ -3709,13 +3739,32 @@ function initMobileNav() {
 function initNavbarScroll() {
   const navbar = document.getElementById("navbar");
   if (!navbar) return;
+  let lastScroll = 0;
+  let ticking = false;
 
   const updateNavbar = () => {
-    navbar.classList.toggle("scrolled", window.scrollY > 8);
+    const scrollY = window.scrollY;
+    navbar.classList.toggle("scrolled", scrollY > 8);
+    // Smooth hide/show on scroll direction
+    if (scrollY > 200) {
+      if (scrollY > lastScroll + 5) {
+        navbar.style.transform = "translateY(-100%)";
+      } else if (scrollY < lastScroll - 5) {
+        navbar.style.transform = "translateY(0)";
+      }
+    } else {
+      navbar.style.transform = "translateY(0)";
+    }
+    lastScroll = scrollY;
+    ticking = false;
   };
 
-  updateNavbar();
-  window.addEventListener("scroll", updateNavbar, { passive: true });
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(updateNavbar);
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 function initRevealOnScroll() {
@@ -3731,15 +3780,48 @@ function initRevealOnScroll() {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          // Staggered reveal for siblings
+          const parent = entry.target.parentElement;
+          if (parent) {
+            const siblings = Array.from(parent.querySelectorAll(":scope > .reveal"));
+            const index = siblings.indexOf(entry.target);
+            entry.target.style.transitionDelay = `${index * 0.08}s`;
+          }
           entry.target.classList.add("in-view");
           observer.unobserve(entry.target);
         }
       });
     },
-    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    { threshold: 0.1, rootMargin: "0px 0px -60px 0px" }
   );
 
   items.forEach((el) => observer.observe(el));
+}
+
+function initParallaxHero() {
+  const heroVisual = document.querySelector(".hero-visual");
+  const heroGlow = document.querySelector(".hero-visual-glow");
+  if (!heroVisual) return;
+
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const heroHeight = document.querySelector(".hero")?.offsetHeight || 600;
+        if (scrollY < heroHeight) {
+          const progress = scrollY / heroHeight;
+          heroVisual.style.transform = `translateY(${progress * 40}px)`;
+          if (heroGlow) {
+            heroGlow.style.transform = `scale(${1 + progress * 0.1}) translateY(${-progress * 20}px)`;
+            heroGlow.style.opacity = 1 - progress * 0.5;
+          }
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 function initFaqAccordion() {
