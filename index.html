@@ -623,11 +623,43 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   line-height: 1.4;
 }
 
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(46, 125, 50, 0.08);
+  border: 1px solid rgba(46, 125, 50, 0.15);
+  color: var(--accent-fg);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  padding: 8px 16px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+
 .hero-text p.hero-desc {
   font-size: 1.1rem;
   max-width: 50ch;
   margin-bottom: 32px;
   line-height: 1.7;
+}
+
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.hero-trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 .hero-visual {
@@ -786,6 +818,13 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 .card h3 {
   font-size: 1.05rem;
   margin-bottom: 8px;
+}
+
+.card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-primary);
 }
 
 .card p {
@@ -1345,6 +1384,16 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   justify-content: center;
 }
 
+.cta-final .btn-outline {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.cta-final .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--white);
+}
+
 .site-footer {
   background: var(--green-deep-dark);
   color: rgba(255, 255, 255, 0.75);
@@ -1631,6 +1680,10 @@ section[id],
   <section class="hero" aria-label="Presentación de Saferide">
     <div class="container hero-inner">
       <div class="hero-text">
+        <span class="hero-badge">
+          <svg class="icon" aria-hidden="true" style="width:14px;height:14px"><use href="#icon-shield-check"></use></svg>
+          Protección médica siempre con vos
+        </span>
         <h1><span class="logo-safe">Safe</span><span class="logo-ride">ride</span></h1>
         <p class="hero-tagline" data-i18n="hero.tagline">Tu información puede salvar tu vida.</p>
         <p class="hero-desc" data-i18n="hero.desc">
@@ -1642,6 +1695,20 @@ section[id],
         <div class="hero-actions">
           <a href="#como-funciona" class="btn btn-primary" data-i18n="hero.ctaPrimary">Ver cómo funciona</a>
           <button type="button" class="btn btn-outline" data-prototype-trigger data-i18n="hero.ctaSecondary">Creá tu ficha</button>
+        </div>
+        <div class="hero-trust">
+          <span class="hero-trust-item">
+            <svg class="icon" aria-hidden="true" style="width:16px;height:16px;color:var(--accent-fg)"><use href="#icon-check-circle"></use></svg>
+            Sin contraseña
+          </span>
+          <span class="hero-trust-item">
+            <svg class="icon" aria-hidden="true" style="width:16px;height:16px;color:var(--accent-fg)"><use href="#icon-check-circle"></use></svg>
+            Gratis para empezar
+          </span>
+          <span class="hero-trust-item">
+            <svg class="icon" aria-hidden="true" style="width:16px;height:16px;color:var(--accent-fg)"><use href="#icon-check-circle"></use></svg>
+            Actualizable
+          </span>
         </div>
       </div>
 
@@ -1843,19 +1910,23 @@ section[id],
       <div class="card-grid cols-4">
         <div class="card benefit-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-refresh-cw"></use></svg></div>
-          <p data-i18n="beneficios.actualizable">Se actualiza cuando vos quieras, a diferencia de una pulsera grabada.</p>
+          <h4 data-i18n="beneficios.actualizableTitle">100% actualizable</h4>
+            <p data-i18n="beneficios.actualizable">Cambialo cuando quieras: grupo sanguíneo, alergias, medicación o contacto de emergencia. A diferencia de una pulsera grabada, nunca queda desactualizada.</p>
         </div>
         <div class="card benefit-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-smartphone"></use></svg></div>
-          <p data-i18n="beneficios.cualquierCelular">Funciona con cualquier celular con cámara, sin instalar nada.</p>
+          <h4 data-i18n="beneficios.cualquierCelularTitle">Sin apps</h4>
+          <p data-i18n="beneficios.cualquierCelular">Funciona con cualquier celular con cámara, sin instalar nada. El personal de salud lo escanea y listo.</p>
         </div>
         <div class="card benefit-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-tag"></use></svg></div>
-          <p data-i18n="beneficios.economico">Económico y fácil de conseguir.</p>
+          <h4 data-i18n="beneficios.economicoTitle">Accesible</h4>
+          <p data-i18n="beneficios.economico">Económico y fácil de conseguir. La versión básica es gratis y te permite generar tu ficha de emergencia al instante.</p>
         </div>
         <div class="card benefit-card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-shield-check"></use></svg></div>
-          <p data-i18n="beneficios.emergenciasReales">Pensado para emergencias reales, no solo para guardar datos.</p>
+          <h4 data-i18n="beneficios.emergenciasRealesTitle">Diseñado para emergencias</h4>
+          <p data-i18n="beneficios.emergenciasReales">Pensado para emergencias reales: solo muestra lo esencial, en una página de solo lectura, optimizada para que el personal médico encuentre rápido lo que necesita.</p>
         </div>
       </div>
     </div>
@@ -1935,6 +2006,14 @@ section[id],
         <div class="reveal">
           <div class="stat-number" data-i18n="stats.stat2Number">4 de 10</div>
           <p class="stat-label" data-i18n="stats.stat2">víctimas fatales de siniestros viales iban en moto.</p>
+        </div>
+        <div class="reveal">
+          <div class="stat-number">24hs</div>
+          <p class="stat-label">es la ventana crítica donde la información médica salva vidas.</p>
+        </div>
+        <div class="reveal">
+          <div class="stat-number">0</div>
+          <p class="stat-label">apps necesitas para que cualquier persona escanee tu QR.</p>
         </div>
       </div>
 
@@ -2217,6 +2296,33 @@ section[id],
             <p data-i18n="faq.a6">Sí, las veces que necesites, desde tu cuenta.</p>
           </div></div>
         </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>¿Funciona en otros países?</span>
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>Sí. El QR funciona en cualquier parte del mundo: cualquier persona con un celular puede escanearlo y ver tu ficha. No hay restricciones geográficas.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>¿Qué diferencia hay con una pulsera grabada?</span>
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>Una pulsera grabada tiene espacio limitado y no se puede actualizar. Saferide te permite cargar toda la información que necesites, modificarla cuando quieras, y acceder a ella desde cualquier celular sin instalar nada.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>¿Puedo usarlo para mi familia?</span>
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p>¡Por supuesto! Podés crear fichas para cada miembro de tu familia: hijos, padres, abuelos. Es ideal para personas que no pueden cargar sus datos solas.</p>
+          </div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -2227,9 +2333,10 @@ section[id],
 <section class="section cta-final" id="contacto" aria-labelledby="cta-final-title">
   <div class="container">
     <h2 id="cta-final-title" data-i18n="ctaFinal.title">¿Querés tener tu información siempre a mano?</h2>
+    <p style="color:rgba(255,255,255,0.85);max-width:540px;margin:0 auto 32px;font-size:1.05rem">Creá tu ficha gratuita en un minuto, o pedí tu pulsera o medalla para tenerla siempre cerca.</p>
     <div class="cta-actions">
       <button type="button" class="btn btn-primary" data-prototype-trigger data-i18n="ctaFinal.generarQr">Generar mi QR</button>
-      <a href="#pedido" class="btn btn-outline" style="color:#fff;border-color:#fff" data-i18n="nav.pedido">Pedí tu pulsera</a>
+      <a href="#pedido" class="btn btn-outline" data-i18n="nav.pedido">Pedí tu pulsera</a>
     </div>
   </div>
 </section>
