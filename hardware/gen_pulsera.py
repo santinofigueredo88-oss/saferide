@@ -234,11 +234,25 @@ for k in range(NB+1):
         tri(ctop, prev, t)
     prev = t
 
+# ============ ORIENTAR PARA TINKERCAD / IMPRESION ============
+# El modelo se construyo con el eje de la muñeca en X y el aro en el plano YZ.
+# Para Tinkercad conviene: aro apoyado (eje muñeca = Z, vertical) y todo por
+# encima del plano de trabajo (Z >= 0).
+_allz = [c for t in tris for p in t[1:] for c in (p[2],)]
+def _xf(p):
+    x, y, z = p          # x = ancho muñeca, (y,z) = circulo del aro
+    return (y, z, x)      # nuevo: (aro_x, aro_y, alto=ancho muñeca)
+# aplicar y luego subir para apoyar en Z=0
+_tmp = [(nrm, _xf(p1), _xf(p2), _xf(p3)) for (nrm, p1, p2, p3) in tris]
+_minz = min(c for t in _tmp for p in t[1:] for c in (p[2],))
+def _up(p): return (p[0], p[1], p[2] - _minz)
+tris = [(nrm, _up(p1), _up(p2), _up(p3)) for (nrm, p1, p2, p3) in _tmp]
+
 # ============ ESCRIBIR STL ============
 with open(OUT, "w") as f:
     f.write("solid pulsera_saferide\n")
     for (nrm, p1, p2, p3) in tris:
-        f.write(f"  facet normal {nrm[0]:.5f} {nrm[1]:.5f} {nrm[2]:.5f}\n    outer loop\n")
+        f.write(f"  facet normal 0 0 0\n    outer loop\n")
         for p in (p1, p2, p3):
             f.write(f"      vertex {p[0]:.4f} {p[1]:.4f} {p[2]:.4f}\n")
         f.write("    endloop\n  endfacet\n")
