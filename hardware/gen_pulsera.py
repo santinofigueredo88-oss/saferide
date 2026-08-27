@@ -33,9 +33,9 @@ BTN_D        = 5.0     # diametro del botoncito al lado del modulo
 BTN_H        = 0.9     # cuanto sobresale
 BTN_OFFSET   = 8.0     # separacion del borde del modulo (a lo largo de la correa)
 
-SEG_MAJOR    = 150     # resolucion a lo largo de la correa
-CS_SEG       = 7       # resolucion por tramo de la seccion de la correa
-MOD_GRID     = 46      # resolucion de la grilla del modulo
+SEG_MAJOR    = 90      # resolucion a lo largo de la correa
+CS_SEG       = 5       # resolucion por tramo de la seccion de la correa
+MOD_GRID     = 30      # resolucion de la grilla del modulo
 OUT          = "pulsera_saferide.stl"
 # -------------------------------------------
 
@@ -248,15 +248,16 @@ _minz = min(c for t in _tmp for p in t[1:] for c in (p[2],))
 def _up(p): return (p[0], p[1], p[2] - _minz)
 tris = [(nrm, _up(p1), _up(p2), _up(p3)) for (nrm, p1, p2, p3) in _tmp]
 
-# ============ ESCRIBIR STL ============
-with open(OUT, "w") as f:
-    f.write("solid pulsera_saferide\n")
-    for (nrm, p1, p2, p3) in tris:
-        f.write(f"  facet normal 0 0 0\n    outer loop\n")
+# ============ ESCRIBIR STL (binario, chico y rapido de importar) ============
+import struct
+with open(OUT, "wb") as f:
+    f.write(b"Saferide bracelet - generado con gen_pulsera.py".ljust(80, b" "))
+    f.write(struct.pack("<I", len(tris)))
+    for (_nrm, p1, p2, p3) in tris:
+        f.write(struct.pack("<3f", 0.0, 0.0, 0.0))
         for p in (p1, p2, p3):
-            f.write(f"      vertex {p[0]:.4f} {p[1]:.4f} {p[2]:.4f}\n")
-        f.write("    endloop\n  endfacet\n")
-    f.write("endsolid pulsera_saferide\n")
+            f.write(struct.pack("<3f", p[0], p[1], p[2]))
+        f.write(struct.pack("<H", 0))
 
 print(f"OK -> {OUT}  ({len(tris)} triangulos)")
 print(f"Correa: r central {Rc:.1f} mm | seccion {STRAP_W}x{STRAP_T} | abraza {WRAP_DEG}°")
