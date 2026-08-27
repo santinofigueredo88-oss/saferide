@@ -4,8 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title data-i18n="meta.title">Saferide — Tu información puede salvar tu vida</title>
-<style>html{background:#eaf4ec}</style>
-<style>@media(prefers-color-scheme:dark){html:not([data-theme=light]){background:#10190f!important;color:#eaf4ec!important}}</style>
 <script>
 // Aplica tema e idioma guardados ANTES de pintar la página, para que no
 // se vea un parpadeo (flash) del tema o idioma equivocado al cargar.
@@ -14,8 +12,6 @@
     var savedTheme = localStorage.getItem("saferide-theme");
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.setAttribute("data-theme", savedTheme);
-    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      document.documentElement.setAttribute("data-theme", "dark");
     }
     var savedLang = localStorage.getItem("saferide-lang");
     if (!savedLang) {
@@ -90,7 +86,7 @@ table {
   --muted-mark: #93a69a;
 
   /* Tokens de superficie/texto: son los que cambian entre modo claro y oscuro */
-  --surface-page: #eaf4ec;
+  --surface-page: #f8faf9;
   --surface: var(--white);
   --surface-alt: #eef5f0;
   --surface-border: #d4e5d9;
@@ -202,9 +198,9 @@ body {
   color: var(--text-primary);
   background: var(--surface-page);
   background-image: 
-    radial-gradient(ellipse at 20% 50%, rgba(46, 125, 50, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(111, 174, 116, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(46, 125, 50, 0.04) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(46, 125, 50, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(111, 174, 116, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(46, 125, 50, 0.02) 0%, transparent 50%);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   transition: background var(--transition), color var(--transition);
@@ -622,7 +618,7 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 
 .hero {
   padding: calc(var(--nav-height) + 80px) 0 96px;
-  background: linear-gradient(170deg, #d3e6d8 0%, #eaf4ec 40%, var(--surface-page) 100%);
+  background: linear-gradient(170deg, #e8f3eb 0%, #f0f7f2 40%, var(--surface-page) 100%);
   overflow: hidden;
   position: relative;
 }
