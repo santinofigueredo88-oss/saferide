@@ -10,8 +10,17 @@
 (function () {
   try {
     var savedTheme = localStorage.getItem("saferide-theme");
+    var isDark = false;
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.setAttribute("data-theme", savedTheme);
+      isDark = savedTheme === "dark";
+    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.setAttribute("data-theme", "dark");
+      isDark = true;
+    }
+    // Force dark background immediately to prevent white flash
+    if (isDark) {
+      document.documentElement.style.cssText = "background:#10190f !important;color:#eaf4ec !important";
     }
     var savedLang = localStorage.getItem("saferide-lang");
     if (!savedLang) {
