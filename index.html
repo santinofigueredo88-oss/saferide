@@ -3375,128 +3375,153 @@ section[id],
               </select>
             </div>
             <div class="form-field">
-              <label for="protoConditions" data-i18n="field.condiciones">Enfermedades / condiciones preexistentes</label>
-              <select id="protoConditions" name="conditions">
-                <option value="" disabled selected>Ninguna / No aplica</option>
-                <option value="Ninguna">Ninguna</option>
-                <option value="Diabetes tipo 1">Diabetes tipo 1</option>
-                <option value="Diabetes tipo 2">Diabetes tipo 2</option>
-                <option value="Hipertensión arterial">Hipertensión arterial</option>
-                <option value="Asma">Asma</option>
-                <option value="Epilepsia">Epilepsia</option>
-                <option value="Cardiopatía">Cardiopatía</option>
-                <option value="Insuficiencia renal crónica">Insuficiencia renal crónica</option>
-                <option value="ACV previo">ACV previo</option>
-                <option value="Cáncer (en tratamiento)">Cáncer (en tratamiento)</option>
-                <option value="Enfermedad celíaca">Enfermedad celíaca</option>
-                <option value="VIH/SIDA">VIH/SIDA</option>
-                <option value="Hepatitis B">Hepatitis B</option>
-                <option value="Hepatitis C">Hepatitis C</option>
-                <option value="Anemia severa">Anemia severa</option>
-                <option value="Hemofilia">Hemofilia</option>
-                <option value="Enfermedad autoinmune">Enfermedad autoinmune</option>
-                <option value="Trasplante de órgano">Trasplante de órgano</option>
-                <option value="Marcapasos / Desfibrilador">Marcapasos / Desfibrilador</option>
-                <option value="Artritis reumatoide">Artritis reumatoide</option>
-                <option value="Lupus">Lupus</option>
-                <option value="Enfermedad de Crohn">Enfermedad de Crohn</option>
-                <option value="Colitis ulcerosa">Colitis ulcerosa</option>
-                <option value="Miastenia gravis">Miastenia gravis</option>
-                <option value="Apnea obstructiva del sueño">Apnea obstructiva del sueño</option>
-                <option value="Otra">Otra (escribí abajo)</option>
-              </select>
-              <input type="text" id="protoConditionsOther" name="conditionsOther" placeholder="Escribí tu condición aquí" style="display:none;margin-top:6px" />
+              <label for="protoConditions">Enfermedades / condiciones preexistentes</label>
+              <input type="text" id="protoConditions" name="conditions" list="conditionsList" placeholder="Ej: Diabetes tipo 2, o escribí la tuya" />
+              <datalist id="conditionsList">
+                <option value="Ninguna">
+                <option value="Diabetes tipo 1">
+                <option value="Diabetes tipo 2">
+                <option value="Hipertensión arterial">
+                <option value="Asma">
+                <option value="Epilepsia">
+                <option value="Cardiopatía">
+                <option value="Insuficiencia renal crónica">
+                <option value="ACV previo">
+                <option value="Cáncer (en tratamiento)">
+                <option value="Enfermedad celíaca">
+                <option value="VIH/SIDA">
+                <option value="Hepatitis B">
+                <option value="Hepatitis C">
+                <option value="Anemia severa">
+                <option value="Hemofilia">
+                <option value="Enfermedad autoinmune">
+                <option value="Trasplante de órgano">
+                <option value="Marcapasos / Desfibrilador">
+                <option value="Artritis reumatoide">
+                <option value="Lupus">
+                <option value="Enfermedad de Crohn">
+                <option value="Colitis ulcerosa">
+                <option value="Miastenia gravis">
+                <option value="Apnea obstructiva del sueño">
+                <option value="Glaucoma">
+                <option value="Cataratas">
+                <option value="Osteoporosis">
+                <option value="Artrosis">
+                <option value="Fibromialgia">
+                <option value="Esclerosis múltiple">
+                <option value="Parkinson">
+                <option value="Alzheimer">
+                <option value="Enfermedad pulmonar (EPOC)">
+              </datalist>
             </div>
             <div class="form-field">
-              <label for="protoAllergies" data-i18n="field.alergias">Alergias</label>
-              <select id="protoAllergies" name="allergies">
-                <option value="" disabled selected>Ninguna / No aplica</option>
-                <option value="Ninguna">Ninguna</option>
-                <option value="Penicilina">Penicilina</option>
-                <option value="Ibuprofeno">Ibuprofeno</option>
-                <option value="Aspirina (ácido acetilsalicílico)">Aspirina (ácido acetilsalicílico)</option>
-                <option value="Paracetamol">Paracetamol</option>
-                <option value="Sulfamidas">Sulfamidas</option>
-                <option value="Anestésicos locales (lidocaína)">Anestésicos locales (lidocaína)</option>
-                <option value="Látex">Látex</option>
-                <option value="Mariscos / mariscos">Mariscos / mariscos</option>
-                <option value="Frutos secos">Frutos secos</option>
-                <option value="Huevo">Huevo</option>
-                <option value="Leche">Leche</option>
-                <option value="Gluten">Gluten</option>
-                <option value="Picaduras de abeja / avispas">Picaduras de abeja / avispas</option>
-                <option value="Contraste yodado">Contraste yodado</option>
-                <option value="Alopurinol">Alopurinol</option>
-                <option value="Carboplatino">Carboplatino</option>
-                <option value="Otra">Otra (escribí abajo)</option>
-              </select>
-              <input type="text" id="protoAllergiesOther" name="allergiesOther" placeholder="Escribí tu alergia aquí" style="display:none;margin-top:6px" />
+              <label for="protoAllergies">Alergias</label>
+              <input type="text" id="protoAllergies" name="allergies" list="allergiesList" placeholder="Ej: Penicilina, o escribí la tuya" />
+              <datalist id="allergiesList">
+                <option value="Ninguna">
+                <option value="Penicilina">
+                <option value="Amoxicilina">
+                <option value="Ibuprofeno">
+                <option value="Aspirina (ácido acetilsalicílico)">
+                <option value="Paracetamol">
+                <option value="Sulfamidas">
+                <option value="Anestésicos locales (lidocaína)">
+                <option value="Látex">
+                <option value="Mariscos">
+                <option value="Frutos secos">
+                <option value="Huevo">
+                <option value="Leche">
+                <option value="Gluten">
+                <option value="Picaduras de abeja / avispas">
+                <option value="Contraste yodado">
+                <option value="Alopurinol">
+                <option value="Carboplatino">
+                <option value="Ciprofloxacino">
+                <option value="Metformina">
+                <option value="Enalapril">
+                <option value="Omeprazol">
+                <option value=" Naproxeno">
+                <option value="Diclofenac">
+                <option value="Cefalosporinas">
+              </datalist>
             </div>
             <div class="form-field">
-              <label for="protoMeds" data-i18n="field.medicacion">Medicación habitual</label>
-              <select id="protoMeds" name="meds">
-                <option value="" disabled selected>Ninguna / No aplica</option>
-                <option value="Ninguna">Ninguna</option>
-                <option value="Metformina">Metformina</option>
-                <option value="Insulina">Insulina</option>
-                <option value="Enalapril">Enalapril</option>
-                <option value="Losartán">Losartán</option>
-                <option value="Amlodipino">Amlodipino</option>
-                <option value="Aspirina (ácido acetilsalicílico)">Aspirina (ácido acetilsalicílico)</option>
-                <option value="Clopidogrel">Clopidogrel</option>
-                <option value="Sintrom (acenocumarol)">Sintrom (acenocumarol)</option>
-                <option value="Levotiroxina">Levotiroxina</option>
-                <option value="Omeprazol">Omeprazol</option>
-                <option value="Salbutamol (inhalador)">Salbutamol (inhalador)</option>
-                <option value="Prednisona">Prednisona</option>
-                <option value="Metotrexato">Metotrexato</option>
-                <option value="Diazepam">Diazepam</option>
-                <option value="Fluoxetina">Fluoxetina</option>
-                <option value="Ibuprofeno">Ibuprofeno</option>
-                <option value="Diclofenac">Diclofenac</option>
-                <option value="Rivaroxabán">Rivaroxabán</option>
-                <option value="Warfarina">Warfarina</option>
-                <option value="Otra">Otra (escribí abajo)</option>
-              </select>
-              <input type="text" id="protoMedsOther" name="medsOther" placeholder="Escribí tu medicación aquí" style="display:none;margin-top:6px" />
+              <label for="protoMeds">Medicación habitual</label>
+              <input type="text" id="protoMeds" name="meds" list="medsList" placeholder="Ej: Ninguna, o escribí tu medicación" />
+              <datalist id="medsList">
+                <option value="Ninguna">
+                <option value="Metformina">
+                <option value="Insulina">
+                <option value="Enalapril">
+                <option value="Losartán">
+                <option value="Amlodipino">
+                <option value="Aspirina (ácido acetilsalicílico)">
+                <option value="Clopidogrel">
+                <option value="Sintrom (acenocumarol)">
+                <option value="Levotiroxina">
+                <option value="Omeprazol">
+                <option value="Salbutamol (inhalador)">
+                <option value="Prednisona">
+                <option value="Metotrexato">
+                <option value="Diazepam">
+                <option value="Fluoxetina">
+                <option value="Ibuprofeno">
+                <option value="Diclofenac">
+                <option value="Rivaroxabán">
+                <option value="Warfarina">
+                <option value="Atorvastatina">
+                <option value="Rosuvastatina">
+                <option value="Bisoprolol">
+                <option value="Carvedilol">
+                <option value="Furosemida">
+                <option value="Espironolactona">
+                <option value="Pantoprazol">
+                <option value="Ranitidina">
+                <option value="Sertralina">
+                <option value="Escitalopram">
+                <option value="Tramadol">
+                <option value="Morfina">
+                <option value="Gabapentina">
+                <option value="Pregabalina">
+              </datalist>
             </div>
             <div class="form-field">
-              <label for="protoInsurance" data-i18n="field.obraSocial">Obra social / cobertura médica</label>
-              <select id="protoInsurance" name="insurance">
-                <option value="" disabled selected>Sin cobertura</option>
-                <option value="Sin cobertura">Sin cobertura</option>
-                <option value="OSDE">OSDE</option>
-                <option value="OSDE (210/310/410)">OSDE (210/310/410)</option>
-                <option value="Swiss Medical">Swiss Medical</option>
-                <option value="Swiss Medical (SMG)">Swiss Medical (SMG)</option>
-                <option value="Galeno">Galeno</option>
-                <option value="Galeno (Gold/Platino)">Galeno (Gold/Platino)</option>
-                <option value="OMINT">OMINT</option>
-                <option value="FEMISAN">FEMISAN</option>
-                <option value="Solar Salud">Solar Salud</option>
-                <option value="APROSALUD">APROSALUD</option>
-                <option value="GLA (Grupo Los Andes)">GLA (Grupo Los Andes)</option>
-                <option value="IOMA">IOMA</option>
-                <option value="IOMA (Plan integral)">IOMA (Plan integral)</option>
-                <option value="OSECAC">OSECAC</option>
-                <option value="OSPECON">OSPECON</option>
-                <option value="UOCRA">UOCRA</option>
-                <option value="AMUR">AMUR</option>
-                <option value="PAMI">PAMI</option>
-                <option value="INSSJyP">INSSJyP</option>
-                <option value="Osprera">Osprera</option>
-                <option value="Puerto Medico">Puerto Medico</option>
-                <option value="Luis Pasteur">Luis Pasteur</option>
-                <option value="OAAPP">OAAPP</option>
-                <option value="UPCN">UPCN</option>
-                <option value="OSBA">OSBA</option>
-                <option value="SUTOCOR">SUTOCOR</option>
-                <option value="Osigrav">Osigrav</option>
-                <option value="OSPRE">OSPRE</option>
-                <option value="Ninguna (prepaga)">Ninguna (prepaga)</option>
-                <option value="Otra">Otra (escribí abajo)</option>
-              </select>
-              <input type="text" id="protoInsuranceOther" name="insuranceOther" placeholder="Escribí tu cobertura aquí" style="display:none;margin-top:6px" />
+              <label for="protoInsurance">Obra social / cobertura médica</label>
+              <input type="text" id="protoInsurance" name="insurance" list="insuranceList" placeholder="Ej: OSDE, Swiss Medical, o escribí la tuya" />
+              <datalist id="insuranceList">
+                <option value="Sin cobertura">
+                <option value="OSDE">
+                <option value="OSDE (210/310/410)">
+                <option value="Swiss Medical">
+                <option value="Swiss Medical (SMG)">
+                <option value="Galeno">
+                <option value="Galeno (Gold/Platino)">
+                <option value="OMINT">
+                <option value="FEMISAN">
+                <option value="Solar Salud">
+                <option value="APROSALUD">
+                <option value="GLA (Grupo Los Andes)">
+                <option value="IOMA">
+                <option value="IOMA (Plan integral)">
+                <option value="OSECAC">
+                <option value="OSPECON">
+                <option value="UOCRA">
+                <option value="AMUR">
+                <option value="PAMI">
+                <option value="INSSJyP">
+                <option value="Osprera">
+                <option value="Puerto Medico">
+                <option value="Luis Pasteur">
+                <option value="OAAPP">
+                <option value="UPCN">
+                <option value="OSBA">
+                <option value="SUTOCOR">
+                <option value="Osigrav">
+                <option value="OSPRE">
+                <option value="Ninguna (prepaga)">
+                <option value="Particular">
+                <option value="Otra prepaga">
+              </datalist>
             </div>
             <div class="form-field">
               <label for="protoPhone" data-i18n="field.telefonoPropio">Teléfono propio</label>
@@ -4657,22 +4682,6 @@ function initPrototypeModal() {
     resultView.hidden = false;
   };
 
-  // Handle "Otra" option in selects
-  const setupOtherToggle = (selectId, inputId) => {
-    const select = document.getElementById(selectId);
-    const input = document.getElementById(inputId);
-    if (!select || !input) return;
-    select.addEventListener("change", () => {
-      input.style.display = select.value === "Otra" ? "block" : "none";
-      if (select.value !== "Otra") input.value = "";
-    });
-  };
-
-  setupOtherToggle("protoConditions", "protoConditionsOther");
-  setupOtherToggle("protoAllergies", "protoAllergiesOther");
-  setupOtherToggle("protoMeds", "protoMedsOther");
-  setupOtherToggle("protoInsurance", "protoInsuranceOther");
-
   // Prefill with example data
   if (prefillBtn) {
     prefillBtn.addEventListener("click", () => {
@@ -4688,11 +4697,6 @@ function initPrototypeModal() {
       document.getElementById("protoPhone").value = "011 4444-5566";
       document.getElementById("protoContactName").value = "María Pérez";
       document.getElementById("protoContactPhone").value = "011 5555-0123";
-      // Hide all "other" inputs
-      ["protoConditionsOther", "protoAllergiesOther", "protoMedsOther", "protoInsuranceOther"].forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) { el.style.display = "none"; el.value = ""; }
-      });
     });
   }
 
@@ -4741,13 +4745,6 @@ function initPrototypeModal() {
       return value || fallback;
     };
 
-    // Resolve "Otra" selections
-    const resolveOther = (field, otherField) => {
-      const val = getText(field, "");
-      if (val === "Otra") return getText(otherField, t("fallback.ningunaEspecificada"));
-      return val || t("fallback.ningunaEspecificada");
-    };
-
     const birthdateRaw = data.get("birthdate");
     let birthdateLabel = "—";
     if (birthdateRaw) {
@@ -4756,10 +4753,10 @@ function initPrototypeModal() {
       birthdateLabel = parsedDate.toLocaleDateString(t("download.dateLocale"), { timeZone: "UTC" });
     }
 
-    const conditions = resolveOther("conditions", "conditionsOther");
-    const allergies = resolveOther("allergies", "allergiesOther");
-    const meds = resolveOther("meds", "medsOther");
-    const insurance = resolveOther("insurance", "insuranceOther");
+    const conditions = getText("conditions", t("fallback.ningunaEspecificada"));
+    const allergies = getText("allergies", t("fallback.ningunaEspecificada"));
+    const meds = getText("meds", t("field.ninguna"));
+    const insurance = getText("insurance", t("fallback.noEspecificada"));
 
     document.getElementById("protoResultName").textContent = getText("fullName", t("demo.fichaTitle"));
     document.getElementById("protoResultSubtitle").textContent = data.get("email");
