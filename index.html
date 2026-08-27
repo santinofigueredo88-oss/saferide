@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title data-i18n="meta.title">Saferide — Tu información puede salvar tu vida</title>
-<style>html{background:#eaf4ec}@media(prefers-color-scheme:dark){html{background:#10190f!important}}</style>
+<style>html{background:#eaf4ec}@media(prefers-color-scheme:dark){html{background:#0e160d!important}}</style>
 <script>
 // Aplica tema e idioma guardados ANTES de pintar la página, para que no
 // se vea un parpadeo (flash) del tema o idioma equivocado al cargar.
@@ -14,6 +14,12 @@
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.setAttribute("data-theme", savedTheme);
     }
+    // Fondo correcto ANTES de que cargue el CSS grande. Cubre el caso de
+    // modo oscuro elegido a mano con el sistema en claro (ahí el @media de
+    // arriba no alcanza y se colaba un flash claro al principio).
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var effectiveDark = savedTheme === "dark" || (savedTheme !== "light" && prefersDark);
+    document.documentElement.style.backgroundColor = effectiveDark ? "#0e160d" : "#eaf4ec";
     var savedLang = localStorage.getItem("saferide-lang");
     if (!savedLang) {
       savedLang = (navigator.language || "es").toLowerCase().startsWith("en") ? "en" : "es";
@@ -81,6 +87,12 @@ table {
   --green-accent-soft: #6fae74;
   --white: #ffffff;
   --green-pale: #eaf4ec;
+  /* Acentos de superficie que se ajustan por tema (ver bloques de modo oscuro) */
+  --surface-raise: rgba(35, 75, 54, 0.04);
+  --surface-hairline: rgba(255, 255, 255, 0.6);
+  --card-glow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  --divider: linear-gradient(90deg, transparent, rgba(46, 125, 50, 0.25), transparent);
+  --ring: rgba(46, 125, 50, 0.16);
   --green-mid: #d3e6d8;
   --text-muted: #4f5f55;
   --success: #2e7d32;
@@ -124,16 +136,21 @@ table {
    Se activa con [data-theme="dark"] en <html> (elegido a mano) o, si el
    usuario no eligió nada todavía, con prefers-color-scheme. */
 html[data-theme="dark"] {
-  --surface-page: #10190f;
-  --surface: #17221a;
-  --surface-alt: #1d2b21;
-  --surface-border: #2b3d31;
+  --surface-page: #0e160d;
+  --surface: #172219;
+  --surface-alt: #1b291f;
+  --surface-border: #31463a;
   --surface-border-strong: var(--green-accent-soft);
-  --surface-translucent: rgba(16, 25, 15, 0.88);
-  --text-primary: #eaf4ec;
-  --text-secondary: #a7bfae;
+  --surface-translucent: rgba(14, 22, 13, 0.9);
+  --text-primary: #eef6ef;
+  --text-secondary: #adc4b4;
   --placeholder-color: #6f8577;
-  --accent-fg: var(--green-accent-soft);
+  --accent-fg: #83c088;
+  --surface-raise: rgba(255, 255, 255, 0.022);
+  --surface-hairline: rgba(255, 255, 255, 0.08);
+  --card-glow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  --divider: linear-gradient(90deg, transparent, rgba(111, 174, 116, 0.28), transparent);
+  --ring: rgba(131, 192, 136, 0.22);
 
   --warning-bg: rgba(255, 180, 77, 0.12);
   --warning-text: #ffb44d;
@@ -160,15 +177,21 @@ html[data-theme="dark"] .navbar.scrolled {
 
 @media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]):not([data-theme="dark"]) {
-    --surface-page: #10190f;
-    --surface: #17221a;
-    --surface-alt: #1d2b21;
-    --surface-border: #2b3d31;
+    --surface-page: #0e160d;
+    --surface: #172219;
+    --surface-alt: #1b291f;
+    --surface-border: #31463a;
     --surface-border-strong: var(--green-accent-soft);
-    --surface-translucent: rgba(16, 25, 15, 0.88);
-    --text-primary: #eaf4ec;
-    --text-secondary: #a7bfae;
+    --surface-translucent: rgba(14, 22, 13, 0.9);
+    --text-primary: #eef6ef;
+    --text-secondary: #adc4b4;
     --placeholder-color: #6f8577;
+    --accent-fg: #83c088;
+    --surface-raise: rgba(255, 255, 255, 0.022);
+    --surface-hairline: rgba(255, 255, 255, 0.08);
+    --card-glow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    --divider: linear-gradient(90deg, transparent, rgba(111, 174, 116, 0.28), transparent);
+    --ring: rgba(131, 192, 136, 0.22);
 
     --warning-bg: rgba(255, 180, 77, 0.12);
     --warning-text: #ffb44d;
@@ -349,12 +372,12 @@ summary:focus-visible {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 17px;
 }
 
 .nav-links a {
   font-weight: 500;
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   color: var(--text-primary);
   position: relative;
   padding: 6px 2px;
@@ -618,10 +641,26 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 }
 
 .hero {
-  padding: calc(var(--nav-height) + 80px) 0 96px;
-  background: linear-gradient(170deg, #d3e6d8 0%, #eaf4ec 40%, var(--surface-page) 100%);
+  padding: calc(var(--nav-height) + clamp(48px, 8vw, 96px)) 0 clamp(72px, 10vw, 112px);
+  background:
+    radial-gradient(1000px 480px at 80% -6%, rgba(46, 125, 50, 0.12), transparent 58%),
+    linear-gradient(170deg, #d7e9dc 0%, #eaf4ec 42%, var(--surface-page) 100%);
   overflow: hidden;
   position: relative;
+}
+
+/* En modo oscuro el hero también va verde profundo, igual que el resto de
+   la página (si no, arriba de todo se veía un bloque casi blanco). */
+html[data-theme="dark"] .hero {
+  background: linear-gradient(170deg, #17251b 0%, #131d13 42%, var(--surface-page) 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .hero {
+    background:
+      radial-gradient(1100px 520px at 78% -8%, rgba(46, 125, 50, 0.16), transparent 60%),
+      linear-gradient(170deg, #1a2c1e 0%, #111c13 44%, var(--surface-page) 100%);
+  }
 }
 
 .hero::before {
@@ -2353,6 +2392,412 @@ section[id],
   color: #ffffff;
 }
 
+/* =========================================================
+   POLISH v2 — profundidad, ritmo y armonía
+   (agregado al final para que gane en el orden de la cascada)
+   ========================================================= */
+
+/* --- Ritmo vertical fluido --- */
+.section {
+  padding: clamp(72px, 9.5vw, 118px) 0;
+}
+.section-heading {
+  margin-bottom: clamp(38px, 5vw, 60px);
+}
+.section-heading h2 {
+  font-size: clamp(1.9rem, 1.2rem + 2.4vw, 2.7rem);
+  letter-spacing: -0.02em;
+}
+h1, h2, h3, .section-heading h2, .hero-tagline { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* --- Textura mate muy sutil sobre toda la página --- */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.022;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+html[data-theme="dark"] body::after { opacity: 0.04; }
+main, .cta-final, .site-footer { position: relative; z-index: 1; }
+
+/* --- Divisor hairline entre secciones --- */
+.section + .section::before,
+.section + .cta-final::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1100px, 88%);
+  height: 1px;
+  background: var(--divider);
+  opacity: 0.7;
+}
+.bg-light + .section::before,
+.section + .bg-light::before { opacity: 0; }
+
+/* --- Superficies con más cuerpo (tarjetas / paneles) --- */
+.card,
+.timeline-step,
+.beneficiary-card,
+.panel,
+.pricing-card,
+.pedido-info-card {
+  background:
+    linear-gradient(180deg, var(--surface-raise), transparent 42%),
+    var(--surface);
+  box-shadow: var(--card-glow), var(--shadow-sm);
+}
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .timeline-step,
+html[data-theme="dark"] .beneficiary-card,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .pricing-card,
+html[data-theme="dark"] .pedido-info-card,
+html[data-theme="dark"] .demo-card,
+html[data-theme="dark"] .comparativa-table-wrap {
+  border-color: var(--surface-hairline);
+}
+html[data-theme="dark"] .card:hover,
+html[data-theme="dark"] .timeline-step:hover,
+html[data-theme="dark"] .beneficiary-card:hover,
+html[data-theme="dark"] .panel:hover,
+html[data-theme="dark"] .pricing-card:hover {
+  border-color: rgba(131, 192, 136, 0.4);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(131, 192, 136, 0.12);
+}
+
+/* --- bg-light: en oscuro, viñeta en vez de "caja más clara" --- */
+html[data-theme="dark"] .bg-light,
+html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
+  background:
+    radial-gradient(900px 500px at 50% 0%, rgba(46, 125, 50, 0.08), transparent 70%),
+    var(--surface-alt);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .card,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .timeline-step,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .beneficiary-card,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .panel,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .pricing-card,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .pedido-info-card,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .demo-card,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .comparativa-table-wrap {
+    border-color: var(--surface-hairline);
+  }
+}
+
+/* --- Texto con acento en degradé --- */
+.text-gradient {
+  background: linear-gradient(120deg, var(--green-accent), var(--green-accent-soft));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+html[data-theme="dark"] .text-gradient {
+  background: linear-gradient(120deg, #8fd095, #b6e6ba);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --- Botones: más terminación --- */
+.btn-primary {
+  background: linear-gradient(180deg, #3a8f3f, var(--green-accent) 55%, var(--green-accent-dark));
+}
+.btn-primary:hover {
+  background: linear-gradient(180deg, var(--green-accent), var(--green-accent-dark));
+}
+.btn:focus-visible {
+  outline: 3px solid var(--accent-fg);
+  outline-offset: 3px;
+}
+.btn-lg {
+  min-height: 54px;
+  padding: 16px 34px;
+  font-size: 1.02rem;
+}
+
+/* --- Eyebrow con línea --- */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-heading .eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+/* --- Nav: link de la sección activa --- */
+.nav-links a.is-active { color: var(--accent-fg); }
+.nav-links a.is-active::after { width: 100%; }
+
+/* --- Hero: jerarquía --- */
+.hero-title { font-size: clamp(3.1rem, 2rem + 4.6vw, 4.6rem); }
+.hero-inner { gap: clamp(40px, 6vw, 72px); }
+@media (min-width: 960px) {
+  .hero-inner { grid-template-columns: 1.05fr 0.95fr; }
+}
+
+/* --- Chips de confianza del hero --- */
+.hero-trust {
+  gap: 10px 18px;
+  padding-top: 22px;
+  margin-top: 22px;
+  border-top: 1px solid var(--surface-border);
+}
+
+/* =========================================================
+   MOCKUP DE TELÉFONO CON LA FICHA
+   ========================================================= */
+.phone-mock {
+  position: relative;
+  z-index: 1;
+  width: min(288px, 76vw);
+  aspect-ratio: 288 / 560;
+  border-radius: 44px;
+  padding: 13px;
+  background: linear-gradient(160deg, #2c322e, #131614);
+  box-shadow:
+    0 44px 90px -24px rgba(6, 20, 12, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 2px 6px rgba(255, 255, 255, 0.14) inset;
+  animation: float-qr 6s ease-in-out infinite;
+}
+.phone-mock::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 20px;
+  background: #0c0f0d;
+  border-radius: 0 0 14px 14px;
+  z-index: 3;
+}
+.phone-screen {
+  position: relative;
+  height: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+}
+.phone-statusbar {
+  flex-shrink: 0;
+  height: 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 20px 6px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-family: var(--font-heading);
+}
+.phone-ficha {
+  flex: 1;
+  overflow: hidden;
+  padding: 14px 16px 18px;
+}
+.phone-ficha-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--surface-border);
+}
+.phone-ficha-head .icon {
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  border-radius: 9px;
+  background: var(--green-accent);
+  color: #fff;
+  flex-shrink: 0;
+}
+.phone-ficha-head strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+.phone-ficha-head span {
+  font-size: 0.66rem;
+  color: var(--text-secondary);
+}
+.phone-alert {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--warning-bg);
+  color: var(--warning-text);
+  border: 1px solid var(--warning-border);
+  border-radius: 8px;
+  padding: 6px 9px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.phone-alert .icon { width: 13px; height: 13px; }
+.phone-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--surface-border);
+  font-size: 0.72rem;
+}
+.phone-row:last-child { border-bottom: none; }
+.phone-row dt { color: var(--text-secondary); }
+.phone-row dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: right;
+}
+.phone-row dd.is-alert { color: var(--warning-text); }
+.phone-mock-glow {
+  position: absolute;
+  inset: -18% -22%;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(46, 125, 50, 0.22), transparent 62%);
+  animation: pulse-glow 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Showcase de la sección demo: teléfono + explicación */
+.demo-showcase {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(36px, 6vw, 68px);
+  align-items: center;
+  max-width: 960px;
+  margin: 0 auto;
+}
+@media (min-width: 860px) {
+  .demo-showcase { grid-template-columns: 300px 1fr; }
+}
+.demo-showcase-visual {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.demo-scan {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+.demo-scan svg { width: 40px; height: 40px; color: var(--accent-fg); flex-shrink: 0; }
+.demo-points { list-style: none; margin: 20px 0 0; padding: 0; }
+.demo-points li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 0;
+  font-size: 0.96rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--surface-border);
+}
+.demo-points li:last-child { border-bottom: none; }
+.demo-points .icon {
+  width: 20px; height: 20px;
+  color: var(--accent-fg);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* =========================================================
+   PRIVACIDAD Y SEGURIDAD
+   ========================================================= */
+.privacy-section { position: relative; overflow: hidden; }
+.privacy-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+@media (min-width: 720px) { .privacy-grid { grid-template-columns: repeat(2, 1fr); } }
+.privacy-card {
+  background:
+    linear-gradient(180deg, var(--surface-raise), transparent 42%),
+    var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 28px 26px;
+  box-shadow: var(--card-glow), var(--shadow-sm);
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.privacy-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 44px rgba(35, 75, 54, 0.14);
+  border-color: rgba(46, 125, 50, 0.3);
+}
+html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
+.privacy-card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.14), rgba(46, 125, 50, 0.04));
+  color: var(--accent-fg);
+  margin-bottom: 16px;
+}
+.privacy-card-icon svg { width: 22px; height: 22px; }
+.privacy-card h3 { font-size: 1.02rem; margin-bottom: 6px; }
+.privacy-card p { font-size: 0.93rem; margin: 0; line-height: 1.6; }
+.privacy-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  max-width: 640px;
+  margin: 36px auto 0;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  text-align: left;
+}
+.privacy-note .icon { width: 22px; height: 22px; color: var(--accent-fg); flex-shrink: 0; }
+
+/* --- Tilt / micro-interacción (JS agrega .tilt-ready) --- */
+.tilt-ready { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-mock,
+  .phone-mock-glow { animation: none !important; }
+  .tilt-ready { transform: none !important; }
+  body::after { display: none; }
+}
+
 
 </style>
 </head>
@@ -2459,13 +2904,13 @@ section[id],
     <nav class="nav-links" id="navLinks" aria-label="Navegación principal" data-i18n-aria-label="nav.mainAria">
       <a href="#como-funciona" data-i18n="nav.comoFunciona">Cómo funciona</a>
       <a href="#formatos" data-i18n="nav.formatos">Formatos</a>
-      <a href="#para-quien">Quiénes lo usan</a>
+      <a href="#privacidad" data-i18n="nav.privacidad">Privacidad</a>
+      <a href="#para-quien" data-i18n="nav.paraQuien">Quiénes lo usan</a>
       <a href="#beneficios" data-i18n="nav.beneficios">Beneficios</a>
       <a href="#comparativa" data-i18n="nav.comparativa">Comparativa</a>
-      <a href="#precios">Precios</a>
+      <a href="#precios" data-i18n="nav.precios">Precios</a>
       <a href="#pedido" data-i18n="nav.pedido">Pedí tu pulsera</a>
       <a href="#faq" data-i18n="nav.faq">FAQ</a>
-      <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
       <button type="button" class="btn btn-primary nav-cta" data-prototype-trigger data-i18n="nav.creaTuFicha">Creá tu ficha</button>
     </nav>
 
@@ -2526,32 +2971,34 @@ section[id],
       </div>
 
       <div class="hero-visual reveal">
-        <span class="hero-visual-glow" aria-hidden="true"></span>
-        <svg class="qr-mock" viewBox="0 0 340 340" role="img" aria-labelledby="qrMockTitle">
-          <title id="qrMockTitle" data-i18n="hero.qrIllustration">Ilustración de una pulsera con un colgante de código QR</title>
-          <circle cx="170" cy="150" r="112" fill="none" stroke="#234B36" stroke-width="24" />
-          <circle cx="170" cy="150" r="112" fill="none" stroke="#3E6E52" stroke-width="4" stroke-dasharray="2 10" opacity="0.6" />
-          <rect x="150" y="228" width="40" height="34" rx="8" fill="#234B36" />
-          <rect x="85" y="175" width="170" height="170" rx="20" fill="#FFFFFF" stroke="#D3E6D8" stroke-width="2" />
-          <g>
-            <rect x="100" y="190" width="34" height="34" fill="#234B36" />
-            <rect x="107" y="197" width="20" height="20" fill="#FFFFFF" />
-            <rect x="113" y="203" width="8" height="8" fill="#234B36" />
-            <rect x="206" y="190" width="34" height="34" fill="#234B36" />
-            <rect x="213" y="197" width="20" height="20" fill="#FFFFFF" />
-            <rect x="219" y="203" width="8" height="8" fill="#234B36" />
-            <rect x="100" y="296" width="34" height="34" fill="#234B36" />
-            <rect x="107" y="303" width="20" height="20" fill="#FFFFFF" />
-            <rect x="113" y="309" width="8" height="8" fill="#234B36" />
-          </g>
-          <g id="qrDataModules" aria-hidden="true"></g>
-          <circle cx="255" cy="180" r="20" fill="#2E7D32" stroke="#FFFFFF" stroke-width="3" />
-          <rect x="249" y="171" width="12" height="18" rx="2" fill="#FFFFFF" />
-          <rect x="246" y="174" width="18" height="12" rx="2" fill="#FFFFFF" />
-          <circle cx="55" cy="80" r="5" fill="#2E7D32" opacity="0.5" />
-          <circle cx="300" cy="90" r="4" fill="#3E6E52" opacity="0.5" />
-          <circle cx="290" cy="290" r="6" fill="#2E7D32" opacity="0.35" />
-        </svg>
+        <span class="phone-mock-glow" aria-hidden="true"></span>
+        <div class="phone-mock" role="img" aria-label="Vista de la ficha médica de emergencia en un celular" data-i18n-aria-label="hero.phoneAria">
+          <div class="phone-screen">
+            <div class="phone-statusbar" aria-hidden="true">
+              <span>9:41</span>
+              <span>saferide.com</span>
+            </div>
+            <div class="phone-ficha">
+              <div class="phone-ficha-head">
+                <svg class="icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
+                <div>
+                  <strong data-i18n="demo.fichaTitle">Ficha médica de emergencia</strong>
+                  <span data-i18n="demo.generadaPor">Generada por Saferide</span>
+                </div>
+              </div>
+              <div class="phone-alert" aria-hidden="true">
+                <svg class="icon"><use href="#icon-alert-triangle"></use></svg>
+                <span data-i18n="demo.badge">Ejemplo — datos ficticios</span>
+              </div>
+              <dl>
+                <div class="phone-row"><dt data-i18n="field.grupoSanguineo">Grupo sanguíneo</dt><dd>0+</dd></div>
+                <div class="phone-row"><dt data-i18n="field.alergias">Alergias</dt><dd class="is-alert" data-i18n="demo.penicilina">Penicilina</dd></div>
+                <div class="phone-row"><dt data-i18n="field.medicacion">Medicación habitual</dt><dd data-i18n="field.ninguna">Ninguna</dd></div>
+                <div class="phone-row"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd>Ana Pérez</dd></div>
+              </dl>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -2666,6 +3113,45 @@ section[id],
           </p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ PRIVACIDAD Y SEGURIDAD ============ -->
+  <section class="section privacy-section" id="privacidad" aria-labelledby="privacidad-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow" data-i18n="privacidad.eyebrow">Privacidad y seguridad</span>
+        <h2 id="privacidad-title" data-i18n="privacidad.title">Tus datos, siempre bajo tu control</h2>
+        <p data-i18n="privacidad.subtitle">Saferide muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.</p>
+      </div>
+
+      <div class="privacy-grid">
+        <div class="privacy-card reveal">
+          <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-eye"></use></svg></div>
+          <h3 data-i18n="privacidad.c1.title">Solo lo esencial es público</h3>
+          <p data-i18n="privacidad.c1.desc">La ficha que se ve al escanear el QR muestra grupo sanguíneo, alergias, medicación y un contacto. Nada más.</p>
+        </div>
+        <div class="privacy-card reveal">
+          <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-pencil"></use></svg></div>
+          <h3 data-i18n="privacidad.c2.title">Vos decidís qué se muestra</h3>
+          <p data-i18n="privacidad.c2.desc">Editás o borrás tu información cuando quieras desde tu cuenta. El resto de tu perfil nunca es visible para terceros.</p>
+        </div>
+        <div class="privacy-card reveal">
+          <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-shield-check"></use></svg></div>
+          <h3 data-i18n="privacidad.c3.title">Sin rastreo ni publicidad</h3>
+          <p data-i18n="privacidad.c3.desc">No vendemos tus datos ni los usamos para otra cosa que no sea mostrar tu ficha de emergencia.</p>
+        </div>
+        <div class="privacy-card reveal">
+          <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-refresh-cw"></use></svg></div>
+          <h3 data-i18n="privacidad.c4.title">Código que se puede revocar</h3>
+          <p data-i18n="privacidad.c4.desc">Si perdés la pulsera o la medalla, generás un código nuevo y el anterior deja de funcionar al instante.</p>
+        </div>
+      </div>
+
+      <p class="privacy-note reveal">
+        <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
+        <span data-i18n="privacidad.note">La ficha pública es de solo lectura: nadie puede modificar tus datos escaneando el código.</span>
+      </p>
     </div>
   </section>
 
@@ -3017,38 +3503,68 @@ section[id],
 
   <!-- ============ PROBÁ CÓMO FUNCIONA (DEMO) ============ -->
   <section class="section bg-light" id="demo" aria-labelledby="demo-title">
-    <div class="container demo-panel">
+    <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="demo.eyebrow">Vista previa</span>
         <h2 id="demo-title" data-i18n="demo.title">Mirá cómo se ve en una emergencia</h2>
-        <p data-i18n="demo.subtitle">Así es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.</p>
+        <p data-i18n="demo.subtitle">Esta es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.</p>
       </div>
 
-      <button class="btn btn-primary" id="demoToggleBtn" aria-expanded="false" aria-controls="demoResult">
-        <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
-        <span class="btn-label" id="demoToggleLabel" data-i18n="demo.verEjemplo">Ver ejemplo</span>
-      </button>
-
-      <div class="demo-result" id="demoResult">
-        <span class="demo-badge">
-          <svg class="icon" aria-hidden="true"><use href="#icon-alert-triangle"></use></svg>
-          <span data-i18n="demo.badge">Ejemplo — datos ficticios</span>
-        </span>
-
-        <div class="demo-card">
-          <div class="demo-card-header">
-            <svg class="icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
-            <div>
-              <h3 data-i18n="demo.fichaTitle">Ficha médica de emergencia</h3>
-              <span data-i18n="demo.generadaPor">Generada por Saferide</span>
+      <div class="demo-showcase">
+        <div class="demo-showcase-visual reveal">
+          <span class="phone-mock-glow" aria-hidden="true"></span>
+          <div class="phone-mock" role="img" aria-label="Ejemplo de ficha médica de emergencia en un celular" data-i18n-aria-label="demo.phoneAria">
+            <div class="phone-screen">
+              <div class="phone-statusbar" aria-hidden="true">
+                <span>9:41</span>
+                <span>saferide.com</span>
+              </div>
+              <div class="phone-ficha">
+                <div class="phone-ficha-head">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
+                  <div>
+                    <strong data-i18n="demo.fichaTitle">Ficha médica de emergencia</strong>
+                    <span data-i18n="demo.generadaPor">Generada por Saferide</span>
+                  </div>
+                </div>
+                <div class="phone-alert" aria-hidden="true">
+                  <svg class="icon"><use href="#icon-alert-triangle"></use></svg>
+                  <span data-i18n="demo.badge">Ejemplo — datos ficticios</span>
+                </div>
+                <dl>
+                  <div class="phone-row"><dt data-i18n="field.grupoSanguineo">Grupo sanguíneo</dt><dd>0+</dd></div>
+                  <div class="phone-row"><dt data-i18n="field.alergias">Alergias</dt><dd class="is-alert" data-i18n="demo.penicilina">Penicilina</dd></div>
+                  <div class="phone-row"><dt data-i18n="field.medicacion">Medicación habitual</dt><dd data-i18n="field.ninguna">Ninguna</dd></div>
+                  <div class="phone-row"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd>Ana Pérez — 011 5555-0123</dd></div>
+                </dl>
+              </div>
             </div>
           </div>
-          <dl>
-            <div class="demo-field"><dt data-i18n="field.grupoSanguineo">Grupo sanguíneo</dt><dd>0+</dd></div>
-            <div class="demo-field"><dt data-i18n="field.alergias">Alergias</dt><dd data-i18n="demo.penicilina">Penicilina</dd></div>
-            <div class="demo-field"><dt data-i18n="field.medicacion">Medicación habitual</dt><dd data-i18n="field.ninguna">Ninguna</dd></div>
-            <div class="demo-field"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd>Ana Pérez — 011 5555-0123</dd></div>
-          </dl>
+        </div>
+
+        <div class="demo-showcase-text reveal">
+          <span class="demo-badge">
+            <svg class="icon" aria-hidden="true"><use href="#icon-alert-triangle"></use></svg>
+            <span data-i18n="demo.badge">Ejemplo — datos ficticios</span>
+          </span>
+          <ul class="demo-points">
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
+              <span data-i18n="demo.point1">Se abre con la cámara del celular, sin instalar ninguna app.</span>
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#icon-eye"></use></svg>
+              <span data-i18n="demo.point2">Muestra de un vistazo lo que el personal médico necesita primero.</span>
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
+              <span data-i18n="demo.point3">Es una página de solo lectura: nadie puede editar tus datos.</span>
+            </li>
+          </ul>
+          <div class="demo-scan">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
+            <span data-i18n="demo.scanHint">Con la pulsera, esta pantalla aparece al escanear tu código QR real.</span>
+          </div>
         </div>
       </div>
     </div>
@@ -3618,9 +4134,11 @@ const translations = {
       mainAria: "Navegación principal",
       comoFunciona: "Cómo funciona",
       formatos: "Formatos",
+      privacidad: "Privacidad",
       paraQuien: "Quiénes lo usan",
       beneficios: "Beneficios",
       comparativa: "Comparativa",
+      precios: "Precios",
       pedido: "Pedí tu pulsera",
       faq: "FAQ",
       contacto: "Contacto",
@@ -3636,6 +4154,7 @@ const translations = {
       ctaPrimary: "Ver cómo funciona",
       ctaSecondary: "Creá tu ficha",
       qrIllustration: "Ilustración de una pulsera con un colgante de código QR",
+      phoneAria: "Vista de la ficha médica de emergencia en un celular",
     },
     problema: {
       eyebrow: "El problema",
@@ -3724,13 +4243,28 @@ const translations = {
     demo: {
       eyebrow: "Vista previa",
       title: "Mirá cómo se ve en una emergencia",
-      subtitle: "Así es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.",
+      subtitle: "Esta es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.",
       verEjemplo: "Ver ejemplo",
       ocultarEjemplo: "Ocultar ejemplo",
       badge: "Ejemplo — datos ficticios",
       fichaTitle: "Ficha médica de emergencia",
       generadaPor: "Generada por Saferide",
       penicilina: "Penicilina",
+      phoneAria: "Ejemplo de ficha médica de emergencia en un celular",
+      point1: "Se abre con la cámara del celular, sin instalar ninguna app.",
+      point2: "Muestra de un vistazo lo que el personal médico necesita primero.",
+      point3: "Es una página de solo lectura: nadie puede editar tus datos.",
+      scanHint: "Con la pulsera, esta pantalla aparece al escanear tu código QR real.",
+    },
+    privacidad: {
+      eyebrow: "Privacidad y seguridad",
+      title: "Tus datos, siempre bajo tu control",
+      subtitle: "Saferide muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.",
+      c1: { title: "Solo lo esencial es público", desc: "La ficha que se ve al escanear el QR muestra grupo sanguíneo, alergias, medicación y un contacto. Nada más." },
+      c2: { title: "Vos decidís qué se muestra", desc: "Editás o borrás tu información cuando quieras desde tu cuenta. El resto de tu perfil nunca es visible para terceros." },
+      c3: { title: "Sin rastreo ni publicidad", desc: "No vendemos tus datos ni los usamos para otra cosa que no sea mostrar tu ficha de emergencia." },
+      c4: { title: "Código que se puede revocar", desc: "Si perdés la pulsera o la medalla, generás un código nuevo y el anterior deja de funcionar al instante." },
+      note: "La ficha pública es de solo lectura: nadie puede modificar tus datos escaneando el código.",
     },
     field: {
       grupoSanguineo: "Grupo sanguíneo",
@@ -3863,9 +4397,11 @@ const translations = {
       mainAria: "Main navigation",
       comoFunciona: "How it works",
       formatos: "Formats",
+      privacidad: "Privacy",
       paraQuien: "Our users",
       beneficios: "Benefits",
       comparativa: "Comparison",
+      precios: "Pricing",
       pedido: "Order your bracelet",
       faq: "FAQ",
       contacto: "Contact",
@@ -3881,6 +4417,7 @@ const translations = {
       ctaPrimary: "See how it works",
       ctaSecondary: "Create your ID",
       qrIllustration: "Illustration of a bracelet with a QR code charm",
+      phoneAria: "Emergency medical ID shown on a phone",
     },
     problema: {
       eyebrow: "The problem",
@@ -3976,6 +4513,21 @@ const translations = {
       fichaTitle: "Emergency medical ID",
       generadaPor: "Generated by Saferide",
       penicilina: "Penicillin",
+      phoneAria: "Example emergency medical ID shown on a phone",
+      point1: "It opens with the phone camera — no app to install.",
+      point2: "It shows at a glance what medical staff need first.",
+      point3: "It's a read-only page: no one can edit your data.",
+      scanHint: "With the bracelet, this screen appears when your real QR code is scanned.",
+    },
+    privacidad: {
+      eyebrow: "Privacy & security",
+      title: "Your data, always under your control",
+      subtitle: "Saferide only shows what's useful in an emergency. Everything else stays private and you manage it.",
+      c1: { title: "Only the essentials are public", desc: "The ID shown when the QR is scanned displays blood type, allergies, medication and one contact. Nothing else." },
+      c2: { title: "You decide what's shown", desc: "Edit or delete your information anytime from your account. The rest of your profile is never visible to third parties." },
+      c3: { title: "No tracking, no ads", desc: "We don't sell your data or use it for anything other than showing your emergency ID." },
+      c4: { title: "A code you can revoke", desc: "If you lose the bracelet or medal, you generate a new code and the old one stops working instantly." },
+      note: "The public ID is read-only: no one can change your data by scanning the code.",
     },
     field: {
       grupoSanguineo: "Blood type",
@@ -4185,6 +4737,7 @@ function initThemeToggle() {
   btn.addEventListener("click", () => {
     const nextTheme = getCurrentTheme() === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", nextTheme);
+    document.documentElement.style.backgroundColor = nextTheme === "dark" ? "#0e160d" : "#eaf4ec";
     try {
       localStorage.setItem("saferide-theme", nextTheme);
     } catch (e) {
@@ -4211,7 +4764,74 @@ document.addEventListener("DOMContentLoaded", () => {
   initPrototypeModal();
   initOrderForm();
   initDownloads();
+  initActiveNav();
+  initCardTilt();
 });
+
+// Marca en el navbar el link de la sección que se está viendo.
+function initActiveNav() {
+  const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  if (!links.length || !("IntersectionObserver" in window)) return;
+
+  const map = new Map();
+  links.forEach((link) => {
+    const id = link.getAttribute("href").slice(1);
+    const section = id && document.getElementById(id);
+    if (section) map.set(section, link);
+  });
+  if (!map.size) return;
+
+  let visible = new Set();
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) visible.add(entry.target);
+      else visible.delete(entry.target);
+    });
+    let topMost = null;
+    visible.forEach((sec) => {
+      if (!topMost || sec.getBoundingClientRect().top < topMost.getBoundingClientRect().top) {
+        topMost = sec;
+      }
+    });
+    links.forEach((l) => l.classList.remove("is-active"));
+    if (topMost && map.get(topMost)) map.get(topMost).classList.add("is-active");
+  }, { rootMargin: `-${parseInt(getComputedStyle(document.documentElement).getPropertyValue("--nav-height")) || 76}px 0px -55% 0px` });
+
+  map.forEach((_link, section) => observer.observe(section));
+}
+
+// Inclinación 3D sutil de las tarjetas al mover el mouse (solo desktop).
+function initCardTilt() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+  const cards = document.querySelectorAll(".card, .privacy-card, .pricing-card, .beneficiary-card");
+  const MAX = 5;
+
+  cards.forEach((card) => {
+    card.classList.add("tilt-ready");
+    let raf = null;
+
+    const onMove = (e) => {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        card.style.transform =
+          `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-6px)`;
+      });
+    };
+    const reset = () => {
+      if (raf) cancelAnimationFrame(raf);
+      card.style.transform = "";
+    };
+
+    card.addEventListener("pointermove", onMove);
+    card.addEventListener("pointerleave", reset);
+    card.addEventListener("blur", reset, true);
+  });
+}
 
 function initMobileNav() {
   const toggle = document.getElementById("navToggle");
