@@ -6,9 +6,20 @@ ovalado en el centro que lleva el QR y el chip NFC.
 
 | Archivo | Qué es |
 |---|---|
-| `pulsera_saferide.stl` | Modelo listo para importar |
-| `gen_pulsera.py` | Script que genera el STL. Cambiás medidas y lo volvés a correr |
+| `pulsera_saferide.scad` | **Recomendado.** Se abre con [OpenSCAD](https://openscad.org) (gratis). Cambiás números y se rehace solo; ya tiene el hueco del QR, el bolsillo del NFC y los agujeros de ajuste. F6 → Exportar STL. |
+| `pulsera_saferide.stl` | Modelo ya generado, para importar en Tinkercad / meter directo al slicer |
+| `gen_pulsera.py` | Genera el `.stl` sin instalar nada (solo Python) |
 | `preview.png` | Cómo se ve |
+
+### Si Tinkercad no te funciona
+
+- **OpenSCAD** (lo más simple para esto): instalás, abrís `pulsera_saferide.scad`,
+  apretás F5. Editás los números de arriba del archivo y se actualiza. F6 y
+  "Exportar como STL" cuando esté listo. No hay que importar nada.
+- **BlocksCAD** (blockscad3d.com): bloques tipo Scratch, en el navegador, exporta STL.
+- **Fusion 360**: gratis con licencia de estudiante/personal, es CAD profesional.
+- Para **solo imprimir** la pulsera tal cual: meté `pulsera_saferide.stl` directo
+  en tu slicer (Cura, PrusaSlicer, Bambu Studio) — no hace falta editarla.
 
 ![vista del modelo](preview.png)
 
