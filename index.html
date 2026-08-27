@@ -2228,42 +2228,19 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.5s ease;
 }
 
 .reveal.in-view {
   opacity: 1;
-  transform: translateY(0);
 }
 
-/* Staggered animation for cards */
-.card-grid .card:nth-child(1) { transition-delay: 0.05s; }
-.card-grid .card:nth-child(2) { transition-delay: 0.1s; }
-.card-grid .card:nth-child(3) { transition-delay: 0.15s; }
-.card-grid .card:nth-child(4) { transition-delay: 0.2s; }
-.card-grid .card:nth-child(5) { transition-delay: 0.25s; }
-.card-grid .card:nth-child(6) { transition-delay: 0.3s; }
-
-.timeline .timeline-step:nth-child(1) { transition-delay: 0.05s; }
-.timeline .timeline-step:nth-child(2) { transition-delay: 0.1s; }
-.timeline .timeline-step:nth-child(3) { transition-delay: 0.15s; }
-.timeline .timeline-step:nth-child(4) { transition-delay: 0.2s; }
-.timeline .timeline-step:nth-child(5) { transition-delay: 0.25s; }
-.timeline .timeline-step:nth-child(6) { transition-delay: 0.3s; }
 
 @media (max-width: 768px) {
-  /* Reduce stagger delays on mobile for snappier feel */
+  /* Sin escalonado en mobile: todo aparece a la vez, sin movimiento */
   .card-grid .card,
   .timeline .timeline-step {
     transition-delay: 0s !important;
-  }
-  /* Reduce reveal animation distance */
-  .reveal {
-    transform: translateY(16px);
-  }
-  .reveal.in-view {
-    transform: translateY(0);
   }
 }
 
@@ -2572,7 +2549,6 @@ html[data-theme="dark"] .text-gradient {
     0 44px 90px -24px rgba(6, 20, 12, 0.6),
     0 0 0 1px rgba(255, 255, 255, 0.05) inset,
     0 2px 6px rgba(255, 255, 255, 0.14) inset;
-  animation: float-qr 6s ease-in-out infinite;
 }
 .phone-mock::before {
   content: "";
@@ -2677,8 +2653,19 @@ html[data-theme="dark"] .text-gradient {
   inset: -18% -22%;
   z-index: 0;
   background: radial-gradient(circle at 50% 45%, rgba(46, 125, 50, 0.22), transparent 62%);
-  animation: pulse-glow 5s ease-in-out infinite;
   pointer-events: none;
+}
+
+/* Nada de movimiento automático al scrollear ni glows que "flotan" */
+.hero::before,
+.hero::after,
+.story-card::after,
+.stats-section::before,
+.stats-section::after,
+.cta-final::before,
+.cta-final::after,
+.hero-visual-glow {
+  animation: none !important;
 }
 
 /* Showcase de la sección demo: teléfono + explicación */
@@ -2732,6 +2719,29 @@ html[data-theme="dark"] .text-gradient {
 /* =========================================================
    PRIVACIDAD Y SEGURIDAD
    ========================================================= */
+/* Precio: un solo producto, tarjeta centrada */
+.pricing-solo {
+  max-width: 460px;
+  margin: 0 auto;
+}
+.pricing-solo .pricing-card {
+  text-align: left;
+}
+.pricing-solo .pricing-card-featured {
+  transform: none;
+}
+.pricing-solo .pricing-card-featured:hover {
+  transform: translateY(-4px);
+}
+.pricing-solo .pricing-price,
+.pricing-solo .pricing-card-header {
+  text-align: center;
+}
+.pricing-solo .pricing-price { justify-content: center; }
+.pricing-solo .pricing-label,
+.pricing-solo h3,
+.pricing-solo .pricing-desc { text-align: center; }
+
 .privacy-section { position: relative; overflow: hidden; }
 .privacy-grid {
   display: grid;
@@ -2945,10 +2955,11 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
         <h1 class="hero-title"><span class="logo-safe">Safe</span><span class="logo-separator"></span><span class="logo-ride">ride</span></h1>
         <p class="hero-tagline" data-i18n="hero.tagline">Tus datos médicos, siempre accesibles.</p>
         <p class="hero-desc" data-i18n="hero.desc">
-          Una pulsera QR y una medalla NFC con tus datos médicos esenciales,
-          siempre con vos. Para que, ante cualquier emergencia y en cualquier
-          parte del mundo, el personal de salud tenga tu información clave
-          apenas ingresás a una guardia, hospital o clínica.
+          Una pulsera con código QR y chip NFC integrado, con tus datos
+          médicos esenciales, siempre con vos. Para que, ante cualquier
+          emergencia y en cualquier parte del mundo, el personal de salud
+          tenga tu información clave apenas ingresás a una guardia, hospital
+          o clínica.
         </p>
         <div class="hero-actions">
           <a href="#como-funciona" class="btn btn-primary" data-i18n="hero.ctaPrimary">Ver cómo funciona</a>
@@ -2957,15 +2968,15 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
         <div class="hero-trust">
           <span class="hero-trust-item">
             <svg class="icon" aria-hidden="true" style="width:16px;height:16px;color:var(--accent-fg)"><use href="#icon-check-circle"></use></svg>
-            Sin contraseña
+            <span data-i18n="hero.trust1">Sin apps ni contraseñas</span>
           </span>
           <span class="hero-trust-item">
             <svg class="icon" aria-hidden="true" style="width:16px;height:16px;color:var(--accent-fg)"><use href="#icon-check-circle"></use></svg>
-            Gratis para empezar
+            <span data-i18n="hero.trust2">Funciona con o sin internet</span>
           </span>
           <span class="hero-trust-item">
             <svg class="icon" aria-hidden="true" style="width:16px;height:16px;color:var(--accent-fg)"><use href="#icon-check-circle"></use></svg>
-            Actualizable
+            <span data-i18n="hero.trust3">Datos actualizables siempre</span>
           </span>
         </div>
       </div>
@@ -2994,6 +3005,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
                 <div class="phone-row"><dt data-i18n="field.grupoSanguineo">Grupo sanguíneo</dt><dd>0+</dd></div>
                 <div class="phone-row"><dt data-i18n="field.alergias">Alergias</dt><dd class="is-alert" data-i18n="demo.penicilina">Penicilina</dd></div>
                 <div class="phone-row"><dt data-i18n="field.medicacion">Medicación habitual</dt><dd data-i18n="field.ninguna">Ninguna</dd></div>
+                <div class="phone-row"><dt data-i18n="field.localidad">Localidad / provincia</dt><dd>Baradero, Bs. As.</dd></div>
                 <div class="phone-row"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd>Ana Pérez</dd></div>
               </dl>
             </div>
@@ -3084,32 +3096,32 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
     </div>
   </section>
 
-  <!-- ============ DOS FORMATOS ============ -->
+  <!-- ============ UNA PULSERA, DOS FORMAS DE LEERLA ============ -->
   <section class="section" id="formatos" aria-labelledby="formatos-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="formatos.eyebrow">Dos formatos, un mismo objetivo</span>
-        <h2 id="formatos-title" data-i18n="formatos.title">Pulsera QR o medalla NFC</h2>
-        <p data-i18n="formatos.subtitle">Elegí el que mejor te sirva, o pedí los dos juntos. Los dos guardan la misma información: solo cambia cómo se leen.</p>
+        <span class="eyebrow" data-i18n="formatos.eyebrow">Una pulsera, dos tecnologías</span>
+        <h2 id="formatos-title" data-i18n="formatos.title">QR y chip NFC, juntos en la misma pulsera</h2>
+        <p data-i18n="formatos.subtitle">No hace falta elegir: la pulsera Saferide trae las dos. Se lee por QR cuando hay internet y por NFC cuando no hay señal. Siempre muestran la misma información.</p>
       </div>
 
       <div class="card-grid">
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-qr-code"></use></svg></div>
-          <h3 data-i18n="formatos.qr.title">Pulsera QR</h3>
+          <h3 data-i18n="formatos.qr.title">Código QR</h3>
           <p data-i18n="formatos.qr.desc">
-            Cualquiera la escanea con la cámara del celular y accede a tu
+            Cualquiera lo escanea con la cámara del celular y accede a tu
             ficha completa en la página de Saferide. Necesita que el
             celular que escanea tenga conexión a internet.
           </p>
         </div>
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-nfc"></use></svg></div>
-          <h3 data-i18n="formatos.nfc.title">Medalla NFC</h3>
+          <h3 data-i18n="formatos.nfc.title">Chip NFC integrado</h3>
           <p data-i18n="formatos.nfc.desc">
-            Al acercar el celular, muestra al instante lo más importante
-            (grupo sanguíneo, alergias, medicación y contacto de emergencia)
-            sin necesitar internet: ideal para zonas sin señal o sin datos.
+            Va dentro de la misma pulsera. Al acercar el celular muestra al
+            instante lo más importante (grupo sanguíneo, alergias, medicación
+            y contacto) sin necesitar internet: ideal para zonas sin señal.
           </p>
         </div>
       </div>
@@ -3144,7 +3156,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
         <div class="privacy-card reveal">
           <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-refresh-cw"></use></svg></div>
           <h3 data-i18n="privacidad.c4.title">Código que se puede revocar</h3>
-          <p data-i18n="privacidad.c4.desc">Si perdés la pulsera o la medalla, generás un código nuevo y el anterior deja de funcionar al instante.</p>
+          <p data-i18n="privacidad.c4.desc">Si perdés la pulsera, generás un código nuevo y el anterior deja de funcionar al instante.</p>
         </div>
       </div>
 
@@ -3191,7 +3203,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
           </div>
           <div class="beneficiary-content">
             <h3>Adultos mayores</h3>
-            <p>Sobre todo quienes viven solos o salen sin acompañante. Una pulsera o medalla les da autonomía y tranquilidad.</p>
+            <p>Sobre todo quienes viven solos o salen sin acompañante. La pulsera les da autonomía y tranquilidad.</p>
           </div>
         </div>
 
@@ -3426,71 +3438,32 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
   <section class="section" id="precios" aria-labelledby="precios-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Planes y precios</span>
-        <h2 id="precios-title">Elegí lo que necesitás</h2>
-        <p>Empezá gratis con tu ficha digital, o pedí el producto físico que más te sirva. Todos los planes incluyen actualización ilimitada.</p>
+        <span class="eyebrow">Precio</span>
+        <h2 id="precios-title">Un solo producto, protección completa</h2>
+        <p>La pulsera Saferide trae el código QR y el chip NFC en una sola pieza. Si no se puede escanear el QR, se lee por NFC. Actualización de datos ilimitada, siempre incluida.</p>
       </div>
 
-      <div class="pricing-grid">
-        <!-- Plan gratuito -->
-        <div class="pricing-card reveal">
-          <div class="pricing-card-header">
-            <span class="pricing-label">Gratuito</span>
-            <div class="pricing-price">
-              <span class="pricing-amount">$0</span>
-              <span class="pricing-period">para siempre</span>
-            </div>
-          </div>
-          <h3>Ficha digital</h3>
-          <p class="pricing-desc">Generá tu código QR con tus datos médicos esenciales.</p>
-          <ul class="pricing-features">
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Ficha médica de emergencia</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Código QR único</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Actualizable cuando quieras</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Sin contraseña</li>
-          </ul>
-          <button type="button" class="btn btn-outline btn-block" data-prototype-trigger>Crear mi ficha gratis</button>
-        </div>
-
-        <!-- Pulsera QR -->
+      <div class="pricing-solo">
         <div class="pricing-card pricing-card-featured reveal">
-          <div class="pricing-popular">⭐ Más vendido</div>
+          <div class="pricing-popular">Pulsera Saferide</div>
           <div class="pricing-card-header">
-            <span class="pricing-label">Pulsera QR</span>
+            <span class="pricing-label">QR + NFC en una</span>
             <div class="pricing-price">
-              <span class="pricing-amount">$2.500</span>
+              <span class="pricing-amount">$4.000</span>
               <span class="pricing-period">cada una</span>
             </div>
           </div>
-          <h3>Pulsera con código QR</h3>
-          <p class="pricing-desc">Llevá tu ficha siempre en la muñeca, lista para escanear en cualquier emergencia.</p>
+          <h3>Pulsera con QR y chip NFC integrado</h3>
+          <p class="pricing-desc">Una sola pulsera con las dos tecnologías: el QR para cuando hay internet, el NFC para cuando no hay señal.</p>
           <ul class="pricing-features">
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Todo lo del plan gratuito</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Código QR + chip NFC en la misma pulsera</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Funciona con o sin internet</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Ficha médica de emergencia editable cuando quieras</li>
             <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Pulsera resistente al agua</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Código QR grabado</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Sin contraseña y sin apps</li>
             <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Envío a todo el país</li>
           </ul>
-          <a href="#pedido" class="btn btn-primary btn-block">Pedir pulsera →</a>
-        </div>
-
-        <!-- Pack completo -->
-        <div class="pricing-card reveal">
-          <div class="pricing-card-header">
-            <span class="pricing-label">Pack completo</span>
-            <div class="pricing-price">
-              <span class="pricing-amount">$4.000</span>
-              <span class="pricing-period">pulsera + medalla</span>
-            </div>
-          </div>
-          <h3>Pulsera QR + Medalla NFC</h3>
-          <p class="pricing-desc">La protección completa: QR para emergencias con internet, NFC para sin señal.</p>
-          <ul class="pricing-features">
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Todo lo de la pulsera QR</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Medalla NFC incluida</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Funciona sin internet</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Ahorrás $1.000</li>
-          </ul>
-          <a href="#pedido" class="btn btn-outline btn-block">Pedir pack →</a>
+          <a href="#pedido" class="btn btn-primary btn-block btn-lg">Pedir mi pulsera →</a>
         </div>
       </div>
 
@@ -3535,6 +3508,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
                   <div class="phone-row"><dt data-i18n="field.grupoSanguineo">Grupo sanguíneo</dt><dd>0+</dd></div>
                   <div class="phone-row"><dt data-i18n="field.alergias">Alergias</dt><dd class="is-alert" data-i18n="demo.penicilina">Penicilina</dd></div>
                   <div class="phone-row"><dt data-i18n="field.medicacion">Medicación habitual</dt><dd data-i18n="field.ninguna">Ninguna</dd></div>
+                  <div class="phone-row"><dt data-i18n="field.localidad">Localidad / provincia</dt><dd>Baradero, Bs. As.</dd></div>
                   <div class="phone-row"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd>Ana Pérez — 011 5555-0123</dd></div>
                 </dl>
               </div>
@@ -3575,7 +3549,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> <span data-i18n="pedido.eyebrow">Enviamos a cualquier parte del mundo</span></span>
-        <h2 id="pedido-title" data-i18n="pedido.title">Pedí tu pulsera o medalla</h2>
+        <h2 id="pedido-title" data-i18n="pedido.title">Pedí tu pulsera</h2>
         <p data-i18n="pedido.subtitle">Completá tus datos de envío y te llega a domicilio. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.</p>
       </div>
 
@@ -3619,9 +3593,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
               <div class="form-field">
                 <label for="orderProduct" data-i18n="field.producto">Producto</label>
                 <select id="orderProduct" name="product" required>
-                  <option value="qr" selected data-i18n="product.qr">Pulsera QR</option>
-                  <option value="nfc" data-i18n="product.nfc">Medalla NFC</option>
-                  <option value="pack" data-i18n="product.pack">Pack (pulsera + medalla)</option>
+                  <option value="pulsera" selected data-i18n="product.pulsera">Pulsera Saferide (QR + NFC) — $4.000</option>
                 </select>
               </div>
               <div class="form-field">
@@ -3741,7 +3713,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a3">Con la pulsera QR, quien te escanea necesita conexión para ver tu ficha completa. Con la medalla NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.</p>
+            <p data-i18n="faq.a3">La pulsera trae QR y NFC. Para ver tu ficha completa por QR, quien te escanea necesita conexión. Con el chip NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.</p>
           </div></div>
         </div>
         <div class="faq-item">
@@ -3808,7 +3780,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
 <section class="section cta-final" id="contacto" aria-labelledby="cta-final-title">
   <div class="container">
     <h2 id="cta-final-title" data-i18n="ctaFinal.title">¿Querés tener tu información siempre a mano?</h2>
-    <p style="color:rgba(255,255,255,0.85);max-width:540px;margin:0 auto 32px;font-size:1.05rem">Creá tu ficha gratuita en un minuto, o pedí tu pulsera o medalla para tenerla siempre cerca.</p>
+    <p style="color:rgba(255,255,255,0.85);max-width:540px;margin:0 auto 32px;font-size:1.05rem">Armá tu ficha en un minuto y pedí tu pulsera con QR y NFC para tenerla siempre en la muñeca.</p>
     <div class="cta-actions">
       <button type="button" class="btn btn-primary" data-prototype-trigger data-i18n="ctaFinal.generarQr">Generar mi QR</button>
       <a href="#pedido" class="btn btn-outline" data-i18n="nav.pedido">Pedí tu pulsera</a>
@@ -4045,6 +4017,14 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
               <input type="tel" id="protoPhone" name="ownPhone" placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" />
             </div>
             <div class="form-field">
+              <label for="protoLocality" data-i18n="field.localidad">Localidad / provincia</label>
+              <input type="text" id="protoLocality" name="locality" placeholder="Ej: Baradero, Buenos Aires" data-i18n-placeholder="ph.localidad" autocomplete="address-level2" />
+            </div>
+            <div class="form-field">
+              <label for="protoAddress" data-i18n="field.domicilio">Domicilio (dónde vive)</label>
+              <input type="text" id="protoAddress" name="homeAddress" placeholder="Ej: Mitre 350" data-i18n-placeholder="ph.domicilio" autocomplete="street-address" />
+            </div>
+            <div class="form-field">
               <label for="protoContactName" data-i18n="field.contactoNombre">Contacto de emergencia (nombre)</label>
               <input type="text" id="protoContactName" name="contactName" required placeholder="Ej: Ana Pérez" data-i18n-placeholder="ph.contactoNombre" />
             </div>
@@ -4096,6 +4076,8 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
             <div class="demo-field"><dt data-i18n="field.medicacion">Medicación habitual</dt><dd id="protoResultMeds">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.obraSocialCorta">Obra social / cobertura</dt><dd id="protoResultInsurance">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.telefonoPropio">Teléfono propio</dt><dd id="protoResultOwnPhone">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.localidad">Localidad / provincia</dt><dd id="protoResultLocality">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.domicilio">Domicilio</dt><dd id="protoResultAddress">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd id="protoResultContact">—</dd></div>
           </dl>
         </div>
@@ -4107,7 +4089,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
         </div>
 
         <p class="modal-disclaimer" data-i18n="modal.resultDisclaimer">
-          Así se ve tu ficha pública al escanear el QR o acercar la medalla NFC.
+          Así se ve tu ficha pública al escanear el QR o acercar la pulsera por NFC.
           Descargala para guardarla en tu celular o imprimirla junto con tu pedido.
         </p>
 
@@ -4150,11 +4132,14 @@ const translations = {
     },
     hero: {
       tagline: "Tus datos médicos, siempre accesibles.",
-      desc: "Una pulsera QR y una medalla NFC con tus datos médicos esenciales, siempre con vos. Para que, ante cualquier emergencia y en cualquier parte del mundo, el personal de salud tenga tu información clave apenas ingresás a una guardia, hospital o clínica.",
+      desc: "Una pulsera con código QR y chip NFC integrado, con tus datos médicos esenciales, siempre con vos. Para que, ante cualquier emergencia y en cualquier parte del mundo, el personal de salud tenga tu información clave apenas ingresás a una guardia, hospital o clínica.",
       ctaPrimary: "Ver cómo funciona",
       ctaSecondary: "Creá tu ficha",
       qrIllustration: "Ilustración de una pulsera con un colgante de código QR",
       phoneAria: "Vista de la ficha médica de emergencia en un celular",
+      trust1: "Sin apps ni contraseñas",
+      trust2: "Funciona con o sin internet",
+      trust3: "Datos actualizables siempre",
     },
     problema: {
       eyebrow: "El problema",
@@ -4173,11 +4158,11 @@ const translations = {
       step6: { title: "Tu información, al toque", desc: "Se muestra solo lo esencial, en una página pública de solo lectura." },
     },
     formatos: {
-      eyebrow: "Dos formatos, un mismo objetivo",
-      title: "Pulsera QR o medalla NFC",
-      subtitle: "Elegí el que mejor te sirva, o pedí los dos juntos. Los dos guardan la misma información: solo cambia cómo se leen.",
-      qr: { title: "Pulsera QR", desc: "Cualquiera la escanea con la cámara del celular y accede a tu ficha completa en la página de Saferide. Necesita que el celular que escanea tenga conexión a internet." },
-      nfc: { title: "Medalla NFC", desc: "Al acercar el celular, muestra al instante lo más importante (grupo sanguíneo, alergias, medicación y contacto de emergencia) sin necesitar internet: ideal para zonas sin señal o sin datos." },
+      eyebrow: "Una pulsera, dos tecnologías",
+      title: "QR y chip NFC, juntos en la misma pulsera",
+      subtitle: "No hace falta elegir: la pulsera Saferide trae las dos. Se lee por QR cuando hay internet y por NFC cuando no hay señal. Siempre muestran la misma información.",
+      qr: { title: "Código QR", desc: "Cualquiera lo escanea con la cámara del celular y accede a tu ficha completa en la página de Saferide. Necesita que el celular que escanea tenga conexión a internet." },
+      nfc: { title: "Chip NFC integrado", desc: "Va dentro de la misma pulsera. Al acercar el celular muestra al instante lo más importante (grupo sanguíneo, alergias, medicación y contacto) sin necesitar internet: ideal para zonas sin señal." },
     },
     paraQuien: {
       eyebrow: "Nuestros usuarios",
@@ -4263,7 +4248,7 @@ const translations = {
       c1: { title: "Solo lo esencial es público", desc: "La ficha que se ve al escanear el QR muestra grupo sanguíneo, alergias, medicación y un contacto. Nada más." },
       c2: { title: "Vos decidís qué se muestra", desc: "Editás o borrás tu información cuando quieras desde tu cuenta. El resto de tu perfil nunca es visible para terceros." },
       c3: { title: "Sin rastreo ni publicidad", desc: "No vendemos tus datos ni los usamos para otra cosa que no sea mostrar tu ficha de emergencia." },
-      c4: { title: "Código que se puede revocar", desc: "Si perdés la pulsera o la medalla, generás un código nuevo y el anterior deja de funcionar al instante." },
+      c4: { title: "Código que se puede revocar", desc: "Si perdés la pulsera, generás un código nuevo y el anterior deja de funcionar al instante." },
       note: "La ficha pública es de solo lectura: nadie puede modificar tus datos escaneando el código.",
     },
     field: {
@@ -4290,12 +4275,16 @@ const translations = {
       obraSocial: "Obra social / cobertura médica",
       obraSocialCorta: "Obra social / cobertura",
       telefonoPropio: "Teléfono propio",
+      localidad: "Localidad / provincia",
+      domicilio: "Domicilio (dónde vive)",
       contactoNombre: "Contacto de emergencia (nombre)",
       contactoTelefono: "Contacto de emergencia (teléfono)",
     },
     ph: {
       nombre: "Ej: Juan Gómez",
       telefono: "Ej: 011 4444-5566",
+      localidad: "Ej: Baradero, Buenos Aires",
+      domicilio: "Ej: Mitre 350",
       direccion: "Ej: Av. Siempre Viva 742",
       ciudad: "Ej: Baradero",
       provincia: "Ej: Buenos Aires",
@@ -4309,13 +4298,14 @@ const translations = {
       contactoNombre: "Ej: Ana Pérez",
     },
     product: {
-      qr: "Pulsera QR",
-      nfc: "Medalla NFC",
-      pack: "Pack (pulsera + medalla)",
+      pulsera: "Pulsera Saferide (QR + NFC) — $4.000",
+      qr: "Pulsera Saferide (QR + NFC)",
+      nfc: "Pulsera Saferide (QR + NFC)",
+      pack: "Pulsera Saferide (QR + NFC)",
     },
     pedido: {
       eyebrow: "Enviamos a cualquier parte del mundo",
-      title: "Pedí tu pulsera o medalla",
+      title: "Pedí tu pulsera",
       subtitle: "Completá tus datos de envío y te llega a domicilio. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.",
       confirmar: "Confirmar pedido",
       disclaimer: "Usamos tu mail únicamente para avisarte por correo las novedades de tu envío.",
@@ -4334,11 +4324,11 @@ const translations = {
       q2: "¿Qué pasa si pierdo la pulsera?",
       a2: "Podés generar un código nuevo cuando quieras desde tu cuenta; el anterior deja de estar activo.",
       q3: "¿Necesito internet para que funcione?",
-      a3: "Con la pulsera QR, quien te escanea necesita conexión para ver tu ficha completa. Con la medalla NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.",
+      a3: "La pulsera trae QR y NFC. Para ver tu ficha completa por QR, quien te escanea necesita conexión. Con el chip NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.",
       q4: "¿Cualquier celular puede leer el QR?",
       a4: "Sí, alcanza con la cámara. No hace falta instalar ninguna aplicación.",
-      q5: "¿Tiene algún costo?",
-      a5: "La versión básica es gratuita. A futuro habrá funciones adicionales opcionales.",
+      q5: "¿Cuánto sale?",
+      a5: "La pulsera con QR y NFC cuesta $4.000, con envío a todo el país y actualización de datos ilimitada incluida.",
       q6: "¿Puedo actualizar mis datos cuando quiera?",
       a6: "Sí, las veces que necesites, desde tu cuenta.",
     },
@@ -4358,7 +4348,7 @@ const translations = {
       generarQr: "Generar mi QR",
       disclaimer: "Tus datos se procesan en este dispositivo. Al generar tu QR vas a poder descargar tu ficha para guardarla o imprimirla.",
       simulacion: "Simulación generada",
-      resultDisclaimer: "Así se ve tu ficha pública al escanear el QR o acercar la medalla NFC. Descargala para guardarla en tu celular o imprimirla junto con tu pedido.",
+      resultDisclaimer: "Así se ve tu ficha pública al escanear el QR o acercar la pulsera por NFC. Descargala para guardarla en tu celular o imprimirla junto con tu pedido.",
       descargarFicha: "Descargar mi ficha",
       editarDatos: "Editar datos",
     },
@@ -4381,6 +4371,8 @@ const translations = {
       medicacion: "Medicación habitual",
       obraSocial: "Obra social / cobertura",
       telefonoPropio: "Teléfono propio",
+      localidad: "Localidad / provincia",
+      domicilio: "Domicilio",
       contactoEmergencia: "Contacto de emergencia",
       generadoCon: "Generado con Saferide.",
       producto: "Producto",
@@ -4413,11 +4405,14 @@ const translations = {
     },
     hero: {
       tagline: "Your medical data, always accessible.",
-      desc: "A QR bracelet and an NFC medal with your essential medical data, always with you. So that, in any emergency and anywhere in the world, medical staff have your key information the moment you arrive at an ER, hospital or clinic.",
+      desc: "A bracelet with a QR code and a built-in NFC chip, carrying your essential medical data, always with you. So that, in any emergency and anywhere in the world, medical staff have your key information the moment you arrive at an ER, hospital or clinic.",
       ctaPrimary: "See how it works",
       ctaSecondary: "Create your ID",
       qrIllustration: "Illustration of a bracelet with a QR code charm",
       phoneAria: "Emergency medical ID shown on a phone",
+      trust1: "No apps, no passwords",
+      trust2: "Works with or without internet",
+      trust3: "Data you can always update",
     },
     problema: {
       eyebrow: "The problem",
@@ -4436,11 +4431,11 @@ const translations = {
       step6: { title: "Your information, in a tap", desc: "Only the essentials are shown, on a public read-only page." },
     },
     formatos: {
-      eyebrow: "Two formats, one goal",
-      title: "QR bracelet or NFC medal",
-      subtitle: "Pick whichever suits you best, or order both together. Both store the same information — only how they're read changes.",
-      qr: { title: "QR bracelet", desc: "Anyone can scan it with a phone camera and access your full ID on the Saferide page. The scanning phone needs an internet connection." },
-      nfc: { title: "NFC medal", desc: "Tapping a phone against it instantly shows the most important data (blood type, allergies, medication and emergency contact) with no internet needed: ideal for areas without signal or data." },
+      eyebrow: "One bracelet, two technologies",
+      title: "QR and NFC chip, together in the same bracelet",
+      subtitle: "No need to choose: the Saferide bracelet has both. It's read by QR when there's internet and by NFC when there's no signal. They always show the same information.",
+      qr: { title: "QR code", desc: "Anyone can scan it with a phone camera and access your full ID on the Saferide page. The scanning phone needs an internet connection." },
+      nfc: { title: "Built-in NFC chip", desc: "It sits inside the same bracelet. Tapping a phone against it instantly shows the most important data (blood type, allergies, medication and contact) with no internet needed: ideal for areas without signal." },
     },
     paraQuien: {
       eyebrow: "Our users",
@@ -4526,7 +4521,7 @@ const translations = {
       c1: { title: "Only the essentials are public", desc: "The ID shown when the QR is scanned displays blood type, allergies, medication and one contact. Nothing else." },
       c2: { title: "You decide what's shown", desc: "Edit or delete your information anytime from your account. The rest of your profile is never visible to third parties." },
       c3: { title: "No tracking, no ads", desc: "We don't sell your data or use it for anything other than showing your emergency ID." },
-      c4: { title: "A code you can revoke", desc: "If you lose the bracelet or medal, you generate a new code and the old one stops working instantly." },
+      c4: { title: "A code you can revoke", desc: "If you lose the bracelet, you generate a new code and the old one stops working instantly." },
       note: "The public ID is read-only: no one can change your data by scanning the code.",
     },
     field: {
@@ -4553,12 +4548,16 @@ const translations = {
       obraSocial: "Health insurance / coverage",
       obraSocialCorta: "Insurance / coverage",
       telefonoPropio: "Own phone",
+      localidad: "Town / state",
+      domicilio: "Home address (where they live)",
       contactoNombre: "Emergency contact (name)",
       contactoTelefono: "Emergency contact (phone)",
     },
     ph: {
       nombre: "E.g.: John Smith",
       telefono: "E.g.: +1 555 123 4567",
+      localidad: "E.g.: Baradero, Buenos Aires",
+      domicilio: "E.g.: 350 Mitre St",
       direccion: "E.g.: 123 Main St",
       ciudad: "E.g.: Baradero",
       provincia: "E.g.: Buenos Aires",
@@ -4572,13 +4571,14 @@ const translations = {
       contactoNombre: "E.g.: Jane Smith",
     },
     product: {
-      qr: "QR bracelet",
-      nfc: "NFC medal",
-      pack: "Pack (bracelet + medal)",
+      pulsera: "Saferide bracelet (QR + NFC) — $4,000",
+      qr: "Saferide bracelet (QR + NFC)",
+      nfc: "Saferide bracelet (QR + NFC)",
+      pack: "Saferide bracelet (QR + NFC)",
     },
     pedido: {
       eyebrow: "We ship anywhere in the world",
-      title: "Order your bracelet or medal",
+      title: "Order your bracelet",
       subtitle: "Fill in your shipping details and it'll arrive at your door. We only ask for your email to notify you about your order — no password needed.",
       confirmar: "Confirm order",
       disclaimer: "We use your email only to notify you by mail about your shipment updates.",
@@ -4597,11 +4597,11 @@ const translations = {
       q2: "What happens if I lose the bracelet?",
       a2: "You can generate a new code anytime from your account; the old one stops working.",
       q3: "Do I need internet for it to work?",
-      a3: "With the QR bracelet, whoever scans it needs a connection to see your full ID. With the NFC medal, no connection is needed: the most important data shows instantly, offline. You do need a connection to load or update your data.",
+      a3: "The bracelet has both QR and NFC. To see your full ID via QR, whoever scans it needs a connection. With the NFC chip, no connection is needed: the most important data shows instantly, offline. You do need a connection to load or update your data.",
       q4: "Can any phone read the QR?",
       a4: "Yes, a camera is enough. No app needs to be installed.",
-      q5: "Does it cost anything?",
-      a5: "The basic version is free. Optional additional features will be available in the future.",
+      q5: "How much is it?",
+      a5: "The bracelet with QR and NFC costs $4,000, with nationwide shipping and unlimited data updates included.",
       q6: "Can I update my data whenever I want?",
       a6: "Yes, as many times as you need, from your account.",
     },
@@ -4621,7 +4621,7 @@ const translations = {
       generarQr: "Generate my QR",
       disclaimer: "Your data is processed on this device. Once you generate your QR you'll be able to download your ID to save or print it.",
       simulacion: "Simulation generated",
-      resultDisclaimer: "This is how your public ID looks when someone scans the QR or taps the NFC medal. Download it to save on your phone or print it with your order.",
+      resultDisclaimer: "This is how your public ID looks when someone scans the QR or taps the bracelet via NFC. Download it to save on your phone or print it with your order.",
       descargarFicha: "Download my ID",
       editarDatos: "Edit data",
     },
@@ -4644,6 +4644,8 @@ const translations = {
       medicacion: "Regular medication",
       obraSocial: "Insurance / coverage",
       telefonoPropio: "Own phone",
+      localidad: "Town / state",
+      domicilio: "Home address",
       contactoEmergencia: "Emergency contact",
       generadoCon: "Generated with Saferide.",
       producto: "Product",
@@ -4861,31 +4863,13 @@ function initMobileNav() {
 function initNavbarScroll() {
   const navbar = document.getElementById("navbar");
   if (!navbar) return;
-  let lastScroll = 0;
   let ticking = false;
-  const isMobile = () => window.innerWidth <= 768;
 
+  // El navbar queda siempre visible y fijo: solo se le agrega una sombra
+  // sutil al scrollear. No se esconde ni se mueve solo.
   const updateNavbar = () => {
-    const scrollY = window.scrollY;
-    navbar.classList.toggle("scrolled", scrollY > 8);
-    // On mobile, don't auto-hide navbar to avoid layout shifts
-    if (isMobile()) {
-      navbar.style.transform = "translateY(0)";
-      lastScroll = scrollY;
-      ticking = false;
-      return;
-    }
-    // Smooth hide/show on scroll direction (desktop only)
-    if (scrollY > 200) {
-      if (scrollY > lastScroll + 5) {
-        navbar.style.transform = "translateY(-100%)";
-      } else if (scrollY < lastScroll - 5) {
-        navbar.style.transform = "translateY(0)";
-      }
-    } else {
-      navbar.style.transform = "translateY(0)";
-    }
-    lastScroll = scrollY;
+    navbar.classList.toggle("scrolled", window.scrollY > 8);
+    navbar.style.transform = "translateY(0)";
     ticking = false;
   };
 
@@ -4895,6 +4879,7 @@ function initNavbarScroll() {
       ticking = true;
     }
   }, { passive: true });
+  updateNavbar();
 }
 
 function initRevealOnScroll() {
@@ -4910,13 +4895,6 @@ function initRevealOnScroll() {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          // Staggered reveal for siblings
-          const parent = entry.target.parentElement;
-          if (parent) {
-            const siblings = Array.from(parent.querySelectorAll(":scope > .reveal"));
-            const index = siblings.indexOf(entry.target);
-            entry.target.style.transitionDelay = `${index * 0.08}s`;
-          }
           entry.target.classList.add("in-view");
           observer.unobserve(entry.target);
         }
@@ -4929,32 +4907,7 @@ function initRevealOnScroll() {
 }
 
 function initParallaxHero() {
-  const heroVisual = document.querySelector(".hero-visual");
-  const heroGlow = document.querySelector(".hero-visual-glow");
-  if (!heroVisual) return;
-
-  const isMobile = () => window.innerWidth <= 768;
-  let ticking = false;
-
-  window.addEventListener("scroll", () => {
-    if (isMobile()) return; // skip parallax on mobile
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        const scrollY = window.scrollY;
-        const heroHeight = document.querySelector(".hero")?.offsetHeight || 600;
-        if (scrollY < heroHeight) {
-          const progress = scrollY / heroHeight;
-          heroVisual.style.transform = `translateY(${progress * 40}px)`;
-          if (heroGlow) {
-            heroGlow.style.transform = `scale(${1 + progress * 0.1}) translateY(${-progress * 20}px)`;
-            heroGlow.style.opacity = 1 - progress * 0.5;
-          }
-        }
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
+  // Parallax desactivado a pedido: nada se mueve solo al scrollear.
 }
 
 function initScrollProgress() {
@@ -5316,6 +5269,8 @@ function initPrototypeModal() {
       document.getElementById("protoMeds").value = "Enalapril";
       document.getElementById("protoInsurance").value = "OSDE";
       document.getElementById("protoPhone").value = "011 4444-5566";
+      document.getElementById("protoLocality").value = "Baradero, Buenos Aires";
+      document.getElementById("protoAddress").value = "Mitre 350";
       document.getElementById("protoContactName").value = "María Pérez";
       document.getElementById("protoContactPhone").value = "011 5555-0123";
     });
@@ -5389,6 +5344,8 @@ function initPrototypeModal() {
     document.getElementById("protoResultMeds").textContent = meds;
     document.getElementById("protoResultInsurance").textContent = insurance;
     document.getElementById("protoResultOwnPhone").textContent = getText("ownPhone", t("fallback.noEspecificado"));
+    document.getElementById("protoResultLocality").textContent = getText("locality", t("fallback.noEspecificada"));
+    document.getElementById("protoResultAddress").textContent = getText("homeAddress", t("fallback.noEspecificado"));
     document.getElementById("protoResultContact").textContent =
       `${getText("contactName", "—")} — ${getText("contactPhone", "—")}`;
 
@@ -5508,6 +5465,8 @@ function initDownloads() {
         `${t("download.medicacion")}: ${getText("protoResultMeds", "—")}`,
         `${t("download.obraSocial")}: ${getText("protoResultInsurance", "—")}`,
         `${t("download.telefonoPropio")}: ${getText("protoResultOwnPhone", "—")}`,
+        `${t("download.localidad")}: ${getText("protoResultLocality", "—")}`,
+        `${t("download.domicilio")}: ${getText("protoResultAddress", "—")}`,
         `${t("download.contactoEmergencia")}: ${getText("protoResultContact", "—")}`,
         "",
         t("download.generadoCon"),

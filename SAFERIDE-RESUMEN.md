@@ -38,8 +38,14 @@ Landing page profesional con modo claro/oscuro, bilingüe (ES/EN), y animaciones
 - `--container-width: 1200px`
 - `--nav-height: 76px`
 
+## Producto y precio
+- Un solo producto físico: **Pulsera Saferide** con código QR + chip NFC
+  integrado en la misma pieza (si no se puede escanear el QR, se lee por NFC).
+- Precio: **$4.000** (envío a todo el país + actualización de datos ilimitada).
+- Ya no hay medalla NFC suelta ni "pack".
+
 ## Notas para continuar
-- Los precios son de ejemplo ($0, $2.500, $4.000)
+- El precio ($4.000) es de ejemplo
 - El formulario de pedido no tiene backend (es demo)
 - Las traducciones ES/EN están en el objeto `translations` en el JS
 - Para push se necesita token con Contents: Read and Write en el repo saferide
