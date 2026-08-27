@@ -2810,6 +2810,124 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
   body::after { display: none; }
 }
 
+/* =========================================================
+   POLISH v3 — fondos translúcidos + partículas visibles
+   Las secciones dejan pasar la constelación que flota detrás;
+   las tarjetas quedan como vidrio esmerilado por encima.
+   ========================================================= */
+
+:root {
+  --glass: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(35, 75, 54, 0.14);
+  --glass-blur: blur(16px) saturate(1.35);
+}
+html[data-theme="dark"] {
+  --glass: rgba(25, 37, 28, 0.72);
+  --glass-border: rgba(133, 192, 136, 0.16);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) {
+    --glass: rgba(25, 37, 28, 0.72);
+    --glass-border: rgba(133, 192, 136, 0.16);
+  }
+}
+
+/* La capa de partículas: fija, detrás del contenido, visible a través de casi todo */
+.particles-canvas { z-index: 0; }
+main, .cta-final, .site-footer { background-color: transparent; }
+
+/* Secciones "claras": apenas un velo, se ven las partículas */
+.bg-light { background: rgba(46, 125, 50, 0.045); }
+html[data-theme="dark"] .bg-light,
+html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
+  background: rgba(255, 255, 255, 0.032);
+}
+
+/* Secciones verdes fuertes → verde translúcido */
+.stats-section {
+  background: linear-gradient(160deg, rgba(35, 75, 54, 0.88), rgba(22, 48, 31, 0.92));
+}
+.cta-final {
+  background: linear-gradient(135deg, rgba(35, 75, 54, 0.88) 0%, rgba(22, 48, 31, 0.93) 100%);
+}
+html[data-theme="dark"] .stats-section,
+html:not([data-theme="light"]):not([data-theme="dark"]) .stats-section {
+  background: linear-gradient(160deg, rgba(26, 46, 32, 0.66), rgba(12, 20, 14, 0.78));
+}
+html[data-theme="dark"] .cta-final,
+html:not([data-theme="light"]):not([data-theme="dark"]) .cta-final {
+  background: linear-gradient(135deg, rgba(26, 46, 32, 0.66) 0%, rgba(12, 20, 14, 0.8) 100%);
+}
+
+/* Footer translúcido */
+.site-footer {
+  background: linear-gradient(180deg, rgba(22, 48, 31, 0.55), rgba(14, 24, 16, 0.85));
+}
+html:not([data-theme="dark"]) .site-footer {
+  background: linear-gradient(180deg, rgba(22, 48, 31, 0.92), rgba(16, 30, 20, 0.97));
+}
+
+/* Hero: la parte de abajo se desvanece para que floten las partículas */
+html[data-theme="dark"] .hero,
+html:not([data-theme="light"]):not([data-theme="dark"]) .hero {
+  background:
+    radial-gradient(1000px 480px at 80% -6%, rgba(46, 125, 50, 0.16), transparent 58%),
+    linear-gradient(178deg, #16221a 0%, rgba(17, 28, 19, 0.55) 46%, transparent 100%);
+}
+html:not([data-theme="dark"]) .hero {
+  background:
+    radial-gradient(1000px 480px at 80% -6%, rgba(46, 125, 50, 0.1), transparent 58%),
+    linear-gradient(178deg, #dcefe1 0%, rgba(234, 244, 236, 0.5) 46%, transparent 100%);
+}
+
+/* Tarjetas / paneles = vidrio esmerilado sobre las partículas */
+.card,
+.timeline-step,
+.beneficiary-card,
+.panel,
+.pricing-card,
+.pedido-info-card,
+.privacy-card,
+.demo-card,
+.comparativa-table-wrap,
+.pedido-info-card {
+  background: var(--glass) !important;
+  border-color: var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* Cita "historia" también translúcida, manteniendo el verde */
+.story-card {
+  background: linear-gradient(135deg, rgba(35, 75, 54, 0.82) 0%, rgba(22, 48, 31, 0.86) 100%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* La pantalla del teléfono SIEMPRE opaca: la ficha tiene que leerse nítida */
+.phone-screen { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* Formularios y modal: opacos por usabilidad */
+.modal { background: var(--surface); }
+.form-field input,
+.form-field select { background: var(--surface); }
+
+/* En mobile bajamos el costo del desenfoque */
+@media (max-width: 768px) {
+  .card,
+  .timeline-step,
+  .beneficiary-card,
+  .panel,
+  .pricing-card,
+  .pedido-info-card,
+  .privacy-card,
+  .demo-card,
+  .comparativa-table-wrap,
+  .story-card {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+}
 
 </style>
 </head>
@@ -5000,18 +5118,18 @@ function initFloatingParticles() {
 
   const createParticles = () => {
     particles = [];
-    // Reduce particles on mobile for better performance
+    // Menos partículas en mobile por rendimiento
     const isMobile = window.innerWidth <= 768;
-    const maxCount = isMobile ? 15 : 50;
-    const count = Math.min(maxCount, Math.floor(canvas.width / (isMobile ? 80 : 35)));
+    const maxCount = isMobile ? 22 : 78;
+    const count = Math.min(maxCount, Math.floor(canvas.width / (isMobile ? 60 : 24)));
     for (let i = 0; i < count; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        opacity: Math.random() * 0.35 + 0.1,
+        size: Math.random() * 2.2 + 0.9,
+        speedX: (Math.random() - 0.5) * 0.42,
+        speedY: (Math.random() - 0.5) * 0.42,
+        opacity: Math.random() * 0.5 + 0.3,
       });
     }
   };
@@ -5019,14 +5137,35 @@ function initFloatingParticles() {
   const isDark = () => document.documentElement.getAttribute("data-theme") === "dark" ||
     (!document.documentElement.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
+  const LINK_DIST = 168;
   const getColors = () => isDark()
-    ? { r: 111, g: 174, b: 116, opacityBase: 0.45, lineBase: 0.15 }
-    : { r: 46, g: 125, b: 50, opacityBase: 0.55, lineBase: 0.2 };
+    ? { r: 125, g: 196, b: 132, opacityBase: 0.85, lineBase: 0.34 }
+    : { r: 46, g: 125, b: 50, opacityBase: 0.7, lineBase: 0.26 };
 
   const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const c = getColors();
 
+    // Líneas primero, para que los puntos con glow queden por encima
+    ctx.lineWidth = 1;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < LINK_DIST) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${c.lineBase * (1 - dist / LINK_DIST)})`;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Puntos con un halo suave
+    ctx.shadowColor = `rgba(${c.r}, ${c.g}, ${c.b}, 0.9)`;
+    ctx.shadowBlur = 7;
     particles.forEach((p) => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -5035,28 +5174,10 @@ function initFloatingParticles() {
 
       p.x += p.speedX;
       p.y += p.speedY;
-
       if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
       if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
     });
-
-    // Draw connections
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 140) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${c.lineBase * (1 - dist / 140)})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-      }
-    }
+    ctx.shadowBlur = 0;
 
     animFrame = requestAnimationFrame(draw);
   };
