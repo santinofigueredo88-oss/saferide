@@ -3380,7 +3380,7 @@ section[id],
             </div>
             <div class="form-field">
               <label for="protoBirthdate" data-i18n="field.fechaNacimiento">Fecha de nacimiento</label>
-              <input type="date" id="protoBirthdate" name="birthdate" required />
+              <input type="date" id="protoBirthdate" name="birthdate" />
             </div>
             <div class="form-field">
               <label for="protoDni" data-i18n="field.dni">DNI</label>
@@ -3388,7 +3388,7 @@ section[id],
             </div>
             <div class="form-field">
               <label for="protoBlood" data-i18n="field.grupoSanguineo">Grupo sanguíneo</label>
-              <select id="protoBlood" name="blood" required>
+              <select id="protoBlood" name="blood">
                 <option value="" disabled selected data-i18n="field.elegiOpcion">Elegí una opción</option>
                 <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
                 <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
@@ -3396,19 +3396,127 @@ section[id],
             </div>
             <div class="form-field">
               <label for="protoConditions" data-i18n="field.condiciones">Enfermedades / condiciones preexistentes</label>
-              <input type="text" id="protoConditions" name="conditions" placeholder="Ej: Diabetes tipo 1, o «Ninguna»" data-i18n-placeholder="ph.condiciones" />
+              <select id="protoConditions" name="conditions">
+                <option value="" disabled selected>Ninguna / No aplica</option>
+                <option value="Ninguna">Ninguna</option>
+                <option value="Diabetes tipo 1">Diabetes tipo 1</option>
+                <option value="Diabetes tipo 2">Diabetes tipo 2</option>
+                <option value="Hipertensión arterial">Hipertensión arterial</option>
+                <option value="Asma">Asma</option>
+                <option value="Epilepsia">Epilepsia</option>
+                <option value="Cardiopatía">Cardiopatía</option>
+                <option value="Insuficiencia renal crónica">Insuficiencia renal crónica</option>
+                <option value="ACV previo">ACV previo</option>
+                <option value="Cáncer (en tratamiento)">Cáncer (en tratamiento)</option>
+                <option value="Enfermedad celíaca">Enfermedad celíaca</option>
+                <option value="VIH/SIDA">VIH/SIDA</option>
+                <option value="Hepatitis B">Hepatitis B</option>
+                <option value="Hepatitis C">Hepatitis C</option>
+                <option value="Anemia severa">Anemia severa</option>
+                <option value="Hemofilia">Hemofilia</option>
+                <option value="Enfermedad autoinmune">Enfermedad autoinmune</option>
+                <option value="Trasplante de órgano">Trasplante de órgano</option>
+                <option value="Marcapasos / Desfibrilador">Marcapasos / Desfibrilador</option>
+                <option value="Artritis reumatoide">Artritis reumatoide</option>
+                <option value="Lupus">Lupus</option>
+                <option value="Enfermedad de Crohn">Enfermedad de Crohn</option>
+                <option value="Colitis ulcerosa">Colitis ulcerosa</option>
+                <option value="Miastenia gravis">Miastenia gravis</option>
+                <option value="Apnea obstructiva del sueño">Apnea obstructiva del sueño</option>
+                <option value="Otra">Otra (escribí abajo)</option>
+              </select>
+              <input type="text" id="protoConditionsOther" name="conditionsOther" placeholder="Escribí tu condición aquí" style="display:none;margin-top:6px" />
             </div>
             <div class="form-field">
               <label for="protoAllergies" data-i18n="field.alergias">Alergias</label>
-              <input type="text" id="protoAllergies" name="allergies" placeholder="Ej: Penicilina, o «Ninguna»" data-i18n-placeholder="ph.alergias" />
+              <select id="protoAllergies" name="allergies">
+                <option value="" disabled selected>Ninguna / No aplica</option>
+                <option value="Ninguna">Ninguna</option>
+                <option value="Penicilina">Penicilina</option>
+                <option value="Ibuprofeno">Ibuprofeno</option>
+                <option value="Aspirina (ácido acetilsalicílico)">Aspirina (ácido acetilsalicílico)</option>
+                <option value="Paracetamol">Paracetamol</option>
+                <option value="Sulfamidas">Sulfamidas</option>
+                <option value="Anestésicos locales (lidocaína)">Anestésicos locales (lidocaína)</option>
+                <option value="Látex">Látex</option>
+                <option value="Mariscos / mariscos">Mariscos / mariscos</option>
+                <option value="Frutos secos">Frutos secos</option>
+                <option value="Huevo">Huevo</option>
+                <option value="Leche">Leche</option>
+                <option value="Gluten">Gluten</option>
+                <option value="Picaduras de abeja / avispas">Picaduras de abeja / avispas</option>
+                <option value="Contraste yodado">Contraste yodado</option>
+                <option value="Alopurinol">Alopurinol</option>
+                <option value="Carboplatino">Carboplatino</option>
+                <option value="Otra">Otra (escribí abajo)</option>
+              </select>
+              <input type="text" id="protoAllergiesOther" name="allergiesOther" placeholder="Escribí tu alergia aquí" style="display:none;margin-top:6px" />
             </div>
             <div class="form-field">
               <label for="protoMeds" data-i18n="field.medicacion">Medicación habitual</label>
-              <input type="text" id="protoMeds" name="meds" placeholder="Ej: Ninguna" data-i18n-placeholder="ph.ninguna" />
+              <select id="protoMeds" name="meds">
+                <option value="" disabled selected>Ninguna / No aplica</option>
+                <option value="Ninguna">Ninguna</option>
+                <option value="Metformina">Metformina</option>
+                <option value="Insulina">Insulina</option>
+                <option value="Enalapril">Enalapril</option>
+                <option value="Losartán">Losartán</option>
+                <option value="Amlodipino">Amlodipino</option>
+                <option value="Aspirina (ácido acetilsalicílico)">Aspirina (ácido acetilsalicílico)</option>
+                <option value="Clopidogrel">Clopidogrel</option>
+                <option value="Sintrom (acenocumarol)">Sintrom (acenocumarol)</option>
+                <option value="Levotiroxina">Levotiroxina</option>
+                <option value="Omeprazol">Omeprazol</option>
+                <option value="Salbutamol (inhalador)">Salbutamol (inhalador)</option>
+                <option value="Prednisona">Prednisona</option>
+                <option value="Metotrexato">Metotrexato</option>
+                <option value="Diazepam">Diazepam</option>
+                <option value="Fluoxetina">Fluoxetina</option>
+                <option value="Ibuprofeno">Ibuprofeno</option>
+                <option value="Diclofenac">Diclofenac</option>
+                <option value="Rivaroxabán">Rivaroxabán</option>
+                <option value="Warfarina">Warfarina</option>
+                <option value="Otra">Otra (escribí abajo)</option>
+              </select>
+              <input type="text" id="protoMedsOther" name="medsOther" placeholder="Escribí tu medicación aquí" style="display:none;margin-top:6px" />
             </div>
             <div class="form-field">
               <label for="protoInsurance" data-i18n="field.obraSocial">Obra social / cobertura médica</label>
-              <input type="text" id="protoInsurance" name="insurance" placeholder="Ej: Sin cobertura" data-i18n-placeholder="ph.sinCobertura" />
+              <select id="protoInsurance" name="insurance">
+                <option value="" disabled selected>Sin cobertura</option>
+                <option value="Sin cobertura">Sin cobertura</option>
+                <option value="OSDE">OSDE</option>
+                <option value="OSDE (210/310/410)">OSDE (210/310/410)</option>
+                <option value="Swiss Medical">Swiss Medical</option>
+                <option value="Swiss Medical (SMG)">Swiss Medical (SMG)</option>
+                <option value="Galeno">Galeno</option>
+                <option value="Galeno (Gold/Platino)">Galeno (Gold/Platino)</option>
+                <option value="OMINT">OMINT</option>
+                <option value="FEMISAN">FEMISAN</option>
+                <option value="Solar Salud">Solar Salud</option>
+                <option value="APROSALUD">APROSALUD</option>
+                <option value="GLA (Grupo Los Andes)">GLA (Grupo Los Andes)</option>
+                <option value="IOMA">IOMA</option>
+                <option value="IOMA (Plan integral)">IOMA (Plan integral)</option>
+                <option value="OSECAC">OSECAC</option>
+                <option value="OSPECON">OSPECON</option>
+                <option value="UOCRA">UOCRA</option>
+                <option value="AMUR">AMUR</option>
+                <option value="PAMI">PAMI</option>
+                <option value="INSSJyP">INSSJyP</option>
+                <option value="Osprera">Osprera</option>
+                <option value="Puerto Medico">Puerto Medico</option>
+                <option value="Luis Pasteur">Luis Pasteur</option>
+                <option value="OAAPP">OAAPP</option>
+                <option value="UPCN">UPCN</option>
+                <option value="OSBA">OSBA</option>
+                <option value="SUTOCOR">SUTOCOR</option>
+                <option value="Osigrav">Osigrav</option>
+                <option value="OSPRE">OSPRE</option>
+                <option value="Ninguna (prepaga)">Ninguna (prepaga)</option>
+                <option value="Otra">Otra (escribí abajo)</option>
+              </select>
+              <input type="text" id="protoInsuranceOther" name="insuranceOther" placeholder="Escribí tu cobertura aquí" style="display:none;margin-top:6px" />
             </div>
             <div class="form-field">
               <label for="protoPhone" data-i18n="field.telefonoPropio">Teléfono propio</label>
@@ -3424,10 +3532,16 @@ section[id],
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block">
-            <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
-            <span data-i18n="modal.generarQr">Generar mi QR</span>
-          </button>
+          <div style="display:flex;gap:12px;margin-top:8px">
+            <button type="submit" class="btn btn-primary" style="flex:2">
+              <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
+              <span data-i18n="modal.generarQr">Generar mi QR</span>
+            </button>
+            <button type="button" class="btn btn-outline" id="prefillBtn" style="flex:1;font-size:0.88rem">
+              <svg class="icon" aria-hidden="true" style="width:16px;height:16px"><use href="#icon-refresh-cw"></use></svg>
+              Rellenar ejemplo
+            </button>
+          </div>
 
           <p class="modal-disclaimer">
             <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
@@ -3462,6 +3576,12 @@ section[id],
             <div class="demo-field"><dt data-i18n="field.telefonoPropio">Teléfono propio</dt><dd id="protoResultOwnPhone">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd id="protoResultContact">—</dd></div>
           </dl>
+        </div>
+
+        <div style="text-align:center;margin:24px 0">
+          <p style="font-weight:600;font-size:0.88rem;margin-bottom:12px;color:var(--text-primary)">Tu código QR ficticio:</p>
+          <canvas id="qrCodeCanvas" width="200" height="200" style="border-radius:12px;border:2px solid var(--surface-border);background:#fff"></canvas>
+          <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px">Esto es una simulación. El QR real se genera al registrar tu cuenta.</p>
         </div>
 
         <p class="modal-disclaimer" data-i18n="modal.resultDisclaimer">
@@ -4451,6 +4571,88 @@ function buildQrPattern() {
   }
 }
 
+function generateFictitiousQR(canvas, dataString) {
+  const ctx = canvas.getContext("2d");
+  const size = 200;
+  const modules = 25;
+  const cellSize = size / modules;
+  canvas.width = size;
+  canvas.height = size;
+
+  // White background
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, size, size);
+
+  // Generate a deterministic pattern from the data string
+  let hash = 0;
+  for (let i = 0; i < dataString.length; i++) {
+    hash = ((hash << 5) - hash + dataString.charCodeAt(i)) | 0;
+  }
+
+  const seededRandom = (i) => {
+    hash = ((hash * 1103515245 + 12345) & 0x7fffffff);
+    return (hash % 1000) / 1000;
+  };
+
+  // Draw finder patterns (top-left, top-right, bottom-left)
+  const drawFinder = (x, y) => {
+    ctx.fillStyle = "#234b36";
+    ctx.fillRect(x * cellSize, y * cellSize, 7 * cellSize, 7 * cellSize);
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect((x + 1) * cellSize, (y + 1) * cellSize, 5 * cellSize, 5 * cellSize);
+    ctx.fillStyle = "#234b36";
+    ctx.fillRect((x + 2) * cellSize, (y + 2) * cellSize, 3 * cellSize, 3 * cellSize);
+  };
+
+  drawFinder(0, 0);
+  drawFinder(modules - 7, 0);
+  drawFinder(0, modules - 7);
+
+  // Draw timing patterns
+  ctx.fillStyle = "#234b36";
+  for (let i = 8; i < modules - 8; i++) {
+    if (i % 2 === 0) {
+      ctx.fillRect(i * cellSize, 6 * cellSize, cellSize, cellSize);
+      ctx.fillRect(6 * cellSize, i * cellSize, cellSize, cellSize);
+    }
+  }
+
+  // Draw data modules using seeded random
+  ctx.fillStyle = "#234b36";
+  for (let row = 0; row < modules; row++) {
+    for (let col = 0; col < modules; col++) {
+      // Skip finder patterns and timing
+      const inFinder = (col < 8 && row < 8) || (col >= modules - 8 && row < 8) || (col < 8 && row >= modules - 8);
+      const onTiming = (col === 6 || row === 6);
+      if (inFinder || onTiming) continue;
+
+      if (seededRandom(row * modules + col) > 0.5) {
+        ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+      }
+    }
+  }
+
+  // Draw alignment pattern (center)
+  const cx = Math.floor(modules / 2);
+  const cy = Math.floor(modules / 2);
+  ctx.fillStyle = "#234b36";
+  ctx.fillRect((cx - 2) * cellSize, (cy - 2) * cellSize, 5 * cellSize, 5 * cellSize);
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect((cx - 1) * cellSize, (cy - 1) * cellSize, 3 * cellSize, 3 * cellSize);
+  ctx.fillStyle = "#234b36";
+  ctx.fillRect(cx * cellSize, cy * cellSize, cellSize, cellSize);
+
+  // Add SafeRide logo dot in center
+  ctx.fillStyle = "#2e7d32";
+  ctx.beginPath();
+  ctx.arc(size / 2, size / 2, 8, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#FFFFFF";
+  ctx.beginPath();
+  ctx.arc(size / 2, size / 2, 3, 0, Math.PI * 2);
+  ctx.fill();
+}
+
 function initPrototypeModal() {
   const overlay = document.getElementById("prototypeModal");
   const closeBtn = document.getElementById("prototypeModalClose");
@@ -4458,6 +4660,7 @@ function initPrototypeModal() {
   const resultView = document.getElementById("prototypeResultView");
   const form = document.getElementById("prototypeForm");
   const editBtn = document.getElementById("prototypeEditBtn");
+  const prefillBtn = document.getElementById("prefillBtn");
   const triggers = document.querySelectorAll("[data-prototype-trigger]");
 
   if (!overlay || !form) return;
@@ -4473,6 +4676,45 @@ function initPrototypeModal() {
     formView.hidden = true;
     resultView.hidden = false;
   };
+
+  // Handle "Otra" option in selects
+  const setupOtherToggle = (selectId, inputId) => {
+    const select = document.getElementById(selectId);
+    const input = document.getElementById(inputId);
+    if (!select || !input) return;
+    select.addEventListener("change", () => {
+      input.style.display = select.value === "Otra" ? "block" : "none";
+      if (select.value !== "Otra") input.value = "";
+    });
+  };
+
+  setupOtherToggle("protoConditions", "protoConditionsOther");
+  setupOtherToggle("protoAllergies", "protoAllergiesOther");
+  setupOtherToggle("protoMeds", "protoMedsOther");
+  setupOtherToggle("protoInsurance", "protoInsuranceOther");
+
+  // Prefill with example data
+  if (prefillBtn) {
+    prefillBtn.addEventListener("click", () => {
+      document.getElementById("protoName").value = "Juan Carlos Pérez";
+      document.getElementById("protoEmail").value = "juan.perez@email.com";
+      document.getElementById("protoBirthdate").value = "1985-03-15";
+      document.getElementById("protoDni").value = "30123456";
+      document.getElementById("protoBlood").value = "O+";
+      document.getElementById("protoConditions").value = "Hipertensión arterial";
+      document.getElementById("protoAllergies").value = "Penicilina";
+      document.getElementById("protoMeds").value = "Enalapril";
+      document.getElementById("protoInsurance").value = "OSDE";
+      document.getElementById("protoPhone").value = "011 4444-5566";
+      document.getElementById("protoContactName").value = "María Pérez";
+      document.getElementById("protoContactPhone").value = "011 5555-0123";
+      // Hide all "other" inputs
+      ["protoConditionsOther", "protoAllergiesOther", "protoMedsOther", "protoInsuranceOther"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) { el.style.display = "none"; el.value = ""; }
+      });
+    });
+  }
 
   const openModal = (trigger) => {
     lastFocused = trigger || document.activeElement;
@@ -4519,6 +4761,13 @@ function initPrototypeModal() {
       return value || fallback;
     };
 
+    // Resolve "Otra" selections
+    const resolveOther = (field, otherField) => {
+      const val = getText(field, "");
+      if (val === "Otra") return getText(otherField, t("fallback.ningunaEspecificada"));
+      return val || t("fallback.ningunaEspecificada");
+    };
+
     const birthdateRaw = data.get("birthdate");
     let birthdateLabel = "—";
     if (birthdateRaw) {
@@ -4527,18 +4776,30 @@ function initPrototypeModal() {
       birthdateLabel = parsedDate.toLocaleDateString(t("download.dateLocale"), { timeZone: "UTC" });
     }
 
+    const conditions = resolveOther("conditions", "conditionsOther");
+    const allergies = resolveOther("allergies", "allergiesOther");
+    const meds = resolveOther("meds", "medsOther");
+    const insurance = resolveOther("insurance", "insuranceOther");
+
     document.getElementById("protoResultName").textContent = getText("fullName", t("demo.fichaTitle"));
     document.getElementById("protoResultSubtitle").textContent = data.get("email");
     document.getElementById("protoResultBirthdate").textContent = birthdateLabel;
     document.getElementById("protoResultDni").textContent = getText("dni", t("fallback.noEspecificado"));
     document.getElementById("protoResultBlood").textContent = data.get("blood");
-    document.getElementById("protoResultConditions").textContent = getText("conditions", t("fallback.ningunaEspecificada"));
-    document.getElementById("protoResultAllergies").textContent = getText("allergies", t("fallback.ningunaEspecificada"));
-    document.getElementById("protoResultMeds").textContent = getText("meds", t("field.ninguna"));
-    document.getElementById("protoResultInsurance").textContent = getText("insurance", t("fallback.noEspecificada"));
+    document.getElementById("protoResultConditions").textContent = conditions;
+    document.getElementById("protoResultAllergies").textContent = allergies;
+    document.getElementById("protoResultMeds").textContent = meds;
+    document.getElementById("protoResultInsurance").textContent = insurance;
     document.getElementById("protoResultOwnPhone").textContent = getText("ownPhone", t("fallback.noEspecificado"));
     document.getElementById("protoResultContact").textContent =
-      `${data.get("contactName")} — ${data.get("contactPhone")}`;
+      `${getText("contactName", "—")} — ${getText("contactPhone", "—")}`;
+
+    // Generate fictitious QR
+    const qrCanvas = document.getElementById("qrCodeCanvas");
+    if (qrCanvas) {
+      const qrData = `${getText("fullName", "")}|${getText("email", "")}|${data.get("blood")}|${conditions}|${allergies}|${meds}`;
+      generateFictitiousQR(qrCanvas, qrData);
+    }
 
     showResultView();
   });
