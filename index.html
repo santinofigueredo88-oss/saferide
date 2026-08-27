@@ -2688,15 +2688,16 @@ html[data-theme="dark"] .text-gradient {
   position: relative;
 }
 .demo-scan {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: 22px;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--surface-border);
   background: var(--surface);
   font-size: 0.9rem;
+  line-height: 1.45;
   color: var(--text-primary);
 }
 .demo-scan svg { width: 40px; height: 40px; color: var(--accent-fg); flex-shrink: 0; }
@@ -2912,8 +2913,13 @@ html:not([data-theme="dark"]) .hero {
 .form-field input,
 .form-field select { background: var(--surface); }
 
-/* En mobile bajamos el costo del desenfoque */
+/* En mobile: sin desenfoque (cuesta batería) y tarjetas más sólidas,
+   pero las partículas se siguen viendo entre secciones. */
 @media (max-width: 768px) {
+  :root { --glass: rgba(255, 255, 255, 0.92); }
+  html[data-theme="dark"],
+  html:not([data-theme="light"]):not([data-theme="dark"]) { --glass: rgba(24, 36, 27, 0.94); }
+
   .card,
   .timeline-step,
   .beneficiary-card,
@@ -2923,10 +2929,19 @@ html:not([data-theme="dark"]) .hero {
   .privacy-card,
   .demo-card,
   .comparativa-table-wrap,
-  .story-card {
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
+  .story-card,
+  .navbar {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
+  html[data-theme="dark"] .navbar,
+  html:not([data-theme="light"]):not([data-theme="dark"]) .navbar { background: #101a10; }
+  html:not([data-theme="dark"]) .navbar { background: #ffffff; }
+
+  body::after { display: none; }
+
+  /* El teléfono un poco más chico para que no coma tanto scroll */
+  .phone-mock { width: min(260px, 72vw); }
 }
 
 </style>
@@ -5186,9 +5201,23 @@ function initFloatingParticles() {
   createParticles();
   draw();
 
+  // Pausa cuando la pestaña no está visible (ahorra batería en el celular)
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      cancelAnimationFrame(animFrame);
+    } else {
+      cancelAnimationFrame(animFrame);
+      draw();
+    }
+  });
+
+  let resizeTimer;
   window.addEventListener("resize", () => {
-    resize();
-    createParticles();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      resize();
+      createParticles();
+    }, 200);
   });
 
   // Watch for theme changes
