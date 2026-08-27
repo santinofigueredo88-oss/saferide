@@ -3302,6 +3302,35 @@ html:not([data-theme="dark"]) .hero {
     </div>
   </section>
 
+  <!-- ============ TITULARIDAD DE LA PULSERA ============ -->
+  <section class="section" id="titularidad" aria-labelledby="titularidad-title">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow" data-i18n="titularidad.eyebrow">Titularidad</span>
+        <h2 id="titularidad-title" data-i18n="titularidad.title">Tus datos médicos, gratis. El titular, una sola vez.</h2>
+        <p data-i18n="titularidad.subtitle">Separamos lo que puede cambiar siempre de lo que queda fijo a tu nombre.</p>
+      </div>
+
+      <div class="split-panel">
+        <div class="panel reveal">
+          <span class="eyebrow" data-i18n="titularidad.medicos.eyebrow">Datos médicos</span>
+          <h2 data-i18n="titularidad.medicos.title">Se editan libremente, sin costo</h2>
+          <p data-i18n="titularidad.medicos.body">Grupo sanguíneo, alergias, medicación, contacto de emergencia y localidad: los actualizás las veces que quieras desde tu cuenta, gratis. Son los datos que salvan vidas en una emergencia, así que nunca quedan trabados.</p>
+        </div>
+        <div class="panel reveal">
+          <span class="eyebrow" data-i18n="titularidad.titular.eyebrow">Titular de la pulsera</span>
+          <h2 data-i18n="titularidad.titular.title">Se carga una sola vez</h2>
+          <p data-i18n="titularidad.titular.body">El nombre, el DNI y la fecha de nacimiento se completan al activar la pulsera y quedan bloqueados. Para transferirla a otra persona —por venta o regalo— hay un costo único de cambio de titularidad, con verificación.</p>
+        </div>
+      </div>
+
+      <p class="privacy-note reveal">
+        <svg class="icon" aria-hidden="true"><use href="#icon-shield-check"></use></svg>
+        <span data-i18n="titularidad.note">Al activar la pulsera se usa un PIN que viene dentro del paquete: solo vos podés vincularla a tu cuenta. Una pulsera ya activada no se puede reclamar de nuevo, aunque alguien escanee el código.</span>
+      </p>
+    </div>
+  </section>
+
   <!-- ============ PARA QUIÉN ES ============ -->
   <section class="section bg-light" id="para-quien" aria-labelledby="para-quien-title">
     <div class="container">
@@ -3880,6 +3909,15 @@ html:not([data-theme="dark"]) .hero {
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
+            <span data-i18n="faq.q7">¿Puedo cambiar el nombre del titular?</span>
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p data-i18n="faq.a7">Los datos médicos (alergias, medicación, grupo sanguíneo, contacto) los cambiás gratis, siempre. El titular —nombre, DNI y fecha de nacimiento— se carga una sola vez al activar la pulsera. Para transferirla a otra persona hay un costo único de cambio de titularidad.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
             <span>¿Funciona en otros países?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
@@ -4386,6 +4424,22 @@ const translations = {
       c4: { title: "Código que se puede revocar", desc: "Si perdés la pulsera, generás un código nuevo y el anterior deja de funcionar al instante." },
       note: "La ficha pública es de solo lectura: nadie puede modificar tus datos escaneando el código.",
     },
+    titularidad: {
+      eyebrow: "Titularidad",
+      title: "Tus datos médicos, gratis. El titular, una sola vez.",
+      subtitle: "Separamos lo que puede cambiar siempre de lo que queda fijo a tu nombre.",
+      medicos: {
+        eyebrow: "Datos médicos",
+        title: "Se editan libremente, sin costo",
+        body: "Grupo sanguíneo, alergias, medicación, contacto de emergencia y localidad: los actualizás las veces que quieras desde tu cuenta, gratis. Son los datos que salvan vidas en una emergencia, así que nunca quedan trabados.",
+      },
+      titular: {
+        eyebrow: "Titular de la pulsera",
+        title: "Se carga una sola vez",
+        body: "El nombre, el DNI y la fecha de nacimiento se completan al activar la pulsera y quedan bloqueados. Para transferirla a otra persona —por venta o regalo— hay un costo único de cambio de titularidad, con verificación.",
+      },
+      note: "Al activar la pulsera se usa un PIN que viene dentro del paquete: solo vos podés vincularla a tu cuenta. Una pulsera ya activada no se puede reclamar de nuevo, aunque alguien escanee el código.",
+    },
     field: {
       grupoSanguineo: "Grupo sanguíneo",
       alergias: "Alergias",
@@ -4466,6 +4520,8 @@ const translations = {
       a5: "La pulsera con QR y NFC cuesta $4.000, con envío a todo el país y actualización de datos ilimitada incluida.",
       q6: "¿Puedo actualizar mis datos cuando quiera?",
       a6: "Sí, las veces que necesites, desde tu cuenta.",
+      q7: "¿Puedo cambiar el nombre del titular?",
+      a7: "Los datos médicos (alergias, medicación, grupo sanguíneo, contacto) los cambiás gratis, siempre. El titular —nombre, DNI y fecha de nacimiento— se carga una sola vez al activar la pulsera. Para transferirla a otra persona hay un costo único de cambio de titularidad.",
     },
     ctaFinal: {
       title: "¿Querés tener tu información siempre a mano?",
@@ -4659,6 +4715,22 @@ const translations = {
       c4: { title: "A code you can revoke", desc: "If you lose the bracelet, you generate a new code and the old one stops working instantly." },
       note: "The public ID is read-only: no one can change your data by scanning the code.",
     },
+    titularidad: {
+      eyebrow: "Ownership",
+      title: "Your medical data, free. The owner, set once.",
+      subtitle: "We separate what can always change from what stays fixed to your name.",
+      medicos: {
+        eyebrow: "Medical data",
+        title: "Edited freely, at no cost",
+        body: "Blood type, allergies, medication, emergency contact and town: update them as many times as you want from your account, for free. This is the data that saves lives in an emergency, so it's never locked.",
+      },
+      titular: {
+        eyebrow: "Bracelet owner",
+        title: "Entered only once",
+        body: "Name, national ID and date of birth are filled in when you activate the bracelet and then locked. To transfer it to another person — a sale or a gift — there's a one-time ownership-change fee, with verification.",
+      },
+      note: "Activating the bracelet uses a PIN included inside the package: only you can link it to your account. An already-activated bracelet can't be claimed again, even if someone scans the code.",
+    },
     field: {
       grupoSanguineo: "Blood type",
       alergias: "Allergies",
@@ -4739,6 +4811,8 @@ const translations = {
       a5: "The bracelet with QR and NFC costs $4,000, with nationwide shipping and unlimited data updates included.",
       q6: "Can I update my data whenever I want?",
       a6: "Yes, as many times as you need, from your account.",
+      q7: "Can I change the owner's name?",
+      a7: "Medical data (allergies, medication, blood type, contact) can be changed for free, always. The owner — name, national ID and date of birth — is entered only once when you activate the bracelet. Transferring it to another person has a one-time ownership-change fee.",
     },
     ctaFinal: {
       title: "Want to have your information always on hand?",
