@@ -14,14 +14,15 @@ ovalado en el centro que lleva el QR y el chip NFC.
 
 ## Medidas del modelo actual
 
-- Muñeca: **165 mm** de circunferencia (adulto). La correa abraza **205°** y queda
-  abierta donde va el cierre.
-- Correa: **17 mm de ancho × 3 mm de espesor**, con los **cantos redondeados**
-  (sección tipo "D") → cómoda, sin bordes.
-- Módulo central: **34 × 21 mm**, sobresale solo **2,6 mm**, esquinas r8 y borde
-  superior biselado. Bajo perfil, como en las smartbands.
-- **Hueco para el QR** ya incluido en la cara de arriba del módulo: **16 × 16 mm**,
-  **0,7 mm** de profundidad (para pegar una etiqueta o para grabar el QR).
+- Muñeca: **165 mm** de circunferencia (adulto). La correa **abraza 300°** —
+  queda casi cerrada, como una smartband — y se abre solo donde va el cierre.
+- Correa: **16 mm de ancho × 3 mm de espesor**, con los **cantos redondeados**
+  (sección tipo "D") → cómoda, sin bordes. Se afina un poco hacia las puntas.
+- Módulo: **19 × 27 mm**, sobresale solo **3 mm** y **sube en rampa suave** desde
+  la correa (sin escalón), como en la foto de referencia.
+- **Hueco para el QR** ya incluido en la meseta del módulo: **13 × 13 mm**,
+  **0,6 mm** de profundidad (para pegar una etiqueta o para grabar el QR).
+- Botoncito redondo al lado del módulo (decorativo / se puede usar para el led).
 
 ## Cómo usarlo en Tinkercad
 
