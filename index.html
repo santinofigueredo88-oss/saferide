@@ -14,6 +14,12 @@
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.setAttribute("data-theme", savedTheme);
     }
+    // Fondo correcto ANTES de que cargue el CSS grande. Cubre el caso de
+    // modo oscuro elegido a mano con el sistema en claro (ahí el @media de
+    // arriba no alcanza y se colaba un flash claro al principio).
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var effectiveDark = savedTheme === "dark" || (savedTheme !== "light" && prefersDark);
+    document.documentElement.style.backgroundColor = effectiveDark ? "#10190f" : "#eaf4ec";
     var savedLang = localStorage.getItem("saferide-lang");
     if (!savedLang) {
       savedLang = (navigator.language || "es").toLowerCase().startsWith("en") ? "en" : "es";
@@ -622,6 +628,18 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   background: linear-gradient(170deg, #d3e6d8 0%, #eaf4ec 40%, var(--surface-page) 100%);
   overflow: hidden;
   position: relative;
+}
+
+/* En modo oscuro el hero también va verde profundo, igual que el resto de
+   la página (si no, arriba de todo se veía un bloque casi blanco). */
+html[data-theme="dark"] .hero {
+  background: linear-gradient(170deg, #17251b 0%, #131d13 42%, var(--surface-page) 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .hero {
+    background: linear-gradient(170deg, #17251b 0%, #131d13 42%, var(--surface-page) 100%);
+  }
 }
 
 .hero::before {
@@ -4185,6 +4203,7 @@ function initThemeToggle() {
   btn.addEventListener("click", () => {
     const nextTheme = getCurrentTheme() === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", nextTheme);
+    document.documentElement.style.backgroundColor = nextTheme === "dark" ? "#10190f" : "#eaf4ec";
     try {
       localStorage.setItem("saferide-theme", nextTheme);
     } catch (e) {
