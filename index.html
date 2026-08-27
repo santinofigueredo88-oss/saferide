@@ -12,6 +12,8 @@
     var savedTheme = localStorage.getItem("saferide-theme");
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.setAttribute("data-theme", savedTheme);
+    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.setAttribute("data-theme", "dark");
     }
     var savedLang = localStorage.getItem("saferide-lang");
     if (!savedLang) {
@@ -2212,6 +2214,21 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 .timeline .timeline-step:nth-child(5) { transition-delay: 0.25s; }
 .timeline .timeline-step:nth-child(6) { transition-delay: 0.3s; }
 
+@media (max-width: 768px) {
+  /* Reduce stagger delays on mobile for snappier feel */
+  .card-grid .card,
+  .timeline .timeline-step {
+    transition-delay: 0s !important;
+  }
+  /* Reduce reveal animation distance */
+  .reveal {
+    transform: translateY(16px);
+  }
+  .reveal.in-view {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -2269,6 +2286,59 @@ section[id],
   }
   .btn {
     width: 100%;
+  }
+}
+
+/* ===== Mobile: reduce movement and fix layout ===== */
+@media (max-width: 768px) {
+  /* Disable floating animations that cause jitter */
+  .qr-mock {
+    animation: none !important;
+  }
+  .hero-visual-glow {
+    animation: none !important;
+  }
+  .hero::before,
+  .hero::after {
+    animation: none !important;
+  }
+  .story-card::after {
+    animation: none !important;
+  }
+  .stats-section::before,
+  .stats-section::after {
+    animation: none !important;
+  }
+  .cta-final::before,
+  .cta-final::after {
+    animation: none !important;
+  }
+
+  /* Reduce parallax jitter: simpler transitions */
+  .hero-visual {
+    transform: none !important;
+  }
+  .hero-visual-glow {
+    transform: none !important;
+  }
+
+  /* Navbar: no auto-hide on mobile to avoid layout shifts */
+  .navbar {
+    transform: none !important;
+  }
+
+  /* Reduce decorative shadows */
+  .card:hover,
+  .beneficiary-card:hover,
+  .timeline-step:hover,
+  .pricing-card:hover,
+  .panel:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Prevent horizontal overflow from tables */
+  .comparativa-table-wrap {
+    max-width: 100%;
   }
 }
 
@@ -4029,11 +4099,19 @@ function initNavbarScroll() {
   if (!navbar) return;
   let lastScroll = 0;
   let ticking = false;
+  const isMobile = () => window.innerWidth <= 768;
 
   const updateNavbar = () => {
     const scrollY = window.scrollY;
     navbar.classList.toggle("scrolled", scrollY > 8);
-    // Smooth hide/show on scroll direction
+    // On mobile, don't auto-hide navbar to avoid layout shifts
+    if (isMobile()) {
+      navbar.style.transform = "translateY(0)";
+      lastScroll = scrollY;
+      ticking = false;
+      return;
+    }
+    // Smooth hide/show on scroll direction (desktop only)
     if (scrollY > 200) {
       if (scrollY > lastScroll + 5) {
         navbar.style.transform = "translateY(-100%)";
@@ -4091,8 +4169,11 @@ function initParallaxHero() {
   const heroGlow = document.querySelector(".hero-visual-glow");
   if (!heroVisual) return;
 
+  const isMobile = () => window.innerWidth <= 768;
   let ticking = false;
+
   window.addEventListener("scroll", () => {
+    if (isMobile()) return; // skip parallax on mobile
     if (!ticking) {
       requestAnimationFrame(() => {
         const scrollY = window.scrollY;
@@ -4200,7 +4281,10 @@ function initFloatingParticles() {
 
   const createParticles = () => {
     particles = [];
-    const count = Math.min(50, Math.floor(canvas.width / 35));
+    // Reduce particles on mobile for better performance
+    const isMobile = window.innerWidth <= 768;
+    const maxCount = isMobile ? 15 : 50;
+    const count = Math.min(maxCount, Math.floor(canvas.width / (isMobile ? 80 : 35)));
     for (let i = 0; i < count; i++) {
       particles.push({
         x: Math.random() * canvas.width,
