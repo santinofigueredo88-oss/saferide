@@ -10,6 +10,12 @@
 // se vea un parpadeo (flash) del tema o idioma equivocado al cargar.
 (function () {
   try {
+    // Que el navegador NO restaure la posición de scroll anterior: al abrir la
+    // página siempre se arranca desde arriba (en el celular a veces quedaba
+    // abierta abajo de todo).
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  } catch (e) {}
+  try {
     var savedTheme = localStorage.getItem("saferide-theme");
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.setAttribute("data-theme", savedTheme);
@@ -4958,7 +4964,16 @@ function initThemeToggle() {
   });
 }
 
+// Si no venís a una sección concreta (#algo), arrancá siempre desde arriba.
+// Cubre carga normal y "volver atrás" (bfcache), sobre todo en el celular.
+function scrollTopSiSinAncla() {
+  if (!window.location.hash) window.scrollTo(0, 0);
+}
+window.addEventListener("pageshow", scrollTopSiSinAncla);
+window.addEventListener("load", () => requestAnimationFrame(scrollTopSiSinAncla));
+
 document.addEventListener("DOMContentLoaded", () => {
+  scrollTopSiSinAncla();
   applyTranslations();
   initThemeToggle();
   initLangToggle();
