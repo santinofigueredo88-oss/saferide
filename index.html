@@ -168,8 +168,8 @@ table {
   --divider: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.25), transparent);
   --ring: rgba(var(--accent-rgb), 0.16);
   --text-muted: #4f5f55;
-  --success: #2e7d32;
-  --muted-mark: #93a69a;
+  --success: var(--green-accent);
+  --muted-mark: #97a19c;
 
   /* Tokens de superficie/texto: son los que cambian entre modo claro y oscuro */
   --surface-page: var(--green-pale);
@@ -289,7 +289,7 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] .navbar {
-  background: rgba(16, 25, 15, 0.85);
+  background: var(--surface-translucent);
   border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 
@@ -331,7 +331,7 @@ html[data-theme="dark"] .navbar.scrolled {
   }
 
   html:not([data-theme="light"]):not([data-theme="dark"]) .navbar {
-    background: rgba(16, 25, 15, 0.85);
+    background: var(--surface-translucent);
     border-bottom-color: rgba(255, 255, 255, 0.06);
   }
 
@@ -2540,18 +2540,6 @@ section[id],
   }
 }
 
-.preview-banner {
-  background: #16301f;
-  color: rgba(255, 255, 255, 0.9);
-  text-align: center;
-  font-size: 0.82rem;
-  padding: 10px 16px;
-}
-
-.preview-banner strong {
-  color: #ffffff;
-}
-
 /* =========================================================
    POLISH v2 — profundidad, ritmo y armonía
    (agregado al final para que gane en el orden de la cascada)
@@ -2628,8 +2616,8 @@ html[data-theme="dark"] .timeline-step:hover,
 html[data-theme="dark"] .beneficiary-card:hover,
 html[data-theme="dark"] .panel:hover,
 html[data-theme="dark"] .pricing-card:hover {
-  border-color: rgba(131, 192, 136, 0.4);
-  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(131, 192, 136, 0.12);
+  border-color: rgba(var(--accent-soft-rgb), 0.4);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(var(--accent-soft-rgb), 0.14);
 }
 
 /* --- bg-light: en oscuro, viñeta en vez de "caja más clara" --- */
@@ -2660,7 +2648,7 @@ html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
   color: transparent;
 }
 html[data-theme="dark"] .text-gradient {
-  background: linear-gradient(120deg, #8fd095, #b6e6ba);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--green-accent-soft) 70%, #fff), color-mix(in srgb, var(--green-accent-soft) 45%, #fff));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -3004,13 +2992,13 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
   --glass-blur: blur(16px) saturate(1.35);
 }
 html[data-theme="dark"] {
-  --glass: rgba(25, 37, 28, 0.72);
-  --glass-border: rgba(133, 192, 136, 0.16);
+  --glass: color-mix(in srgb, var(--surface) 86%, transparent);
+  --glass-border: rgba(var(--accent-soft-rgb), 0.18);
 }
 @media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]):not([data-theme="dark"]) {
-    --glass: rgba(25, 37, 28, 0.72);
-    --glass-border: rgba(133, 192, 136, 0.16);
+    --glass: color-mix(in srgb, var(--surface) 86%, transparent);
+    --glass-border: rgba(var(--accent-soft-rgb), 0.18);
   }
 }
 
@@ -3099,7 +3087,7 @@ html:not([data-theme="dark"]) .hero {
 @media (max-width: 768px) {
   :root { --glass: rgba(255, 255, 255, 0.92); }
   html[data-theme="dark"],
-  html:not([data-theme="light"]):not([data-theme="dark"]) { --glass: rgba(24, 36, 27, 0.94); }
+  html:not([data-theme="light"]):not([data-theme="dark"]) { --glass: color-mix(in srgb, var(--surface) 96%, transparent); }
 
   .card,
   .timeline-step,
@@ -3116,7 +3104,7 @@ html:not([data-theme="dark"]) .hero {
     backdrop-filter: none !important;
   }
   html[data-theme="dark"] .navbar,
-  html:not([data-theme="light"]):not([data-theme="dark"]) .navbar { background: #101a10; }
+  html:not([data-theme="light"]):not([data-theme="dark"]) .navbar { background: color-mix(in srgb, var(--surface-page), #000 6%); }
   html:not([data-theme="dark"]) .navbar { background: #ffffff; }
 
   body::after { display: none; }
@@ -3250,11 +3238,11 @@ html:not([data-theme="dark"]) .hero {
             <span class="palette-dot" aria-hidden="true"></span>
           </button>
           <div class="palette-menu" id="paletteMenu" role="menu" hidden>
-            <button type="button" role="menuitemradio" data-palette="verde"   style="--sw:#2e7d32" aria-label="Verde"></button>
-            <button type="button" role="menuitemradio" data-palette="azul"    style="--sw:#2563c9" aria-label="Azul"></button>
-            <button type="button" role="menuitemradio" data-palette="violeta" style="--sw:#7c3aed" aria-label="Violeta"></button>
-            <button type="button" role="menuitemradio" data-palette="aqua"    style="--sw:#0d9488" aria-label="Aguamarina"></button>
-            <button type="button" role="menuitemradio" data-palette="ambar"   style="--sw:#c2680a" aria-label="Ámbar"></button>
+            <button type="button" role="menuitemradio" data-palette="verde"   style="--sw:#2e8038" aria-label="Verde"></button>
+            <button type="button" role="menuitemradio" data-palette="azul"    style="--sw:#2b6fd6" aria-label="Azul"></button>
+            <button type="button" role="menuitemradio" data-palette="violeta" style="--sw:#6d47d4" aria-label="Violeta"></button>
+            <button type="button" role="menuitemradio" data-palette="aqua"    style="--sw:#0e8f83" aria-label="Aguamarina"></button>
+            <button type="button" role="menuitemradio" data-palette="ambar"   style="--sw:#b3620f" aria-label="Ámbar"></button>
           </div>
         </div>
         <button type="button" class="pref-toggle" id="themeToggle" aria-label="Cambiar a modo oscuro" data-i18n-aria-label="nav.themeToggleAria">
@@ -5720,6 +5708,11 @@ function generateFictitiousQR(canvas, dataString) {
   canvas.width = size;
   canvas.height = size;
 
+  // color de los módulos según la paleta activa
+  const cs = getComputedStyle(document.documentElement);
+  const DARK = (cs.getPropertyValue("--green-deep").trim() || "#234b36");
+  const ACC = (cs.getPropertyValue("--green-accent").trim() || "#2e7d32");
+
   // White background
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, size, size);
@@ -5737,11 +5730,11 @@ function generateFictitiousQR(canvas, dataString) {
 
   // Draw finder patterns (top-left, top-right, bottom-left)
   const drawFinder = (x, y) => {
-    ctx.fillStyle = "#234b36";
+    ctx.fillStyle = DARK;
     ctx.fillRect(x * cellSize, y * cellSize, 7 * cellSize, 7 * cellSize);
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect((x + 1) * cellSize, (y + 1) * cellSize, 5 * cellSize, 5 * cellSize);
-    ctx.fillStyle = "#234b36";
+    ctx.fillStyle = DARK;
     ctx.fillRect((x + 2) * cellSize, (y + 2) * cellSize, 3 * cellSize, 3 * cellSize);
   };
 
@@ -5750,7 +5743,7 @@ function generateFictitiousQR(canvas, dataString) {
   drawFinder(0, modules - 7);
 
   // Draw timing patterns
-  ctx.fillStyle = "#234b36";
+  ctx.fillStyle = DARK;
   for (let i = 8; i < modules - 8; i++) {
     if (i % 2 === 0) {
       ctx.fillRect(i * cellSize, 6 * cellSize, cellSize, cellSize);
@@ -5759,7 +5752,7 @@ function generateFictitiousQR(canvas, dataString) {
   }
 
   // Draw data modules using seeded random
-  ctx.fillStyle = "#234b36";
+  ctx.fillStyle = DARK;
   for (let row = 0; row < modules; row++) {
     for (let col = 0; col < modules; col++) {
       // Skip finder patterns and timing
@@ -5776,15 +5769,15 @@ function generateFictitiousQR(canvas, dataString) {
   // Draw alignment pattern (center)
   const cx = Math.floor(modules / 2);
   const cy = Math.floor(modules / 2);
-  ctx.fillStyle = "#234b36";
+  ctx.fillStyle = DARK;
   ctx.fillRect((cx - 2) * cellSize, (cy - 2) * cellSize, 5 * cellSize, 5 * cellSize);
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect((cx - 1) * cellSize, (cy - 1) * cellSize, 3 * cellSize, 3 * cellSize);
-  ctx.fillStyle = "#234b36";
+  ctx.fillStyle = DARK;
   ctx.fillRect(cx * cellSize, cy * cellSize, cellSize, cellSize);
 
   // Add SafeRide logo dot in center
-  ctx.fillStyle = "#2e7d32";
+  ctx.fillStyle = ACC;
   ctx.beginPath();
   ctx.arc(size / 2, size / 2, 8, 0, Math.PI * 2);
   ctx.fill();
