@@ -5737,5 +5737,22 @@ function initDownloads() {
 }
 </script>
 
+<script>
+// Refuerzo: apenas termina de parsear el HTML, si no hay ancla (#seccion),
+// dejamos la página arriba de todo. Cubre el caso raro de que abra scrolleada.
+(function () {
+  if (window.location.hash) return;
+  var top = function () {
+    window.scrollTo(0, 0);
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  };
+  top();
+  window.addEventListener("load", function () { requestAnimationFrame(top); });
+  setTimeout(top, 60);
+  setTimeout(top, 300);
+})();
+</script>
+
 </body>
 </html>
