@@ -6059,26 +6059,40 @@ function initDownloads() {
 </script>
 
 <script>
-// Refuerzo: si no hay ancla (#seccion), la página tiene que abrir ARRIBA.
-// Durante el primer segundo, si algo la scrollea sola y el usuario todavía
-// no tocó nada, la volvemos arriba. Si el usuario ya interactuó, no molestamos.
+// Refuerzo: si no venís a una sección concreta (#seccion), la página abre ARRIBA.
+// Durante los primeros ~3 segundos, si algo la scrollea sola y el usuario todavía
+// no tocó nada, la volvemos arriba. Apenas el usuario interactúa, dejamos de actuar.
 (function () {
-  if (window.location.hash) return;
+  var h = window.location.hash;
+  if (h && h !== "#" && h !== "#top") return;
+
   var userMoved = false;
   var mark = function () { userMoved = true; };
-  ["wheel", "touchstart", "keydown", "pointerdown", "mousedown"].forEach(function (ev) {
-    window.addEventListener(ev, mark, { passive: true, once: true });
+  ["wheel", "touchstart", "touchmove", "keydown", "pointerdown", "mousedown"].forEach(function (ev) {
+    window.addEventListener(ev, mark, { passive: true });
   });
+
   var toTop = function () {
     if (userMoved) return;
-    window.scrollTo(0, 0);
-    if (document.documentElement) document.documentElement.scrollTop = 0;
-    if (document.body) document.body.scrollTop = 0;
+    if (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
   };
+
   toTop();
   document.addEventListener("DOMContentLoaded", toTop);
   window.addEventListener("load", function () { requestAnimationFrame(toTop); });
-  [50, 150, 350, 650, 1000].forEach(function (ms) { setTimeout(toTop, ms); });
+  window.addEventListener("pageshow", toTop);
+
+  // vigilancia activa por 3 s: cualquier scroll no provocado por el usuario, se corrige
+  var onScroll = function () { toTop(); };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  [30, 90, 200, 400, 700, 1100, 1700, 2500].forEach(function (ms) { setTimeout(toTop, ms); });
+  setTimeout(function () {
+    window.removeEventListener("scroll", onScroll);
+  }, 3000);
 })();
 </script>
 
