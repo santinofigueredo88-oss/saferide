@@ -167,7 +167,7 @@ table {
   --card-glow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
   --divider: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.25), transparent);
   --ring: rgba(var(--accent-rgb), 0.16);
-  --text-muted: #4f5f55;
+  --text-muted: #58605b;
   --success: var(--green-accent);
   --muted-mark: #97a19c;
 
@@ -2654,9 +2654,12 @@ html[data-theme="dark"] .text-gradient {
   color: transparent;
 }
 
-/* --- Botones: más terminación --- */
+/* --- Botones: más terminación (brillo sutil arriba, de la propia paleta) --- */
 .btn-primary {
-  background: linear-gradient(180deg, #3a8f3f, var(--green-accent) 55%, var(--green-accent-dark));
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--green-accent) 84%, #ffffff),
+    var(--green-accent) 52%,
+    var(--green-accent-dark));
 }
 .btn-primary:hover {
   background: linear-gradient(180deg, var(--green-accent), var(--green-accent-dark));
@@ -2715,7 +2718,7 @@ html[data-theme="dark"] .text-gradient {
   aspect-ratio: 288 / 560;
   border-radius: 44px;
   padding: 13px;
-  background: linear-gradient(160deg, #2c322e, #131614);
+  background: linear-gradient(160deg, #2b2d2c, #131413);
   box-shadow:
     0 44px 90px -24px rgba(6, 20, 12, 0.6),
     0 0 0 1px rgba(255, 255, 255, 0.05) inset,
@@ -2729,7 +2732,7 @@ html[data-theme="dark"] .text-gradient {
   transform: translateX(-50%);
   width: 96px;
   height: 20px;
-  background: #0c0f0d;
+  background: #0c0c0c;
   border-radius: 0 0 14px 14px;
   z-index: 3;
 }
