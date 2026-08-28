@@ -20,12 +20,23 @@
     if (savedTheme === "light" || savedTheme === "dark") {
       document.documentElement.setAttribute("data-theme", savedTheme);
     }
-    // Fondo correcto ANTES de que cargue el CSS grande. Cubre el caso de
-    // modo oscuro elegido a mano con el sistema en claro (ahí el @media de
-    // arriba no alcanza y se colaba un flash claro al principio).
+    // Paleta de color elegida (verde por defecto)
+    var PAL = {
+      verde:   { l: "#eaf4ec", d: "#0e160d" },
+      azul:    { l: "#eaf1fb", d: "#0d1420" },
+      violeta: { l: "#f1ebfb", d: "#140f1e" },
+      aqua:    { l: "#e9f5f3", d: "#0a1614" },
+      ambar:   { l: "#fbf2e6", d: "#1a130a" }
+    };
+    var savedPal = localStorage.getItem("saferide-palette");
+    if (savedPal && PAL[savedPal] && savedPal !== "verde") {
+      document.documentElement.setAttribute("data-palette", savedPal);
+    }
+    var pal = PAL[savedPal] || PAL.verde;
+    // Fondo correcto ANTES de que cargue el CSS grande (evita flash de color equivocado).
     var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
     var effectiveDark = savedTheme === "dark" || (savedTheme !== "light" && prefersDark);
-    document.documentElement.style.backgroundColor = effectiveDark ? "#0e160d" : "#eaf4ec";
+    document.documentElement.style.backgroundColor = effectiveDark ? pal.d : pal.l;
     var savedLang = localStorage.getItem("saferide-lang");
     if (!savedLang) {
       savedLang = (navigator.language || "es").toLowerCase().startsWith("en") ? "en" : "es";
@@ -87,21 +98,26 @@ table {
 }
 
 :root {
+  /* ===== PALETA (verde por defecto). Se cambia con [data-palette] en <html> ===== */
   --green-deep: #234b36;
   --green-deep-dark: #16301f;
   --green-deep-soft: #3e6e52;
   --green-accent: #2e7d32;
   --green-accent-dark: #256b29;
   --green-accent-soft: #6fae74;
-  --white: #ffffff;
   --green-pale: #eaf4ec;
+  --green-mid: #d3e6d8;
+  --accent-rgb: 46, 125, 50;
+  --accent-soft-rgb: 111, 174, 116;
+  --deep-rgb: 35, 75, 54;
+  --particle-rgb: 46, 125, 50;
+  --white: #ffffff;
   /* Acentos de superficie que se ajustan por tema (ver bloques de modo oscuro) */
-  --surface-raise: rgba(35, 75, 54, 0.04);
+  --surface-raise: rgba(var(--deep-rgb), 0.04);
   --surface-hairline: rgba(255, 255, 255, 0.6);
   --card-glow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
-  --divider: linear-gradient(90deg, transparent, rgba(46, 125, 50, 0.25), transparent);
-  --ring: rgba(46, 125, 50, 0.16);
-  --green-mid: #d3e6d8;
+  --divider: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.25), transparent);
+  --ring: rgba(var(--accent-rgb), 0.16);
   --text-muted: #4f5f55;
   --success: #2e7d32;
   --muted-mark: #93a69a;
@@ -133,11 +149,67 @@ table {
   --radius-lg: 28px;
   --nav-height: 76px;
 
-  --shadow-sm: 0 2px 8px rgba(35, 75, 54, 0.08);
-  --shadow-md: 0 12px 32px rgba(35, 75, 54, 0.12);
-  --shadow-lg: 0 24px 48px rgba(35, 75, 54, 0.16);
+  --shadow-sm: 0 2px 8px rgba(var(--deep-rgb), 0.08);
+  --shadow-md: 0 12px 32px rgba(var(--deep-rgb), 0.12);
+  --shadow-lg: 0 24px 48px rgba(var(--deep-rgb), 0.16);
 
   --transition: 0.25s ease;
+}
+
+/* =========================================================
+   PALETAS DE COLOR  ( <html data-palette="azul|violeta|aqua|ambar"> )
+   Solo cambian los colores; el resto de la pagina queda igual.
+   Cada paleta redefine los mismos tokens que la verde de arriba.
+   ========================================================= */
+html[data-palette="azul"] {
+  --green-deep: #1e3a5f; --green-deep-dark: #14263f; --green-deep-soft: #3a5a86;
+  --green-accent: #2563c9; --green-accent-dark: #1e4fa8; --green-accent-soft: #7aa5e6;
+  --green-pale: #eaf1fb; --green-mid: #d3e0f2;
+  --accent-rgb: 37, 99, 201; --accent-soft-rgb: 122, 165, 230; --deep-rgb: 30, 58, 95; --particle-rgb: 37, 99, 201;
+  --surface-page: #eaf1fb; --surface-alt: #eef3fc; --surface-border: #d3e2f4;
+}
+html[data-palette="violeta"] {
+  --green-deep: #3b2a63; --green-deep-dark: #271b45; --green-deep-soft: #5a4590;
+  --green-accent: #7c3aed; --green-accent-dark: #6828c9; --green-accent-soft: #b18ae8;
+  --green-pale: #f1ebfb; --green-mid: #e3d7f4;
+  --accent-rgb: 124, 58, 237; --accent-soft-rgb: 177, 138, 232; --deep-rgb: 59, 42, 99; --particle-rgb: 124, 58, 237;
+  --surface-page: #f1ebfb; --surface-alt: #f3eefc; --surface-border: #e2d6f4;
+}
+html[data-palette="aqua"] {
+  --green-deep: #124f4a; --green-deep-dark: #0c3430; --green-deep-soft: #2f766f;
+  --green-accent: #0d9488; --green-accent-dark: #0b7d73; --green-accent-soft: #5cc7bd;
+  --green-pale: #e9f5f3; --green-mid: #cfe9e5;
+  --accent-rgb: 13, 148, 136; --accent-soft-rgb: 92, 199, 189; --deep-rgb: 18, 79, 74; --particle-rgb: 13, 148, 136;
+  --surface-page: #e9f5f3; --surface-alt: #eef6f5; --surface-border: #cfe6e2;
+}
+html[data-palette="ambar"] {
+  --green-deep: #5c3d16; --green-deep-dark: #3d280e; --green-deep-soft: #8a5f2a;
+  --green-accent: #c2680a; --green-accent-dark: #a85806; --green-accent-soft: #eab464;
+  --green-pale: #fbf2e6; --green-mid: #f4e3ce;
+  --accent-rgb: 194, 104, 10; --accent-soft-rgb: 234, 180, 100; --deep-rgb: 92, 61, 22; --particle-rgb: 217, 130, 20;
+  --surface-page: #fbf2e6; --surface-alt: #fcf5ec; --surface-border: #f0e0c9;
+}
+
+/* --- mismas paletas en modo oscuro (superficies y acentos mas claros) --- */
+html[data-palette="azul"][data-theme="dark"],
+html[data-palette="azul"]:not([data-theme="light"]):not([data-theme="dark"]) {
+  --surface-page: #0d1420; --surface: #16202e; --surface-alt: #1a2636; --surface-border: #2f4257;
+  --accent-fg: #86b4ee; --particle-rgb: 122, 175, 235; --text-secondary: #a8bdd6;
+}
+html[data-palette="violeta"][data-theme="dark"],
+html[data-palette="violeta"]:not([data-theme="light"]):not([data-theme="dark"]) {
+  --surface-page: #140f1e; --surface: #1e1830; --surface-alt: #241d3a; --surface-border: #3a2f57;
+  --accent-fg: #bb98f0; --particle-rgb: 168, 130, 235; --text-secondary: #c0b2d8;
+}
+html[data-palette="aqua"][data-theme="dark"],
+html[data-palette="aqua"]:not([data-theme="light"]):not([data-theme="dark"]) {
+  --surface-page: #0a1614; --surface: #12211f; --surface-alt: #162927; --surface-border: #2a413e;
+  --accent-fg: #52cabe; --particle-rgb: 100, 205, 195; --text-secondary: #a3c4bf;
+}
+html[data-palette="ambar"][data-theme="dark"],
+html[data-palette="ambar"]:not([data-theme="light"]):not([data-theme="dark"]) {
+  --surface-page: #1a130a; --surface: #241c11; --surface-alt: #2b2115; --surface-border: #453521;
+  --accent-fg: #edb86a; --particle-rgb: 235, 180, 110; --text-secondary: #d3bfa3;
 }
 
 /* ===== Modo oscuro =====
@@ -154,17 +226,18 @@ html[data-theme="dark"] {
   --text-secondary: #adc4b4;
   --placeholder-color: #6f8577;
   --accent-fg: #83c088;
+  --particle-rgb: 125, 196, 132;
   --surface-raise: rgba(255, 255, 255, 0.022);
   --surface-hairline: rgba(255, 255, 255, 0.08);
   --card-glow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
-  --divider: linear-gradient(90deg, transparent, rgba(111, 174, 116, 0.28), transparent);
+  --divider: linear-gradient(90deg, transparent, rgba(var(--accent-soft-rgb), 0.28), transparent);
   --ring: rgba(131, 192, 136, 0.22);
 
   --warning-bg: rgba(255, 180, 77, 0.12);
   --warning-text: #ffb44d;
   --warning-border: rgba(255, 180, 77, 0.35);
-  --success-bg: rgba(111, 174, 116, 0.14);
-  --success-border: rgba(111, 174, 116, 0.4);
+  --success-bg: rgba(var(--accent-soft-rgb), 0.14);
+  --success-border: rgba(var(--accent-soft-rgb), 0.4);
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.38);
@@ -195,17 +268,18 @@ html[data-theme="dark"] .navbar.scrolled {
     --text-secondary: #adc4b4;
     --placeholder-color: #6f8577;
     --accent-fg: #83c088;
+  --particle-rgb: 125, 196, 132;
     --surface-raise: rgba(255, 255, 255, 0.022);
     --surface-hairline: rgba(255, 255, 255, 0.08);
     --card-glow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
-    --divider: linear-gradient(90deg, transparent, rgba(111, 174, 116, 0.28), transparent);
+    --divider: linear-gradient(90deg, transparent, rgba(var(--accent-soft-rgb), 0.28), transparent);
     --ring: rgba(131, 192, 136, 0.22);
 
     --warning-bg: rgba(255, 180, 77, 0.12);
     --warning-text: #ffb44d;
     --warning-border: rgba(255, 180, 77, 0.35);
-    --success-bg: rgba(111, 174, 116, 0.14);
-    --success-border: rgba(111, 174, 116, 0.4);
+    --success-bg: rgba(var(--accent-soft-rgb), 0.14);
+    --success-border: rgba(var(--accent-soft-rgb), 0.4);
 
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.38);
@@ -230,9 +304,9 @@ body {
   color: var(--text-primary);
   background: var(--surface-page);
   background-image: 
-    radial-gradient(ellipse at 20% 50%, rgba(46, 125, 50, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(111, 174, 116, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(46, 125, 50, 0.02) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(var(--accent-rgb), 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(var(--accent-soft-rgb), 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(var(--accent-rgb), 0.02) 0%, transparent 50%);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   transition: background var(--transition), color var(--transition);
@@ -518,6 +592,46 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   letter-spacing: 0.03em;
 }
 
+/* ===== Selector de paleta de colores ===== */
+.palette-picker { position: relative; }
+.palette-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--green-accent);
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--green-accent-soft);
+}
+.palette-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  z-index: 1200;
+}
+.palette-menu[hidden] { display: none; }
+.palette-menu button {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--sw);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.palette-menu button:hover { transform: scale(1.12); }
+.palette-menu button[aria-checked="true"] {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px var(--surface) inset;
+}
+@media (max-width: 1239px) {
+  .palette-menu { right: auto; left: 0; }
+}
+
 @media (max-width: 1239px) {
   .nav-links {
     position: fixed;
@@ -617,12 +731,12 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 .btn-primary {
   background: var(--green-accent);
   color: var(--white);
-  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.25);
+  box-shadow: 0 4px 14px rgba(var(--accent-rgb), 0.25);
 }
 
 .btn-primary:hover {
   background: var(--green-accent-dark);
-  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+  box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.35);
 }
 
 .btn-outline {
@@ -651,8 +765,8 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 .hero {
   padding: calc(var(--nav-height) + clamp(48px, 8vw, 96px)) 0 clamp(72px, 10vw, 112px);
   background:
-    radial-gradient(1000px 480px at 80% -6%, rgba(46, 125, 50, 0.12), transparent 58%),
-    linear-gradient(170deg, #d7e9dc 0%, #eaf4ec 42%, var(--surface-page) 100%);
+    radial-gradient(1000px 480px at 80% -6%, rgba(var(--accent-rgb), 0.12), transparent 58%),
+    linear-gradient(170deg, var(--green-mid) 0%, var(--green-pale) 42%, var(--surface-page) 100%);
   overflow: hidden;
   position: relative;
 }
@@ -660,14 +774,14 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
 /* En modo oscuro el hero también va verde profundo, igual que el resto de
    la página (si no, arriba de todo se veía un bloque casi blanco). */
 html[data-theme="dark"] .hero {
-  background: linear-gradient(170deg, #17251b 0%, #131d13 42%, var(--surface-page) 100%);
+  background: linear-gradient(170deg, var(--green-deep-dark) 0%, color-mix(in srgb, var(--green-deep-dark) 70%, var(--surface-page)) 42%, var(--surface-page) 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]):not([data-theme="dark"]) .hero {
     background:
-      radial-gradient(1100px 520px at 78% -8%, rgba(46, 125, 50, 0.16), transparent 60%),
-      linear-gradient(170deg, #1a2c1e 0%, #111c13 44%, var(--surface-page) 100%);
+      radial-gradient(1100px 520px at 78% -8%, rgba(var(--accent-rgb), 0.16), transparent 60%),
+      linear-gradient(170deg, var(--green-deep-dark) 0%, color-mix(in srgb, var(--green-deep-dark) 60%, var(--surface-page)) 44%, var(--surface-page) 100%);
   }
 }
 
@@ -678,7 +792,7 @@ html[data-theme="dark"] .hero {
   right: -15%;
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(46, 125, 50, 0.07) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.07) 0%, transparent 65%);
   pointer-events: none;
   animation: float-glow 8s ease-in-out infinite;
 }
@@ -690,7 +804,7 @@ html[data-theme="dark"] .hero {
   left: -10%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(111, 174, 116, 0.05) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(var(--accent-soft-rgb), 0.05) 0%, transparent 65%);
   pointer-events: none;
   animation: float-glow 10s ease-in-out infinite reverse;
 }
@@ -753,8 +867,8 @@ html[data-theme="dark"] .hero {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(46, 125, 50, 0.1);
-  border: 1px solid rgba(46, 125, 50, 0.2);
+  background: rgba(var(--accent-rgb), 0.1);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
   color: var(--accent-fg);
   font-family: var(--font-heading);
   font-weight: 600;
@@ -798,7 +912,7 @@ html[data-theme="dark"] .hero {
   position: absolute;
   width: 380px;
   height: 380px;
-  background: radial-gradient(circle, rgba(46, 125, 50, 0.16) 0%, rgba(35, 75, 54, 0.06) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.16) 0%, rgba(var(--deep-rgb), 0.06) 50%, transparent 75%);
   border-radius: 50%;
   z-index: 0;
   animation: pulse-glow 4s ease-in-out infinite;
@@ -834,7 +948,7 @@ html[data-theme="dark"] .hero {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(46, 125, 50, 0.04) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.04) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -892,7 +1006,7 @@ html[data-theme="dark"] .hero {
 
 .timeline-step:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(35, 75, 54, 0.12);
+  box-shadow: 0 16px 40px rgba(var(--deep-rgb), 0.12);
 }
 
 .timeline-step:hover::before {
@@ -969,7 +1083,7 @@ html[data-theme="dark"] .hero {
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
   padding: 32px 28px;
-  box-shadow: 0 2px 12px rgba(35, 75, 54, 0.05);
+  box-shadow: 0 2px 12px rgba(var(--deep-rgb), 0.05);
   transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease;
   position: relative;
   overflow: hidden;
@@ -977,8 +1091,8 @@ html[data-theme="dark"] .hero {
 
 .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 48px rgba(35, 75, 54, 0.15);
-  border-color: rgba(46, 125, 50, 0.3);
+  box-shadow: 0 20px 48px rgba(var(--deep-rgb), 0.15);
+  border-color: rgba(var(--accent-rgb), 0.3);
 }
 
 .card::before {
@@ -1002,7 +1116,7 @@ html[data-theme="dark"] .hero {
   width: 56px;
   height: 56px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--surface-alt) 0%, rgba(46, 125, 50, 0.08) 100%);
+  background: linear-gradient(135deg, var(--surface-alt) 0%, rgba(var(--accent-rgb), 0.08) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1068,10 +1182,10 @@ html[data-theme="dark"] .hero {
 /* Light mode enhancements */
 @media (prefers-color-scheme: light) {
   .card, .panel, .pricing-card, .beneficiary-card {
-    box-shadow: 0 4px 20px rgba(35, 75, 54, 0.06);
+    box-shadow: 0 4px 20px rgba(var(--deep-rgb), 0.06);
   }
   .card:hover, .panel:hover, .pricing-card:hover, .beneficiary-card:hover {
-    box-shadow: 0 20px 50px rgba(35, 75, 54, 0.12);
+    box-shadow: 0 20px 50px rgba(var(--deep-rgb), 0.12);
   }
 }
 
@@ -1079,14 +1193,14 @@ html:not([data-theme="dark"]) .card,
 html:not([data-theme="dark"]) .panel,
 html:not([data-theme="dark"]) .pricing-card,
 html:not([data-theme="dark"]) .beneficiary-card {
-  box-shadow: 0 4px 20px rgba(35, 75, 54, 0.06);
+  box-shadow: 0 4px 20px rgba(var(--deep-rgb), 0.06);
 }
 
 html:not([data-theme="dark"]) .card:hover,
 html:not([data-theme="dark"]) .panel:hover,
 html:not([data-theme="dark"]) .pricing-card:hover,
 html:not([data-theme="dark"]) .beneficiary-card:hover {
-  box-shadow: 0 20px 50px rgba(35, 75, 54, 0.12);
+  box-shadow: 0 20px 50px rgba(var(--deep-rgb), 0.12);
 }
 
 /* ===== Beneficiary Grid ===== */
@@ -1125,7 +1239,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 
 .beneficiary-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(35, 75, 54, 0.1);
+  box-shadow: 0 16px 40px rgba(var(--deep-rgb), 0.1);
 }
 
 .beneficiary-card::before {
@@ -1149,7 +1263,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   width: 56px;
   height: 56px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--surface-alt) 0%, rgba(46, 125, 50, 0.08) 100%);
+  background: linear-gradient(135deg, var(--surface-alt) 0%, rgba(var(--accent-rgb), 0.08) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1195,7 +1309,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 }
 
 .benefit-item:hover {
-  background: rgba(46, 125, 50, 0.02);
+  background: rgba(var(--accent-rgb), 0.02);
 }
 
 .benefit-item::before {
@@ -1219,7 +1333,8 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   .benefit-item:nth-child(2n+1) {
     border-right: 1px solid var(--surface-border);
   }
-  .benefit-item:nth-child(n+3) {
+  /* sin linea abajo en la ultima fila (los 2 ultimos) */
+  .benefit-item:nth-last-child(-n+2) {
     border-bottom: none;
   }
   .benefit-item:nth-child(2n+1)::before {
@@ -1237,7 +1352,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 2rem;
-  color: rgba(46, 125, 50, 0.12);
+  color: rgba(var(--accent-rgb), 0.12);
   line-height: 1;
   letter-spacing: -0.02em;
 }
@@ -1264,7 +1379,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   max-width: 860px;
   margin: 0 auto;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(35, 75, 54, 0.2);
+  box-shadow: 0 20px 50px rgba(var(--deep-rgb), 0.2);
 }
 
 .story-card::after {
@@ -1274,7 +1389,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   right: -30%;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(111, 174, 116, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-soft-rgb), 0.08) 0%, transparent 70%);
   pointer-events: none;
   animation: float-glow 10s ease-in-out infinite;
 }
@@ -1344,7 +1459,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 }
 
 .panel:hover {
-  box-shadow: 0 16px 40px rgba(35, 75, 54, 0.1);
+  box-shadow: 0 16px 40px rgba(var(--deep-rgb), 0.1);
   transform: translateY(-4px);
 }
 
@@ -1383,7 +1498,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   right: -100px;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(111, 174, 116, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-soft-rgb), 0.15) 0%, transparent 70%);
   pointer-events: none;
   animation: float-glow 12s ease-in-out infinite;
 }
@@ -1395,7 +1510,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   left: -100px;
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, rgba(46, 125, 50, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.1) 0%, transparent 70%);
   pointer-events: none;
   animation: float-glow 10s ease-in-out infinite reverse;
 }
@@ -1505,7 +1620,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 }
 
 .comparativa-table tbody tr:last-child {
-  background: rgba(46, 125, 50, 0.1);
+  background: rgba(var(--accent-rgb), 0.1);
 }
 
 .comparativa-table tbody tr:last-child :first-child {
@@ -1563,18 +1678,18 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 
 .pricing-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(35, 75, 54, 0.1);
+  box-shadow: 0 16px 40px rgba(var(--deep-rgb), 0.1);
 }
 
 .pricing-card-featured {
   border: 2px solid var(--accent-fg);
-  box-shadow: 0 12px 32px rgba(46, 125, 50, 0.15);
+  box-shadow: 0 12px 32px rgba(var(--accent-rgb), 0.15);
   transform: scale(1.03);
 }
 
 .pricing-card-featured:hover {
   transform: scale(1.03) translateY(-4px);
-  box-shadow: 0 20px 48px rgba(46, 125, 50, 0.2);
+  box-shadow: 0 20px 48px rgba(var(--accent-rgb), 0.2);
 }
 
 .pricing-popular {
@@ -1789,7 +1904,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   border: 2px solid var(--surface-border-strong);
   border-radius: var(--radius-md);
   padding: 32px;
-  box-shadow: 0 16px 40px rgba(35, 75, 54, 0.1);
+  box-shadow: 0 16px 40px rgba(var(--deep-rgb), 0.1);
   position: relative;
   overflow: hidden;
 }
@@ -1885,7 +2000,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 }
 
 .faq-question:hover {
-  background: rgba(46, 125, 50, 0.03);
+  background: rgba(var(--accent-rgb), 0.03);
 }
 
 .faq-question:hover {
@@ -1898,7 +2013,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 }
 
 .faq-item:hover {
-  background: rgba(46, 125, 50, 0.02);
+  background: rgba(var(--accent-rgb), 0.02);
 }
 
 .faq-question .icon {
@@ -2041,7 +2156,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
 .form-field select:focus {
   outline: none;
   border-color: var(--accent-fg);
-  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.15);
+  box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.15);
   transform: translateY(-1px);
 }
 
@@ -2091,7 +2206,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   left: -20%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(111, 174, 116, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-soft-rgb), 0.12) 0%, transparent 70%);
   pointer-events: none;
   animation: float-glow 14s ease-in-out infinite;
 }
@@ -2103,7 +2218,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   right: -15%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(46, 125, 50, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.1) 0%, transparent 70%);
   pointer-events: none;
   animation: float-glow 11s ease-in-out infinite reverse;
 }
@@ -2146,7 +2261,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(111, 174, 116, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-soft-rgb), 0.3), transparent);
 }
 
 .footer-top {
@@ -2276,7 +2391,7 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   z-index: 9999;
   width: 0;
   transition: width 0.1s linear;
-  box-shadow: 0 0 10px rgba(46, 125, 50, 0.5);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.5);
 }
 
 /* ===== Particles Canvas ===== */
@@ -2461,7 +2576,7 @@ html[data-theme="dark"] .pricing-card:hover {
 html[data-theme="dark"] .bg-light,
 html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
   background:
-    radial-gradient(900px 500px at 50% 0%, rgba(46, 125, 50, 0.08), transparent 70%),
+    radial-gradient(900px 500px at 50% 0%, rgba(var(--accent-rgb), 0.08), transparent 70%),
     var(--surface-alt);
 }
 @media (prefers-color-scheme: dark) {
@@ -2660,7 +2775,7 @@ html[data-theme="dark"] .text-gradient {
   position: absolute;
   inset: -18% -22%;
   z-index: 0;
-  background: radial-gradient(circle at 50% 45%, rgba(46, 125, 50, 0.22), transparent 62%);
+  background: radial-gradient(circle at 50% 45%, rgba(var(--accent-rgb), 0.22), transparent 62%);
   pointer-events: none;
 }
 
@@ -2772,8 +2887,8 @@ html[data-theme="dark"] .text-gradient {
 }
 .privacy-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 18px 44px rgba(35, 75, 54, 0.14);
-  border-color: rgba(46, 125, 50, 0.3);
+  box-shadow: 0 18px 44px rgba(var(--deep-rgb), 0.14);
+  border-color: rgba(var(--accent-rgb), 0.3);
 }
 html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
 .privacy-card-icon {
@@ -2783,7 +2898,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(46, 125, 50, 0.14), rgba(46, 125, 50, 0.04));
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.14), rgba(var(--accent-rgb), 0.04));
   color: var(--accent-fg);
   margin-bottom: 16px;
 }
@@ -2825,7 +2940,7 @@ html[data-theme="dark"] .privacy-card { border-color: var(--surface-hairline); }
 
 :root {
   --glass: rgba(255, 255, 255, 0.82);
-  --glass-border: rgba(35, 75, 54, 0.14);
+  --glass-border: rgba(var(--deep-rgb), 0.14);
   --glass-blur: blur(16px) saturate(1.35);
 }
 html[data-theme="dark"] {
@@ -2844,7 +2959,7 @@ html[data-theme="dark"] {
 main, .cta-final, .site-footer { background-color: transparent; }
 
 /* Secciones "claras": apenas un velo, se ven las partículas */
-.bg-light { background: rgba(46, 125, 50, 0.045); }
+.bg-light { background: rgba(var(--accent-rgb), 0.045); }
 html[data-theme="dark"] .bg-light,
 html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
   background: rgba(255, 255, 255, 0.032);
@@ -2852,39 +2967,39 @@ html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
 
 /* Secciones verdes fuertes → verde translúcido */
 .stats-section {
-  background: linear-gradient(160deg, rgba(35, 75, 54, 0.88), rgba(22, 48, 31, 0.92));
+  background: linear-gradient(160deg, rgba(var(--deep-rgb), 0.88), color-mix(in srgb, var(--green-deep-dark) 92%, transparent));
 }
 .cta-final {
-  background: linear-gradient(135deg, rgba(35, 75, 54, 0.88) 0%, rgba(22, 48, 31, 0.93) 100%);
+  background: linear-gradient(135deg, rgba(var(--deep-rgb), 0.88) 0%, color-mix(in srgb, var(--green-deep-dark) 93%, transparent) 100%);
 }
 html[data-theme="dark"] .stats-section,
 html:not([data-theme="light"]):not([data-theme="dark"]) .stats-section {
-  background: linear-gradient(160deg, rgba(26, 46, 32, 0.66), rgba(12, 20, 14, 0.78));
+  background: linear-gradient(160deg, color-mix(in srgb, var(--green-deep-dark) 68%, transparent), color-mix(in srgb, var(--surface-page) 82%, transparent));
 }
 html[data-theme="dark"] .cta-final,
 html:not([data-theme="light"]):not([data-theme="dark"]) .cta-final {
-  background: linear-gradient(135deg, rgba(26, 46, 32, 0.66) 0%, rgba(12, 20, 14, 0.8) 100%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--green-deep-dark) 68%, transparent) 0%, color-mix(in srgb, var(--surface-page) 82%, transparent) 100%);
 }
 
 /* Footer translúcido */
 .site-footer {
-  background: linear-gradient(180deg, rgba(22, 48, 31, 0.55), rgba(14, 24, 16, 0.85));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--green-deep-dark) 55%, transparent), color-mix(in srgb, var(--surface-page) 88%, transparent));
 }
 html:not([data-theme="dark"]) .site-footer {
-  background: linear-gradient(180deg, rgba(22, 48, 31, 0.92), rgba(16, 30, 20, 0.97));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--green-deep-dark) 92%, transparent), color-mix(in srgb, var(--green-deep-dark) 97%, transparent));
 }
 
 /* Hero: la parte de abajo se desvanece para que floten las partículas */
 html[data-theme="dark"] .hero,
 html:not([data-theme="light"]):not([data-theme="dark"]) .hero {
   background:
-    radial-gradient(1000px 480px at 80% -6%, rgba(46, 125, 50, 0.16), transparent 58%),
-    linear-gradient(178deg, #16221a 0%, rgba(17, 28, 19, 0.55) 46%, transparent 100%);
+    radial-gradient(1000px 480px at 80% -6%, rgba(var(--accent-rgb), 0.16), transparent 58%),
+    linear-gradient(178deg, var(--green-deep-dark) 0%, color-mix(in srgb, var(--green-deep-dark) 55%, transparent) 46%, transparent 100%);
 }
 html:not([data-theme="dark"]) .hero {
   background:
-    radial-gradient(1000px 480px at 80% -6%, rgba(46, 125, 50, 0.1), transparent 58%),
-    linear-gradient(178deg, #dcefe1 0%, rgba(234, 244, 236, 0.5) 46%, transparent 100%);
+    radial-gradient(1000px 480px at 80% -6%, rgba(var(--accent-rgb), 0.1), transparent 58%),
+    linear-gradient(178deg, var(--green-mid) 0%, color-mix(in srgb, var(--green-pale) 50%, transparent) 46%, transparent 100%);
 }
 
 /* Tarjetas / paneles = vidrio esmerilado sobre las partículas */
@@ -2906,7 +3021,7 @@ html:not([data-theme="dark"]) .hero {
 
 /* Cita "historia" también translúcida, manteniendo el verde */
 .story-card {
-  background: linear-gradient(135deg, rgba(35, 75, 54, 0.82) 0%, rgba(22, 48, 31, 0.86) 100%);
+  background: linear-gradient(135deg, rgba(var(--deep-rgb), 0.82) 0%, color-mix(in srgb, var(--green-deep-dark) 86%, transparent) 100%);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
@@ -3068,6 +3183,18 @@ html:not([data-theme="dark"]) .hero {
     <div class="nav-actions">
       <button type="button" class="btn btn-primary nav-cta" data-prototype-trigger data-i18n="nav.creaTuFicha">Creá tu ficha</button>
       <div class="pref-toggles">
+        <div class="palette-picker">
+          <button type="button" class="pref-toggle" id="paletteToggle" aria-label="Cambiar la paleta de colores" data-i18n-aria-label="nav.paletteAria" aria-expanded="false" aria-haspopup="true">
+            <span class="palette-dot" aria-hidden="true"></span>
+          </button>
+          <div class="palette-menu" id="paletteMenu" role="menu" hidden>
+            <button type="button" role="menuitemradio" data-palette="verde"   style="--sw:#2e7d32" aria-label="Verde"></button>
+            <button type="button" role="menuitemradio" data-palette="azul"    style="--sw:#2563c9" aria-label="Azul"></button>
+            <button type="button" role="menuitemradio" data-palette="violeta" style="--sw:#7c3aed" aria-label="Violeta"></button>
+            <button type="button" role="menuitemradio" data-palette="aqua"    style="--sw:#0d9488" aria-label="Aguamarina"></button>
+            <button type="button" role="menuitemradio" data-palette="ambar"   style="--sw:#c2680a" aria-label="Ámbar"></button>
+          </div>
+        </div>
         <button type="button" class="pref-toggle" id="themeToggle" aria-label="Cambiar a modo oscuro" data-i18n-aria-label="nav.themeToggleAria">
           <svg class="icon icon-sun" aria-hidden="true"><use href="#icon-sun"></use></svg>
           <svg class="icon icon-moon" aria-hidden="true"><use href="#icon-moon"></use></svg>
@@ -3418,41 +3545,57 @@ html:not([data-theme="dark"]) .hero {
   <section class="section" id="beneficios" aria-labelledby="beneficios-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Ventajas</span>
-        <h2 id="beneficios-title">¿Por qué elegir Saferide?</h2>
-        <p>Saferide combina simplicidad, accesibilidad y diseño pensado para emergencias reales.</p>
+        <span class="eyebrow" data-i18n="beneficios.eyebrow">Ventajas</span>
+        <h2 id="beneficios-title" data-i18n="beneficios.title">¿Por qué elegir Saferide?</h2>
+        <p data-i18n="beneficios.subtitle">Saferide combina simplicidad, accesibilidad y diseño pensado para emergencias reales.</p>
       </div>
 
       <div class="benefits-grid">
         <div class="benefit-item reveal">
           <div class="benefit-number">01</div>
           <div class="benefit-content">
-            <h3>Actualización permanente</h3>
-            <p>Cambialo cuando quieras: grupo sanguíneo, alergias, medicación o contacto de emergencia. A diferencia de una pulsera grabada, nunca queda desactualizada.</p>
+            <h3 data-i18n="beneficios.b1.title">Actualización permanente</h3>
+            <p data-i18n="beneficios.b1.desc">Cambialo cuando quieras: grupo sanguíneo, alergias, medicación o contacto de emergencia. A diferencia de una pulsera grabada, nunca queda desactualizada.</p>
           </div>
         </div>
 
         <div class="benefit-item reveal">
           <div class="benefit-number">02</div>
           <div class="benefit-content">
-            <h3>Sin aplicaciones</h3>
-            <p>Funciona con cualquier celular con cámara, sin instalar nada. El personal de salud escanea y accede al instante.</p>
+            <h3 data-i18n="beneficios.b2.title">Sin aplicaciones</h3>
+            <p data-i18n="beneficios.b2.desc">Funciona con cualquier celular con cámara, sin instalar nada. El personal de salud escanea y accede al instante.</p>
           </div>
         </div>
 
         <div class="benefit-item reveal">
           <div class="benefit-number">03</div>
           <div class="benefit-content">
-            <h3>Accesible para todos</h3>
-            <p>Económico y fácil de conseguir. La versión básica es gratis y te permite generar tu ficha de emergencia al instante.</p>
+            <h3 data-i18n="beneficios.b3.title">Accesible para todos</h3>
+            <p data-i18n="beneficios.b3.desc">Económico y fácil de conseguir. Cargás tu ficha de emergencia al instante, sin contraseñas.</p>
           </div>
         </div>
 
         <div class="benefit-item reveal">
           <div class="benefit-number">04</div>
           <div class="benefit-content">
-            <h3>Diseñado para emergencias</h3>
-            <p>Solo muestra lo esencial en una página de solo lectura, optimizada para que el personal médico encuentre rápido lo que necesita.</p>
+            <h3 data-i18n="beneficios.b4.title">Diseñado para emergencias</h3>
+            <p data-i18n="beneficios.b4.desc">Solo muestra lo esencial en una página de solo lectura, optimizada para que el personal médico encuentre rápido lo que necesita.</p>
+          </div>
+        </div>
+
+        <div class="benefit-item reveal">
+          <div class="benefit-number">05</div>
+          <div class="benefit-content">
+            <h3 data-i18n="beneficios.b5.title">Recordatorio una vez al año</h3>
+            <p data-i18n="beneficios.b5.desc">Cada 12 meses te llega un mail para que revises tu ficha, por si te diagnosticaron una enfermedad, cambiaste de medicación o apareció una alergia nueva. Con un clic confirmás que sigue todo igual.</p>
+          </div>
+        </div>
+
+        <div class="benefit-item reveal">
+          <div class="benefit-number">06</div>
+          <div class="benefit-content">
+            <h3 data-i18n="beneficios.b6.title">Para toda tu familia</h3>
+            <p data-i18n="beneficios.b6.desc">Podés crear y administrar una ficha para cada integrante: hijos, padres, abuelos. Ideal para quienes no pueden cargar sus datos solos.</p>
           </div>
         </div>
       </div>
@@ -3924,6 +4067,15 @@ html:not([data-theme="dark"]) .hero {
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
+            <span data-i18n="faq.q8">¿Me avisan si tengo que actualizar la ficha?</span>
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p data-i18n="faq.a8">Sí. Una vez al año te mandamos un mail para que revises tu ficha, por si cambió algo importante (una enfermedad nueva, otra medicación, una alergia). Si sigue todo igual, lo confirmás con un clic.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
             <span>¿Funciona en otros países?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
@@ -4308,6 +4460,7 @@ const translations = {
       themeToggleAriaDark: "Cambiar a modo claro",
       langToggleAria: "Switch to English",
       menuToggleAria: "Abrir menú de navegación",
+      paletteAria: "Cambiar la paleta de colores",
     },
     hero: {
       tagline: "Tus datos médicos, siempre accesibles.",
@@ -4354,12 +4507,15 @@ const translations = {
       ninos: { title: "Niños y niñas", desc: "Con sus datos cargados por sus padres o tutores." },
     },
     beneficios: {
-      eyebrow: "Beneficios",
-      title: "Por qué Saferide",
-      actualizable: "Se actualiza cuando vos quieras, a diferencia de una pulsera grabada.",
-      cualquierCelular: "Funciona con cualquier celular con cámara, sin instalar nada.",
-      economico: "Económico y fácil de conseguir.",
-      emergenciasReales: "Pensado para emergencias reales, no solo para guardar datos.",
+      eyebrow: "Ventajas",
+      title: "¿Por qué elegir Saferide?",
+      subtitle: "Saferide combina simplicidad, accesibilidad y diseño pensado para emergencias reales.",
+      b1: { title: "Actualización permanente", desc: "Cambialo cuando quieras: grupo sanguíneo, alergias, medicación o contacto de emergencia. A diferencia de una pulsera grabada, nunca queda desactualizada." },
+      b2: { title: "Sin aplicaciones", desc: "Funciona con cualquier celular con cámara, sin instalar nada. El personal de salud escanea y accede al instante." },
+      b3: { title: "Accesible para todos", desc: "Económico y fácil de conseguir. Cargás tu ficha de emergencia al instante, sin contraseñas." },
+      b4: { title: "Diseñado para emergencias", desc: "Solo muestra lo esencial en una página de solo lectura, optimizada para que el personal médico encuentre rápido lo que necesita." },
+      b5: { title: "Recordatorio una vez al año", desc: "Cada 12 meses te llega un mail para que revises tu ficha, por si te diagnosticaron una enfermedad, cambiaste de medicación o apareció una alergia nueva. Con un clic confirmás que sigue todo igual." },
+      b6: { title: "Para toda tu familia", desc: "Podés crear y administrar una ficha para cada integrante: hijos, padres, abuelos. Ideal para quienes no pueden cargar sus datos solos." },
     },
     historia: {
       eyebrow: "Un ejemplo",
@@ -4528,6 +4684,8 @@ const translations = {
       a6: "Sí, las veces que necesites, desde tu cuenta.",
       q7: "¿Puedo cambiar el nombre del titular?",
       a7: "Los datos médicos (alergias, medicación, grupo sanguíneo, contacto) los cambiás gratis, siempre. El titular —nombre, DNI y fecha de nacimiento— se carga una sola vez al activar la pulsera. Para transferirla a otra persona hay un costo único de cambio de titularidad.",
+      q8: "¿Me avisan si tengo que actualizar la ficha?",
+      a8: "Sí. Una vez al año te mandamos un mail para que revises tu ficha, por si cambió algo importante (una enfermedad nueva, otra medicación, una alergia). Si sigue todo igual, lo confirmás con un clic.",
     },
     ctaFinal: {
       title: "¿Querés tener tu información siempre a mano?",
@@ -4599,6 +4757,7 @@ const translations = {
       themeToggleAriaDark: "Switch to light mode",
       langToggleAria: "Cambiar a español",
       menuToggleAria: "Open navigation menu",
+      paletteAria: "Change the color palette",
     },
     hero: {
       tagline: "Your medical data, always accessible.",
@@ -4645,12 +4804,15 @@ const translations = {
       ninos: { title: "Children", desc: "With their data entered by their parents or guardians." },
     },
     beneficios: {
-      eyebrow: "Benefits",
-      title: "Why Saferide",
-      actualizable: "Updates whenever you want, unlike an engraved bracelet.",
-      cualquierCelular: "Works with any phone that has a camera, no installs needed.",
-      economico: "Affordable and easy to get.",
-      emergenciasReales: "Built for real emergencies, not just for storing data.",
+      eyebrow: "Advantages",
+      title: "Why choose Saferide?",
+      subtitle: "Saferide combines simplicity, accessibility and a design built for real emergencies.",
+      b1: { title: "Always up to date", desc: "Change it whenever you want: blood type, allergies, medication or emergency contact. Unlike an engraved bracelet, it's never outdated." },
+      b2: { title: "No apps", desc: "Works with any phone that has a camera, no installs. Medical staff scan it and get in instantly." },
+      b3: { title: "Accessible to everyone", desc: "Affordable and easy to get. You fill in your emergency ID instantly, with no passwords." },
+      b4: { title: "Built for emergencies", desc: "It only shows the essentials on a read-only page, laid out so medical staff find what they need fast." },
+      b5: { title: "A reminder once a year", desc: "Every 12 months you get an email to review your ID, in case you were diagnosed with a condition, changed medication or developed a new allergy. One click confirms everything's still the same." },
+      b6: { title: "For your whole family", desc: "You can create and manage an ID for each member: kids, parents, grandparents. Ideal for those who can't fill in their own data." },
     },
     historia: {
       eyebrow: "An example",
@@ -4819,6 +4981,8 @@ const translations = {
       a6: "Yes, as many times as you need, from your account.",
       q7: "Can I change the owner's name?",
       a7: "Medical data (allergies, medication, blood type, contact) can be changed for free, always. The owner — name, national ID and date of birth — is entered only once when you activate the bracelet. Transferring it to another person has a one-time ownership-change fee.",
+      q8: "Do you remind me to update my ID?",
+      a8: "Yes. Once a year we email you to review your ID, in case something important changed (a new condition, different medication, an allergy). If it's all still the same, you confirm with one click.",
     },
     ctaFinal: {
       title: "Want to have your information always on hand?",
@@ -4954,13 +5118,78 @@ function initThemeToggle() {
   btn.addEventListener("click", () => {
     const nextTheme = getCurrentTheme() === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", nextTheme);
-    document.documentElement.style.backgroundColor = nextTheme === "dark" ? "#0e160d" : "#eaf4ec";
+    syncRootBg(nextTheme);
     try {
       localStorage.setItem("saferide-theme", nextTheme);
     } catch (e) {
       /* localStorage no disponible */
     }
     updateAria();
+  });
+}
+
+// Colores de fondo por paleta (mismos valores que el script del <head>)
+const PALETTE_BG = {
+  verde:   { l: "#eaf4ec", d: "#0e160d" },
+  azul:    { l: "#eaf1fb", d: "#0d1420" },
+  violeta: { l: "#f1ebfb", d: "#140f1e" },
+  aqua:    { l: "#e9f5f3", d: "#0a1614" },
+  ambar:   { l: "#fbf2e6", d: "#1a130a" },
+};
+function currentPalette() {
+  return document.documentElement.getAttribute("data-palette") || "verde";
+}
+function syncRootBg(themeOverride) {
+  const explicit = themeOverride || document.documentElement.getAttribute("data-theme");
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const isDark = explicit === "dark" || (explicit !== "light" && prefersDark);
+  const pal = PALETTE_BG[currentPalette()] || PALETTE_BG.verde;
+  document.documentElement.style.backgroundColor = isDark ? pal.d : pal.l;
+}
+
+function initPaletteToggle() {
+  const btn = document.getElementById("paletteToggle");
+  const menu = document.getElementById("paletteMenu");
+  if (!btn || !menu) return;
+  const options = Array.from(menu.querySelectorAll("[data-palette]"));
+
+  const markCurrent = () => {
+    const cur = currentPalette();
+    options.forEach((o) =>
+      o.setAttribute("aria-checked", String(o.dataset.palette === cur))
+    );
+  };
+  markCurrent();
+
+  const closeMenu = () => {
+    menu.hidden = true;
+    btn.setAttribute("aria-expanded", "false");
+  };
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = menu.hidden;
+    menu.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+  });
+
+  options.forEach((opt) => {
+    opt.addEventListener("click", () => {
+      const p = opt.dataset.palette;
+      if (p === "verde") document.documentElement.removeAttribute("data-palette");
+      else document.documentElement.setAttribute("data-palette", p);
+      try { localStorage.setItem("saferide-palette", p); } catch (e) {}
+      syncRootBg();
+      markCurrent();
+      closeMenu();
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menu.hidden && !menu.contains(e.target) && e.target !== btn) closeMenu();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
   });
 }
 
@@ -4976,6 +5205,7 @@ document.addEventListener("DOMContentLoaded", () => {
   scrollTopSiSinAncla();
   applyTranslations();
   initThemeToggle();
+  initPaletteToggle();
   initLangToggle();
   initMobileNav();
   initNavbarScroll();
@@ -5242,9 +5472,24 @@ function initFloatingParticles() {
     (!document.documentElement.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   const LINK_DIST = 168;
-  const getColors = () => isDark()
-    ? { r: 125, g: 196, b: 132, opacityBase: 0.85, lineBase: 0.34 }
-    : { r: 46, g: 125, b: 50, opacityBase: 0.7, lineBase: 0.26 };
+  // El color viene de la paleta activa (variable CSS --particle-rgb).
+  // Se cachea y solo se relee cuando cambia el tema o la paleta.
+  let rgbCache = null;
+  const readRGB = () => {
+    const v = getComputedStyle(document.documentElement)
+      .getPropertyValue("--particle-rgb").trim();
+    const p = v.split(",").map((n) => parseInt(n, 10));
+    rgbCache = (p.length === 3 && p.every((n) => !isNaN(n)))
+      ? p
+      : (isDark() ? [125, 196, 132] : [46, 125, 50]);
+  };
+  readRGB();
+  const getColors = () => {
+    const [r, g, b] = rgbCache;
+    return isDark()
+      ? { r, g, b, opacityBase: 0.85, lineBase: 0.34 }
+      : { r, g, b, opacityBase: 0.7, lineBase: 0.26 };
+  };
 
   const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -5309,11 +5554,12 @@ function initFloatingParticles() {
     }, 200);
   });
 
-  // Watch for theme changes
-  const observer = new MutationObserver(() => {
-    // Colors are computed dynamically in draw(), no restart needed
-  });
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  // Relee el color cuando cambia el tema o la paleta
+  const observer = new MutationObserver(readRGB);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-palette"] });
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readRGB);
+  }
 }
 
 function initFaqAccordion() {
