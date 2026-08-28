@@ -53,7 +53,7 @@
 }
 </script>
 
-<style>html{background:#eaf4ec}@media(prefers-color-scheme:dark){html{background:#0e160d!important}}</style>
+<style>html{background:#edf5ef}@media(prefers-color-scheme:dark){html{background:#0d140f!important}}</style>
 <script>
 // Aplica tema e idioma guardados ANTES de pintar la página, para que no
 // se vea un parpadeo (flash) del tema o idioma equivocado al cargar.
@@ -71,11 +71,11 @@
     }
     // Paleta de color elegida (verde por defecto)
     var PAL = {
-      verde:   { l: "#eaf4ec", d: "#0e160d" },
-      azul:    { l: "#eaf1fb", d: "#0d1420" },
-      violeta: { l: "#f1ebfb", d: "#140f1e" },
-      aqua:    { l: "#e9f5f3", d: "#0a1614" },
-      ambar:   { l: "#fbf2e6", d: "#1a130a" }
+      verde:   { l: "#edf5ef", d: "#0d140f" },
+      azul:    { l: "#eef3fc", d: "#0b1220" },
+      violeta: { l: "#f0ecfa", d: "#100e1a" },
+      aqua:    { l: "#e9f4f2", d: "#08130f" },
+      ambar:   { l: "#faf3e9", d: "#140f08" }
     };
     var savedPal = localStorage.getItem("saferide-palette");
     if (savedPal && PAL[savedPal] && savedPal !== "verde") {
@@ -148,18 +148,18 @@ table {
 
 :root {
   /* ===== PALETA (verde por defecto). Se cambia con [data-palette] en <html> ===== */
-  --green-deep: #234b36;
-  --green-deep-dark: #16301f;
-  --green-deep-soft: #3e6e52;
-  --green-accent: #2e7d32;
-  --green-accent-dark: #256b29;
-  --green-accent-soft: #6fae74;
-  --green-pale: #eaf4ec;
-  --green-mid: #d3e6d8;
-  --accent-rgb: 46, 125, 50;
-  --accent-soft-rgb: 111, 174, 116;
-  --deep-rgb: 35, 75, 54;
-  --particle-rgb: 46, 125, 50;
+  --green-deep: #1f4a37;
+  --green-deep-dark: #123024;
+  --green-deep-soft: #3c7058;
+  --green-accent: #2e8038;
+  --green-accent-dark: #236e2b;
+  --green-accent-soft: #79bd82;
+  --green-pale: #edf5ef;
+  --green-mid: #d9ebdd;
+  --accent-rgb: 46, 128, 56;
+  --accent-soft-rgb: 121, 189, 130;
+  --deep-rgb: 31, 74, 55;
+  --particle-rgb: 52, 148, 78;
   --white: #ffffff;
   /* Acentos de superficie que se ajustan por tema (ver bloques de modo oscuro) */
   --surface-raise: rgba(var(--deep-rgb), 0.04);
@@ -172,15 +172,15 @@ table {
   --muted-mark: #93a69a;
 
   /* Tokens de superficie/texto: son los que cambian entre modo claro y oscuro */
-  --surface-page: #eaf4ec;
+  --surface-page: var(--green-pale);
   --surface: var(--white);
-  --surface-alt: #eef5f0;
-  --surface-border: #d4e5d9;
+  --surface-alt: color-mix(in srgb, var(--green-pale) 55%, #ffffff);
+  --surface-border: color-mix(in srgb, var(--green-deep) 16%, var(--green-pale));
   --surface-border-strong: var(--green-deep);
   --surface-translucent: rgba(255, 255, 255, 0.92);
   --text-primary: var(--green-deep);
-  --text-secondary: #3d5a45;
-  --placeholder-color: #8fa598;
+  --text-secondary: color-mix(in srgb, var(--green-deep) 78%, #7d8a83);
+  --placeholder-color: color-mix(in srgb, var(--green-deep) 40%, #9aa8a1);
   --accent-fg: var(--green-accent);
 
   --warning-bg: #fff4e6;
@@ -211,76 +211,69 @@ table {
    Cada paleta redefine los mismos tokens que la verde de arriba.
    ========================================================= */
 html[data-palette="azul"] {
-  --green-deep: #1e3a5f; --green-deep-dark: #14263f; --green-deep-soft: #3a5a86;
-  --green-accent: #2563c9; --green-accent-dark: #1e4fa8; --green-accent-soft: #7aa5e6;
-  --green-pale: #eaf1fb; --green-mid: #d3e0f2;
-  --accent-rgb: 37, 99, 201; --accent-soft-rgb: 122, 165, 230; --deep-rgb: 30, 58, 95; --particle-rgb: 37, 99, 201;
-  --surface-page: #eaf1fb; --surface-alt: #eef3fc; --surface-border: #d3e2f4;
+  --green-deep: #1c3c66; --green-deep-dark: #122845; --green-deep-soft: #3a5e93;
+  --green-accent: #2b6fd6; --green-accent-dark: #2159b8; --green-accent-soft: #83aeea;
+  --green-pale: #eef3fc; --green-mid: #d8e4f5;
+  --accent-rgb: 43, 111, 214; --accent-soft-rgb: 131, 174, 234; --deep-rgb: 28, 60, 102; --particle-rgb: 43, 111, 214;
 }
 html[data-palette="violeta"] {
-  --green-deep: #3b2a63; --green-deep-dark: #271b45; --green-deep-soft: #5a4590;
-  --green-accent: #7c3aed; --green-accent-dark: #6828c9; --green-accent-soft: #b18ae8;
-  --green-pale: #f1ebfb; --green-mid: #e3d7f4;
-  --accent-rgb: 124, 58, 237; --accent-soft-rgb: 177, 138, 232; --deep-rgb: 59, 42, 99; --particle-rgb: 124, 58, 237;
-  --surface-page: #f1ebfb; --surface-alt: #f3eefc; --surface-border: #e2d6f4;
+  --green-deep: #342a5c; --green-deep-dark: #221b3e; --green-deep-soft: #524484;
+  --green-accent: #6d47d4; --green-accent-dark: #5b39ba; --green-accent-soft: #a892e2;
+  --green-pale: #f0ecfa; --green-mid: #e2dbf3;
+  --accent-rgb: 109, 71, 212; --accent-soft-rgb: 168, 146, 226; --deep-rgb: 52, 42, 92; --particle-rgb: 128, 96, 220;
 }
 html[data-palette="aqua"] {
-  --green-deep: #124f4a; --green-deep-dark: #0c3430; --green-deep-soft: #2f766f;
-  --green-accent: #0d9488; --green-accent-dark: #0b7d73; --green-accent-soft: #5cc7bd;
-  --green-pale: #e9f5f3; --green-mid: #cfe9e5;
-  --accent-rgb: 13, 148, 136; --accent-soft-rgb: 92, 199, 189; --deep-rgb: 18, 79, 74; --particle-rgb: 13, 148, 136;
-  --surface-page: #e9f5f3; --surface-alt: #eef6f5; --surface-border: #cfe6e2;
+  --green-deep: #114a45; --green-deep-dark: #0b322e; --green-deep-soft: #2e6f68;
+  --green-accent: #0e8f83; --green-accent-dark: #0b776d; --green-accent-soft: #5fc4b9;
+  --green-pale: #e9f4f2; --green-mid: #d0e7e3;
+  --accent-rgb: 14, 143, 131; --accent-soft-rgb: 95, 196, 185; --deep-rgb: 17, 74, 69; --particle-rgb: 20, 160, 148;
 }
 html[data-palette="ambar"] {
-  --green-deep: #5c3d16; --green-deep-dark: #3d280e; --green-deep-soft: #8a5f2a;
-  --green-accent: #c2680a; --green-accent-dark: #a85806; --green-accent-soft: #eab464;
-  --green-pale: #fbf2e6; --green-mid: #f4e3ce;
-  --accent-rgb: 194, 104, 10; --accent-soft-rgb: 234, 180, 100; --deep-rgb: 92, 61, 22; --particle-rgb: 217, 130, 20;
-  --surface-page: #fbf2e6; --surface-alt: #fcf5ec; --surface-border: #f0e0c9;
+  --green-deep: #523b1c; --green-deep-dark: #372611; --green-deep-soft: #7d5b2d;
+  --green-accent: #b3620f; --green-accent-dark: #985110; --green-accent-soft: #e2b072;
+  --green-pale: #faf3e9; --green-mid: #f1e4d0;
+  --accent-rgb: 179, 98, 15; --accent-soft-rgb: 226, 176, 114; --deep-rgb: 82, 59, 28; --particle-rgb: 205, 140, 55;
 }
 
-/* --- mismas paletas en modo oscuro (superficies y acentos mas claros) --- */
+/* --- mismas paletas en modo oscuro: solo el fondo base y las particulas;
+       el resto (superficies, bordes, acentos) se deriva solo --- */
 html[data-palette="azul"][data-theme="dark"],
 html[data-palette="azul"]:not([data-theme="light"]):not([data-theme="dark"]) {
-  --surface-page: #0d1420; --surface: #16202e; --surface-alt: #1a2636; --surface-border: #2f4257;
-  --accent-fg: #86b4ee; --particle-rgb: 122, 175, 235; --text-secondary: #a8bdd6;
+  --surface-page: #0b1220; --particle-rgb: 120, 168, 236;
 }
 html[data-palette="violeta"][data-theme="dark"],
 html[data-palette="violeta"]:not([data-theme="light"]):not([data-theme="dark"]) {
-  --surface-page: #140f1e; --surface: #1e1830; --surface-alt: #241d3a; --surface-border: #3a2f57;
-  --accent-fg: #bb98f0; --particle-rgb: 168, 130, 235; --text-secondary: #c0b2d8;
+  --surface-page: #100e1a; --particle-rgb: 152, 122, 228;
 }
 html[data-palette="aqua"][data-theme="dark"],
 html[data-palette="aqua"]:not([data-theme="light"]):not([data-theme="dark"]) {
-  --surface-page: #0a1614; --surface: #12211f; --surface-alt: #162927; --surface-border: #2a413e;
-  --accent-fg: #52cabe; --particle-rgb: 100, 205, 195; --text-secondary: #a3c4bf;
+  --surface-page: #08130f; --particle-rgb: 96, 198, 186;
 }
 html[data-palette="ambar"][data-theme="dark"],
 html[data-palette="ambar"]:not([data-theme="light"]):not([data-theme="dark"]) {
-  --surface-page: #1a130a; --surface: #241c11; --surface-alt: #2b2115; --surface-border: #453521;
-  --accent-fg: #edb86a; --particle-rgb: 235, 180, 110; --text-secondary: #d3bfa3;
+  --surface-page: #140f08; --particle-rgb: 216, 160, 100;
 }
 
 /* ===== Modo oscuro =====
    Se activa con [data-theme="dark"] en <html> (elegido a mano) o, si el
    usuario no eligió nada todavía, con prefers-color-scheme. */
 html[data-theme="dark"] {
-  --surface-page: #0e160d;
-  --surface: #172219;
-  --surface-alt: #1b291f;
-  --surface-border: #31463a;
+  --surface-page: #0d140f;
+  --surface: color-mix(in srgb, var(--green-deep) 30%, var(--surface-page));
+  --surface-alt: color-mix(in srgb, var(--green-deep) 20%, var(--surface-page));
+  --surface-border: color-mix(in srgb, var(--green-accent-soft) 17%, var(--surface-page));
   --surface-border-strong: var(--green-accent-soft);
-  --surface-translucent: rgba(14, 22, 13, 0.9);
+  --surface-translucent: color-mix(in srgb, var(--surface-page) 90%, transparent);
   --text-primary: #eef6ef;
-  --text-secondary: #adc4b4;
-  --placeholder-color: #6f8577;
-  --accent-fg: #83c088;
-  --particle-rgb: 125, 196, 132;
+  --text-secondary: color-mix(in srgb, var(--green-accent-soft) 26%, #a9b2ad);
+  --placeholder-color: color-mix(in srgb, var(--green-accent-soft) 20%, #6b746f);
+  --accent-fg: color-mix(in srgb, var(--green-accent-soft) 86%, #ffffff);
+  --particle-rgb: 60, 160, 88;
   --surface-raise: rgba(255, 255, 255, 0.022);
   --surface-hairline: rgba(255, 255, 255, 0.08);
   --card-glow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
   --divider: linear-gradient(90deg, transparent, rgba(var(--accent-soft-rgb), 0.28), transparent);
-  --ring: rgba(131, 192, 136, 0.22);
+  --ring: rgba(var(--accent-soft-rgb), 0.22);
 
   --warning-bg: rgba(255, 180, 77, 0.12);
   --warning-text: #ffb44d;
@@ -307,22 +300,22 @@ html[data-theme="dark"] .navbar.scrolled {
 
 @media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]):not([data-theme="dark"]) {
-    --surface-page: #0e160d;
-    --surface: #172219;
-    --surface-alt: #1b291f;
-    --surface-border: #31463a;
+    --surface-page: #0d140f;
+    --surface: color-mix(in srgb, var(--green-deep) 30%, var(--surface-page));
+    --surface-alt: color-mix(in srgb, var(--green-deep) 20%, var(--surface-page));
+    --surface-border: color-mix(in srgb, var(--green-accent-soft) 17%, var(--surface-page));
     --surface-border-strong: var(--green-accent-soft);
-    --surface-translucent: rgba(14, 22, 13, 0.9);
+    --surface-translucent: color-mix(in srgb, var(--surface-page) 90%, transparent);
     --text-primary: #eef6ef;
-    --text-secondary: #adc4b4;
-    --placeholder-color: #6f8577;
-    --accent-fg: #83c088;
-  --particle-rgb: 125, 196, 132;
+    --text-secondary: color-mix(in srgb, var(--green-accent-soft) 26%, #a9b2ad);
+    --placeholder-color: color-mix(in srgb, var(--green-accent-soft) 20%, #6b746f);
+    --accent-fg: color-mix(in srgb, var(--green-accent-soft) 86%, #ffffff);
+    --particle-rgb: 60, 160, 88;
     --surface-raise: rgba(255, 255, 255, 0.022);
     --surface-hairline: rgba(255, 255, 255, 0.08);
     --card-glow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
     --divider: linear-gradient(90deg, transparent, rgba(var(--accent-soft-rgb), 0.28), transparent);
-    --ring: rgba(131, 192, 136, 0.22);
+    --ring: rgba(var(--accent-soft-rgb), 0.22);
 
     --warning-bg: rgba(255, 180, 77, 0.12);
     --warning-text: #ffb44d;
@@ -5201,11 +5194,11 @@ function initThemeToggle() {
 
 // Colores de fondo por paleta (mismos valores que el script del <head>)
 const PALETTE_BG = {
-  verde:   { l: "#eaf4ec", d: "#0e160d" },
-  azul:    { l: "#eaf1fb", d: "#0d1420" },
-  violeta: { l: "#f1ebfb", d: "#140f1e" },
-  aqua:    { l: "#e9f5f3", d: "#0a1614" },
-  ambar:   { l: "#fbf2e6", d: "#1a130a" },
+  verde:   { l: "#edf5ef", d: "#0d140f" },
+  azul:    { l: "#eef3fc", d: "#0b1220" },
+  violeta: { l: "#f0ecfa", d: "#100e1a" },
+  aqua:    { l: "#e9f4f2", d: "#08130f" },
+  ambar:   { l: "#faf3e9", d: "#140f08" },
 };
 function currentPalette() {
   return document.documentElement.getAttribute("data-palette") || "verde";
