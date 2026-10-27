@@ -29,6 +29,8 @@ PLATEAU      = 0.58    # fraccion del modulo que queda plana arriba (resto: ramp
 QR_SIDE      = 13.0    # lado del hueco cuadrado del QR
 QR_DEPTH     = 0.6     # profundidad del hueco del QR
 
+BTN_ON       = False   # botoncito al lado del modulo: DESACTIVADO (sin partes que parezcan botones;
+                       # el chip NFC va escondido debajo del modulo del QR)
 BTN_D        = 5.0     # diametro del botoncito al lado del modulo
 BTN_H        = 0.9     # cuanto sobresale
 BTN_OFFSET   = 8.0     # separacion del borde del modulo (a lo largo de la correa)
@@ -205,34 +207,35 @@ b2 = qpt(qtl[2][0], qtl[2][1], qz_bot); b3 = qpt(qtl[3][0], qtl[3][1], qz_bot)
 tri(b0, b2, b1); tri(b0, b3, b2)
 
 # ============ BOTONCITO al lado del modulo ============
-btn_s = B + BTN_OFFSET
-btn_theta = btn_s / Rout
-bz0 = Rout - 0.4
-bz1 = Rout + BTN_H
-NB = 28
-prev = None
-for k in range(NB+1):
-    a = 2*math.pi*k/NB
-    x = (BTN_D/2.0)*math.cos(a)
-    dl = (BTN_D/2.0)*math.sin(a)
-    th = btn_theta + dl/Rout
-    o = (x, bz0*math.sin(th), bz0*math.cos(th))
-    t = (x, bz1*math.sin(th), bz1*math.cos(th))
-    if prev:
-        quad(prev[0], o, t, prev[1])
-    prev = (o, t)
-# tapa del boton
-ctop = (0.0, bz1*math.sin(btn_theta), bz1*math.cos(btn_theta))
-prev = None
-for k in range(NB+1):
-    a = 2*math.pi*k/NB
-    x = (BTN_D/2.0)*math.cos(a)
-    dl = (BTN_D/2.0)*math.sin(a)
-    th = btn_theta + dl/Rout
-    t = (x, bz1*math.sin(th), bz1*math.cos(th))
-    if prev:
-        tri(ctop, prev, t)
-    prev = t
+if BTN_ON:
+    btn_s = B + BTN_OFFSET
+    btn_theta = btn_s / Rout
+    bz0 = Rout - 0.4
+    bz1 = Rout + BTN_H
+    NB = 28
+    prev = None
+    for k in range(NB+1):
+        a = 2*math.pi*k/NB
+        x = (BTN_D/2.0)*math.cos(a)
+        dl = (BTN_D/2.0)*math.sin(a)
+        th = btn_theta + dl/Rout
+        o = (x, bz0*math.sin(th), bz0*math.cos(th))
+        t = (x, bz1*math.sin(th), bz1*math.cos(th))
+        if prev:
+            quad(prev[0], o, t, prev[1])
+        prev = (o, t)
+    # tapa del boton
+    ctop = (0.0, bz1*math.sin(btn_theta), bz1*math.cos(btn_theta))
+    prev = None
+    for k in range(NB+1):
+        a = 2*math.pi*k/NB
+        x = (BTN_D/2.0)*math.cos(a)
+        dl = (BTN_D/2.0)*math.sin(a)
+        th = btn_theta + dl/Rout
+        t = (x, bz1*math.sin(th), bz1*math.cos(th))
+        if prev:
+            tri(ctop, prev, t)
+        prev = t
 
 # ============ ORIENTAR PARA TINKERCAD / IMPRESION ============
 # El modelo se construyo con el eje de la muñeca en X y el aro en el plano YZ.

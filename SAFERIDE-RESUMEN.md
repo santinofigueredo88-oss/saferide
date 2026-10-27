@@ -1,7 +1,8 @@
-# Saferide — Resumen del Proyecto
+# Safe.Ride — Resumen del Proyecto
 
 ## Descripción
-Saferide es una pulsera QR y medalla NFC con datos médicos de emergencia.
+Safe.Ride es una pulsera con código QR y chip NFC con datos médicos de emergencia, pensada para todo público
+(cualquier persona que pueda tener un accidente). Slogan: «Tu información, a tiempo.»
 Landing page profesional con modo claro/oscuro, bilingüe (ES/EN), y animaciones.
 
 ## Creadores
@@ -22,7 +23,7 @@ Landing page profesional con modo claro/oscuro, bilingüe (ES/EN), y animaciones
 - Partículas flotantes en toda la página (canvas)
 - Scroll progress bar (barra de progreso fija)
 - Contadores animados en estadísticas
-- Secciones: Problema, Cómo funciona, Formatos, Quiénes lo usan, Beneficios, Historia, Futuro/Proyecto, Estadísticas, Comparativa, Precios, Demo, Pedido, FAQ, CTA, Footer
+- Secciones: Problema, Cómo funciona, Formatos, Privacidad, Tu cuenta (activación con PIN), Quiénes lo usan, Beneficios, Historia, Futuro/Proyecto, Estadísticas, Comparativa, Precio, Demo, Pedido, FAQ, CTA, Footer
 - Formulario de pedido con layout 2 columnas
 - Modal de prototype (creación de ficha)
 - Modo oscuro/claro con toggle
@@ -39,13 +40,17 @@ Landing page profesional con modo claro/oscuro, bilingüe (ES/EN), y animaciones
 - `--nav-height: 76px`
 
 ## Producto y precio
-- Un solo producto físico: **Pulsera Saferide** con código QR + chip NFC
+- Un solo producto físico: **Pulsera Safe.Ride** con código QR + chip NFC
   integrado en la misma pieza (si no se puede escanear el QR, se lee por NFC).
-- Precio: **$4.000** (envío a todo el país + actualización de datos ilimitada).
-- Ya no hay medalla NFC suelta ni "pack".
+  Los dos abren la misma ficha online: el celular que escanea necesita internet.
+- Precio: **$8.000** (igual que en el informe; actualización de datos ilimitada incluida).
+- Entrega: Baradero y zona norte de Buenos Aires (alcance del proyecto).
+- Datos de la ficha: nombre, fecha de nacimiento, grupo sanguíneo, condiciones, alergias,
+  medicación, obra social, localidad, contacto de emergencia y última actualización.
+  **No se piden DNI ni domicilio** (minimización de datos, Ley 25.326). Hay consentimiento obligatorio.
 
 ## Notas para continuar
-- El precio ($4.000) es de ejemplo
+- Todo el contenido está coordinado con el informe del proyecto (precio, NFC, datos, público, estadísticas)
 - El formulario de pedido no tiene backend (es demo)
 - Las traducciones ES/EN están en el objeto `translations` en el JS
 - Para push se necesita token con Contents: Read and Write en el repo saferide

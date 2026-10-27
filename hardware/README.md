@@ -1,4 +1,4 @@
-# Pulsera Saferide — modelo 3D
+# Pulsera Safe.Ride — modelo 3D
 
 Base para diseñar la pulsera en **Tinkercad** (o cualquier programa 3D / impresora).
 Estilo **malla deportiva (smartband)**: correa curva y fina, con un módulo bajo y
@@ -33,7 +33,10 @@ ovalado en el centro que lleva el QR y el chip NFC.
   la correa (sin escalón), como en la foto de referencia.
 - **Hueco para el QR** ya incluido en la meseta del módulo: **13 × 13 mm**,
   **0,6 mm** de profundidad (para pegar una etiqueta o para grabar el QR).
-- Botoncito redondo al lado del módulo (decorativo / se puede usar para el led).
+- **Sin botones ni partes móviles**: el chip NFC va escondido debajo del módulo del QR
+  (bolsillo por la cara interna). Para leerlo, se acerca el celular al módulo.
+  El botoncito decorativo de versiones anteriores quedó desactivado (`BTN_ON = False`
+  en `gen_pulsera.py`).
 
 ## Cómo usarlo en Tinkercad
 

@@ -1,4 +1,4 @@
-# Saferide — Tecnologías usadas
+# Safe.Ride — Tecnologías usadas
 
 La página es **un solo archivo `index.html`**: sin frameworks, sin librerías
 externas y sin herramientas de compilación (no hay npm, ni bundlers, ni
