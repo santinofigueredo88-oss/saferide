@@ -3,29 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title data-i18n="meta.title">Saferide — Tu información puede salvar tu vida</title>
+<title data-i18n="meta.title">Safe.Ride — Tu información, a tiempo.</title>
 
-<meta name="description" content="Una pulsera con código QR y chip NFC que lleva tus datos médicos esenciales. En una emergencia, el personal de salud accede al instante a tu grupo sanguíneo, alergias, medicación y contacto — con o sin internet.">
+<meta name="description" content="Una pulsera con código QR y chip NFC que lleva tus datos médicos esenciales. En una emergencia, el personal de salud accede al instante a tu grupo sanguíneo, alergias, medicación y contacto — desde cualquier celular, sin instalar nada.">
 <meta name="author" content="Santino Figueredo, Elena Avogadro">
 <meta name="theme-color" content="#234b36" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e160d" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
-<link rel="canonical" href="https://santinofigueredo88-oss.github.io/saferide/">
+<link rel="canonical" href="https://saferide-lime-beta.vercel.app/">
 
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Saferide">
-<meta property="og:title" content="Saferide — Tu información puede salvar tu vida">
-<meta property="og:description" content="Una pulsera con QR y chip NFC con tus datos médicos esenciales. En una emergencia, el personal de salud los ve al instante, con o sin internet.">
-<meta property="og:url" content="https://santinofigueredo88-oss.github.io/saferide/">
+<meta property="og:site_name" content="Safe.Ride">
+<meta property="og:title" content="Safe.Ride — Tu información, a tiempo.">
+<meta property="og:description" content="Una pulsera con QR y chip NFC con tus datos médicos esenciales. Ante cualquier accidente, quien te ayude los ve al instante desde su celular, sin instalar nada.">
+<meta property="og:url" content="https://saferide-lime-beta.vercel.app/">
 <meta property="og:locale" content="es_AR">
-<meta property="og:image" content="https://santinofigueredo88-oss.github.io/saferide/og.png">
+<meta property="og:image" content="https://saferide-lime-beta.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Saferide — pulsera con QR y NFC para emergencias médicas">
+<meta property="og:image:alt" content="Safe.Ride — pulsera con QR y NFC para emergencias médicas">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Saferide — Tu información puede salvar tu vida">
+<meta name="twitter:title" content="Safe.Ride — Tu información, a tiempo.">
 <meta name="twitter:description" content="Una pulsera con QR y chip NFC con tus datos médicos esenciales, accesibles al instante en una emergencia.">
-<meta name="twitter:image" content="https://santinofigueredo88-oss.github.io/saferide/og.png">
+<meta name="twitter:image" content="https://saferide-lime-beta.vercel.app/og.png">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232e7d32'/%3E%3Cpath d='M16 5 7 8.6v6.2c0 4.8 3.7 8.6 9 9.6 5.3-1 9-4.8 9-9.6V8.6L16 5z' fill='none' stroke='white' stroke-width='2.1'/%3E%3Cpath d='M11.7 16.2l3 3 5.6-6.4' fill='none' stroke='white' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232e7d32'/%3E%3Cpath d='M16 5 7 8.6v6.2c0 4.8 3.7 8.6 9 9.6 5.3-1 9-4.8 9-9.6V8.6L16 5z' fill='none' stroke='white' stroke-width='2.1'/%3E%3Cpath d='M11.7 16.2l3 3 5.6-6.4' fill='none' stroke='white' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
@@ -34,19 +34,19 @@
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Pulsera Saferide",
-  "description": "Pulsera con código QR y chip NFC integrado que muestra tus datos médicos de emergencia (grupo sanguíneo, alergias, medicación y contacto) al instante, con o sin internet.",
+  "name": "Pulsera Safe.Ride",
+  "description": "Pulsera con código QR y chip NFC integrado que muestra tus datos médicos de emergencia (grupo sanguíneo, alergias, medicación y contacto) al instante desde cualquier celular, sin instalar nada.",
   "category": "Identificación médica de emergencia",
-  "brand": { "@type": "Brand", "name": "Saferide" },
+  "brand": { "@type": "Brand", "name": "Safe.Ride" },
   "offers": {
     "@type": "Offer",
-    "price": "4000",
+    "price": "8000",
     "priceCurrency": "ARS",
     "availability": "https://schema.org/InStock"
   },
   "manufacturer": {
     "@type": "Organization",
-    "name": "Saferide",
+    "name": "Safe.Ride",
     "founder": ["Santino Figueredo", "Elena Avogadro"],
     "description": "Proyecto tecnológico escolar — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero."
   }
@@ -354,6 +354,8 @@ body {
   transition: background var(--transition), color var(--transition);
   overflow-x: hidden;
 }
+html { overflow-x: clip; }
+.hero { overflow-x: clip; }
 
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
@@ -688,11 +690,11 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   border-color: var(--text-primary);
   box-shadow: 0 0 0 2px var(--surface) inset;
 }
-@media (max-width: 1239px) {
+@media (max-width: 1359px) {
   .palette-menu { right: auto; left: 0; }
 }
 
-@media (max-width: 1239px) {
+@media (max-width: 1359px) {
   .nav-links {
     position: fixed;
     top: var(--nav-height);
@@ -730,7 +732,7 @@ html[data-theme="dark"] .pref-toggle .icon-moon {
   }
 }
 
-@media (min-width: 1240px) {
+@media (min-width: 1360px) {
   .nav-toggle {
     display: none;
   }
@@ -2621,11 +2623,17 @@ html[data-theme="dark"] .pricing-card:hover {
 }
 
 /* --- bg-light: en oscuro, viñeta en vez de "caja más clara" --- */
-html[data-theme="dark"] .bg-light,
-html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
+html[data-theme="dark"] .bg-light {
   background:
     radial-gradient(900px 500px at 50% 0%, rgba(var(--accent-rgb), 0.08), transparent 70%),
     var(--surface-alt);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
+  background:
+    radial-gradient(900px 500px at 50% 0%, rgba(var(--accent-rgb), 0.08), transparent 70%),
+    var(--surface-alt);
+  }
 }
 @media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]):not([data-theme="dark"]) .card,
@@ -3011,9 +3019,13 @@ main, .cta-final, .site-footer { background-color: transparent; }
 
 /* Secciones "claras": apenas un velo, se ven las partículas */
 .bg-light { background: rgba(var(--accent-rgb), 0.045); }
-html[data-theme="dark"] .bg-light,
-html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
+html[data-theme="dark"] .bg-light {
   background: rgba(255, 255, 255, 0.032);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
+  background: rgba(255, 255, 255, 0.032);
+  }
 }
 
 /* Secciones verdes fuertes → verde translúcido */
@@ -3023,13 +3035,21 @@ html:not([data-theme="light"]):not([data-theme="dark"]) .bg-light {
 .cta-final {
   background: linear-gradient(135deg, rgba(var(--deep-rgb), 0.88) 0%, color-mix(in srgb, var(--green-deep-dark) 93%, transparent) 100%);
 }
-html[data-theme="dark"] .stats-section,
-html:not([data-theme="light"]):not([data-theme="dark"]) .stats-section {
+html[data-theme="dark"] .stats-section {
   background: linear-gradient(160deg, color-mix(in srgb, var(--green-deep-dark) 68%, transparent), color-mix(in srgb, var(--surface-page) 82%, transparent));
 }
-html[data-theme="dark"] .cta-final,
-html:not([data-theme="light"]):not([data-theme="dark"]) .cta-final {
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .stats-section {
+  background: linear-gradient(160deg, color-mix(in srgb, var(--green-deep-dark) 68%, transparent), color-mix(in srgb, var(--surface-page) 82%, transparent));
+  }
+}
+html[data-theme="dark"] .cta-final {
   background: linear-gradient(135deg, color-mix(in srgb, var(--green-deep-dark) 68%, transparent) 0%, color-mix(in srgb, var(--surface-page) 82%, transparent) 100%);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .cta-final {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--green-deep-dark) 68%, transparent) 0%, color-mix(in srgb, var(--surface-page) 82%, transparent) 100%);
+  }
 }
 
 /* Footer translúcido */
@@ -3041,11 +3061,17 @@ html:not([data-theme="dark"]) .site-footer {
 }
 
 /* Hero: la parte de abajo se desvanece para que floten las partículas */
-html[data-theme="dark"] .hero,
-html:not([data-theme="light"]):not([data-theme="dark"]) .hero {
+html[data-theme="dark"] .hero {
   background:
     radial-gradient(1000px 480px at 80% -6%, rgba(var(--accent-rgb), 0.16), transparent 58%),
     linear-gradient(178deg, var(--green-deep-dark) 0%, color-mix(in srgb, var(--green-deep-dark) 55%, transparent) 46%, transparent 100%);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]):not([data-theme="dark"]) .hero {
+  background:
+    radial-gradient(1000px 480px at 80% -6%, rgba(var(--accent-rgb), 0.16), transparent 58%),
+    linear-gradient(178deg, var(--green-deep-dark) 0%, color-mix(in srgb, var(--green-deep-dark) 55%, transparent) 46%, transparent 100%);
+  }
 }
 html:not([data-theme="dark"]) .hero {
   background:
@@ -3216,8 +3242,8 @@ html:not([data-theme="dark"]) .hero {
 <!-- ============ NAVBAR ============ -->
 <header class="navbar" id="navbar">
   <div class="container">
-    <a href="#top" class="logo" aria-label="Saferide, ir al inicio" data-i18n-aria-label="nav.logoAria">
-      <span class="logo-safe">Safe</span><span class="logo-ride">ride</span>
+    <a href="#top" class="logo" aria-label="Safe.Ride, ir al inicio" data-i18n-aria-label="nav.logoAria">
+      <span class="logo-safe">Safe</span><span class="logo-ride">.Ride</span>
     </a>
 
     <nav class="nav-links" id="navLinks" aria-label="Navegación principal" data-i18n-aria-label="nav.mainAria">
@@ -3266,22 +3292,16 @@ html:not([data-theme="dark"]) .hero {
 <main id="top">
 
   <!-- ============ HERO ============ -->
-  <section class="hero" aria-label="Presentación de Saferide">
+  <section class="hero" aria-label="Presentación de Safe.Ride">
     <div class="container hero-inner">
       <div class="hero-text">
         <span class="hero-badge">
           <svg class="icon" aria-hidden="true" style="width:14px;height:14px"><use href="#icon-shield-check"></use></svg>
-          Protección médica siempre con vos
+          <span data-i18n="hero.badge">Protección médica siempre con vos</span>
         </span>
-        <h1 class="hero-title"><span class="logo-safe">Safe</span><span class="logo-separator"></span><span class="logo-ride">ride</span></h1>
-        <p class="hero-tagline" data-i18n="hero.tagline">Tus datos médicos, siempre accesibles.</p>
-        <p class="hero-desc" data-i18n="hero.desc">
-          Una pulsera con código QR y chip NFC integrado, con tus datos
-          médicos esenciales, siempre con vos. Para que, ante cualquier
-          emergencia y en cualquier parte del mundo, el personal de salud
-          tenga tu información clave apenas ingresás a una guardia, hospital
-          o clínica.
-        </p>
+        <h1 class="hero-title"><span class="logo-safe">Safe</span><span class="logo-separator"></span><span class="logo-ride">Ride</span></h1>
+        <p class="hero-tagline" data-i18n="hero.tagline">Tu información, a tiempo.</p>
+        <p class="hero-desc" data-i18n="hero.desc">Una pulsera de TPU con código QR y chip NFC en la misma pieza, con tus datos médicos esenciales. Ante cualquier accidente —en la calle, en el trabajo, en casa o haciendo deporte— quien te ayude escanea el QR o acerca el celular y ve al instante tu grupo sanguíneo, tus alergias, tu medicación y a quién avisar.</p>
         <div class="hero-actions">
           <a href="#como-funciona" class="btn btn-primary" data-i18n="hero.ctaPrimary">Ver cómo funciona</a>
           <button type="button" class="btn btn-outline" data-prototype-trigger data-i18n="hero.ctaSecondary">Creá tu ficha</button>
@@ -3293,7 +3313,7 @@ html:not([data-theme="dark"]) .hero {
           </span>
           <span class="hero-trust-item">
             <svg class="icon" aria-hidden="true" style="width:16px;height:16px;color:var(--accent-fg)"><use href="#icon-check-circle"></use></svg>
-            <span data-i18n="hero.trust2">Funciona con o sin internet</span>
+            <span data-i18n="hero.trust2">QR o NFC: si falla uno, funciona el otro</span>
           </span>
           <span class="hero-trust-item">
             <svg class="icon" aria-hidden="true" style="width:16px;height:16px;color:var(--accent-fg)"><use href="#icon-check-circle"></use></svg>
@@ -3308,14 +3328,14 @@ html:not([data-theme="dark"]) .hero {
           <div class="phone-screen">
             <div class="phone-statusbar" aria-hidden="true">
               <span>9:41</span>
-              <span>saferide.com</span>
+              <span>Safe.Ride · ficha</span>
             </div>
             <div class="phone-ficha">
               <div class="phone-ficha-head">
                 <svg class="icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
                 <div>
                   <strong data-i18n="demo.fichaTitle">Ficha médica de emergencia</strong>
-                  <span data-i18n="demo.generadaPor">Generada por Saferide</span>
+                  <span data-i18n="demo.generadaPor">Generada por Safe.Ride</span>
                 </div>
               </div>
               <div class="phone-alert" aria-hidden="true">
@@ -3343,15 +3363,7 @@ html:not([data-theme="dark"]) .hero {
         <span class="eyebrow" data-i18n="problema.eyebrow">El problema</span>
         <h2 id="problema-title" data-i18n="problema.title">Cuando más se necesita, es cuando menos se tiene</h2>
       </div>
-      <p data-i18n="problema.body">
-        En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico:
-        si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar —
-        ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica,
-        en cualquier país. Las pulseras grabadas y las tarjetas de emergencia ayudan, pero se
-        quedan cortas: no se pueden actualizar y tienen espacio limitado. Saferide combina un
-        accesorio simple con una plataforma digital que se actualiza cuando vos quieras, pensada
-        para cualquier persona, no solo para quienes andan en moto.
-      </p>
+      <p data-i18n="problema.body">En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico: si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar — ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica, en cualquier país. Las pulseras grabadas y las tarjetas de emergencia ayudan, pero se quedan cortas: no se pueden actualizar y tienen espacio limitado. Safe.Ride combina un accesorio simple con una plataforma digital que se actualiza cuando vos quieras, pensada para cualquier persona, no solo para quienes andan en moto.</p>
     </div>
   </section>
 
@@ -3369,8 +3381,8 @@ html:not([data-theme="dark"]) .hero {
           <div class="timeline-step-number" aria-hidden="true">1</div>
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-user-plus"></use></svg>
-            <h3 data-i18n="comoFunciona.step1.title">Registrate con tu mail</h3>
-            <p data-i18n="comoFunciona.step1.desc">Sin contraseñas: solo tu mail, para identificarte y avisarte novedades.</p>
+            <h3 data-i18n="comoFunciona.step1.title">Dejá tu mail</h3>
+            <p data-i18n="comoFunciona.step1.desc">Sin contraseñas: te mandamos tu enlace privado para cargar y editar tu ficha.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
@@ -3378,7 +3390,7 @@ html:not([data-theme="dark"]) .hero {
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
             <h3 data-i18n="comoFunciona.step2.title">Cargá tus datos médicos</h3>
-            <p data-i18n="comoFunciona.step2.desc">Grupo sanguíneo, alergias, medicación y un contacto de emergencia.</p>
+            <p data-i18n="comoFunciona.step2.desc">Grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
@@ -3393,8 +3405,8 @@ html:not([data-theme="dark"]) .hero {
           <div class="timeline-step-number" aria-hidden="true">4</div>
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
-            <h3 data-i18n="comoFunciona.step4.title">Imprimilo o descargalo</h3>
-            <p data-i18n="comoFunciona.step4.desc">En una pulsera, una tarjeta o el celular.</p>
+            <h3 data-i18n="comoFunciona.step4.title">Grabamos tu pulsera</h3>
+            <p data-i18n="comoFunciona.step4.desc">Tu QR va en la pulsera y el chip NFC se graba con el mismo enlace.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
@@ -3402,7 +3414,7 @@ html:not([data-theme="dark"]) .hero {
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-siren"></use></svg>
             <h3 data-i18n="comoFunciona.step5.title">Listo para una emergencia</h3>
-            <p data-i18n="comoFunciona.step5.desc">Cualquiera puede escanearlo con la cámara, sin instalar nada.</p>
+            <p data-i18n="comoFunciona.step5.desc">Cualquiera escanea el QR o acerca el celular al círculo NFC, sin instalar nada.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
@@ -3423,27 +3435,19 @@ html:not([data-theme="dark"]) .hero {
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="formatos.eyebrow">Una pulsera, dos tecnologías</span>
         <h2 id="formatos-title" data-i18n="formatos.title">QR y chip NFC, juntos en la misma pulsera</h2>
-        <p data-i18n="formatos.subtitle">No hace falta elegir: la pulsera Saferide trae las dos. Se lee por QR cuando hay internet y por NFC cuando no hay señal. Siempre muestran la misma información.</p>
+        <p data-i18n="formatos.subtitle">No hace falta elegir: la pulsera Safe.Ride trae las dos. Si el QR está rayado se usa el NFC, y si el celular no tiene NFC se usa el QR. Las dos abren la misma ficha.</p>
       </div>
 
       <div class="card-grid">
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-qr-code"></use></svg></div>
           <h3 data-i18n="formatos.qr.title">Código QR</h3>
-          <p data-i18n="formatos.qr.desc">
-            Cualquiera lo escanea con la cámara del celular y accede a tu
-            ficha completa en la página de Saferide. Necesita que el
-            celular que escanea tenga conexión a internet.
-          </p>
+          <p data-i18n="formatos.qr.desc">Cualquiera lo escanea con la cámara del celular y accede a tu ficha en la página de Safe.Ride. El celular que escanea necesita conexión a internet.</p>
         </div>
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-nfc"></use></svg></div>
           <h3 data-i18n="formatos.nfc.title">Chip NFC integrado</h3>
-          <p data-i18n="formatos.nfc.desc">
-            Va dentro de la misma pulsera. Al acercar el celular muestra al
-            instante lo más importante (grupo sanguíneo, alergias, medicación
-            y contacto) sin necesitar internet: ideal para zonas sin señal.
-          </p>
+          <p data-i18n="formatos.nfc.desc">Va dentro de la pulsera, debajo del círculo central (no es un botón: es donde se apoya el celular). Al acercarlo se abre la misma ficha, aunque el QR esté rayado. Como el QR, necesita conexión a internet.</p>
         </div>
       </div>
     </div>
@@ -3455,19 +3459,19 @@ html:not([data-theme="dark"]) .hero {
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="privacidad.eyebrow">Privacidad y seguridad</span>
         <h2 id="privacidad-title" data-i18n="privacidad.title">Tus datos, siempre bajo tu control</h2>
-        <p data-i18n="privacidad.subtitle">Saferide muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.</p>
+        <p data-i18n="privacidad.subtitle">Safe.Ride muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.</p>
       </div>
 
       <div class="privacy-grid">
         <div class="privacy-card reveal">
           <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-eye"></use></svg></div>
           <h3 data-i18n="privacidad.c1.title">Solo lo esencial es público</h3>
-          <p data-i18n="privacidad.c1.desc">La ficha que se ve al escanear el QR muestra grupo sanguíneo, alergias, medicación y un contacto. Nada más.</p>
+          <p data-i18n="privacidad.c1.desc">La ficha muestra grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia. No pedimos DNI ni datos bancarios.</p>
         </div>
         <div class="privacy-card reveal">
           <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-pencil"></use></svg></div>
           <h3 data-i18n="privacidad.c2.title">Vos decidís qué se muestra</h3>
-          <p data-i18n="privacidad.c2.desc">Editás o borrás tu información cuando quieras desde tu cuenta. El resto de tu perfil nunca es visible para terceros.</p>
+          <p data-i18n="privacidad.c2.desc">Ves, corregís o borrás tu ficha cuando quieras desde tu enlace privado. Antes de publicarla te pedimos tu consentimiento.</p>
         </div>
         <div class="privacy-card reveal">
           <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-shield-check"></use></svg></div>
@@ -3477,7 +3481,7 @@ html:not([data-theme="dark"]) .hero {
         <div class="privacy-card reveal">
           <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-refresh-cw"></use></svg></div>
           <h3 data-i18n="privacidad.c4.title">Código que se puede revocar</h3>
-          <p data-i18n="privacidad.c4.desc">Si perdés la pulsera, generás un código nuevo y el anterior deja de funcionar al instante.</p>
+          <p data-i18n="privacidad.c4.desc">Si perdés la pulsera, avisás: desactivamos ese código y te damos uno nuevo.</p>
         </div>
       </div>
 
@@ -3492,27 +3496,27 @@ html:not([data-theme="dark"]) .hero {
   <section class="section" id="titularidad" aria-labelledby="titularidad-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="titularidad.eyebrow">Titularidad</span>
-        <h2 id="titularidad-title" data-i18n="titularidad.title">Tus datos médicos, gratis. El titular, una sola vez.</h2>
-        <p data-i18n="titularidad.subtitle">Separamos lo que puede cambiar siempre de lo que queda fijo a tu nombre.</p>
+        <span class="eyebrow" data-i18n="titularidad.eyebrow">Tus datos</span>
+        <h2 id="titularidad-title" data-i18n="titularidad.title">La pulsera es la misma. Tu ficha, siempre al día.</h2>
+        <p data-i18n="titularidad.subtitle">Cambiar un dato no obliga a hacer otra pulsera.</p>
       </div>
 
       <div class="split-panel">
         <div class="panel reveal">
           <span class="eyebrow" data-i18n="titularidad.medicos.eyebrow">Datos médicos</span>
           <h2 data-i18n="titularidad.medicos.title">Se editan libremente, sin costo</h2>
-          <p data-i18n="titularidad.medicos.body">Grupo sanguíneo, alergias, medicación, contacto de emergencia y localidad: los actualizás las veces que quieras desde tu cuenta, gratis. Son los datos que salvan vidas en una emergencia, así que nunca quedan trabados.</p>
+          <p data-i18n="titularidad.medicos.body">Grupo sanguíneo, alergias, medicación, contacto de emergencia y dónde vivís: los actualizás las veces que quieras desde tu enlace privado, gratis. La ficha muestra la fecha de la última actualización.</p>
         </div>
         <div class="panel reveal">
-          <span class="eyebrow" data-i18n="titularidad.titular.eyebrow">Titular de la pulsera</span>
-          <h2 data-i18n="titularidad.titular.title">Se carga una sola vez</h2>
-          <p data-i18n="titularidad.titular.body">El nombre, el DNI y la fecha de nacimiento se completan al activar la pulsera y quedan bloqueados. Para transferirla a otra persona —por venta o regalo— hay un costo único de cambio de titularidad, con verificación.</p>
+          <span class="eyebrow" data-i18n="titularidad.titular.eyebrow">Si perdés la pulsera</span>
+          <h2 data-i18n="titularidad.titular.title">Se desactiva el código</h2>
+          <p data-i18n="titularidad.titular.body">Nos avisás y desactivamos el código de la pulsera perdida: deja de mostrar tu ficha. Te asignamos un código nuevo y tus datos siguen guardados.</p>
         </div>
       </div>
 
       <p class="privacy-note reveal">
         <svg class="icon" aria-hidden="true"><use href="#icon-shield-check"></use></svg>
-        <span data-i18n="titularidad.note">Al activar la pulsera se usa un PIN que viene dentro del paquete: solo vos podés vincularla a tu cuenta. Una pulsera ya activada no se puede reclamar de nuevo, aunque alguien escanee el código.</span>
+        <span data-i18n="titularidad.note">Para menores de 18 años, la ficha la carga y la autoriza su madre, padre o tutor.</span>
       </p>
     </div>
   </section>
@@ -3521,9 +3525,9 @@ html:not([data-theme="dark"]) .hero {
   <section class="section bg-light" id="para-quien" aria-labelledby="para-quien-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Nuestros usuarios</span>
-        <h2 id="para-quien-title">Personas que ya eligieron estar más seguras</h2>
-        <p>Saferide fue diseñado para brindar tranquilidad y seguridad a personas en diferentes situaciones de vida. Si vos o alguien de tu entorno necesita tener sus datos médicos accesibles, este es tu producto.</p>
+        <span class="eyebrow" data-i18n="paraQuien.eyebrow">Para quién es</span>
+        <h2 id="para-quien-title" data-i18n="paraQuien.title">Un accidente le puede pasar a cualquiera</h2>
+        <p data-i18n="paraQuien.subtitle">En la calle, en el trabajo, en casa o haciendo deporte. Safe.Ride sirve para cualquier persona, de cualquier edad.</p>
       </div>
 
       <div class="beneficiary-grid">
@@ -3532,8 +3536,8 @@ html:not([data-theme="dark"]) .hero {
             <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-heart-pulse"></use></svg>
           </div>
           <div class="beneficiary-content">
-            <h3>Enfermedades crónicas</h3>
-            <p>Diabetes, cardiopatías, epilepsia, entre otras. El personal médico necesita conocer tu condición antes de intervenir.</p>
+            <h3 data-i18n="paraQuien.cronicas.title">Alergias o enfermedades crónicas</h3>
+            <p data-i18n="paraQuien.cronicas.desc">La medicación y las alergias quedan visibles antes de cualquier intervención.</p>
           </div>
         </div>
 
@@ -3542,8 +3546,8 @@ html:not([data-theme="dark"]) .hero {
             <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-shield-alert"></use></svg>
           </div>
           <div class="beneficiary-content">
-            <h3>Alergias medicamentosas</h3>
-            <p>Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas. Tu alergia tiene que estar visible.</p>
+            <h3 data-i18n="paraQuien.alergicas.title">Trabajadores</h3>
+            <p data-i18n="paraQuien.alergicas.desc">En la obra, el campo, la industria o el reparto: sus compañeros ven alergias y a quién llamar en segundos.</p>
           </div>
         </div>
 
@@ -3552,8 +3556,8 @@ html:not([data-theme="dark"]) .hero {
             <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-user-round"></use></svg>
           </div>
           <div class="beneficiary-content">
-            <h3>Adultos mayores</h3>
-            <p>Sobre todo quienes viven solos o salen sin acompañante. La pulsera les da autonomía y tranquilidad.</p>
+            <h3 data-i18n="paraQuien.mayores.title">Adultos mayores</h3>
+            <p data-i18n="paraQuien.mayores.desc">Sobre todo quienes viven solos: si sufren una caída o una descompensación, se sabe quiénes son y dónde viven.</p>
           </div>
         </div>
 
@@ -3562,8 +3566,8 @@ html:not([data-theme="dark"]) .hero {
             <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-bike"></use></svg>
           </div>
           <div class="beneficiary-content">
-            <h3>Deportistas y ciclistas</h3>
-            <p>Más expuestos a accidentes fuera de casa y lejos de quien pueda identificarlos o contactar a su familia.</p>
+            <h3 data-i18n="paraQuien.deportistas.title">Deportistas</h3>
+            <p data-i18n="paraQuien.deportistas.desc">Entrenan solos o lejos de casa, muchas veces sin el celular.</p>
           </div>
         </div>
 
@@ -3572,8 +3576,8 @@ html:not([data-theme="dark"]) .hero {
             <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-car"></use></svg>
           </div>
           <div class="beneficiary-content">
-            <h3>Conductores</h3>
-            <p>Protagonistas frecuentes de siniestros viales. En un choque, cada minuto sin información es un minuto de riesgo.</p>
+            <h3 data-i18n="paraQuien.conductores.title">En la calle</h3>
+            <p data-i18n="paraQuien.conductores.desc">Motociclistas, conductores, pasajeros, ciclistas y peatones, aunque no lleven documentos encima.</p>
           </div>
         </div>
 
@@ -3582,14 +3586,14 @@ html:not([data-theme="dark"]) .hero {
             <svg aria-hidden="true" style="width:32px;height:32px"><use href="#icon-baby"></use></svg>
           </div>
           <div class="beneficiary-content">
-            <h3>Niños y niñas</h3>
-            <p>Con sus datos cargados por sus padres o tutores. Ideal para la escuela, campamentos o actividades deportivas.</p>
+            <h3 data-i18n="paraQuien.ninos.title">Niños y estudiantes</h3>
+            <p data-i18n="paraQuien.ninos.desc">Con sus datos cargados y autorizados por su madre, padre o tutor.</p>
           </div>
         </div>
       </div>
 
       <div class="reveal" style="text-align:center;margin-top:48px">
-        <a href="#precios" class="btn btn-primary">Ver precios y planes</a>
+        <a href="#precios" class="btn btn-primary" data-i18n="paraQuien.boton">Ver el precio</a>
       </div>
     </div>
   </section>
@@ -3599,8 +3603,8 @@ html:not([data-theme="dark"]) .hero {
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="beneficios.eyebrow">Ventajas</span>
-        <h2 id="beneficios-title" data-i18n="beneficios.title">¿Por qué elegir Saferide?</h2>
-        <p data-i18n="beneficios.subtitle">Saferide combina simplicidad, accesibilidad y diseño pensado para emergencias reales.</p>
+        <h2 id="beneficios-title" data-i18n="beneficios.title">¿Por qué elegir Safe.Ride?</h2>
+        <p data-i18n="beneficios.subtitle">Safe.Ride combina simplicidad, accesibilidad y diseño pensado para emergencias reales.</p>
       </div>
 
       <div class="benefits-grid">
@@ -3623,8 +3627,8 @@ html:not([data-theme="dark"]) .hero {
         <div class="benefit-item reveal">
           <div class="benefit-number">03</div>
           <div class="benefit-content">
-            <h3 data-i18n="beneficios.b3.title">Accesible para todos</h3>
-            <p data-i18n="beneficios.b3.desc">Económico y fácil de conseguir. Cargás tu ficha de emergencia al instante, sin contraseñas.</p>
+            <h3 data-i18n="beneficios.b3.title">Liviana y accesible</h3>
+            <p data-i18n="beneficios.b3.desc">Hecha en Baradero con impresión 3D en TPU flexible: pesa entre 8 y 10 gramos y se puede usar todo el día.</p>
           </div>
         </div>
 
@@ -3639,8 +3643,8 @@ html:not([data-theme="dark"]) .hero {
         <div class="benefit-item reveal">
           <div class="benefit-number">05</div>
           <div class="benefit-content">
-            <h3 data-i18n="beneficios.b5.title">Recordatorio una vez al año</h3>
-            <p data-i18n="beneficios.b5.desc">Cada 12 meses te llega un mail para que revises tu ficha, por si te diagnosticaron una enfermedad, cambiaste de medicación o apareció una alergia nueva. Con un clic confirmás que sigue todo igual.</p>
+            <h3 data-i18n="beneficios.b5.title">Dos tecnologías en una</h3>
+            <p data-i18n="beneficios.b5.desc">QR y NFC en la misma pulsera: si el QR se raya, se lee por NFC; si el celular no tiene NFC, se usa el QR.</p>
           </div>
         </div>
 
@@ -3660,27 +3664,16 @@ html:not([data-theme="dark"]) .hero {
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="historia.eyebrow">Un ejemplo</span>
-        <h2 id="historia-title" data-i18n="historia.title">Una historia real</h2>
+        <h2 id="historia-title" data-i18n="historia.title">La historia de Nico</h2>
       </div>
 
       <div class="story-card reveal">
         <blockquote>
-          <p data-i18n="historia.p1">
-            Es una tarde de domingo y un ciclista sale a entrenar por una ruta que conoce
-            de memoria. En una bajada, pierde el control y cae. Nadie que pasa por ahí sabe
-            quién es, ni si tiene alguna alergia, ni a quién avisar.
-          </p>
-          <p data-i18n="historia.p2">
-            Cuando llega el equipo médico, alguien nota la pulsera con el código QR en su
-            muñeca. La escanean con el celular y, en segundos, aparece lo que necesitan: su
-            grupo sanguíneo, una alergia a un analgésico común, y el teléfono de su hermana.
-          </p>
-          <p data-i18n="historia.p3">
-            Ese dato evita que le administren un medicamento que podría haberle hecho mal,
-            y permite avisar a su familia mientras todavía está siendo trasladado.
-          </p>
+          <p data-i18n="historia.p1">Nico tiene 19 años y reparte pedidos en moto todas las noches para pagarse la facultad. Una noche de lluvia, en una esquina mal iluminada, un auto no respeta el pare y lo golpea. Nico queda en el asfalto, inconsciente.</p>
+          <p data-i18n="historia.p2">Llega un patrullero. El policía, que no lo conoce, ve la pulsera verde en su muñeca. Acerca el celular y, en segundos, aparecen el nombre de Nico, su grupo sanguíneo, que es alérgico a la penicilina y el teléfono de su mamá.</p>
+          <p data-i18n="historia.p3">Cuando llega la ambulancia, los paramédicos ya saben qué medicación evitar, y la familia de Nico ya está avisada.</p>
         </blockquote>
-        <footer data-i18n="historia.footer">Situación ilustrativa, a modo de ejemplo</footer>
+        <footer data-i18n="historia.footer">Historia ficticia, basada en situaciones que pasan todos los días</footer>
       </div>
     </div>
   </section>
@@ -3692,20 +3685,12 @@ html:not([data-theme="dark"]) .hero {
         <div class="panel reveal" id="futuro">
           <span class="eyebrow" data-i18n="futuro.eyebrow">Mirando hacia adelante</span>
           <h2 data-i18n="futuro.title">Un proyecto pensado para crecer</h2>
-          <p data-i18n="futuro.body">
-            Saferide no es solo una idea: viene con un modelo de negocio pensado para
-            sostenerse en el tiempo, con posibles alianzas con hospitales, clínicas, obras
-            sociales y clubes deportivos, y una hoja de ruta que incluye nuevas funciones
-            como historial de vacunas o turnos médicos.
-          </p>
+          <p data-i18n="futuro.body">Empezamos con un lote piloto en Baradero y la zona norte, y buscamos alianzas con el municipio, centros de jubilados, clubes, escuelas de manejo, empresas y ART. A futuro queremos sumar avisos a la familia cuando se escanea la pulsera, conexión con los servicios de emergencia (SAME), la ficha en varios idiomas y pulseras de distintos tamaños y colores.</p>
         </div>
         <div class="panel reveal" id="proyecto">
           <span class="eyebrow" data-i18n="proyecto.eyebrow">Quiénes lo hacemos</span>
           <h2 data-i18n="proyecto.title">Sobre el proyecto</h2>
-          <p data-i18n-html="proyecto.body">
-            Saferide es un proyecto tecnológico desarrollado por Santino Figueredo y Elena Avogadro,
-            estudiantes de la Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», en Baradero.
-          </p>
+          <p data-i18n-html="proyecto.body">Safe.Ride es un proyecto de Elena Avogadro y Santino Figueredo, de 7.º 4.ª Programación de la Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», en Baradero, para la materia Proyecto de Diseño e Implementación de Sistemas Computacionales (profesores Azul Saladín y Gonzalo Santín). En el camino escuchamos a usuarios y docentes y cambiamos tres cosas: el botón pasó a ser la zona de lectura NFC, la banda pasó de PLA rígido a TPU flexible, y la idea pasó de ser solo para motociclistas a ser para todo público.</p>
         </div>
       </div>
     </div>
@@ -3721,30 +3706,28 @@ html:not([data-theme="dark"]) .hero {
       </div>
 
       <div class="stats-grid">
+        <!-- Cifras del documento del proyecto (ANSV 2025, SRT 2024, OMS). Quietas: sin conteo animado. -->
         <div class="reveal">
-          <div class="stat-number" data-count="11">11</div>
-          <p class="stat-label" data-i18n="stats.stat1">personas mueren por día en siniestros viales en Argentina.</p>
+          <div class="stat-number" data-i18n="stats.n1">11</div>
+          <p class="stat-label" data-i18n="stats.stat1">personas mueren por día en siniestros viales en Argentina (4.060 en 2025).</p>
         </div>
         <div class="reveal">
-          <div class="stat-number" data-count="4 de 10">4 de 10</div>
-          <p class="stat-label" data-i18n="stats.stat2">víctimas fatales de siniestros viales iban en moto.</p>
+          <div class="stat-number" data-i18n="stats.n2">46%</div>
+          <p class="stat-label" data-i18n="stats.stat2">de las víctimas fatales en las calles iban en moto: casi la mitad.</p>
         </div>
         <div class="reveal">
-          <div class="stat-number" data-count="24hs" data-prefix="" data-suffix="">24hs</div>
-          <p class="stat-label">es la ventana crítica donde la información médica salva vidas.</p>
+          <div class="stat-number" data-i18n="stats.n3">355.000</div>
+          <p class="stat-label" data-i18n="stats.stat3">accidentes y enfermedades laborales en Argentina en 2024.</p>
         </div>
         <div class="reveal">
-          <div class="stat-number" data-count="0">0</div>
-          <p class="stat-label">apps necesitas para que cualquier persona escanee tu QR.</p>
+          <div class="stat-number" data-i18n="stats.n4">684.000</div>
+          <p class="stat-label" data-i18n="stats.stat4">muertes por año en el mundo por caídas, sobre todo de mayores de 60.</p>
         </div>
       </div>
 
-      <p class="stats-source" data-i18n="stats.source">Fuente: Agencia Nacional de Seguridad Vial (ANSV), datos oficiales 2024.</p>
+      <p class="stats-source" data-i18n="stats.source">Fuentes: ANSV, Informe preliminar de siniestralidad vial fatal 2025; Superintendencia de Riesgos del Trabajo (2024); Organización Mundial de la Salud.</p>
 
-      <p class="stats-closing reveal" data-i18n="stats.closing">
-        Detrás de cada cifra hay una persona a la que, muchas veces, nadie pudo identificar
-        a tiempo. Saferide busca achicar esa distancia.
-      </p>
+      <p class="stats-closing reveal" data-i18n="stats.closing">Detrás de cada cifra hay una persona a la que, muchas veces, nadie pudo identificar a tiempo. Safe.Ride busca achicar esa distancia.</p>
     </div>
   </section>
 
@@ -3753,12 +3736,12 @@ html:not([data-theme="dark"]) .hero {
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="comparativa.eyebrow">Comparativa</span>
-        <h2 id="comparativa-title" data-i18n="comparativa.title">¿Por qué Saferide y no otra opción?</h2>
+        <h2 id="comparativa-title" data-i18n="comparativa.title">¿Por qué Safe.Ride y no otra opción?</h2>
       </div>
 
       <div class="comparativa-table-wrap reveal">
         <table class="comparativa-table">
-          <caption class="sr-only" data-i18n="comparativa.caption">Comparación entre Saferide y otras alternativas de identificación médica</caption>
+          <caption class="sr-only" data-i18n="comparativa.caption">Comparación entre Safe.Ride y otras alternativas de identificación médica</caption>
           <thead>
             <tr>
               <th scope="col" data-i18n="comparativa.colOpcion">Opción</th>
@@ -3769,7 +3752,7 @@ html:not([data-theme="dark"]) .hero {
           </thead>
           <tbody>
             <tr>
-              <th scope="row" data-i18n="comparativa.rowPulsera">Pulsera grabada</th>
+              <th scope="row" data-i18n="comparativa.rowPulsera">Pulsera grabada (Road iD, MedicAlert, Ruta iD)</th>
               <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only" data-i18n="comparativa.no">No</span></td>
               <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
               <td><svg class="icon mark-no" aria-hidden="true"><use href="#icon-x"></use></svg><span class="sr-only" data-i18n="comparativa.no">No</span></td>
@@ -3787,7 +3770,7 @@ html:not([data-theme="dark"]) .hero {
               <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
             </tr>
             <tr>
-              <th scope="row">Saferide</th>
+              <th scope="row">Safe.Ride</th>
               <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
               <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
               <td><svg class="icon mark-yes" aria-hidden="true"><use href="#icon-check"></use></svg><span class="sr-only" data-i18n="comparativa.si">Sí</span></td>
@@ -3796,7 +3779,7 @@ html:not([data-theme="dark"]) .hero {
         </table>
       </div>
 
-      <p class="comparativa-note reveal" data-i18n="comparativa.note">Ninguna alternativa suma las tres cosas a la vez. Saferide sí.</p>
+      <p class="comparativa-note reveal" data-i18n="comparativa.note">Ninguna alternativa suma las tres cosas a la vez. Safe.Ride sí.</p>
     </div>
   </section>
 
@@ -3804,38 +3787,38 @@ html:not([data-theme="dark"]) .hero {
   <section class="section" id="precios" aria-labelledby="precios-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow">Precio</span>
-        <h2 id="precios-title">Un solo producto, protección completa</h2>
-        <p>La pulsera Saferide trae el código QR y el chip NFC en una sola pieza. Si no se puede escanear el QR, se lee por NFC. Actualización de datos ilimitada, siempre incluida.</p>
+        <span class="eyebrow" data-i18n="precios.eyebrow">Precio</span>
+        <h2 id="precios-title" data-i18n="precios.title">Un solo producto, protección completa</h2>
+        <p data-i18n="precios.subtitle">La pulsera Safe.Ride trae el código QR y el chip NFC en una sola pieza. Si no se puede escanear el QR, se lee por NFC. La actualización de tus datos está siempre incluida.</p>
       </div>
 
       <div class="pricing-solo">
         <div class="pricing-card pricing-card-featured reveal">
-          <div class="pricing-popular">Pulsera Saferide</div>
+          <div class="pricing-popular" data-i18n="precios.popular">Pulsera Safe.Ride</div>
           <div class="pricing-card-header">
-            <span class="pricing-label">QR + NFC en una</span>
+            <span class="pricing-label" data-i18n="precios.label">QR + NFC en una</span>
             <div class="pricing-price">
-              <span class="pricing-amount">$4.000</span>
-              <span class="pricing-period">cada una</span>
+              <span class="pricing-amount" data-i18n="precios.monto">$8.000</span>
+              <span class="pricing-period" data-i18n="precios.periodo">cada una</span>
             </div>
           </div>
-          <h3>Pulsera con QR y chip NFC integrado</h3>
-          <p class="pricing-desc">Una sola pulsera con las dos tecnologías: el QR para cuando hay internet, el NFC para cuando no hay señal.</p>
+          <h3 data-i18n="precios.cardTitle">Pulsera de TPU con QR y chip NFC</h3>
+          <p class="pricing-desc" data-i18n="precios.cardDesc">Una sola pulsera con las dos tecnologías: si el QR se raya, el NFC abre la misma ficha.</p>
           <ul class="pricing-features">
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Código QR + chip NFC en la misma pulsera</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Funciona con o sin internet</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Ficha médica de emergencia editable cuando quieras</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Pulsera resistente al agua</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Sin contraseña y sin apps</li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Envío a todo el país</li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f1">Código QR + chip NFC en la misma pulsera</span></li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f2">Ficha médica editable cuando quieras, sin costo</span></li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f3">TPU flexible, liviana (8 a 10 g)</span></li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f4">Sin contraseña y sin apps</span></li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f5">Dura entre 12 y 18 meses de uso diario</span></li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f6">Entrega en Baradero y zona norte</span></li>
           </ul>
-          <a href="#pedido" class="btn btn-primary btn-block btn-lg">Pedir mi pulsera →</a>
+          <a href="#pedido" class="btn btn-primary btn-block btn-lg" data-i18n="precios.boton">Pedir mi pulsera →</a>
         </div>
       </div>
 
       <p class="pricing-guarantee reveal" style="text-align:center;margin-top:40px;font-size:0.92rem;color:var(--text-secondary)">
         <svg class="icon" aria-hidden="true" style="width:18px;height:18px;color:var(--accent-fg);vertical-align:-3px;margin-right:4px"><use href="#icon-shield-check"></use></svg>
-        Garantía de satisfacción. Si no te gusta, te devolvemos tu dinero.
+        <span data-i18n="precios.nota">Apta para el uso diario; no sumergir por mucho tiempo. Para leerla, el celular necesita cámara o NFC y conexión a internet.</span>
       </p>
     </div>
   </section>
@@ -3856,14 +3839,14 @@ html:not([data-theme="dark"]) .hero {
             <div class="phone-screen">
               <div class="phone-statusbar" aria-hidden="true">
                 <span>9:41</span>
-                <span>saferide.com</span>
+                <span>Safe.Ride · ficha</span>
               </div>
               <div class="phone-ficha">
                 <div class="phone-ficha-head">
                   <svg class="icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
                   <div>
                     <strong data-i18n="demo.fichaTitle">Ficha médica de emergencia</strong>
-                    <span data-i18n="demo.generadaPor">Generada por Saferide</span>
+                    <span data-i18n="demo.generadaPor">Generada por Safe.Ride</span>
                   </div>
                 </div>
                 <div class="phone-alert" aria-hidden="true">
@@ -3901,6 +3884,7 @@ html:not([data-theme="dark"]) .hero {
               <span data-i18n="demo.point3">Es una página de solo lectura: nadie puede editar tus datos.</span>
             </li>
           </ul>
+          <p class="demo-aviso" data-i18n="demo.aviso" style="font-size:0.85rem;color:var(--text-secondary);margin:4px 0 14px">Safe.Ride no reemplaza la atención médica ni hace diagnósticos: solo muestra los datos que carga cada persona.</p>
           <div class="demo-scan">
             <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
             <span data-i18n="demo.scanHint">Con la pulsera, esta pantalla aparece al escanear tu código QR real.</span>
@@ -3914,28 +3898,28 @@ html:not([data-theme="dark"]) .hero {
   <section class="section bg-light" id="pedido" aria-labelledby="pedido-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> <span data-i18n="pedido.eyebrow">Enviamos a cualquier parte del mundo</span></span>
+        <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> <span data-i18n="pedido.eyebrow">Entregas en Baradero y zona norte</span></span>
         <h2 id="pedido-title" data-i18n="pedido.title">Pedí tu pulsera</h2>
-        <p data-i18n="pedido.subtitle">Completá tus datos de envío y te llega a domicilio. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.</p>
+        <p data-i18n="pedido.subtitle">Por ahora entregamos en Baradero y la zona norte de Buenos Aires. Completá tus datos y te avisamos cuándo la recibís. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.</p>
       </div>
 
       <div class="pedido-layout">
         <div class="pedido-info reveal">
           <div class="pedido-info-card">
-            <h3>¿Por qué elegir Saferide?</h3>
+            <h3 data-i18n="pedido.porQue">Lo que incluye</h3>
             <ul class="pedido-benefits">
-              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Envío a todo el país</li>
-              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Garantía de satisfacción</li>
-              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Actualización de datos gratis</li>
-              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> Soporte por mail</li>
+              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i1">Entrega en Baradero y zona norte</span></li>
+              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i2">Instructivo y ayuda para cargar tu ficha</span></li>
+              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i3">Actualización de datos gratis</span></li>
+              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i4">Consultas por Instagram</span></li>
             </ul>
           </div>
           <div class="pedido-info-card">
-            <h3>Medios de pago</h3>
+            <h3 data-i18n="pedido.medios">Medios de pago</h3>
             <div class="pedido-payment-methods">
-              <span class="payment-badge">Transferencia</span>
+              <span class="payment-badge" data-i18n="pedido.m1">Transferencia</span>
               <span class="payment-badge">Mercado Pago</span>
-              <span class="payment-badge">Efectivo</span>
+              <span class="payment-badge" data-i18n="pedido.m3">Efectivo</span>
             </div>
           </div>
         </div>
@@ -3959,7 +3943,7 @@ html:not([data-theme="dark"]) .hero {
               <div class="form-field">
                 <label for="orderProduct" data-i18n="field.producto">Producto</label>
                 <select id="orderProduct" name="product" required>
-                  <option value="pulsera" selected data-i18n="product.pulsera">Pulsera Saferide (QR + NFC) — $4.000</option>
+                  <option value="pulsera" selected data-i18n="product.pulsera">Pulsera Safe.Ride (QR + NFC) — $8.000</option>
                 </select>
               </div>
               <div class="form-field">
@@ -4016,7 +4000,7 @@ html:not([data-theme="dark"]) .hero {
             <div class="demo-card-header">
               <svg class="icon" aria-hidden="true"><use href="#icon-package"></use></svg>
               <div>
-                <h3 id="orderResultName">Pedido Saferide</h3>
+                <h3 id="orderResultName">Pedido Safe.Ride</h3>
                 <span id="orderResultSubtitle">—</span>
               </div>
             </div>
@@ -4070,7 +4054,7 @@ html:not([data-theme="dark"]) .hero {
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a2">Podés generar un código nuevo cuando quieras desde tu cuenta; el anterior deja de estar activo.</p>
+            <p data-i18n="faq.a2">Tu ficha no se borra. Nos avisás, desactivamos el código de esa pulsera y te asignamos uno nuevo.</p>
           </div></div>
         </div>
         <div class="faq-item">
@@ -4079,7 +4063,7 @@ html:not([data-theme="dark"]) .hero {
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a3">La pulsera trae QR y NFC. Para ver tu ficha completa por QR, quien te escanea necesita conexión. Con el chip NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.</p>
+            <p data-i18n="faq.a3">Sí. Tanto el QR como el NFC abren un enlace a tu ficha, así que el celular que escanea necesita conexión a internet en ese momento (la mayoría tiene datos móviles). Vos también necesitás conexión para cargar o actualizar tus datos.</p>
           </div></div>
         </div>
         <div class="faq-item">
@@ -4093,11 +4077,11 @@ html:not([data-theme="dark"]) .hero {
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span data-i18n="faq.q5">¿Tiene algún costo?</span>
+            <span data-i18n="faq.q5">¿Cuánto sale?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a5">La versión básica es gratuita. A futuro habrá funciones adicionales opcionales.</p>
+            <p data-i18n="faq.a5">La pulsera con QR y NFC cuesta $8.000 e incluye la actualización de tus datos sin límite y sin costo extra. Por ahora la entregamos en Baradero y la zona norte.</p>
           </div></div>
         </div>
         <div class="faq-item">
@@ -4106,52 +4090,52 @@ html:not([data-theme="dark"]) .hero {
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a6">Sí, las veces que necesites, desde tu cuenta.</p>
+            <p data-i18n="faq.a6">Sí, las veces que necesites, desde tu enlace privado. No hace falta cambiar la pulsera.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span data-i18n="faq.q7">¿Puedo cambiar el nombre del titular?</span>
+            <span data-i18n="faq.q7">¿Es solo para motociclistas?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a7">Los datos médicos (alergias, medicación, grupo sanguíneo, contacto) los cambiás gratis, siempre. El titular —nombre, DNI y fecha de nacimiento— se carga una sola vez al activar la pulsera. Para transferirla a otra persona hay un costo único de cambio de titularidad.</p>
+            <p data-i18n="faq.a7">No. Empezó pensada para ellos, pero sirve para cualquier persona que pueda tener un accidente: en la calle, en el trabajo, en casa o haciendo deporte, de cualquier edad.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span data-i18n="faq.q8">¿Me avisan si tengo que actualizar la ficha?</span>
+            <span data-i18n="faq.q8">¿Reemplaza la atención médica?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a8">Sí. Una vez al año te mandamos un mail para que revises tu ficha, por si cambió algo importante (una enfermedad nueva, otra medicación, una alergia). Si sigue todo igual, lo confirmás con un clic.</p>
+            <p data-i18n="faq.a8">No. Safe.Ride solo muestra los datos que carga cada persona para ayudar en una emergencia. No hace diagnósticos ni reemplaza la atención de un profesional de la salud.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>¿Funciona en otros países?</span>
+            <span data-i18n="faq.q9">¿Funciona en otros países?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>Sí. El QR funciona en cualquier parte del mundo: cualquier persona con un celular puede escanearlo y ver tu ficha. No hay restricciones geográficas.</p>
+            <p data-i18n="faq.a9">Sí. El QR y el NFC abren tu ficha desde cualquier celular con internet, en cualquier país. Por ahora las pulseras se entregan en Baradero y la zona norte.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>¿Qué diferencia hay con una pulsera grabada?</span>
+            <span data-i18n="faq.q10">¿Qué diferencia hay con una pulsera grabada?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>Una pulsera grabada tiene espacio limitado y no se puede actualizar. Saferide te permite cargar toda la información que necesites, modificarla cuando quieras, y acceder a ella desde cualquier celular sin instalar nada.</p>
+            <p data-i18n="faq.a10">Una pulsera grabada tiene espacio limitado y, para cambiar un dato, hay que hacer otra. Con Safe.Ride cambiás tu ficha cuando quieras, sin tocar la pulsera, y se lee por QR o por NFC.</p>
           </div></div>
         </div>
         <div class="faq-item">
           <button class="faq-question" aria-expanded="false">
-            <span>¿Puedo usarlo para mi familia?</span>
+            <span data-i18n="faq.q11">¿Puedo usarlo para mi familia?</span>
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p>¡Por supuesto! Podés crear fichas para cada miembro de tu familia: hijos, padres, abuelos. Es ideal para personas que no pueden cargar sus datos solas.</p>
+            <p data-i18n="faq.a11">Sí. Cada persona tiene su pulsera y su ficha. Para menores de 18, la ficha la carga y la autoriza su madre, padre o tutor.</p>
           </div></div>
         </div>
       </div>
@@ -4164,7 +4148,7 @@ html:not([data-theme="dark"]) .hero {
 <section class="section cta-final" id="contacto" aria-labelledby="cta-final-title">
   <div class="container">
     <h2 id="cta-final-title" data-i18n="ctaFinal.title">¿Querés tener tu información siempre a mano?</h2>
-    <p style="color:rgba(255,255,255,0.85);max-width:540px;margin:0 auto 32px;font-size:1.05rem">Armá tu ficha en un minuto y pedí tu pulsera con QR y NFC para tenerla siempre en la muñeca.</p>
+    <p style="color:rgba(255,255,255,0.85);max-width:540px;margin:0 auto 32px;font-size:1.05rem" data-i18n="ctaFinal.body">Armá tu ficha en un minuto y pedí tu pulsera con QR y NFC para tenerla siempre en la muñeca.</p>
     <div class="cta-actions">
       <button type="button" class="btn btn-primary" data-prototype-trigger data-i18n="ctaFinal.generarQr">Generar mi QR</button>
       <a href="#pedido" class="btn btn-outline" data-i18n="nav.pedido">Pedí tu pulsera</a>
@@ -4176,17 +4160,14 @@ html:not([data-theme="dark"]) .hero {
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="logo"><span class="logo-safe">Safe</span><span class="logo-ride">ride</span></div>
-        <p class="footer-slogan" data-i18n="hero.tagline">Tus datos médicos, siempre accesibles.</p>
+        <div class="logo"><span class="logo-safe">Safe</span><span class="logo-ride">.Ride</span></div>
+        <p class="footer-slogan" data-i18n="hero.tagline">Tu información, a tiempo.</p>
       </div>
 
       <div class="footer-contact">
-        <a href="mailto:contacto@saferide.com">
-          <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
-          contacto@saferide.com
-        </a>
+        <p class="footer-contacto" data-i18n="footer.contacto" style="margin:0;color:rgba(255,255,255,0.82)">Contacto: por Instagram o en la E.S.T. N.º 1 de Baradero</p>
         <div class="footer-social">
-          <a href="https://www.instagram.com/saferide.baradero?igsh=MWZ2Zjk5c2FrenF6MQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Saferide en Instagram (se abre en una pestaña nueva)" data-i18n-aria-label="footer.instagramAria">
+          <a href="https://www.instagram.com/saferide.baradero?igsh=MWZ2Zjk5c2FrenF6MQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Safe.Ride en Instagram (se abre en una pestaña nueva)" data-i18n-aria-label="footer.instagramAria">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -4198,8 +4179,9 @@ html:not([data-theme="dark"]) .hero {
     </div>
 
     <div class="footer-bottom">
-      <span>© 2026 Saferide — Santino Figueredo & Elena Avogadro</span>
+      <span>© 2026 Safe.Ride — Elena Avogadro & Santino Figueredo</span>
       <span data-i18n="footer.escolar">Proyecto escolar — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero</span>
+      <span data-i18n="footer.aviso">Safe.Ride no reemplaza la atención médica ni hace diagnósticos.</span>
     </div>
   </div>
 </footer>
@@ -4213,13 +4195,9 @@ html:not([data-theme="dark"]) .hero {
 
     <div class="modal-body">
       <div id="prototypeFormView">
-        <span class="eyebrow" data-i18n="modal.eyebrow">Creá tu cuenta</span>
+        <span class="eyebrow" data-i18n="modal.eyebrow">Tu ficha</span>
         <h2 id="prototypeModalTitle" data-i18n="modal.title">Creá tu ficha de emergencia</h2>
-        <p data-i18n="modal.intro">
-          Completá estos datos para generar tu ficha y tu código QR.
-          Solo necesitás tu mail — no hace falta contraseña — así podemos
-          identificarte y avisarte novedades por correo.
-        </p>
+        <p data-i18n="modal.intro">Completá estos datos para generar tu ficha y tu código QR. Solo necesitás tu mail —no hace falta contraseña— para mandarte tu enlace privado y poder editarla.</p>
 
         <form id="prototypeForm" novalidate>
           <div class="form-grid">
@@ -4234,10 +4212,6 @@ html:not([data-theme="dark"]) .hero {
             <div class="form-field">
               <label for="protoBirthdate" data-i18n="field.fechaNacimiento">Fecha de nacimiento</label>
               <input type="date" id="protoBirthdate" name="birthdate" />
-            </div>
-            <div class="form-field">
-              <label for="protoDni" data-i18n="field.dni">DNI</label>
-              <input type="text" id="protoDni" name="dni" placeholder="Ej: 40123456" data-i18n-placeholder="ph.dni" inputmode="numeric" />
             </div>
             <div class="form-field">
               <label for="protoBlood" data-i18n="field.grupoSanguineo">Grupo sanguíneo</label>
@@ -4414,25 +4388,30 @@ html:not([data-theme="dark"]) .hero {
             </div>
             <div class="form-field">
               <label for="protoContactPhone" data-i18n="field.contactoTelefono">Contacto de emergencia (teléfono)</label>
-              <input type="tel" id="protoContactPhone" name="contactPhone" required placeholder="Ej: 011 5555-0123" data-i18n-placeholder="ph.telefono" />
+              <input type="tel" id="protoContactPhone" name="contactPhone" required placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" />
             </div>
           </div>
+
+          <!-- Consentimiento (Ley 25.326: los datos de salud son datos sensibles) -->
+          <label class="consentimiento" for="protoConsent" style="display:flex;gap:10px;align-items:flex-start;margin:4px 0 12px;font-size:0.88rem;line-height:1.45;color:var(--text-secondary);cursor:pointer">
+            <input type="checkbox" id="protoConsent" name="consent" required style="margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:var(--green-accent)" />
+            <span data-i18n="modal.consentimiento">Acepto que estos datos se muestren a quien escanee mi pulsera en una emergencia, según la Ley 25.326 de Protección de Datos Personales. Puedo verlos, corregirlos o borrarlos cuando quiera. Si es para un menor de 18 años, lo autoriza su madre, padre o tutor.</span>
+          </label>
 
           <div style="display:flex;gap:12px;margin-top:8px">
             <button type="submit" class="btn btn-primary" style="flex:2">
               <svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
               <span data-i18n="modal.generarQr">Generar mi QR</span>
             </button>
-            <button type="button" class="btn btn-outline" id="prefillBtn" style="flex:1;font-size:0.88rem">
+            <button type="button" class="btn btn-outline" id="prefillBtn" style="flex:1;font-size:0.88rem;white-space:normal;line-height:1.2;text-align:center">
               <svg class="icon" aria-hidden="true" style="width:16px;height:16px"><use href="#icon-refresh-cw"></use></svg>
-              Rellenar ejemplo
+              <span data-i18n="modal.rellenar">Rellenar ejemplo</span>
             </button>
           </div>
 
           <p class="modal-disclaimer">
             <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
-            <span data-i18n="modal.disclaimer">Tus datos se procesan en este dispositivo. Al generar tu QR
-            vas a poder descargar tu ficha para guardarla o imprimirla.</span>
+            <span data-i18n="modal.disclaimer">Tus datos se procesan en este dispositivo. Al generar tu QR vas a poder descargar tu ficha para guardarla o imprimirla.</span>
           </p>
         </form>
       </div>
@@ -4453,7 +4432,6 @@ html:not([data-theme="dark"]) .hero {
           </div>
           <dl>
             <div class="demo-field"><dt data-i18n="field.fechaNacimiento">Fecha de nacimiento</dt><dd id="protoResultBirthdate">—</dd></div>
-            <div class="demo-field"><dt data-i18n="field.dni">DNI</dt><dd id="protoResultDni">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.grupoSanguineo">Grupo sanguíneo</dt><dd id="protoResultBlood">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.condicionesCortas">Enfermedades / condiciones</dt><dd id="protoResultConditions">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.alergias">Alergias</dt><dd id="protoResultAllergies">—</dd></div>
@@ -4461,21 +4439,18 @@ html:not([data-theme="dark"]) .hero {
             <div class="demo-field"><dt data-i18n="field.obraSocialCorta">Obra social / cobertura</dt><dd id="protoResultInsurance">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.telefonoPropio">Teléfono propio</dt><dd id="protoResultOwnPhone">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.localidad">Localidad / provincia</dt><dd id="protoResultLocality">—</dd></div>
-            <div class="demo-field"><dt data-i18n="field.domicilio">Domicilio</dt><dd id="protoResultAddress">—</dd></div>
+            <div class="demo-field"><dt data-i18n="field.domicilio">Domicilio (dónde vive)</dt><dd id="protoResultAddress">—</dd></div>
             <div class="demo-field"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd id="protoResultContact">—</dd></div>
           </dl>
         </div>
 
         <div style="text-align:center;margin:24px 0">
-          <p style="font-weight:600;font-size:0.88rem;margin-bottom:12px;color:var(--text-primary)">Tu código QR ficticio:</p>
+          <p style="font-weight:600;font-size:0.88rem;margin-bottom:12px;color:var(--text-primary)" data-i18n="modal.qrFicticio">Tu código QR de ejemplo:</p>
           <canvas id="qrCodeCanvas" width="200" height="200" style="border-radius:12px;border:2px solid var(--surface-border);background:#fff"></canvas>
-          <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px">Esto es una simulación. El QR real se genera al registrar tu cuenta.</p>
+          <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px" data-i18n="modal.simulacionNota">Esto es una simulación. El QR real va grabado en tu pulsera.</p>
         </div>
 
-        <p class="modal-disclaimer" data-i18n="modal.resultDisclaimer">
-          Así se ve tu ficha pública al escanear el QR o acercar la pulsera por NFC.
-          Descargala para guardarla en tu celular o imprimirla junto con tu pedido.
-        </p>
+        <p class="modal-disclaimer" data-i18n="modal.resultDisclaimer">Así se ve tu ficha pública al escanear el QR o acercar la pulsera por NFC. Descargala para guardarla en tu celular o imprimirla junto con tu pedido.</p>
 
         <button type="button" class="btn btn-primary btn-block" id="prototypeDownloadBtn">
           <svg class="icon" aria-hidden="true"><use href="#icon-download"></use></svg>
@@ -4494,10 +4469,10 @@ html:not([data-theme="dark"]) .hero {
 // ============ TRADUCCIONES (ES / EN) ============
 const translations = {
   es: {
-    meta: { title: "Saferide — Tu información puede salvar tu vida" },
+    meta: { title: "Safe.Ride — Tu información, a tiempo." },
     a11y: { skip: "Saltar al contenido" },
     nav: {
-      logoAria: "Saferide, ir al inicio",
+      logoAria: "Safe.Ride, ir al inicio",
       mainAria: "Navegación principal",
       comoFunciona: "Cómo funciona",
       formatos: "Formatos",
@@ -4517,102 +4492,129 @@ const translations = {
       paletteAria: "Cambiar la paleta de colores",
     },
     hero: {
-      tagline: "Tus datos médicos, siempre accesibles.",
-      desc: "Una pulsera con código QR y chip NFC integrado, con tus datos médicos esenciales, siempre con vos. Para que, ante cualquier emergencia y en cualquier parte del mundo, el personal de salud tenga tu información clave apenas ingresás a una guardia, hospital o clínica.",
+      badge: "Protección médica siempre con vos",
+      tagline: "Tu información, a tiempo.",
+      desc: "Una pulsera de TPU con código QR y chip NFC en la misma pieza, con tus datos médicos esenciales. Ante cualquier accidente —en la calle, en el trabajo, en casa o haciendo deporte— quien te ayude escanea el QR o acerca el celular y ve al instante tu grupo sanguíneo, tus alergias, tu medicación y a quién avisar.",
       ctaPrimary: "Ver cómo funciona",
       ctaSecondary: "Creá tu ficha",
       qrIllustration: "Ilustración de una pulsera con un colgante de código QR",
       phoneAria: "Vista de la ficha médica de emergencia en un celular",
       trust1: "Sin apps ni contraseñas",
-      trust2: "Funciona con o sin internet",
+      trust2: "QR o NFC: si falla uno, funciona el otro",
       trust3: "Datos actualizables siempre",
     },
     problema: {
       eyebrow: "El problema",
       title: "Cuando más se necesita, es cuando menos se tiene",
-      body: "En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico: si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar — ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica, en cualquier país. Las pulseras grabadas y las tarjetas de emergencia ayudan, pero se quedan cortas: no se pueden actualizar y tienen espacio limitado. Saferide combina un accesorio simple con una plataforma digital que se actualiza cuando vos quieras, pensada para cualquier persona, no solo para quienes andan en moto.",
+      body: "En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico: si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar — ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica, en cualquier país. Las pulseras grabadas y las tarjetas de emergencia ayudan, pero se quedan cortas: no se pueden actualizar y tienen espacio limitado. Safe.Ride combina un accesorio simple con una plataforma digital que se actualiza cuando vos quieras, pensada para cualquier persona, no solo para quienes andan en moto.",
     },
     comoFunciona: {
       eyebrow: "Paso a paso",
       title: "Cómo funciona",
       subtitle: "De la carga de tus datos a la lectura del QR, en seis pasos simples.",
-      step1: { title: "Registrate con tu mail", desc: "Sin contraseñas: solo tu mail, para identificarte y avisarte novedades." },
-      step2: { title: "Cargá tus datos médicos", desc: "Grupo sanguíneo, alergias, medicación y un contacto de emergencia." },
+      step1: { title: "Dejá tu mail", desc: "Sin contraseñas: te mandamos tu enlace privado para cargar y editar tu ficha." },
+      step2: { title: "Cargá tus datos médicos", desc: "Grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia." },
       step3: { title: "Generá tu QR", desc: "El sistema arma tu código único al instante." },
-      step4: { title: "Imprimilo o descargalo", desc: "En una pulsera, una tarjeta o el celular." },
-      step5: { title: "Listo para una emergencia", desc: "Cualquiera puede escanearlo con la cámara, sin instalar nada." },
+      step4: { title: "Grabamos tu pulsera", desc: "Tu QR va en la pulsera y el chip NFC se graba con el mismo enlace." },
+      step5: { title: "Listo para una emergencia", desc: "Cualquiera escanea el QR o acerca el celular al círculo NFC, sin instalar nada." },
       step6: { title: "Tu información, al toque", desc: "Se muestra solo lo esencial, en una página pública de solo lectura." },
     },
     formatos: {
       eyebrow: "Una pulsera, dos tecnologías",
       title: "QR y chip NFC, juntos en la misma pulsera",
-      subtitle: "No hace falta elegir: la pulsera Saferide trae las dos. Se lee por QR cuando hay internet y por NFC cuando no hay señal. Siempre muestran la misma información.",
-      qr: { title: "Código QR", desc: "Cualquiera lo escanea con la cámara del celular y accede a tu ficha completa en la página de Saferide. Necesita que el celular que escanea tenga conexión a internet." },
-      nfc: { title: "Chip NFC integrado", desc: "Va dentro de la misma pulsera. Al acercar el celular muestra al instante lo más importante (grupo sanguíneo, alergias, medicación y contacto) sin necesitar internet: ideal para zonas sin señal." },
+      subtitle: "No hace falta elegir: la pulsera Safe.Ride trae las dos. Si el QR está rayado se usa el NFC, y si el celular no tiene NFC se usa el QR. Las dos abren la misma ficha.",
+      qr: { title: "Código QR", desc: "Cualquiera lo escanea con la cámara del celular y accede a tu ficha en la página de Safe.Ride. El celular que escanea necesita conexión a internet." },
+      nfc: { title: "Chip NFC integrado", desc: "Va dentro de la pulsera, debajo del círculo central (no es un botón: es donde se apoya el celular). Al acercarlo se abre la misma ficha, aunque el QR esté rayado. Como el QR, necesita conexión a internet." },
     },
     paraQuien: {
-      eyebrow: "Nuestros usuarios",
-      title: "Pensado para cualquiera que quiera estar más seguro",
-      cronicas: { title: "Personas con enfermedades crónicas", desc: "Necesitan que el personal médico conozca su condición antes de intervenir." },
-      alergicas: { title: "Personas alérgicas", desc: "Una reacción a un medicamento mal indicado puede ser tan grave como no atenderlas." },
-      mayores: { title: "Adultos mayores", desc: "Sobre todo quienes viven solos o salen sin acompañante." },
-      deportistas: { title: "Deportistas", desc: "Ciclistas, runners, motociclistas, más expuestos a accidentes fuera de casa." },
-      conductores: { title: "Conductores", desc: "Protagonistas frecuentes de siniestros viales." },
-      ninos: { title: "Niños y niñas", desc: "Con sus datos cargados por sus padres o tutores." },
+      subtitle: "En la calle, en el trabajo, en casa o haciendo deporte. Safe.Ride sirve para cualquier persona, de cualquier edad.",
+      boton: "Ver el precio",
+      eyebrow: "Para quién es",
+      title: "Un accidente le puede pasar a cualquiera",
+      cronicas: { title: "Alergias o enfermedades crónicas", desc: "La medicación y las alergias quedan visibles antes de cualquier intervención." },
+      alergicas: { title: "Trabajadores", desc: "En la obra, el campo, la industria o el reparto: sus compañeros ven alergias y a quién llamar en segundos." },
+      mayores: { title: "Adultos mayores", desc: "Sobre todo quienes viven solos: si sufren una caída o una descompensación, se sabe quiénes son y dónde viven." },
+      deportistas: { title: "Deportistas", desc: "Entrenan solos o lejos de casa, muchas veces sin el celular." },
+      conductores: { title: "En la calle", desc: "Motociclistas, conductores, pasajeros, ciclistas y peatones, aunque no lleven documentos encima." },
+      ninos: { title: "Niños y estudiantes", desc: "Con sus datos cargados y autorizados por su madre, padre o tutor." },
     },
     beneficios: {
       eyebrow: "Ventajas",
-      title: "¿Por qué elegir Saferide?",
-      subtitle: "Saferide combina simplicidad, accesibilidad y diseño pensado para emergencias reales.",
+      title: "¿Por qué elegir Safe.Ride?",
+      subtitle: "Safe.Ride combina simplicidad, accesibilidad y diseño pensado para emergencias reales.",
       b1: { title: "Actualización permanente", desc: "Cambialo cuando quieras: grupo sanguíneo, alergias, medicación o contacto de emergencia. A diferencia de una pulsera grabada, nunca queda desactualizada." },
       b2: { title: "Sin aplicaciones", desc: "Funciona con cualquier celular con cámara, sin instalar nada. El personal de salud escanea y accede al instante." },
-      b3: { title: "Accesible para todos", desc: "Económico y fácil de conseguir. Cargás tu ficha de emergencia al instante, sin contraseñas." },
+      b3: { title: "Liviana y accesible", desc: "Hecha en Baradero con impresión 3D en TPU flexible: pesa entre 8 y 10 gramos y se puede usar todo el día." },
       b4: { title: "Diseñado para emergencias", desc: "Solo muestra lo esencial en una página de solo lectura, optimizada para que el personal médico encuentre rápido lo que necesita." },
-      b5: { title: "Recordatorio una vez al año", desc: "Cada 12 meses te llega un mail para que revises tu ficha, por si te diagnosticaron una enfermedad, cambiaste de medicación o apareció una alergia nueva. Con un clic confirmás que sigue todo igual." },
+      b5: { title: "Dos tecnologías en una", desc: "QR y NFC en la misma pulsera: si el QR se raya, se lee por NFC; si el celular no tiene NFC, se usa el QR." },
       b6: { title: "Para toda tu familia", desc: "Podés crear y administrar una ficha para cada integrante: hijos, padres, abuelos. Ideal para quienes no pueden cargar sus datos solos." },
     },
     historia: {
       eyebrow: "Un ejemplo",
-      title: "Una historia real",
-      p1: "Es una tarde de domingo y un ciclista sale a entrenar por una ruta que conoce de memoria. En una bajada, pierde el control y cae. Nadie que pasa por ahí sabe quién es, ni si tiene alguna alergia, ni a quién avisar.",
-      p2: "Cuando llega el equipo médico, alguien nota la pulsera con el código QR en su muñeca. La escanean con el celular y, en segundos, aparece lo que necesitan: su grupo sanguíneo, una alergia a un analgésico común, y el teléfono de su hermana.",
-      p3: "Ese dato evita que le administren un medicamento que podría haberle hecho mal, y permite avisar a su familia mientras todavía está siendo trasladado.",
-      footer: "Situación ilustrativa, a modo de ejemplo",
+      title: "La historia de Nico",
+      p1: "Nico tiene 19 años y reparte pedidos en moto todas las noches para pagarse la facultad. Una noche de lluvia, en una esquina mal iluminada, un auto no respeta el pare y lo golpea. Nico queda en el asfalto, inconsciente.",
+      p2: "Llega un patrullero. El policía, que no lo conoce, ve la pulsera verde en su muñeca. Acerca el celular y, en segundos, aparecen el nombre de Nico, su grupo sanguíneo, que es alérgico a la penicilina y el teléfono de su mamá.",
+      p3: "Cuando llega la ambulancia, los paramédicos ya saben qué medicación evitar, y la familia de Nico ya está avisada.",
+      footer: "Historia ficticia, basada en situaciones que pasan todos los días",
     },
     futuro: {
       eyebrow: "Mirando hacia adelante",
       title: "Un proyecto pensado para crecer",
-      body: "Saferide no es solo una idea: viene con un modelo de negocio pensado para sostenerse en el tiempo, con posibles alianzas con hospitales, clínicas, obras sociales y clubes deportivos, y una hoja de ruta que incluye nuevas funciones como historial de vacunas o turnos médicos.",
+      body: "Empezamos con un lote piloto en Baradero y la zona norte, y buscamos alianzas con el municipio, centros de jubilados, clubes, escuelas de manejo, empresas y ART. A futuro queremos sumar avisos a la familia cuando se escanea la pulsera, conexión con los servicios de emergencia (SAME), la ficha en varios idiomas y pulseras de distintos tamaños y colores.",
     },
     proyecto: {
       eyebrow: "Quiénes lo hacemos",
       title: "Sobre el proyecto",
-      body: 'Saferide es un proyecto tecnológico desarrollado por Santino Figueredo y Elena Avogadro, estudiantes de la Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», en Baradero.',
+      body: 'Safe.Ride es un proyecto de Elena Avogadro y Santino Figueredo, de 7.º 4.ª Programación de la Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», en Baradero, para la materia Proyecto de Diseño e Implementación de Sistemas Computacionales (profesores Azul Saladín y Gonzalo Santín). En el camino escuchamos a usuarios y docentes y cambiamos tres cosas: el botón pasó a ser la zona de lectura NFC, la banda pasó de PLA rígido a TPU flexible, y la idea pasó de ser solo para motociclistas a ser para todo público.',
     },
     stats: {
       eyebrow: "Contexto",
       title: "Los números no mienten",
       subtitle: "Y esto no le pasa solo a quienes andan en moto: cualquier persona puede necesitar ayuda médica urgente, en cualquier lugar.",
-      stat1: "personas mueren por día en siniestros viales en Argentina.",
-      stat2Number: "4 de 10",
-      stat2: "víctimas fatales de siniestros viales iban en moto.",
-      source: "Fuente: Agencia Nacional de Seguridad Vial (ANSV), datos oficiales 2024.",
-      closing: "Detrás de cada cifra hay una persona a la que, muchas veces, nadie pudo identificar a tiempo. Saferide busca achicar esa distancia.",
+      n1: "11",
+      stat1: "personas mueren por día en siniestros viales en Argentina (4.060 en 2025).",
+      n2: "46%",
+      stat2: "de las víctimas fatales en las calles iban en moto: casi la mitad.",
+      n3: "355.000",
+      stat3: "accidentes y enfermedades laborales en Argentina en 2024.",
+      n4: "684.000",
+      stat4: "muertes por año en el mundo por caídas, sobre todo de mayores de 60.",
+      source: "Fuentes: ANSV, Informe preliminar de siniestralidad vial fatal 2025; Superintendencia de Riesgos del Trabajo (2024); Organización Mundial de la Salud.",
+      closing: "Detrás de cada cifra hay una persona a la que, muchas veces, nadie pudo identificar a tiempo. Safe.Ride busca achicar esa distancia.",
     },
     comparativa: {
       eyebrow: "Comparativa",
-      title: "¿Por qué Saferide y no otra opción?",
-      caption: "Comparación entre Saferide y otras alternativas de identificación médica",
+      title: "¿Por qué Safe.Ride y no otra opción?",
+      caption: "Comparación entre Safe.Ride y otras alternativas de identificación médica",
       colOpcion: "Opción",
       colActualizable: "Actualizable",
       colSinApps: "Sin apps ni configuración",
       colSinLimite: "Sin límite de espacio",
-      rowPulsera: "Pulsera grabada",
+      rowPulsera: "Pulsera grabada (Road iD, MedicAlert, Ruta iD)",
       rowTarjeta: "Tarjeta impresa",
       rowApp: "App médica",
       no: "No",
       si: "Sí",
-      note: "Ninguna alternativa suma las tres cosas a la vez. Saferide sí.",
+      note: "Ninguna alternativa suma las tres cosas a la vez. Safe.Ride sí.",
+    },
+    precios: {
+      eyebrow: "Precio",
+      title: "Un solo producto, protección completa",
+      subtitle: "La pulsera Safe.Ride trae el código QR y el chip NFC en una sola pieza. Si no se puede escanear el QR, se lee por NFC. La actualización de tus datos está siempre incluida.",
+      popular: "Pulsera Safe.Ride",
+      label: "QR + NFC en una",
+      monto: "$8.000",
+      periodo: "cada una",
+      cardTitle: "Pulsera de TPU con QR y chip NFC",
+      cardDesc: "Una sola pulsera con las dos tecnologías: si el QR se raya, el NFC abre la misma ficha.",
+      f1: "Código QR + chip NFC en la misma pulsera",
+      f2: "Ficha médica editable cuando quieras, sin costo",
+      f3: "TPU flexible, liviana (8 a 10 g)",
+      f4: "Sin contraseña y sin apps",
+      f5: "Dura entre 12 y 18 meses de uso diario",
+      f6: "Entrega en Baradero y zona norte",
+      boton: "Pedir mi pulsera →",
+      nota: "Apta para el uso diario; no sumergir por mucho tiempo. Para leerla, el celular necesita cámara o NFC y conexión a internet.",
     },
     demo: {
       eyebrow: "Vista previa",
@@ -4622,39 +4624,40 @@ const translations = {
       ocultarEjemplo: "Ocultar ejemplo",
       badge: "Ejemplo — datos ficticios",
       fichaTitle: "Ficha médica de emergencia",
-      generadaPor: "Generada por Saferide",
+      generadaPor: "Generada por Safe.Ride",
       penicilina: "Penicilina",
       phoneAria: "Ejemplo de ficha médica de emergencia en un celular",
       point1: "Se abre con la cámara del celular, sin instalar ninguna app.",
       point2: "Muestra de un vistazo lo que el personal médico necesita primero.",
       point3: "Es una página de solo lectura: nadie puede editar tus datos.",
+      aviso: "Safe.Ride no reemplaza la atención médica ni hace diagnósticos: solo muestra los datos que carga cada persona.",
       scanHint: "Con la pulsera, esta pantalla aparece al escanear tu código QR real.",
     },
     privacidad: {
       eyebrow: "Privacidad y seguridad",
       title: "Tus datos, siempre bajo tu control",
-      subtitle: "Saferide muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.",
-      c1: { title: "Solo lo esencial es público", desc: "La ficha que se ve al escanear el QR muestra grupo sanguíneo, alergias, medicación y un contacto. Nada más." },
-      c2: { title: "Vos decidís qué se muestra", desc: "Editás o borrás tu información cuando quieras desde tu cuenta. El resto de tu perfil nunca es visible para terceros." },
+      subtitle: "Safe.Ride muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.",
+      c1: { title: "Solo lo esencial es público", desc: "La ficha muestra grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia. No pedimos DNI ni datos bancarios." },
+      c2: { title: "Vos decidís qué se muestra", desc: "Ves, corregís o borrás tu ficha cuando quieras desde tu enlace privado. Antes de publicarla te pedimos tu consentimiento." },
       c3: { title: "Sin rastreo ni publicidad", desc: "No vendemos tus datos ni los usamos para otra cosa que no sea mostrar tu ficha de emergencia." },
-      c4: { title: "Código que se puede revocar", desc: "Si perdés la pulsera, generás un código nuevo y el anterior deja de funcionar al instante." },
+      c4: { title: "Código que se puede revocar", desc: "Si perdés la pulsera, avisás: desactivamos ese código y te damos uno nuevo." },
       note: "La ficha pública es de solo lectura: nadie puede modificar tus datos escaneando el código.",
     },
     titularidad: {
-      eyebrow: "Titularidad",
-      title: "Tus datos médicos, gratis. El titular, una sola vez.",
-      subtitle: "Separamos lo que puede cambiar siempre de lo que queda fijo a tu nombre.",
+      eyebrow: "Tus datos",
+      title: "La pulsera es la misma. Tu ficha, siempre al día.",
+      subtitle: "Cambiar un dato no obliga a hacer otra pulsera.",
       medicos: {
         eyebrow: "Datos médicos",
         title: "Se editan libremente, sin costo",
-        body: "Grupo sanguíneo, alergias, medicación, contacto de emergencia y localidad: los actualizás las veces que quieras desde tu cuenta, gratis. Son los datos que salvan vidas en una emergencia, así que nunca quedan trabados.",
+        body: "Grupo sanguíneo, alergias, medicación, contacto de emergencia y dónde vivís: los actualizás las veces que quieras desde tu enlace privado, gratis. La ficha muestra la fecha de la última actualización.",
       },
       titular: {
-        eyebrow: "Titular de la pulsera",
-        title: "Se carga una sola vez",
-        body: "El nombre, el DNI y la fecha de nacimiento se completan al activar la pulsera y quedan bloqueados. Para transferirla a otra persona —por venta o regalo— hay un costo único de cambio de titularidad, con verificación.",
+        eyebrow: "Si perdés la pulsera",
+        title: "Se desactiva el código",
+        body: "Nos avisás y desactivamos el código de la pulsera perdida: deja de mostrar tu ficha. Te asignamos un código nuevo y tus datos siguen guardados.",
       },
-      note: "Al activar la pulsera se usa un PIN que viene dentro del paquete: solo vos podés vincularla a tu cuenta. Una pulsera ya activada no se puede reclamar de nuevo, aunque alguien escanee el código.",
+      note: "Para menores de 18 años, la ficha la carga y la autoriza su madre, padre o tutor.",
     },
     field: {
       grupoSanguineo: "Grupo sanguíneo",
@@ -4703,63 +4706,84 @@ const translations = {
       contactoNombre: "Ej: Ana Pérez",
     },
     product: {
-      pulsera: "Pulsera Saferide (QR + NFC) — $4.000",
-      qr: "Pulsera Saferide (QR + NFC)",
-      nfc: "Pulsera Saferide (QR + NFC)",
-      pack: "Pulsera Saferide (QR + NFC)",
+      pulsera: "Pulsera Safe.Ride (QR + NFC) — $8.000",
+      qr: "Pulsera Safe.Ride (QR + NFC)",
+      nfc: "Pulsera Safe.Ride (QR + NFC)",
+      pack: "Pulsera Safe.Ride (QR + NFC)",
     },
     pedido: {
-      eyebrow: "Enviamos a cualquier parte del mundo",
+      porQue: "Lo que incluye",
+      i1: "Entrega en Baradero y zona norte",
+      i2: "Instructivo y ayuda para cargar tu ficha",
+      i3: "Actualización de datos gratis",
+      i4: "Consultas por Instagram",
+      medios: "Medios de pago",
+      m1: "Transferencia",
+      m3: "Efectivo",
+      eyebrow: "Entregas en Baradero y zona norte",
       title: "Pedí tu pulsera",
-      subtitle: "Completá tus datos de envío y te llega a domicilio. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.",
+      subtitle: "Por ahora entregamos en Baradero y la zona norte de Buenos Aires. Completá tus datos y te avisamos cuándo la recibís. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.",
       confirmar: "Confirmar pedido",
       disclaimer: "Usamos tu mail únicamente para avisarte por correo las novedades de tu envío.",
       confirmado: "Pedido confirmado",
-      pedidoSaferide: "Pedido Saferide",
+      pedidoSaferide: "Pedido Safe.Ride",
       enviarA: "Enviar a",
       avisoMail: "Te avisamos por mail las novedades de tu envío. Guardá o descargá este comprobante.",
       descargarComprobante: "Descargar comprobante",
       otroPedido: "Hacer otro pedido",
     },
     faq: {
+      q9: "¿Funciona en otros países?",
+      a9: "Sí. El QR y el NFC abren tu ficha desde cualquier celular con internet, en cualquier país. Por ahora las pulseras se entregan en Baradero y la zona norte.",
+      q10: "¿Qué diferencia hay con una pulsera grabada?",
+      a10: "Una pulsera grabada tiene espacio limitado y, para cambiar un dato, hay que hacer otra. Con Safe.Ride cambiás tu ficha cuando quieras, sin tocar la pulsera, y se lee por QR o por NFC.",
+      q11: "¿Puedo usarlo para mi familia?",
+      a11: "Sí. Cada persona tiene su pulsera y su ficha. Para menores de 18, la ficha la carga y la autoriza su madre, padre o tutor.",
       eyebrow: "Dudas frecuentes",
       title: "Preguntas frecuentes",
       q1: "¿Mis datos médicos quedan públicos?",
       a1: "No. Solo se muestra lo esencial para una emergencia (grupo sanguíneo, alergias, medicación, contacto). El resto de tu perfil queda privado y solo vos podés editarlo.",
       q2: "¿Qué pasa si pierdo la pulsera?",
-      a2: "Podés generar un código nuevo cuando quieras desde tu cuenta; el anterior deja de estar activo.",
+      a2: "Tu ficha no se borra. Nos avisás, desactivamos el código de esa pulsera y te asignamos uno nuevo.",
       q3: "¿Necesito internet para que funcione?",
-      a3: "La pulsera trae QR y NFC. Para ver tu ficha completa por QR, quien te escanea necesita conexión. Con el chip NFC no hace falta: los datos más importantes se muestran al instante, sin internet. Vos sí necesitás conexión para cargar o actualizar tus datos.",
+      a3: "Sí. Tanto el QR como el NFC abren un enlace a tu ficha, así que el celular que escanea necesita conexión a internet en ese momento (la mayoría tiene datos móviles). Vos también necesitás conexión para cargar o actualizar tus datos.",
       q4: "¿Cualquier celular puede leer el QR?",
       a4: "Sí, alcanza con la cámara. No hace falta instalar ninguna aplicación.",
       q5: "¿Cuánto sale?",
-      a5: "La pulsera con QR y NFC cuesta $4.000, con envío a todo el país y actualización de datos ilimitada incluida.",
+      a5: "La pulsera con QR y NFC cuesta $8.000 e incluye la actualización de tus datos sin límite y sin costo extra. Por ahora la entregamos en Baradero y la zona norte.",
       q6: "¿Puedo actualizar mis datos cuando quiera?",
-      a6: "Sí, las veces que necesites, desde tu cuenta.",
-      q7: "¿Puedo cambiar el nombre del titular?",
-      a7: "Los datos médicos (alergias, medicación, grupo sanguíneo, contacto) los cambiás gratis, siempre. El titular —nombre, DNI y fecha de nacimiento— se carga una sola vez al activar la pulsera. Para transferirla a otra persona hay un costo único de cambio de titularidad.",
-      q8: "¿Me avisan si tengo que actualizar la ficha?",
-      a8: "Sí. Una vez al año te mandamos un mail para que revises tu ficha, por si cambió algo importante (una enfermedad nueva, otra medicación, una alergia). Si sigue todo igual, lo confirmás con un clic.",
+      a6: "Sí, las veces que necesites, desde tu enlace privado. No hace falta cambiar la pulsera.",
+      q7: "¿Es solo para motociclistas?",
+      a7: "No. Empezó pensada para ellos, pero sirve para cualquier persona que pueda tener un accidente: en la calle, en el trabajo, en casa o haciendo deporte, de cualquier edad.",
+      q8: "¿Reemplaza la atención médica?",
+      a8: "No. Safe.Ride solo muestra los datos que carga cada persona para ayudar en una emergencia. No hace diagnósticos ni reemplaza la atención de un profesional de la salud.",
     },
     ctaFinal: {
+      body: "Armá tu ficha en un minuto y pedí tu pulsera con QR y NFC para tenerla siempre en la muñeca.",
       title: "¿Querés tener tu información siempre a mano?",
       generarQr: "Generar mi QR",
     },
     footer: {
-      instagramAria: "Saferide en Instagram (se abre en una pestaña nueva)",
+      instagramAria: "Safe.Ride en Instagram (se abre en una pestaña nueva)",
       escolar: "Proyecto escolar — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero",
+      aviso: "Safe.Ride no reemplaza la atención médica ni hace diagnósticos.",
+      contacto: "Contacto: por Instagram o en la E.S.T. N.º 1 de Baradero",
     },
     modal: {
+      rellenar: "Rellenar ejemplo",
+      qrFicticio: "Tu código QR de ejemplo:",
+      simulacionNota: "Esto es una simulación. El QR real va grabado en tu pulsera.",
       cerrar: "Cerrar",
-      eyebrow: "Creá tu cuenta",
+      eyebrow: "Tu ficha",
       title: "Creá tu ficha de emergencia",
-      intro: "Completá estos datos para generar tu ficha y tu código QR. Solo necesitás tu mail — no hace falta contraseña — así podemos identificarte y avisarte novedades por correo.",
+      intro: "Completá estos datos para generar tu ficha y tu código QR. Solo necesitás tu mail —no hace falta contraseña— para mandarte tu enlace privado y poder editarla.",
       generarQr: "Generar mi QR",
       disclaimer: "Tus datos se procesan en este dispositivo. Al generar tu QR vas a poder descargar tu ficha para guardarla o imprimirla.",
       simulacion: "Simulación generada",
       resultDisclaimer: "Así se ve tu ficha pública al escanear el QR o acercar la pulsera por NFC. Descargala para guardarla en tu celular o imprimirla junto con tu pedido.",
       descargarFicha: "Descargar mi ficha",
       editarDatos: "Editar datos",
+      consentimiento: "Acepto que estos datos se muestren a quien escanee mi pulsera en una emergencia, según la Ley 25.326 de Protección de Datos Personales. Puedo verlos, corregirlos o borrarlos cuando quiera. Si es para un menor de 18 años, lo autoriza su madre, padre o tutor.",
     },
     fallback: {
       noEspecificado: "No especificado",
@@ -4768,8 +4792,8 @@ const translations = {
     },
     download: {
       dateLocale: "es-AR",
-      fichaHeader: "FICHA DE EMERGENCIA — SAFERIDE",
-      pedidoHeader: "COMPROBANTE DE PEDIDO — SAFERIDE",
+      fichaHeader: "FICHA DE EMERGENCIA — SAFE.RIDE",
+      pedidoHeader: "COMPROBANTE DE PEDIDO — SAFE.RIDE",
       nombre: "Nombre",
       mail: "Mail",
       fechaNacimiento: "Fecha de nacimiento",
@@ -4783,7 +4807,7 @@ const translations = {
       localidad: "Localidad / provincia",
       domicilio: "Domicilio",
       contactoEmergencia: "Contacto de emergencia",
-      generadoCon: "Generado con Saferide.",
+      generadoCon: "Generado con Safe.Ride. No reemplaza la atención médica.",
       producto: "Producto",
       cantidad: "Cantidad",
       enviarA: "Enviar a",
@@ -4792,10 +4816,10 @@ const translations = {
     },
   },
   en: {
-    meta: { title: "Saferide — Your information can save your life" },
+    meta: { title: "Safe.Ride — Your information, in time." },
     a11y: { skip: "Skip to content" },
     nav: {
-      logoAria: "Saferide, go to homepage",
+      logoAria: "Safe.Ride, go to homepage",
       mainAria: "Main navigation",
       comoFunciona: "How it works",
       formatos: "Formats",
@@ -4815,102 +4839,129 @@ const translations = {
       paletteAria: "Change the color palette",
     },
     hero: {
-      tagline: "Your medical data, always accessible.",
-      desc: "A bracelet with a QR code and a built-in NFC chip, carrying your essential medical data, always with you. So that, in any emergency and anywhere in the world, medical staff have your key information the moment you arrive at an ER, hospital or clinic.",
+      badge: "Medical protection always with you",
+      tagline: "Your information, in time.",
+      desc: "A TPU bracelet with a QR code and an NFC chip in the same piece, carrying your essential medical data. In any accident —on the street, at work, at home or doing sports— whoever helps you scans the QR or taps their phone and instantly sees your blood type, allergies, medication and who to call.",
       ctaPrimary: "See how it works",
       ctaSecondary: "Create your ID",
       qrIllustration: "Illustration of a bracelet with a QR code charm",
       phoneAria: "Emergency medical ID shown on a phone",
       trust1: "No apps, no passwords",
-      trust2: "Works with or without internet",
+      trust2: "QR or NFC: if one fails, the other works",
       trust3: "Data you can always update",
     },
     problema: {
       eyebrow: "The problem",
       title: "When it's needed most is when it's hardest to find",
-      body: "In an emergency, every minute counts. But that's exactly when the most basic information is missing: whether the person has an allergy, what medication they take, their blood type, or who to call — whether it happens on the street, at home, or at the ER of a hospital or clinic, in any country. Engraved bracelets and emergency cards help, but they fall short: they can't be updated and have limited space. Saferide combines a simple accessory with a digital platform you can update anytime, designed for anyone — not just motorcycle riders.",
+      body: "In an emergency, every minute counts. But that's exactly when the most basic information is missing: whether the person has an allergy, what medication they take, their blood type, or who to call — whether it happens on the street, at home, or at the ER of a hospital or clinic, in any country. Engraved bracelets and emergency cards help, but they fall short: they can't be updated and have limited space. Safe.Ride combines a simple accessory with a digital platform you can update anytime, designed for anyone — not just motorcycle riders.",
     },
     comoFunciona: {
       eyebrow: "Step by step",
       title: "How it works",
       subtitle: "From loading your data to scanning the QR, in six simple steps.",
-      step1: { title: "Sign up with your email", desc: "No passwords: just your email, to identify you and send you updates." },
-      step2: { title: "Add your medical data", desc: "Blood type, allergies, medication, and an emergency contact." },
+      step1: { title: "Leave your email", desc: "No passwords: we send you your private link to fill in and edit your ID." },
+      step2: { title: "Add your medical data", desc: "Blood type, allergies, medication, conditions, where you live and an emergency contact." },
       step3: { title: "Generate your QR", desc: "The system builds your unique code instantly." },
-      step4: { title: "Print or download it", desc: "On a bracelet, a card, or your phone." },
-      step5: { title: "Ready for an emergency", desc: "Anyone can scan it with their camera, no app needed." },
+      step4: { title: "We program your bracelet", desc: "Your QR goes on the bracelet and the NFC chip gets the same link." },
+      step5: { title: "Ready for an emergency", desc: "Anyone scans the QR or taps their phone on the NFC circle, no app needed." },
       step6: { title: "Your information, in a tap", desc: "Only the essentials are shown, on a public read-only page." },
     },
     formatos: {
       eyebrow: "One bracelet, two technologies",
       title: "QR and NFC chip, together in the same bracelet",
-      subtitle: "No need to choose: the Saferide bracelet has both. It's read by QR when there's internet and by NFC when there's no signal. They always show the same information.",
-      qr: { title: "QR code", desc: "Anyone can scan it with a phone camera and access your full ID on the Saferide page. The scanning phone needs an internet connection." },
-      nfc: { title: "Built-in NFC chip", desc: "It sits inside the same bracelet. Tapping a phone against it instantly shows the most important data (blood type, allergies, medication and contact) with no internet needed: ideal for areas without signal." },
+      subtitle: "No need to choose: the Safe.Ride bracelet has both. If the QR is scratched, NFC is used; if the phone has no NFC, the QR is used. Both open the same ID.",
+      qr: { title: "QR code", desc: "Anyone can scan it with a phone camera and access your ID on the Safe.Ride page. The scanning phone needs an internet connection." },
+      nfc: { title: "Built-in NFC chip", desc: "It sits inside the bracelet, under the central circle (it's not a button: it's where the phone goes). Tapping a phone opens the same ID, even if the QR is scratched. Like the QR, it needs an internet connection." },
     },
     paraQuien: {
-      eyebrow: "Our users",
-      title: "Designed for anyone who wants to feel safer",
-      cronicas: { title: "People with chronic conditions", desc: "They need medical staff to know their condition before treating them." },
-      alergicas: { title: "People with allergies", desc: "A reaction to the wrong medication can be as serious as not being treated at all." },
-      mayores: { title: "Older adults", desc: "Especially those who live alone or go out unaccompanied." },
-      deportistas: { title: "Athletes", desc: "Cyclists, runners, motorcyclists — more exposed to accidents away from home." },
-      conductores: { title: "Drivers", desc: "Frequent protagonists of road accidents." },
-      ninos: { title: "Children", desc: "With their data entered by their parents or guardians." },
+      subtitle: "On the street, at work, at home or doing sports. Safe.Ride works for anyone, at any age.",
+      boton: "See the price",
+      eyebrow: "Who it's for",
+      title: "An accident can happen to anyone",
+      cronicas: { title: "Allergies or chronic conditions", desc: "Medication and allergies are visible before any treatment." },
+      alergicas: { title: "Workers", desc: "On construction sites, farms, factories or deliveries: coworkers see allergies and who to call in seconds." },
+      mayores: { title: "Older adults", desc: "Especially those who live alone: after a fall or a sudden illness, people know who they are and where they live." },
+      deportistas: { title: "Athletes", desc: "They train alone or far from home, often without their phone." },
+      conductores: { title: "On the street", desc: "Motorcyclists, drivers, passengers, cyclists and pedestrians, even without documents on them." },
+      ninos: { title: "Children and students", desc: "With their data entered and authorized by a parent or guardian." },
     },
     beneficios: {
       eyebrow: "Advantages",
-      title: "Why choose Saferide?",
-      subtitle: "Saferide combines simplicity, accessibility and a design built for real emergencies.",
+      title: "Why choose Safe.Ride?",
+      subtitle: "Safe.Ride combines simplicity, accessibility and a design built for real emergencies.",
       b1: { title: "Always up to date", desc: "Change it whenever you want: blood type, allergies, medication or emergency contact. Unlike an engraved bracelet, it's never outdated." },
       b2: { title: "No apps", desc: "Works with any phone that has a camera, no installs. Medical staff scan it and get in instantly." },
-      b3: { title: "Accessible to everyone", desc: "Affordable and easy to get. You fill in your emergency ID instantly, with no passwords." },
+      b3: { title: "Light and affordable", desc: "Made in Baradero with flexible TPU 3D printing: it weighs 8 to 10 grams and can be worn all day." },
       b4: { title: "Built for emergencies", desc: "It only shows the essentials on a read-only page, laid out so medical staff find what they need fast." },
-      b5: { title: "A reminder once a year", desc: "Every 12 months you get an email to review your ID, in case you were diagnosed with a condition, changed medication or developed a new allergy. One click confirms everything's still the same." },
+      b5: { title: "Two technologies in one", desc: "QR and NFC in the same bracelet: if the QR gets scratched, it's read by NFC; if the phone has no NFC, the QR is used." },
       b6: { title: "For your whole family", desc: "You can create and manage an ID for each member: kids, parents, grandparents. Ideal for those who can't fill in their own data." },
     },
     historia: {
       eyebrow: "An example",
-      title: "A real story",
-      p1: "It's a Sunday afternoon, and a cyclist heads out to train on a route he knows by heart. Going downhill, he loses control and falls. No one passing by knows who he is, whether he has any allergies, or who to call.",
-      p2: "When the medical team arrives, someone notices the bracelet with the QR code on his wrist. They scan it with their phone and, within seconds, what they need appears: his blood type, an allergy to a common painkiller, and his sister's phone number.",
-      p3: "That piece of information keeps them from giving him a medication that could have harmed him, and lets them notify his family while he's still being transported.",
-      footer: "Illustrative scenario, for example purposes",
+      title: "Nico's story",
+      p1: "Nico is 19 and delivers orders on his motorcycle every night to pay for college. One rainy night, at a poorly lit corner, a car runs a stop sign and hits him. Nico lies on the asphalt, unconscious.",
+      p2: "A patrol car arrives. The officer, who doesn't know him, sees the green bracelet on his wrist. He taps his phone and, within seconds, Nico's name, blood type, his penicillin allergy and his mom's phone number appear.",
+      p3: "When the ambulance arrives, the paramedics already know which medication to avoid, and Nico's family has already been called.",
+      footer: "Fictional story, based on situations that happen every day",
     },
     futuro: {
       eyebrow: "Looking ahead",
       title: "A project built to grow",
-      body: "Saferide isn't just an idea: it comes with a business model designed to be sustainable over time, with possible partnerships with hospitals, clinics, health insurers and sports clubs, and a roadmap that includes new features like vaccine records or medical appointments.",
+      body: "We're starting with a pilot batch in Baradero and northern Buenos Aires, and looking for partnerships with the city, senior centers, clubs, driving schools, companies and workplace insurers. Next, we want to add alerts to the family when the bracelet is scanned, a link with emergency services (SAME), the ID in several languages and bracelets in different sizes and colors.",
     },
     proyecto: {
       eyebrow: "Who's behind it",
       title: "About the project",
-      body: 'Saferide is a technology project developed by Santino Figueredo and Elena Avogadro, students at Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», in Baradero, Argentina.',
+      body: 'Safe.Ride is a project by Elena Avogadro and Santino Figueredo, from the 7th-year Programming class (4th division) at Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», in Baradero, Argentina, for the subject Computer Systems Design and Implementation Project (teachers Azul Saladín and Gonzalo Santín). Listening to users and teachers, we changed three things: the button became the NFC reading area, the band went from rigid PLA to flexible TPU, and the idea went from motorcyclists only to everyone.',
     },
     stats: {
       eyebrow: "Context",
       title: "The numbers don't lie",
       subtitle: "And this doesn't only happen to motorcycle riders: anyone can need urgent medical help, anywhere.",
-      stat1: "people die every day in road accidents in Argentina.",
-      stat2Number: "4 out of 10",
-      stat2: "fatal road accident victims were riding a motorcycle.",
-      source: "Source: Agencia Nacional de Seguridad Vial (ANSV), official 2024 data.",
-      closing: "Behind every number is a person who, many times, no one could identify in time. Saferide aims to close that gap.",
+      n1: "11",
+      stat1: "people die every day in road accidents in Argentina (4,060 in 2025).",
+      n2: "46%",
+      stat2: "of fatal road victims were on a motorcycle: almost half.",
+      n3: "355,000",
+      stat3: "work accidents and occupational illnesses in Argentina in 2024.",
+      n4: "684,000",
+      stat4: "deaths a year worldwide from falls, mostly people over 60.",
+      source: "Sources: ANSV, Preliminary report on fatal road accidents 2025; Superintendencia de Riesgos del Trabajo (2024); World Health Organization.",
+      closing: "Behind every number is a person who, many times, no one could identify in time. Safe.Ride aims to close that gap.",
     },
     comparativa: {
       eyebrow: "Comparison",
-      title: "Why Saferide and not another option?",
-      caption: "Comparison between Saferide and other medical identification alternatives",
+      title: "Why Safe.Ride and not another option?",
+      caption: "Comparison between Safe.Ride and other medical identification alternatives",
       colOpcion: "Option",
       colActualizable: "Updatable",
       colSinApps: "No apps or setup",
       colSinLimite: "No space limit",
-      rowPulsera: "Engraved bracelet",
+      rowPulsera: "Engraved bracelet (Road iD, MedicAlert, Ruta iD)",
       rowTarjeta: "Printed card",
       rowApp: "Medical app",
       no: "No",
       si: "Yes",
-      note: "No other alternative combines all three at once. Saferide does.",
+      note: "No other alternative combines all three at once. Safe.Ride does.",
+    },
+    precios: {
+      eyebrow: "Price",
+      title: "One product, complete protection",
+      subtitle: "The Safe.Ride bracelet has the QR code and the NFC chip in a single piece. If the QR can't be scanned, it's read by NFC. Updating your data is always included.",
+      popular: "Safe.Ride bracelet",
+      label: "QR + NFC in one",
+      monto: "$8,000",
+      periodo: "each",
+      cardTitle: "TPU bracelet with QR and NFC chip",
+      cardDesc: "One bracelet with both technologies: if the QR gets scratched, NFC opens the same ID.",
+      f1: "QR code + NFC chip in the same bracelet",
+      f2: "Medical ID you can edit anytime, at no cost",
+      f3: "Flexible, lightweight TPU (8 to 10 g)",
+      f4: "No password, no apps",
+      f5: "Lasts 12 to 18 months of daily use",
+      f6: "Delivery in Baradero and northern Buenos Aires",
+      boton: "Order my bracelet →",
+      nota: "Fine for daily use; don't keep it underwater for long. To read it, the phone needs a camera or NFC and an internet connection.",
     },
     demo: {
       eyebrow: "Preview",
@@ -4920,39 +4971,40 @@ const translations = {
       ocultarEjemplo: "Hide example",
       badge: "Example — fictional data",
       fichaTitle: "Emergency medical ID",
-      generadaPor: "Generated by Saferide",
+      generadaPor: "Generated by Safe.Ride",
       penicilina: "Penicillin",
       phoneAria: "Example emergency medical ID shown on a phone",
       point1: "It opens with the phone camera — no app to install.",
       point2: "It shows at a glance what medical staff need first.",
       point3: "It's a read-only page: no one can edit your data.",
+      aviso: "Safe.Ride doesn't replace medical care or make diagnoses: it only shows the data each person enters.",
       scanHint: "With the bracelet, this screen appears when your real QR code is scanned.",
     },
     privacidad: {
       eyebrow: "Privacy & security",
       title: "Your data, always under your control",
-      subtitle: "Saferide only shows what's useful in an emergency. Everything else stays private and you manage it.",
-      c1: { title: "Only the essentials are public", desc: "The ID shown when the QR is scanned displays blood type, allergies, medication and one contact. Nothing else." },
-      c2: { title: "You decide what's shown", desc: "Edit or delete your information anytime from your account. The rest of your profile is never visible to third parties." },
+      subtitle: "Safe.Ride only shows what's useful in an emergency. Everything else stays private and you manage it.",
+      c1: { title: "Only the essentials are public", desc: "The ID shows blood type, allergies, medication, conditions, where you live and an emergency contact. We don't ask for ID numbers or bank details." },
+      c2: { title: "You decide what's shown", desc: "View, correct or delete your ID anytime from your private link. We ask for your consent before publishing it." },
       c3: { title: "No tracking, no ads", desc: "We don't sell your data or use it for anything other than showing your emergency ID." },
-      c4: { title: "A code you can revoke", desc: "If you lose the bracelet, you generate a new code and the old one stops working instantly." },
+      c4: { title: "A code you can revoke", desc: "If you lose the bracelet, let us know: we deactivate that code and give you a new one." },
       note: "The public ID is read-only: no one can change your data by scanning the code.",
     },
     titularidad: {
-      eyebrow: "Ownership",
-      title: "Your medical data, free. The owner, set once.",
-      subtitle: "We separate what can always change from what stays fixed to your name.",
+      eyebrow: "Your data",
+      title: "Same bracelet. Your ID, always up to date.",
+      subtitle: "Changing a detail doesn't mean making a new bracelet.",
       medicos: {
         eyebrow: "Medical data",
         title: "Edited freely, at no cost",
-        body: "Blood type, allergies, medication, emergency contact and town: update them as many times as you want from your account, for free. This is the data that saves lives in an emergency, so it's never locked.",
+        body: "Blood type, allergies, medication, emergency contact and where you live: update them as many times as you want from your private link, for free. The ID shows the date of the last update.",
       },
       titular: {
-        eyebrow: "Bracelet owner",
-        title: "Entered only once",
-        body: "Name, national ID and date of birth are filled in when you activate the bracelet and then locked. To transfer it to another person — a sale or a gift — there's a one-time ownership-change fee, with verification.",
+        eyebrow: "If you lose the bracelet",
+        title: "The code is deactivated",
+        body: "Let us know and we deactivate the lost bracelet's code: it stops showing your ID. We assign you a new code and your data stays saved.",
       },
-      note: "Activating the bracelet uses a PIN included inside the package: only you can link it to your account. An already-activated bracelet can't be claimed again, even if someone scans the code.",
+      note: "For anyone under 18, the ID is filled in and authorized by a parent or guardian.",
     },
     field: {
       grupoSanguineo: "Blood type",
@@ -5001,63 +5053,84 @@ const translations = {
       contactoNombre: "E.g.: Jane Smith",
     },
     product: {
-      pulsera: "Saferide bracelet (QR + NFC) — $4,000",
-      qr: "Saferide bracelet (QR + NFC)",
-      nfc: "Saferide bracelet (QR + NFC)",
-      pack: "Saferide bracelet (QR + NFC)",
+      pulsera: "Safe.Ride bracelet (QR + NFC) — $8,000",
+      qr: "Safe.Ride bracelet (QR + NFC)",
+      nfc: "Safe.Ride bracelet (QR + NFC)",
+      pack: "Safe.Ride bracelet (QR + NFC)",
     },
     pedido: {
-      eyebrow: "We ship anywhere in the world",
+      porQue: "What's included",
+      i1: "Delivery in Baradero and northern Buenos Aires",
+      i2: "Instructions and help to fill in your ID",
+      i3: "Free data updates",
+      i4: "Questions via Instagram",
+      medios: "Payment methods",
+      m1: "Bank transfer",
+      m3: "Cash",
+      eyebrow: "Delivery in Baradero and northern Buenos Aires",
       title: "Order your bracelet",
-      subtitle: "Fill in your shipping details and it'll arrive at your door. We only ask for your email to notify you about your order — no password needed.",
+      subtitle: "For now we deliver in Baradero and northern Buenos Aires. Fill in your details and we'll let you know when it arrives. We only ask for your email to notify you about your order — no password needed.",
       confirmar: "Confirm order",
       disclaimer: "We use your email only to notify you by mail about your shipment updates.",
       confirmado: "Order confirmed",
-      pedidoSaferide: "Saferide Order",
+      pedidoSaferide: "Safe.Ride Order",
       enviarA: "Ship to",
       avisoMail: "We'll notify you by mail about your shipment updates. Save or download this receipt.",
       descargarComprobante: "Download receipt",
       otroPedido: "Place another order",
     },
     faq: {
+      q9: "Does it work in other countries?",
+      a9: "Yes. The QR and NFC open your ID from any phone with internet, in any country. For now, bracelets are delivered in Baradero and northern Buenos Aires.",
+      q10: "How is it different from an engraved bracelet?",
+      a10: "An engraved bracelet has limited space and, to change a detail, you need a new one. With Safe.Ride you change your ID anytime without touching the bracelet, and it can be read by QR or NFC.",
+      q11: "Can I use it for my family?",
+      a11: "Yes. Each person has their own bracelet and ID. For anyone under 18, a parent or guardian fills in and authorizes the ID.",
       eyebrow: "Frequently asked questions",
       title: "FAQ",
       q1: "Is my medical data public?",
       a1: "No. Only the essentials for an emergency are shown (blood type, allergies, medication, contact). The rest of your profile stays private and only you can edit it.",
       q2: "What happens if I lose the bracelet?",
-      a2: "You can generate a new code anytime from your account; the old one stops working.",
+      a2: "Your ID isn't deleted. Let us know, we deactivate that bracelet's code and assign you a new one.",
       q3: "Do I need internet for it to work?",
-      a3: "The bracelet has both QR and NFC. To see your full ID via QR, whoever scans it needs a connection. With the NFC chip, no connection is needed: the most important data shows instantly, offline. You do need a connection to load or update your data.",
+      a3: "Yes. Both the QR and the NFC open a link to your ID, so the scanning phone needs an internet connection at that moment (most have mobile data). You also need a connection to load or update your data.",
       q4: "Can any phone read the QR?",
       a4: "Yes, a camera is enough. No app needs to be installed.",
       q5: "How much is it?",
-      a5: "The bracelet with QR and NFC costs $4,000, with nationwide shipping and unlimited data updates included.",
+      a5: "The bracelet with QR and NFC costs $8,000 and includes unlimited data updates at no extra cost. For now we deliver in Baradero and northern Buenos Aires.",
       q6: "Can I update my data whenever I want?",
-      a6: "Yes, as many times as you need, from your account.",
-      q7: "Can I change the owner's name?",
-      a7: "Medical data (allergies, medication, blood type, contact) can be changed for free, always. The owner — name, national ID and date of birth — is entered only once when you activate the bracelet. Transferring it to another person has a one-time ownership-change fee.",
-      q8: "Do you remind me to update my ID?",
-      a8: "Yes. Once a year we email you to review your ID, in case something important changed (a new condition, different medication, an allergy). If it's all still the same, you confirm with one click.",
+      a6: "Yes, as many times as you need, from your private link. No need to change the bracelet.",
+      q7: "Is it only for motorcyclists?",
+      a7: "No. It started with them in mind, but it works for anyone who could have an accident: on the street, at work, at home or doing sports, at any age.",
+      q8: "Does it replace medical care?",
+      a8: "No. Safe.Ride only shows the data each person enters to help in an emergency. It doesn't make diagnoses or replace care from a health professional.",
     },
     ctaFinal: {
+      body: "Create your ID in a minute and order your bracelet with QR and NFC to always have it on your wrist.",
       title: "Want to have your information always on hand?",
       generarQr: "Generate my QR",
     },
     footer: {
-      instagramAria: "Saferide on Instagram (opens in a new tab)",
+      instagramAria: "Safe.Ride on Instagram (opens in a new tab)",
       escolar: "School project — Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero, Argentina",
+      aviso: "Safe.Ride doesn't replace medical care or make diagnoses.",
+      contacto: "Contact: on Instagram or at E.S.T. N.º 1 in Baradero",
     },
     modal: {
+      rellenar: "Fill in example",
+      qrFicticio: "Your example QR code:",
+      simulacionNota: "This is a simulation. The real QR is engraved on your bracelet.",
       cerrar: "Close",
-      eyebrow: "Create your account",
+      eyebrow: "Your ID",
       title: "Create your emergency ID",
-      intro: "Fill in this information to generate your ID and QR code. You only need your email — no password needed — so we can identify you and send you updates by mail.",
+      intro: "Fill in this information to generate your ID and QR code. You only need your email —no password— so we can send you your private link to edit it.",
       generarQr: "Generate my QR",
       disclaimer: "Your data is processed on this device. Once you generate your QR you'll be able to download your ID to save or print it.",
       simulacion: "Simulation generated",
       resultDisclaimer: "This is how your public ID looks when someone scans the QR or taps the bracelet via NFC. Download it to save on your phone or print it with your order.",
       descargarFicha: "Download my ID",
       editarDatos: "Edit data",
+      consentimiento: "I agree that this data is shown to whoever scans my bracelet in an emergency, under Argentina's Personal Data Protection Law 25.326. I can view, correct or delete it anytime. For anyone under 18, a parent or guardian authorizes it.",
     },
     fallback: {
       noEspecificado: "Not specified",
@@ -5066,8 +5139,8 @@ const translations = {
     },
     download: {
       dateLocale: "en-US",
-      fichaHeader: "EMERGENCY MEDICAL ID — SAFERIDE",
-      pedidoHeader: "ORDER RECEIPT — SAFERIDE",
+      fichaHeader: "EMERGENCY MEDICAL ID — SAFE.RIDE",
+      pedidoHeader: "ORDER RECEIPT — SAFE.RIDE",
       nombre: "Name",
       mail: "Email",
       fechaNacimiento: "Date of birth",
@@ -5081,7 +5154,7 @@ const translations = {
       localidad: "Town / state",
       domicilio: "Home address",
       contactoEmergencia: "Emergency contact",
-      generadoCon: "Generated with Saferide.",
+      generadoCon: "Generated with Safe.Ride. It doesn't replace medical care.",
       producto: "Product",
       cantidad: "Quantity",
       enviarA: "Ship to",
@@ -5820,7 +5893,6 @@ function initPrototypeModal() {
       document.getElementById("protoName").value = "Juan Carlos Pérez";
       document.getElementById("protoEmail").value = "juan.perez@email.com";
       document.getElementById("protoBirthdate").value = "1985-03-15";
-      document.getElementById("protoDni").value = "30123456";
       document.getElementById("protoBlood").value = "O+";
       document.getElementById("protoConditions").value = "Hipertensión arterial";
       document.getElementById("protoAllergies").value = "Penicilina";
@@ -5895,7 +5967,6 @@ function initPrototypeModal() {
     document.getElementById("protoResultName").textContent = getText("fullName", t("demo.fichaTitle"));
     document.getElementById("protoResultSubtitle").textContent = data.get("email");
     document.getElementById("protoResultBirthdate").textContent = birthdateLabel;
-    document.getElementById("protoResultDni").textContent = getText("dni", t("fallback.noEspecificado"));
     document.getElementById("protoResultBlood").textContent = data.get("blood");
     document.getElementById("protoResultConditions").textContent = conditions;
     document.getElementById("protoResultAllergies").textContent = allergies;
@@ -6016,7 +6087,6 @@ function initDownloads() {
         `${t("download.nombre")}: ${getText("protoResultName", "—")}`,
         `${t("download.mail")}: ${getText("protoResultSubtitle", "—")}`,
         `${t("download.fechaNacimiento")}: ${getText("protoResultBirthdate", "—")}`,
-        `${t("download.dni")}: ${getText("protoResultDni", "—")}`,
         `${t("download.grupoSanguineo")}: ${getText("protoResultBlood", "—")}`,
         `${t("download.condiciones")}: ${getText("protoResultConditions", "—")}`,
         `${t("download.alergias")}: ${getText("protoResultAllergies", "—")}`,
