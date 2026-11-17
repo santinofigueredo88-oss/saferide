@@ -3447,7 +3447,7 @@ html:not([data-theme="dark"]) .hero {
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-nfc"></use></svg></div>
           <h3 data-i18n="formatos.nfc.title">Chip NFC integrado</h3>
-          <p data-i18n="formatos.nfc.desc">Va dentro de la pulsera, debajo del círculo central (no es un botón: es donde se apoya el celular). Al acercarlo se abre la misma ficha, aunque el QR esté rayado. Como el QR, necesita conexión a internet.</p>
+          <p data-i18n="formatos.nfc.desc">Va dentro de la pulsera, debajo del círculo central (no es un botón: es donde se apoya el celular). Al acercarlo se abre la misma ficha, aunque el QR esté rayado. Y aunque no haya internet, muestra lo justo y necesario: grupo sanguíneo, alergias y contacto de emergencia.</p>
         </div>
       </div>
     </div>
@@ -3818,7 +3818,7 @@ html:not([data-theme="dark"]) .hero {
 
       <p class="pricing-guarantee reveal" style="text-align:center;margin-top:40px;font-size:0.92rem;color:var(--text-secondary)">
         <svg class="icon" aria-hidden="true" style="width:18px;height:18px;color:var(--accent-fg);vertical-align:-3px;margin-right:4px"><use href="#icon-shield-check"></use></svg>
-        <span data-i18n="precios.nota">Apta para el uso diario; no sumergir por mucho tiempo. Para leerla, el celular necesita cámara o NFC y conexión a internet.</span>
+        <span data-i18n="precios.nota">Apta para el uso diario; no sumergir por mucho tiempo. Para ver la ficha completa, el celular necesita internet; sin internet, el NFC muestra lo esencial.</span>
       </p>
     </div>
   </section>
@@ -4063,7 +4063,7 @@ html:not([data-theme="dark"]) .hero {
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a3">Sí. Tanto el QR como el NFC abren un enlace a tu ficha, así que el celular que escanea necesita conexión a internet en ese momento (la mayoría tiene datos móviles). Vos también necesitás conexión para cargar o actualizar tus datos.</p>
+            <p data-i18n="faq.a3">Para la ficha completa, sí: el QR y el NFC abren un enlace a tu ficha, así que el celular que escanea necesita internet en ese momento. Pero si no hay internet, el chip NFC igual muestra lo justo y necesario, porque lo lleva guardado adentro: grupo sanguíneo, alergias y contacto de emergencia. Para cargar o actualizar tus datos sí necesitás conexión.</p>
           </div></div>
         </div>
         <div class="faq-item">
@@ -4524,7 +4524,7 @@ const translations = {
       title: "QR y chip NFC, juntos en la misma pulsera",
       subtitle: "No hace falta elegir: la pulsera Safe.Ride trae las dos. Si el QR está rayado se usa el NFC, y si el celular no tiene NFC se usa el QR. Las dos abren la misma ficha.",
       qr: { title: "Código QR", desc: "Cualquiera lo escanea con la cámara del celular y accede a tu ficha en la página de Safe.Ride. El celular que escanea necesita conexión a internet." },
-      nfc: { title: "Chip NFC integrado", desc: "Va dentro de la pulsera, debajo del círculo central (no es un botón: es donde se apoya el celular). Al acercarlo se abre la misma ficha, aunque el QR esté rayado. Como el QR, necesita conexión a internet." },
+      nfc: { title: "Chip NFC integrado", desc: "Va dentro de la pulsera, debajo del círculo central (no es un botón: es donde se apoya el celular). Al acercarlo se abre la misma ficha, aunque el QR esté rayado. Y aunque no haya internet, muestra lo justo y necesario: grupo sanguíneo, alergias y contacto de emergencia." },
     },
     paraQuien: {
       subtitle: "En la calle, en el trabajo, en casa o haciendo deporte. Safe.Ride sirve para cualquier persona, de cualquier edad.",
@@ -4614,7 +4614,7 @@ const translations = {
       f5: "Dura entre 12 y 18 meses de uso diario",
       f6: "Entrega en Baradero y zona norte",
       boton: "Pedir mi pulsera →",
-      nota: "Apta para el uso diario; no sumergir por mucho tiempo. Para leerla, el celular necesita cámara o NFC y conexión a internet.",
+      nota: "Apta para el uso diario; no sumergir por mucho tiempo. Para ver la ficha completa, el celular necesita internet; sin internet, el NFC muestra lo esencial.",
     },
     demo: {
       eyebrow: "Vista previa",
@@ -4746,7 +4746,7 @@ const translations = {
       q2: "¿Qué pasa si pierdo la pulsera?",
       a2: "Tu ficha no se borra. Nos avisás, desactivamos el código de esa pulsera y te asignamos uno nuevo.",
       q3: "¿Necesito internet para que funcione?",
-      a3: "Sí. Tanto el QR como el NFC abren un enlace a tu ficha, así que el celular que escanea necesita conexión a internet en ese momento (la mayoría tiene datos móviles). Vos también necesitás conexión para cargar o actualizar tus datos.",
+      a3: "Para la ficha completa, sí: el QR y el NFC abren un enlace a tu ficha, así que el celular que escanea necesita internet en ese momento. Pero si no hay internet, el chip NFC igual muestra lo justo y necesario, porque lo lleva guardado adentro: grupo sanguíneo, alergias y contacto de emergencia. Para cargar o actualizar tus datos sí necesitás conexión.",
       q4: "¿Cualquier celular puede leer el QR?",
       a4: "Sí, alcanza con la cámara. No hace falta instalar ninguna aplicación.",
       q5: "¿Cuánto sale?",
@@ -4871,7 +4871,7 @@ const translations = {
       title: "QR and NFC chip, together in the same bracelet",
       subtitle: "No need to choose: the Safe.Ride bracelet has both. If the QR is scratched, NFC is used; if the phone has no NFC, the QR is used. Both open the same ID.",
       qr: { title: "QR code", desc: "Anyone can scan it with a phone camera and access your ID on the Safe.Ride page. The scanning phone needs an internet connection." },
-      nfc: { title: "Built-in NFC chip", desc: "It sits inside the bracelet, under the central circle (it's not a button: it's where the phone goes). Tapping a phone opens the same ID, even if the QR is scratched. Like the QR, it needs an internet connection." },
+      nfc: { title: "Built-in NFC chip", desc: "It sits inside the bracelet, under the central circle (it's not a button: it's where the phone goes). Tapping a phone opens the same ID, even if the QR is scratched. Even with no internet, it shows the essentials: blood type, allergies and emergency contact." },
     },
     paraQuien: {
       subtitle: "On the street, at work, at home or doing sports. Safe.Ride works for anyone, at any age.",
@@ -4961,7 +4961,7 @@ const translations = {
       f5: "Lasts 12 to 18 months of daily use",
       f6: "Delivery in Baradero and northern Buenos Aires",
       boton: "Order my bracelet →",
-      nota: "Fine for daily use; don't keep it underwater for long. To read it, the phone needs a camera or NFC and an internet connection.",
+      nota: "Fine for daily use; don't keep it underwater for long. To see the full ID the phone needs internet; with no internet, the NFC shows the essentials.",
     },
     demo: {
       eyebrow: "Preview",
@@ -5093,7 +5093,7 @@ const translations = {
       q2: "What happens if I lose the bracelet?",
       a2: "Your ID isn't deleted. Let us know, we deactivate that bracelet's code and assign you a new one.",
       q3: "Do I need internet for it to work?",
-      a3: "Yes. Both the QR and the NFC open a link to your ID, so the scanning phone needs an internet connection at that moment (most have mobile data). You also need a connection to load or update your data.",
+      a3: "For the full ID, yes: the QR and the NFC open a link to your ID, so the scanning phone needs internet at that moment. But with no internet, the NFC chip still shows the essentials, because it stores them inside: blood type, allergies and emergency contact. You do need a connection to load or update your data.",
       q4: "Can any phone read the QR?",
       a4: "Yes, a camera is enough. No app needs to be installed.",
       q5: "How much is it?",
