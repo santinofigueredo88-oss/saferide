@@ -1,0 +1,82 @@
+.nfc-section {
+  display: grid;
+  grid-template-columns: minmax(0, .87fr) minmax(0, 1.13fr);
+  overflow: hidden;
+  align-items: stretch;
+  margin-block: clamp(18px, 3vw, 34px) 4px;
+  scroll-margin-top: 18px;
+  border: 1px solid #284c3c;
+  border-radius: 25px;
+  background: #11251d;
+  color: #f3faf3;
+}
+.nfc-copy { padding: clamp(23px, 4vw, 57px); align-self: center; }
+.nfc-kicker { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px; color: #c7efa8; font: 700 .72rem/1.2 var(--mono); letter-spacing: .075em; }
+.nfc-copy h2 { font-size: clamp(2.1rem, 4.4vw, 4.05rem); line-height: 1.02; letter-spacing: -.066em; text-wrap: balance; }
+.nfc-copy h2 span { color: #bce686; }
+.nfc-copy > p:not(.nfc-note) { max-width: 42ch; margin-top: 17px; color: #c2d8ca; font-size: .96rem; }
+.nfc-trigger { display: inline-flex; justify-content: center; align-items: center; gap: 9px; min-height: 48px; margin-top: 23px; padding: 8px 13px; border: 1px solid #bde286; border-radius: 13px; background: #d1f788; color: #152c1b; font-size: .86rem; font-weight: 760; }
+.nfc-trigger:hover { background: #dfffaa; }
+.nfc-trigger:focus-visible { outline-color: #d1f788; }
+.nfc-trigger[aria-disabled=true] { cursor: progress; background: #d8e9c5; }
+.nfc-note { margin-top: 8px; color: #a7c1b2; font-size: .76rem; }
+.nfc-steps { display: flex; flex-wrap: wrap; gap: 8px 15px; align-items: center; margin: 24px 0 0; padding: 0; list-style: none; }
+.nfc-steps li { display: inline-flex; align-items: center; gap: 5px; color: #b0c9bc; font-size: .76rem; }
+.nfc-steps li span { display: grid; place-items: center; min-width: 23px; height: 23px; border: 1px solid #4a6c5c; border-radius: 50%; font: 700 .61rem var(--mono); }
+.nfc-steps [aria-current=step] { color: #f9fff7; }
+.nfc-steps [aria-current=step] span, .nfc-steps [data-complete=true] span { background: #d1f788; border-color: #d1f788; color: #152c1b; }
+
+.nfc-stage { position: relative; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); place-items: center; gap: 14px; min-height: 390px; padding: 23px clamp(14px, 3vw, 36px); overflow: hidden; isolation: isolate; background: radial-gradient(ellipse at 35% 42%, #315847 0%, #244535 42%, #182c23 100%); }
+.nfc-stage::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(#92c0a36b .8px, transparent 1px) 0 0 / 17px 17px; opacity: .48; mask-image: radial-gradient(ellipse at center, #000 8%, transparent 84%); }
+.chip-rig { display: grid; justify-items: center; position: relative; z-index: 1; width: 100%; max-width: 185px; }
+.chip-art { display: block; width: 100%; filter: drop-shadow(0 18px 16px #071b13b8); transform: rotate(-12deg); }
+.chip-caption { margin-top: 9px; padding: 5px 8px; color: #cce4d5; border: 1px solid #547464; border-radius: 999px; background: #162f25; white-space: nowrap; font: 700 .62rem var(--mono); letter-spacing: .04em; }
+.nfc-signal { position: absolute; left: 34%; top: 50%; z-index: 0; width: 115px; height: 115px; translate: -50% -50%; pointer-events: none; }
+.nfc-signal span { position: absolute; inset: 0; border: 1.5px solid #d6fd94; border-radius: 50%; opacity: 0; }
+.nfc-phone { align-self: center; position: relative; z-index: 2; display: flex; flex-direction: column; width: min(100%, 254px); min-height: 325px; padding: 13px; border: 5px solid #0b1f16; border-radius: 29px; overflow: hidden; background: #f9fdf7; color: #193629; box-shadow: 0 14px 31px #061910a3, 0 0 0 1px #9db7a7; transform: translateX(22px) rotate(6deg); }
+.nfc-screen-top { display: flex; justify-content: space-between; align-items: center; gap: 5px; padding-bottom: 9px; border-bottom: 1px solid #dde9df; font-size: .68rem; font-weight: 790; }
+.offline-badge { display: flex; align-items: center; gap: 4px; padding: 3px 5px; border-radius: 999px; white-space: nowrap; color: #6a4a20; background: #f4ecd6; font-size: .58rem; font-weight: 710; }
+.offline-badge i { width: 5px; height: 5px; border-radius: 50%; background: #a47636; }
+.nfc-wait { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; }
+.nfc-reader-icon { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 6px; border-radius: 14px; background: #e1f0df; color: #286046; }
+.nfc-reader-icon .icon { width: 24px; height: 24px; }
+.nfc-phone h3 { font-size: 1.17rem; font-weight: 800; line-height: 1.1; letter-spacing: -.04em; }
+.nfc-phone p { color: #466158; font-size: .73rem; line-height: 1.32; }
+.nfc-result { padding-top: 11px; }
+.nfc-confirm { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 6px; color: #35744e; font-size: .66rem; font-weight: 770; }
+.nfc-confirm .icon { width: 13px; height: 13px; }
+.nfc-result dl { display: grid; gap: 4px; margin-block: 8px; }
+.nfc-result dl div { padding: 4px 7px; border-radius: 7px; background: #eaf3e8; }
+.nfc-result dt { color: #466658; font-size: .62rem; }
+.nfc-result dd { margin: 0; font-size: .77rem; font-weight: 760; }
+.nfc-result dl div:nth-child(2) { background: #fbf0e0; }
+.nfc-result dl div:nth-child(2) dd { color: #793f29; }
+.nfc-result > p { font-size: .64rem; }
+.nfc-section:is([data-nfc-state=approach], [data-nfc-state=read], [data-nfc-state=done]) .nfc-phone { transform: translateX(-16px); }
+.nfc-section:is([data-nfc-state=read], [data-nfc-state=done]) .chip-art { filter: drop-shadow(0 0 15px #b8ef8a60) drop-shadow(0 14px 16px #0a2117a0); }
+
+@media (max-width: 780px) {
+  .nfc-section { grid-template-columns: 1fr; border-radius: 19px; }
+  .nfc-copy { padding-block: 24px; }
+  .nfc-steps { margin-top: 16px; }
+  .nfc-stage { min-height: 340px; }
+}
+@media (max-width: 440px) {
+  .nfc-stage { grid-template-columns: minmax(0, .53fr) minmax(0, 1.47fr); gap: 7px; min-height: 295px; padding: 11px; }
+  .chip-caption { padding: 3px; font-size: .45rem; }
+  .nfc-phone { min-height: 258px; border-radius: 21px; border-width: 4px; padding: 9px; transform: translateX(4px) rotate(4deg); }
+  .nfc-section:is([data-nfc-state=approach], [data-nfc-state=read], [data-nfc-state=done]) .nfc-phone { transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nfc-phone { transition: transform .5s cubic-bezier(.2,.75,.25,1); }
+  .chip-art { transition: filter .3s ease; }
+  .nfc-section[data-nfc-state=read] .nfc-signal span { animation: nfc-wave .78s ease-out both; }
+  .nfc-section[data-nfc-state=read] .nfc-signal span:nth-child(2) { animation-delay: .11s; }
+  .nfc-section[data-nfc-state=read] .nfc-signal span:nth-child(3) { animation-delay: .22s; }
+  .nfc-result:not([hidden]) { animation: nfc-pop .36s ease-out both; }
+  .nfc-result:not([hidden]) dl div { animation: nfc-pop .36s ease-out both; }
+  .nfc-result:not([hidden]) dl div:nth-child(2) { animation-delay: .07s; }
+  .nfc-result:not([hidden]) dl div:nth-child(3) { animation-delay: .14s; }
+  @keyframes nfc-wave { 0% { opacity: 0; transform: scale(.35); } 25% { opacity: .85; } 100% { opacity: 0; transform: scale(1.7); } }
+  @keyframes nfc-pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+}

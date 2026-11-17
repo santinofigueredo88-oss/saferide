@@ -1,0 +1,12 @@
+{
+  "name": "saferide-visor",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:visor": "esbuild pulsera-3d/visor.mjs --bundle --format=iife --target=es2020 --minify --legal-comments=eof --outfile=pulsera-3d/visor.bundle.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "three": "0.185.1"
+  }
+}

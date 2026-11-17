@@ -3414,7 +3414,7 @@ html:not([data-theme="dark"]) .hero {
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-siren"></use></svg>
             <h3 data-i18n="comoFunciona.step5.title">Listo para una emergencia</h3>
-            <p data-i18n="comoFunciona.step5.desc">Cualquiera escanea el QR o acerca el celular al círculo NFC, sin instalar nada.</p>
+            <p data-i18n="comoFunciona.step5.desc">Cualquiera escanea el QR o acerca un celular compatible al mismo punto para leer el NFC, sin instalar una app propia.</p>
           </div>
         </li>
         <li class="timeline-step reveal">
@@ -3447,7 +3447,7 @@ html:not([data-theme="dark"]) .hero {
         <div class="card reveal">
           <div class="card-icon"><svg aria-hidden="true"><use href="#icon-nfc"></use></svg></div>
           <h3 data-i18n="formatos.nfc.title">Chip NFC integrado</h3>
-          <p data-i18n="formatos.nfc.desc">Va dentro de la pulsera, debajo del círculo central (no es un botón: es donde se apoya el celular). Al acercarlo se abre la misma ficha, aunque el QR esté rayado. Y aunque no haya internet, muestra lo justo y necesario: grupo sanguíneo, alergias y contacto de emergencia.</p>
+          <p data-i18n="formatos.nfc.desc">El chip cuadrado va dentro de la pulsera, justo debajo del QR. Acercá un celular compatible a ese punto para leerlo, aunque el código esté rayado. Sin internet, muestra el grupo sanguíneo, las alergias y el contacto de emergencia.</p>
         </div>
       </div>
     </div>
@@ -3889,6 +3889,7 @@ html:not([data-theme="dark"]) .hero {
             <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
             <span data-i18n="demo.scanHint">Con la pulsera, esta pantalla aparece al escanear tu código QR real.</span>
           </div>
+          <a class="btn btn-primary" style="margin-top:14px" href="./maqueta.html" data-i18n="demo.maqueta">Explorar la pulsera en 3D y probar NFC</a>
         </div>
       </div>
     </div>
@@ -4516,7 +4517,7 @@ const translations = {
       step2: { title: "Cargá tus datos médicos", desc: "Grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia." },
       step3: { title: "Generá tu QR", desc: "El sistema arma tu código único al instante." },
       step4: { title: "Grabamos tu pulsera", desc: "Tu QR va en la pulsera y el chip NFC se graba con el mismo enlace." },
-      step5: { title: "Listo para una emergencia", desc: "Cualquiera escanea el QR o acerca el celular al círculo NFC, sin instalar nada." },
+      step5: { title: "Listo para una emergencia", desc: "Cualquiera escanea el QR o acerca un celular compatible al mismo punto para leer el NFC, sin instalar una app propia." },
       step6: { title: "Tu información, al toque", desc: "Se muestra solo lo esencial, en una página pública de solo lectura." },
     },
     formatos: {
@@ -4524,7 +4525,7 @@ const translations = {
       title: "QR y chip NFC, juntos en la misma pulsera",
       subtitle: "No hace falta elegir: la pulsera Safe.Ride trae las dos. Si el QR está rayado se usa el NFC, y si el celular no tiene NFC se usa el QR. Las dos abren la misma ficha.",
       qr: { title: "Código QR", desc: "Cualquiera lo escanea con la cámara del celular y accede a tu ficha en la página de Safe.Ride. El celular que escanea necesita conexión a internet." },
-      nfc: { title: "Chip NFC integrado", desc: "Va dentro de la pulsera, debajo del círculo central (no es un botón: es donde se apoya el celular). Al acercarlo se abre la misma ficha, aunque el QR esté rayado. Y aunque no haya internet, muestra lo justo y necesario: grupo sanguíneo, alergias y contacto de emergencia." },
+      nfc: { title: "Chip NFC integrado", desc: "El chip cuadrado va dentro de la pulsera, justo debajo del QR. Acercá un celular compatible a ese punto para leerlo, aunque el código esté rayado. Sin internet, muestra el grupo sanguíneo, las alergias y el contacto de emergencia." },
     },
     paraQuien: {
       subtitle: "En la calle, en el trabajo, en casa o haciendo deporte. Safe.Ride sirve para cualquier persona, de cualquier edad.",
@@ -4632,6 +4633,7 @@ const translations = {
       point3: "Es una página de solo lectura: nadie puede editar tus datos.",
       aviso: "Safe.Ride no reemplaza la atención médica ni hace diagnósticos: solo muestra los datos que carga cada persona.",
       scanHint: "Con la pulsera, esta pantalla aparece al escanear tu código QR real.",
+      maqueta: "Explorar la pulsera en 3D y probar NFC",
     },
     privacidad: {
       eyebrow: "Privacidad y seguridad",
@@ -4863,7 +4865,7 @@ const translations = {
       step2: { title: "Add your medical data", desc: "Blood type, allergies, medication, conditions, where you live and an emergency contact." },
       step3: { title: "Generate your QR", desc: "The system builds your unique code instantly." },
       step4: { title: "We program your bracelet", desc: "Your QR goes on the bracelet and the NFC chip gets the same link." },
-      step5: { title: "Ready for an emergency", desc: "Anyone scans the QR or taps their phone on the NFC circle, no app needed." },
+      step5: { title: "Ready for an emergency", desc: "Scan the QR code or hold a compatible phone over the same spot to read NFC, without a dedicated app." },
       step6: { title: "Your information, in a tap", desc: "Only the essentials are shown, on a public read-only page." },
     },
     formatos: {
@@ -4871,7 +4873,7 @@ const translations = {
       title: "QR and NFC chip, together in the same bracelet",
       subtitle: "No need to choose: the Safe.Ride bracelet has both. If the QR is scratched, NFC is used; if the phone has no NFC, the QR is used. Both open the same ID.",
       qr: { title: "QR code", desc: "Anyone can scan it with a phone camera and access your ID on the Safe.Ride page. The scanning phone needs an internet connection." },
-      nfc: { title: "Built-in NFC chip", desc: "It sits inside the bracelet, under the central circle (it's not a button: it's where the phone goes). Tapping a phone opens the same ID, even if the QR is scratched. Even with no internet, it shows the essentials: blood type, allergies and emergency contact." },
+      nfc: { title: "Built-in NFC chip", desc: "The square chip sits inside the bracelet, directly under the QR code. Hold a compatible phone over that spot to read it, even if the code is scratched. Without internet, it shows blood type, allergies, and emergency contact." },
     },
     paraQuien: {
       subtitle: "On the street, at work, at home or doing sports. Safe.Ride works for anyone, at any age.",
@@ -4979,6 +4981,7 @@ const translations = {
       point3: "It's a read-only page: no one can edit your data.",
       aviso: "Safe.Ride doesn't replace medical care or make diagnoses: it only shows the data each person enters.",
       scanHint: "With the bracelet, this screen appears when your real QR code is scanned.",
+      maqueta: "Explore the 3D bracelet and try NFC (in Spanish)",
     },
     privacidad: {
       eyebrow: "Privacy & security",
