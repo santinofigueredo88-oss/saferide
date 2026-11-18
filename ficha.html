@@ -189,8 +189,15 @@
   const $ = id => document.getElementById(id);
 
   function leerLink() {
-    const hash = location.hash.slice(1);
+    // Los datos van después del #. Algunas apps lo graban como %23 o como ?, así que se aceptan las tres formas.
+    let hash = location.hash.slice(1);
+    if (!hash) {
+      const ruta = location.pathname + location.search;
+      const marca = ruta.search(/%23|\?/i);
+      if (marca >= 0) hash = ruta.slice(marca).replace(/^(%23|\?)/i, '');
+    }
     if (!hash) return null;
+    if (!hash.includes('=') && /%3D/i.test(hash)) { try { hash = decodeURIComponent(hash); } catch {} }
     const p = new URLSearchParams(hash);
     if (!p.get('n')) return null;
     const datos = {};

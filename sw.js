@@ -1,6 +1,6 @@
 // Guarda la ficha en el celular para que abra aunque no haya internet.
 // Los datos de la persona no se guardan: vienen dentro del link del chip (después del #).
-const CACHE = 'saferide-ficha-v1';
+const CACHE = 'saferide-ficha-v2';
 const ARCHIVOS = [
   './ficha.html',
   './pulsera-3d/visor.css?v=4',
@@ -26,7 +26,7 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return;
-  const esFicha = url.pathname.endsWith('/ficha.html') || url.pathname.endsWith('/ficha');
+  const esFicha = /^\/ficha/i.test(url.pathname); // también /ficha, /Ficha.html o con %23
   const esArchivo = ARCHIVOS.some(a => url.pathname.endsWith(a.slice(1).split('?')[0]));
   if (!esFicha && !esArchivo) return;
 

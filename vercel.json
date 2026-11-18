@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/(ficha|Ficha|FICHA)(.*)", "destination": "/ficha.html" }
+  ]
+}
