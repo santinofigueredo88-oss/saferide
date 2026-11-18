@@ -67,6 +67,12 @@
     .lista li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 12px; padding: 12px; border: 1px solid #e0ebe1; border-radius: 11px; background: #f6faf6; }
     .lista strong { display: block; font-size: 1.02rem; letter-spacing: -.02em; }
     .lista small { color: var(--muted); font-size: .8rem; }
+    .lista small.aviso-anio { display: block; margin-top: 2px; color: #7a5300; font-weight: 600; }
+    .lista li.vieja { border-color: #e9c46a; }
+    .aviso-anual { margin: 0 0 12px; padding: 12px 14px; border: 1px solid #e9c46a; border-radius: 11px; background: #fdf1d6; color: #5c3f00; font-size: .9rem; font-weight: 600; }
+    :root[data-theme=dark] .aviso-anual { background: #3a2f12; border-color: #8a6d1f; color: #f5d98a; }
+    :root[data-theme=dark] .lista small.aviso-anio { color: #f5d98a; }
+    :root[data-theme=dark] .lista li.vieja { border-color: #8a6d1f; }
     .lista .hero-actions { margin: 0; }
     .lista .hero-actions button { flex: 0 0 auto; min-height: 40px; }
     .fijo { display: flex; align-items: center; gap: 8px; min-height: 45px; padding: 9px 11px; border: 1px dashed #c9dcc9; border-radius: 11px; font-weight: 720; }
@@ -123,6 +129,7 @@
       <!-- Con sesión: lista de fichas -->
       <section class="tarjeta" id="v-lista" hidden aria-labelledby="t-lista">
         <div class="tarjeta-titulo"><h2 id="t-lista">Mis fichas</h2><span id="cantidad"></span></div>
+        <p class="aviso-anual" id="aviso-anual" role="status" hidden></p>
         <ul class="lista" id="lista"></ul>
         <p class="nota" id="lista-vacia" hidden>Todavía no tenés fichas. Creá la primera.</p>
         <div class="hero-actions"><button class="hero-primary" type="button" id="nueva">Crear una ficha nueva <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
@@ -226,6 +233,6 @@
       <nav aria-label="Enlaces del proyecto"><a href="./editar.html">Mi ficha</a><a href="./maqueta.html">Ver la pulsera</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
     </footer>
   </main>
-  <script type="module" src="./pulsera-3d/editar.mjs?v=2"></script>
+  <script type="module" src="./pulsera-3d/editar.mjs?v=3"></script>
 </body>
 </html>

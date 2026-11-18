@@ -1,5 +1,5 @@
 // Panel del equipo: ver los pedidos, imprimir el QR, grabar el chip y marcar el avance.
-import { cargarFirebase, cargarAuth, linkDeFicha } from './fichas.mjs?v=1';
+import { cargarFirebase, cargarAuth, linkDeFicha, fichaVieja, fechaDeFicha } from './fichas.mjs?v=2';
 
 const EQUIPO = ['santinofigueredo88@gmail.com'];
 const ESTADOS = { nuevo: 'NUEVO', grabado: 'GRABADO', enviado: 'ENVIADO', cancelado: 'CANCELADO' };
@@ -135,6 +135,9 @@ function pintar() {
       fila(dl, 'Grupo', p.ficha.g);
       fila(dl, 'Alergias', p.ficha.a);
       fila(dl, 'Contacto', [p.ficha.cn, p.ficha.ct].filter(Boolean).join(' · '));
+      if (fichaVieja(p.ficha)) {
+        fila(dl, 'Revisar', `La ficha no se actualiza desde el ${fechaDeFicha(p.ficha).toLocaleDateString('es-AR')}. Avisale al cliente que revise sus datos y, si cambian, volvé a grabar el chip.`);
+      }
     } else {
       fila(dl, 'Ficha', 'El cliente borró la ficha');
     }

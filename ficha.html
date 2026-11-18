@@ -201,7 +201,7 @@
     }
     if (esencial.n) estado('BUSCANDO LOS DATOS MÁS NUEVOS…');
     try {
-      const { leerFicha } = await import('./pulsera-3d/fichas.mjs?v=1');
+      const { leerFicha } = await import('./pulsera-3d/fichas.mjs?v=2');
       const f = await leerFicha(id);
       if (!f) {
         $('vista-ficha').hidden = true;
@@ -211,7 +211,10 @@
       }
       mostrarFicha({ n: f.nombre, g: f.g, a: f.a, c: f.c, m: f.m, cn: f.cn, ct: f.ct, o: f.o, l: f.l, d: f.d });
       const cuando = f.actualizado && f.actualizado.toDate ? f.actualizado.toDate() : null;
-      estado(cuando ? `DATOS ACTUALIZADOS EL ${cuando.toLocaleDateString('es-AR')}` : 'DATOS ACTUALIZADOS');
+      const vieja = cuando && Date.now() - cuando.getTime() > 365 * 24 * 60 * 60 * 1000;
+      estado(cuando
+        ? `DATOS ACTUALIZADOS EL ${cuando.toLocaleDateString('es-AR')}${vieja ? ' · TIENEN MÁS DE UN AÑO, CONFIRMALOS CON SU CONTACTO' : ''}`
+        : 'DATOS ACTUALIZADOS');
     } catch (e) {
       if (esencial.n) {
         estado('SIN INTERNET · SE VEN LOS DATOS ESENCIALES GUARDADOS EN LA PULSERA');

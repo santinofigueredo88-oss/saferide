@@ -1,5 +1,5 @@
 // Página "Mi ficha": entrar con Google, crear la ficha y cambiar los datos médicos.
-import { cargarFirebase, cargarAuth, CAMPOS, nuevoCodigo, linkDeFicha } from './fichas.mjs?v=1';
+import { cargarFirebase, cargarAuth, CAMPOS, nuevoCodigo, linkDeFicha, fichaVieja } from './fichas.mjs?v=2';
 
 const $ = id => document.getElementById(id);
 const vistas = ['v-entrar', 'v-lista', 'form', 'v-listo', 'f-pedido', 'v-pedido-ok'];
@@ -76,6 +76,13 @@ async function cargarLista() {
     const cuando = f.datos.actualizado?.toDate?.();
     fecha.textContent = cuando ? `Actualizada el ${cuando.toLocaleDateString('es-AR')}` : '';
     texto.append(nombre, fecha);
+    if (fichaVieja(f.datos)) {
+      li.classList.add('vieja');
+      const aviso = document.createElement('small');
+      aviso.className = 'aviso-anio';
+      aviso.textContent = 'Pasó más de un año: revisá que tus datos sigan bien y tocá «Cambiar datos» para confirmarlos.';
+      texto.append(aviso);
+    }
     const acciones = document.createElement('div');
     acciones.className = 'hero-actions';
     const editar = document.createElement('button');
@@ -92,6 +99,11 @@ async function cargarLista() {
     lista.append(li);
   }
   $('lista-vacia').hidden = fichas.length > 0;
+  const viejas = fichas.filter(f => fichaVieja(f.datos)).length;
+  $('aviso-anual').hidden = viejas === 0;
+  $('aviso-anual').textContent = viejas === 1
+    ? 'Tenés una ficha que no se revisa hace más de un año. Tus datos médicos pueden haber cambiado: revisalos y guardalos de nuevo.'
+    : `Tenés ${viejas} fichas que no se revisan hace más de un año. Tus datos médicos pueden haber cambiado: revisalos y guardalos de nuevo.`;
   $('cantidad').textContent = fichas.length ? `${String(fichas.length).padStart(2, '0')} FICHA${fichas.length > 1 ? 'S' : ''}` : '';
   await cargarPedidos();
   mostrar('v-lista');

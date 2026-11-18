@@ -17,6 +17,16 @@ export const CAMPOS = ['g', 'a', 'c', 'm', 'cn', 'ct', 'o', 'l', 'd'];
 // Lo esencial viaja también dentro del link, para verlo sin internet.
 export const ESENCIALES = ['n', 'g', 'a', 'cn', 'ct'];
 
+// Cada año se le pide al titular que revise sus datos.
+const UN_ANIO = 365 * 24 * 60 * 60 * 1000;
+export function fechaDeFicha(datos) {
+  return datos?.actualizado?.toDate?.() || null;
+}
+export function fichaVieja(datos) {
+  const cuando = fechaDeFicha(datos);
+  return !!cuando && Date.now() - cuando.getTime() > UN_ANIO;
+}
+
 let cargado;
 export function cargarFirebase() {
   if (!cargado) {
