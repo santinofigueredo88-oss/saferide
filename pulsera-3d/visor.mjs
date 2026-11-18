@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { initNfcDemo } from './nfc-demo.mjs';
 import { initTour } from './tour.mjs';
+import { crearMuneca } from './muneca.mjs';
 
 const $ = (selector) => document.querySelector(selector);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -39,6 +40,7 @@ function highlightPart(id) {
   $('#part-description').textContent = part?.copy || 'El QR queda visible por fuera. Debajo, en el mismo punto, se aloja el chip NFC cuadrado.';
   $('#part-demo').hidden = selectedPart !== 'chip';
   catalogButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.part === selectedPart)));
+  document.querySelectorAll('[data-layer]').forEach(layer => layer.classList.toggle('is-selected', layer.dataset.layer === id));
   viewer?.selectionChanged();
 }
 
@@ -161,10 +163,10 @@ function bandFinish() {
   texture.colorSpace = THREE.NoColorSpace;
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(7, 1);
-  const finish = material(0x2b5947, .73, .02);
+  const finish = material(0x28573f, .88, 0);
   finish.bumpMap = texture;
-  finish.bumpScale = .06;
-  finish.sheen = .22;
+  finish.bumpScale = .11;
+  finish.sheen = .12;
   finish.sheenColor.setHex(0x6cbca0);
   finish.sheenRoughness = .8;
   return finish;
@@ -221,7 +223,7 @@ function makeModel(scene) {
 
   const chip = part('chip', 0, 0, 31.8);
   chip.add(plate(roundedRect(8.1, 8.1, .68), .42, .11, material(0x273d30, .62, .04)));
-  const copper = material(0xf4ad5d, .31, .44);
+  const copper = material(0xe79b59, .28, .74);
   for (let i = 0; i < 4; i++) {
     const size = 7.38 - i * .64;
     const line = roundedRect(size, size, .53);
@@ -272,7 +274,7 @@ function makeModel(scene) {
 function lightModel(scene, renderer) {
   const room = new RoomEnvironment();
   const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(room, .045).texture;
+  scene.environment = pmrem.fromScene(room, .035).texture;
   scene.environmentIntensity = .66;
   room.dispose();
   pmrem.dispose();
@@ -317,7 +319,8 @@ function createViewer() {
   orbit.minDistance = 50;
   orbit.maxDistance = 380;
 
-  const parts = makeModel(scene);
+  const rig = new THREE.Group(); scene.add(rig);
+  const parts = makeModel(rig);
   const floor = lightModel(scene, renderer);
   const shell = $('#callouts');
   const leaders = $('#leaders');
@@ -327,11 +330,15 @@ function createViewer() {
   const separation = $('#separation');
   const fullscreen = $('#fullscreen');
   const presets = [...document.querySelectorAll('[data-view]')];
-  const angles = { perspective: V(70, 57, 124), front: V(0, 7, 120), inside: V(-55, 100, -100) };
+  const angles = { perspective: V(70, 57, 124), front: V(0, 7, 120), inside: V(-55, 100, -100), worn: V(12,36,160) };
+  let wrist, worn = false, wearPhase = 0;
   let view = 'perspective', exploded = false, labels = false, phase = 0, zoom = 1;
   let width = 1, height = 1, frame = 0, previousTime = 0, failed = false, cameraInput = false;
   let spinning = false, stageVisible = true;
   const world = V(0, 0, 0);
+  const zoomLevel = $('#zoom-level');
+  const polar = new THREE.Spherical();
+  let flight = null, spread = 1;
 
   for (const [id, part] of Object.entries(parts)) {
     const button = document.createElement('button');
@@ -355,15 +362,15 @@ function createViewer() {
   }
 
   function updateButtonStates() {
-    stage.dataset.mode = exploded ? 'exploded' : 'assembled';
+    stage.dataset.mode = worn ? 'worn' : exploded ? 'exploded' : 'assembled';
     stage.dataset.labels = String(labels);
-    $('#assembly-state').textContent = exploded ? 'Vista desarmada' : 'Armada';
-    explodeButton.lastChild.textContent = exploded ? ' Volver a armar' : ' Desarmar';
+    $('#assembly-state').textContent = worn ? 'En la muñeca' : exploded ? 'Vista desarmada' : 'Armada';
+    explodeButton.lastChild.textContent = exploded ? ' Armar' : ' Desarmar';
     explodeButton.setAttribute('aria-pressed', String(exploded));
     labelButton.setAttribute('aria-pressed', String(labels));
     $('#separation-control').hidden = !exploded;
     shell.hidden = !labels;
-    presets.forEach(button => button.setAttribute('aria-pressed', String(view === button.dataset.view)));
+    presets.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === 'worn' ? worn : view === button.dataset.view)));
     for (const [id, part] of Object.entries(parts)) {
       part.button.hidden = internalParts.has(id) && !exploded;
       part.button.setAttribute('aria-pressed', String(id === selectedPart));
@@ -376,6 +383,7 @@ function createViewer() {
   }
 
   function fitDistance() {
+    if (worn) return 185 * Math.max(1, 1.52 / camera.aspect);
     if (!exploded) return 99 * Math.max(1, 1.16 / camera.aspect);
     // Leave room for the two columns on wide stages and the label rows on narrow ones.
     const labelRows = labels && width <= labelRowsMaxWidth;
@@ -383,21 +391,42 @@ function createViewer() {
     return 151 * Math.max(labelRows ? 1.22 : 1, 1.04 * height / usableWidth);
   }
 
-  function frameCamera(direction) {
-    const oldDirection = camera.position.clone().sub(orbit.target).normalize();
-    orbit.target.set(exploded ? -3 : 1, exploded ? -3 : -4, exploded ? 12 : 8);
-    const distance = fitDistance() * zoom;
-    orbit.minDistance = fitDistance() * .50;
-    orbit.maxDistance = fitDistance() * 2.3;
-    camera.position.copy(direction || oldDirection).normalize().multiplyScalar(distance).add(orbit.target);
-    orbit.update(); schedule();
+  function frameCamera(direction, duration = 0) {
+    const offset = camera.position.clone().sub(orbit.target);
+    const from = new THREE.Spherical().setFromVector3(offset);
+    const to = new THREE.Spherical().setFromVector3(direction || offset);
+    const fit = fitDistance();
+    to.radius = fit * zoom;
+    // Always turn through the shorter arc, even across the azimuth seam.
+    const angle = to.theta - from.theta;
+    to.theta = from.theta + Math.atan2(Math.sin(angle), Math.cos(angle));
+    orbit.minDistance = fit * .50;
+    orbit.maxDistance = fit * 2.3;
+    flight = { from, to, origin: orbit.target.clone(), target: worn ? V(8,4,1) : exploded ? V(-3,-3,12) : V(1,-4,8), start: performance.now(), duration };
+    if (!duration || reduceMotion.matches) advanceCamera(1);
+    schedule();
+  }
+
+  function advanceCamera(t) {
+    const { from, to, origin, target } = flight;
+    const mix = 1 - (1 - t) ** 3;
+    polar.set(THREE.MathUtils.lerp(from.radius, to.radius, mix), THREE.MathUtils.lerp(from.phi, to.phi, mix), THREE.MathUtils.lerp(from.theta, to.theta, mix));
+    orbit.target.lerpVectors(origin, target, mix);
+    camera.position.setFromSpherical(polar).add(orbit.target);
+    if (t === 1) flight = null;
   }
 
   function applyView(name) {
     setSpin(false);
+    worn = name === 'worn';
+    if (worn) {
+      setExploded(false);
+      labels = false;
+      if (!wrist) { wrist = crearMuneca(); rig.add(wrist); }
+    }
     view = name;
     zoom = 1;
-    frameCamera(angles[name]);
+    frameCamera(angles[name], 390);
     updateButtonStates();
   }
 
@@ -405,21 +434,24 @@ function createViewer() {
     if (exploded === on) return;
     setSpin(false);
     exploded = on;
+    if (on && worn) { worn = false; view = 'perspective'; }
     labels = on;
     zoom = 1;
     if (!on && internalParts.has(selectedPart)) selectPart(selectedPart);
-    frameCamera();
+    frameCamera(angles[view], 410);
     updateButtonStates(); schedule();
   }
 
   function changeZoom(factor) {
     setSpin(false);
-    zoom = THREE.MathUtils.clamp(camera.position.distanceTo(orbit.target) / fitDistance() * factor, .50, 2.3);
-    frameCamera();
+    const current = flight ? zoom : camera.position.distanceTo(orbit.target) / fitDistance();
+    zoom = THREE.MathUtils.clamp(current * factor, .50, 2.3);
+    frameCamera(view ? angles[view] : null, 190);
   }
 
   function resize() {
     const size = stage.getBoundingClientRect();
+    if (size.width === width && size.height === height) return;
     const currentZoom = camera.position.distanceTo(orbit.target) / fitDistance();
     zoom = width === 1 ? 1 : THREE.MathUtils.clamp(currentZoom, .50, 2.3);
     width = Math.max(size.width, 1); height = Math.max(size.height, 1);
@@ -490,14 +522,25 @@ function createViewer() {
     frame = 0;
     const step = previousTime ? Math.min(now - previousTime, 40) : 16;
     previousTime = now;
-    const goal = exploded ? separation.valueAsNumber / 100 : 0;
-    phase = reduceMotion.matches ? goal : THREE.MathUtils.lerp(phase, goal, 1 - Math.exp(-step / 100));
-    if (Math.abs(phase - goal) < .002) phase = goal;
-    parts.clasp.group.rotation.y = THREE.MathUtils.lerp(claspAngle, .35, phase);
-    floor.visible = phase < .5;
+    const goal = exploded ? 1 : 0, fraction = separation.valueAsNumber / 100;
+    const approach = (value, end, ms) => reduceMotion.matches || Math.abs(value - end) < .002 ? end : THREE.MathUtils.lerp(value, end, 1 - Math.exp(-step / ms));
+    phase = approach(phase, goal, 115);
+    spread = approach(spread, fraction, 55);
+    wearPhase = approach(wearPhase, worn ? 1 : 0, 80);
+    rig.rotation.z = -(width / height > 1.1 ? 1.13 : .66) * wearPhase;
+    if (wrist) {
+      wrist.visible = wearPhase > .002;
+      // El brazo entra por el eje interior y queda quieto al terminar el encuadre.
+      wrist.position.y = (wearPhase - 1) * 165;
+    }
+    parts.clasp.group.rotation.y = THREE.MathUtils.lerp(claspAngle, .35, phase * spread);
+    floor.visible = phase < .5 && wearPhase < .01;
     floor.material.opacity = .55 * Math.max(0, 1 - 2 * phase);
-    for (const part of Object.values(parts)) {
-      part.group.position.copy(part.position).addScaledVector(part.offset, phase);
+    for (const [id, part] of Object.entries(parts)) {
+      // The external plate lifts first; the film and then the chip follow it out.
+      const delay = id === 'chip' ? .34 : id === 'film' ? .17 : 0;
+      const layer = THREE.MathUtils.smoothstep(phase, delay, 1) * spread;
+      part.group.position.copy(part.position).addScaledVector(part.offset, layer);
       part.guide.visible = phase > .05;
       if (part.guide.visible) {
         const p = part.guide.geometry.attributes.position;
@@ -507,10 +550,13 @@ function createViewer() {
       }
     }
     orbit.autoRotate = spinning && stageVisible && !document.hidden;
+    if (flight) advanceCamera(reduceMotion.matches ? 1 : THREE.MathUtils.clamp((now - flight.start) / flight.duration, 0, 1));
     orbit.update(step / 1000);
+    const percent = `${Math.round(100 * fitDistance() / orbit.getDistance())} %`;
+    if (zoomLevel.textContent !== percent) zoomLevel.textContent = percent;
     renderer.render(scene, camera);
     updateCallouts();
-    if (phase !== goal || orbit.autoRotate) schedule();
+    if (flight || phase !== goal || wearPhase !== Number(worn) || spread !== fraction || orbit.autoRotate) schedule();
   }
 
   function schedule() { if (!frame && !failed) frame = requestAnimationFrame(draw); }
@@ -521,11 +567,12 @@ function createViewer() {
     orbit.autoRotate = on && stageVisible && !document.hidden;
     spinButton.setAttribute('aria-pressed', String(on));
     spinButton.title = on ? 'Pausar giro' : 'Girar automáticamente';
-    if (on) { view = ''; updateButtonStates(); }
+    spinButton.querySelector('use').setAttribute('href', on ? '#icon-pause' : '#icon-spin');
+    if (on) { flight = null; view = ''; updateButtonStates(); }
     schedule();
   }
 
-  orbit.addEventListener('start', () => { cameraInput = true; setSpin(false); });
+  orbit.addEventListener('start', () => { flight = null; cameraInput = true; setSpin(false); });
   orbit.addEventListener('end', () => { cameraInput = false; });
   orbit.addEventListener('change', () => {
     if (cameraInput && view) { view = ''; updateButtonStates(); }
@@ -603,7 +650,7 @@ function createViewer() {
   }
   labelButton.addEventListener('click', () => {
     zoom = camera.position.distanceTo(orbit.target) / fitDistance();
-    labels = !labels; frameCamera(); updateButtonStates(); schedule();
+    labels = !labels; frameCamera(view ? angles[view] : null, 260); updateButtonStates(); schedule();
   });
   presets.forEach(button => button.addEventListener('click', () => applyView(button.dataset.view)));
   $('#zoom-out').addEventListener('click', () => changeZoom(1.22));
@@ -611,7 +658,7 @@ function createViewer() {
   $('#reset-camera').addEventListener('click', () => applyView('perspective'));
   new ResizeObserver(() => { if (!failed) resize(); }).observe(stage);
   reduceMotion.addEventListener('change', () => { orbit.enableDamping = !reduceMotion.matches; schedule(); });
-  resize(); applyView('perspective');
+  resize(); frameCamera(angles.perspective); updateButtonStates();
   return {
     showTourStep(step) {
       if (failed) return;
@@ -638,6 +685,7 @@ function createViewer() {
 function showFallback() {
   $('#model').hidden = $('#stage-hint').hidden = $('#callouts').hidden = $('#leaders').hidden = true;
   $('#fallback').hidden = false;
+  $('#zoom-level').hidden = $('#separation-control').hidden = true;
   $('#assembly-state').textContent = 'VISTA ESTÁTICA';
   document.querySelectorAll('[data-requires-3d]').forEach(button => { button.disabled = true; });
 }

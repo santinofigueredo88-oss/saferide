@@ -206,6 +206,33 @@
   width: min(100%, 7.5rem);
 }
 
+.guardia { width:100%; max-width:19rem; }
+.guardia svg { display:block; width:100%; overflow:hidden; border-radius:14px 14px 0 0; }
+.campo-lectura { opacity:0; }
+.nfc-section[data-nfc-state=read] .campo-lectura { opacity:1; }
+@media(prefers-reduced-motion:no-preference) {
+  .campo-lectura { transition:opacity .15s ease-out; }
+}
+.proximidad { display:grid; grid-template-columns:1fr auto; align-items:center; gap:2px 8px; padding:12px; background:#132c20; border:1px solid #54735f; border-radius:0 0 14px 14px; }
+.proximidad label { color:#f0f7ee; font-size:.78rem; font-weight:650; }
+.proximidad span { color:#c7efae; font-size:.72rem; }
+.proximidad input,.proximidad small { grid-column:1 / -1; }
+.proximidad input { width:100%; min-width:0; height:32px; margin:0; accent-color:#c6ed99; cursor:pointer; }
+.proximidad small { font-size:.72rem; color:#c2d6c7; }
+.nfc-solo-lector { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.nfc-aviso { align-self:start; margin-top:1rem; padding:14px; border:1px solid #b7cebd; border-radius:16px; background:#fbfdf8; box-shadow:0 7px 15px #1b3a2612; }
+.aviso-origen { display:flex; align-items:center; gap:5px; margin-bottom:.75rem; font-size:.7rem; font-weight:700; color:#376444; }
+.aviso-origen .icon { width:14px; height:14px; }
+.aviso-origen small { margin-left:auto; font-size:.68rem; font-weight:500; }
+.nfc-section .nfc-aviso h3 { font-size:1.05rem; margin-bottom:.4rem; }
+.nfc-aviso button { margin-top:.8rem; width:100%; display:flex; align-items:center; justify-content:space-between; min-height:44px; padding:8px 12px; background:#215038; color:white; border:0; border-radius:8px; font-size:.82rem; font-weight:650; }
+.nfc-aviso button:hover { background:#31684b; }
+:root[data-theme=dark] .nfc-aviso { background:#2c4234; border-color:#53715d; }
+:root[data-theme=dark] .aviso-origen { color:#c2e6c6; }
+:root[data-theme=dark] .nfc-aviso button { background:#bde5b6; color:#163620; }
+.nfc-section[data-nfc-state=lost] .nfc-reader-icon { background:#674a32; color:#ffddb2; box-shadow:none; }
+@media(prefers-reduced-motion:no-preference) { .nfc-aviso:not([hidden]) { animation:aviso-leido .24s ease-out both; } @keyframes aviso-leido { from { opacity:0;transform:translateY(-7px); } } }
+
 .nfc-section .chip-art {
   display: block;
   width: 100%;
@@ -410,6 +437,31 @@
 .nfc-section[data-nfc-state=done] .nfc-phone { transform: translate(var(--nfc-away-x), var(--nfc-away-y)); }
 .nfc-section[data-nfc-state=done] .chip-art { filter: drop-shadow(0 0 7px #d4fa9644) drop-shadow(0 14px 12px #071b13ba); }
 .nfc-section[data-nfc-state=done] .nfc-signal { --nfc-signal-ink: #c5eab0; }
+.nfc-section[data-nfc-state=read] .nfc-coil { stroke: #edffae; }
+.nfc-section[data-nfc-state=read] .chip-caption { border-color:var(--nfc-lime); color:var(--nfc-lime); }
+.nfc-section[data-nfc-state=done] .nfc-trigger { background:transparent; color:var(--nfc-lime); }
+.nfc-section[data-nfc-state=done] .nfc-trigger:hover { background:#2b4837; }
+
+:root[data-theme=dark] .nfc-section .nfc-phone { background:linear-gradient(150deg,#20372a,#15251c) padding-box,linear-gradient(145deg,#8ea691,#344c3d 35%,#14231b 70%,#55775c) border-box; color:var(--sr-text); }
+:root[data-theme=dark] .nfc-section :is(.nfc-phone h3,.nfc-result dd) { color:var(--sr-text); }
+:root[data-theme=dark] .nfc-section :is(.nfc-phone p,.nfc-result dt) { color:var(--sr-secondary); }
+:root[data-theme=dark] .nfc-section :is(.nfc-screen-top,.nfc-result>p) { border-color:var(--sr-edge); }
+:root[data-theme=dark] .nfc-section :is(.offline-badge,.nfc-confirm,.nfc-result dl div) { background:#284332; border-color:#4c6a51; color:#d6f2c9; }
+:root[data-theme=dark] .nfc-section .nfc-result dl div:nth-child(2) { background:#423225; border-color:#7d5c3f; }
+:root[data-theme=dark] .nfc-section .nfc-result dl div:nth-child(2) :is(dt,dd) { color:#ffcd9f; }
+:root[data-theme=dark] .nfc-section .nfc-reader-icon { box-shadow:none; }
+
+/* Keep the antenna and the result in the same glance on a phone. */
+@container saferide-nfc (min-width: 17rem) and (max-width: 33.99rem) {
+  .nfc-section .nfc-stage {
+    grid-template-columns:minmax(3.7rem, .48fr) 1.55rem minmax(0, 1.4fr);
+    grid-template-rows:auto; padding:1.45rem .8rem;
+    --nfc-axis:to right; --nfc-away-y:0px; --nfc-near-x:-6px; --nfc-near-y:0px; --nfc-chip-y:0px;
+  }
+  .nfc-section .chip-caption { padding:.2rem; font-size:.59rem; }
+  .nfc-section .nfc-signal { --nfc-signal-size:1.6rem; --nfc-axis-width:100%; --nfc-axis-height:1px; }
+  .nfc-section .nfc-phone { min-height:20.75rem; padding-inline:.6rem; }
+}
 
 @container saferide-nfc (min-width: 34rem) {
   .nfc-section .nfc-stage {
@@ -443,6 +495,18 @@
     border-inline-start: 1px solid var(--nfc-line);
     border-radius: 0 calc(var(--nfc-radius) - 1px) calc(var(--nfc-radius) - 1px) 0;
   }
+}
+
+/* La ilustración es la acción; la pantalla contigua permite leer el resultado. */
+@container saferide-nfc (min-width:34rem) {
+  .nfc-section .nfc-stage { grid-template-columns:minmax(0,1fr) 2.1rem minmax(0,1fr); padding-inline:clamp(1.3rem,2.5cqi,2.3rem); }
+  .nfc-section .nfc-signal { --nfc-signal-size:2rem; }
+  .nfc-section .guardia { justify-self:end; }
+}
+@container saferide-nfc (max-width:33.99rem) {
+  .nfc-section .nfc-stage { grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto; gap:1.1rem; }
+  .nfc-section .guardia { width:min(100%,16rem); }
+  .nfc-section .nfc-signal { display:none; }
 }
 
 /* Match the 650 ms approach and 780 ms read in nfc-demo.mjs. */

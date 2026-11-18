@@ -4,10 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f1f4f1">
-  <title>Safe.Ride · Pulsera de emergencia y demo interactiva</title>
-  <link rel="stylesheet" href="./pulsera-3d/visor.css?v=2">
-  <link rel="stylesheet" href="./pulsera-3d/nfc-demo.css?v=2">
-  <script defer src="./pulsera-3d/visor.bundle.js?v=2"></script>
+  <title>Safe.Ride · Pulsera de emergencia y simulador interactivo</title>
+  <script src="./pulsera-3d/tema.js"></script>
+  <link rel="stylesheet" href="./pulsera-3d/visor.css?v=4">
+  <link rel="stylesheet" href="./pulsera-3d/nfc-demo.css?v=5">
+  <link rel="stylesheet" href="./pulsera-3d/tema.css">
+  <script defer src="./pulsera-3d/visor.bundle.js?v=5"></script>
 </head>
 <body id="inicio">
   <svg class="symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -21,6 +23,7 @@
     <symbol id="icon-nfc" viewBox="0 0 24 24"><path d="M7 9a4 4 0 0 1 0 6m4-9a8 8 0 0 1 0 12m4-15a12 12 0 0 1 0 18"/><circle cx="4.5" cy="12" r=".6"/></symbol>
     <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
     <symbol id="icon-spin" viewBox="0 0 24 24"><path d="M20 10a8.2 8.2 0 0 0-14-4L4 8m0-4v4h4m-4 6a8.2 8.2 0 0 0 14 4l2-2m0 4v-4h-4"/></symbol>
+    <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8 5v14m8-14v14" stroke-width="3"/></symbol>
   </svg>
   <header class="site-header"><div class="topbar shell">
     <a class="brand" href="./index.html#demo" aria-label="Safe.Ride · Volver al proyecto">
@@ -35,6 +38,7 @@
       <a class="nav-section" href="#visor">Pulsera</a>
       <a class="nav-section" href="#componentes">Componentes</a>
       <a class="demo-link" href="#demo-nfc" data-tour="read">Probar NFC <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a>
+      <button class="tema" type="button" data-tema aria-label="Modo oscuro" aria-pressed="false" hidden><span>Modo oscuro</span></button>
     </nav>
   </div></header>
 
@@ -76,7 +80,7 @@
           <svg class="leaders" id="leaders" aria-hidden="true"></svg>
           <div class="callouts" id="callouts" role="group" aria-label="Piezas en el modelo" hidden></div>
           <div class="stage-label"><span></span> <span id="assembly-state" role="status">Armada</span></div>
-          <div class="stage-hint" id="stage-hint">Arrastrá para girar <span>·</span> Rueda o pellizco para acercar</div>
+          <div class="stage-hint" id="stage-hint">Arrastrá para girar <span>·</span> Usá la rueda o dos dedos para acercar</div>
           <div class="fallback" id="fallback" hidden>
             <img src="./hardware/preview.png" alt="Vista estática del cuerpo curvo de la pulsera Safe.Ride">
             <p>El visor 3D no está disponible en este navegador. Podés consultar las piezas en la ficha técnica.</p>
@@ -90,15 +94,17 @@
           <output id="separation-value" for="separation">100 %</output>
         </div>
         <div class="viewer-bottom">
-          <div class="angles" role="group" aria-label="Ángulo de vista">
+          <div class="angles" role="group" aria-label="Vistas de la pulsera">
             <button type="button" data-view="perspective" aria-pressed="true" data-requires-3d>Perspectiva</button>
             <button type="button" data-view="front" aria-pressed="false" data-requires-3d>Frente</button>
             <button type="button" data-view="inside" aria-pressed="false" data-requires-3d>Interior</button>
+            <button type="button" data-view="worn" aria-pressed="false" data-requires-3d>En la muñeca</button>
           </div>
           <div class="zoom" role="group" aria-label="Ajustes de cámara">
             <button type="button" id="zoom-out" title="Alejar" aria-label="Alejar" data-requires-3d>−</button>
+            <span id="zoom-level" class="zoom-level" title="Aumento respecto de la vista inicial">100 %</span>
             <button type="button" id="zoom-in" title="Acercar" aria-label="Acercar" data-requires-3d>+</button>
-            <button type="button" id="reset-camera" title="Recentrar vista" aria-label="Recentrar vista" data-requires-3d><svg class="icon" aria-hidden="true"><use href="#icon-reset"/></svg></button>
+            <button type="button" id="reset-camera" title="Volver a la vista inicial" aria-label="Volver a la vista inicial" data-requires-3d><svg class="icon" aria-hidden="true"><use href="#icon-reset"/></svg></button>
             <button type="button" id="fullscreen" title="Pantalla completa" aria-label="Pantalla completa" hidden data-requires-3d><svg class="icon" aria-hidden="true"><use href="#icon-expand"/></svg></button>
           </div>
         </div>
@@ -135,7 +141,7 @@
           <h3 id="part-title">Dos lecturas, una pulsera</h3>
           <p id="part-description">El QR queda visible por fuera. Debajo, en el mismo punto, se aloja el chip NFC cuadrado.</p>
         </div>
-        <div class="stack-order" aria-label="Capas desde el exterior: QR, lámina protectora, NFC y carcasa"><span>QR</span><span aria-hidden="true">→</span><span>Lámina</span><span aria-hidden="true">→</span><span>NFC</span><span aria-hidden="true">→</span><span>Carcasa</span></div>
+        <div class="stack-order" aria-label="Capas desde el exterior: QR, lámina protectora, NFC y carcasa"><span data-layer="qr">QR</span><span aria-hidden="true">→</span><span data-layer="film">Lámina</span><span aria-hidden="true">→</span><span data-layer="chip">NFC</span><span aria-hidden="true">→</span><span data-layer="housing">Carcasa</span></div>
         <a class="part-demo" id="part-demo" href="#demo-nfc" data-tour="read" hidden>Probar la lectura del chip <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a>
         </div>
       </aside>
@@ -144,40 +150,62 @@
     <section class="nfc-section" id="demo-nfc" aria-labelledby="nfc-title" data-nfc-state="idle">
       <div class="nfc-copy">
         <span class="nfc-kicker"><svg class="icon" aria-hidden="true"><use href="#icon-nfc"/></svg> 03 · DEMOSTRACIÓN NFC</span>
-        <h2 id="nfc-title">Datos esenciales.<br><span>Incluso sin internet.</span></h2>
-        <p>Un celular compatible se acerca al QR y lee el chip que está debajo. La demo reproduce lo que aparecería en la pantalla.</p>
+        <h2 id="nfc-title">Una lectura<br><span>en la guardia.</span></h2>
+        <p>La paciente lleva la pulsera en la muñeca. Acercá el dorso del celular al cuadrado del QR y mantenelo ahí un instante: la antena lee el chip que está debajo. Después, tocá el aviso en la pantalla.</p>
         <button class="nfc-trigger" id="nfc-trigger" type="button" aria-controls="nfc-display"><svg class="icon" aria-hidden="true"><use href="#icon-nfc"/></svg><span>Acercar el celular</span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
-        <p class="nfc-note">Simulación con datos ficticios.</p>
+        <p class="nfc-note">Simulación con datos ficticios. No usa el NFC de tu equipo.</p>
         <ol class="nfc-steps" aria-label="Progreso de la lectura">
           <li data-nfc-step="approach"><span>01</span> Acercar</li>
-          <li data-nfc-step="read"><span>02</span> Leer chip</li>
-          <li data-nfc-step="done"><span>03</span> Ver datos</li>
+          <li data-nfc-step="read"><span>02</span> Mantener cerca</li>
+          <li data-nfc-step="done"><span>03</span> Abrir el aviso</li>
         </ol>
       </div>
       <div class="nfc-stage">
-        <div class="chip-rig" aria-hidden="true">
-          <svg class="chip-art" viewBox="0 0 176 176">
-            <defs><linearGradient id="chip-board" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#455b4a"/><stop offset="1" stop-color="#1a2d23"/></linearGradient><linearGradient id="chip-copper" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#ffe5a6"/><stop offset="1" stop-color="#c67c34"/></linearGradient></defs>
-            <rect x="9" y="12" width="158" height="158" rx="23" fill="#0c2017"/>
-            <rect x="9" y="7" width="158" height="158" rx="23" fill="url(#chip-board)" stroke="#86a087" stroke-opacity=".62"/>
-            <g fill="none" stroke="url(#chip-copper)" stroke-width="3">
-              <rect x="22" y="20" width="132" height="132" rx="16"/><rect x="30" y="28" width="116" height="116" rx="13"/><rect x="38" y="36" width="100" height="100" rx="10"/><rect x="46" y="44" width="84" height="84" rx="8"/>
+        <div class="guardia">
+          <svg viewBox="0 0 264 208" fill="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="sala" x2="1" y2="1"><stop stop-color="#f1f5e9"/><stop offset="1" stop-color="#afcbbf"/></linearGradient>
+              <linearGradient id="piel" x2=".25" y2="1"><stop stop-color="#e5b497"/><stop offset=".55" stop-color="#c79478"/><stop offset="1" stop-color="#9d6c54"/></linearGradient>
+              <linearGradient id="vidrio" x2="1" y2="1"><stop stop-color="#788e83"/><stop offset=".45" stop-color="#304d44"/><stop offset="1" stop-color="#172b25"/></linearGradient>
+            </defs>
+            <rect width="264" height="208" rx="16" fill="url(#sala)"/>
+            <path d="M0 77h264v131H0z" fill="#bad1c1"/><path d="M0 81h264" stroke="#9bb9aa" stroke-width="3"/>
+            <rect x="14" y="15" width="84" height="23" rx="4" fill="#365b4d"/><text x="56" y="30" text-anchor="middle" fill="#f5faed" font-family="system-ui,sans-serif" font-size="11" font-weight="700" letter-spacing="1">GUARDIA</text>
+            <path d="M0 145q17-20 49-16l215 27v52H0z" fill="#839f98"/><path d="M0 141q16-20 49-16l215 28v19L0 149z" fill="#eff5e9"/>
+            <!-- Antebrazo apoyado en la camilla y pulsera con la placa expuesta. -->
+            <path d="M0 99c42 1 72 10 111 17 16 2 31-4 44-1l33 9c7 3 6 9-1 9l-27-3 26 11c6 3 4 9-3 7l-29-10 22 11c5 4 1 8-4 6l-33-13c-7 3-15 2-24-1L0 133z" fill="url(#piel)" stroke="#9f705a" stroke-width="1.3"/>
+            <path d="M0 93c19 1 40 4 61 11l-7 43-54-7z" fill="#637f91"/><path d="m50 103-7 42" stroke="#abc2ca" stroke-width="3"/>
+            <g transform="rotate(10 115 126)"><rect x="105" y="110" width="19" height="35" rx="5" fill="#254e39"/><rect x="103" y="111" width="24" height="17" rx="5" fill="#356b49"/><rect x="111" y="113" width="10" height="10" rx="1" fill="#f1f6e7"/><path d="M113 115h2v2h-2zm4 0h2v2h-2zm-4 4h2v2h-2zm4 0h2v2h-2z" fill="#193526"/></g>
+            <g class="campo-lectura" stroke="#426d40" stroke-width="2.5" stroke-linecap="round"><path d="M108 107q7-7 15 0m-19-5q11-11 23 0"/></g>
+            <!-- La mano de la enfermera y su teléfono se acercan como una sola pieza. -->
+            <g class="mano-lectora"><path d="m350-15-145 69-26-3-14 9 3 15 24 4 22-11 146-60" fill="url(#piel)" stroke="#87614d" stroke-width="1.5"/><path d="m355-23-145 67 12 30 140-53z" fill="#53867b"/><path d="m211 46 11 26" stroke="#d2ebe2" stroke-width="3"/>
+              <g transform="rotate(-130 169 61)"><rect x="152" y="26" width="34" height="67" rx="6" fill="#172a23" stroke="#688075" stroke-width="1.6"/><rect x="154" y="28" width="30" height="62" rx="4.5" fill="url(#vidrio)"/><rect x="165" y="30" width="8" height="2" rx="1" fill="#16241e"/><path d="M156 55l26-17v5l-26 17z" fill="#fff" opacity=".09"/><path d="M164 86h10" stroke="#b8cbc2" stroke-linecap="round"/></g>
+              <path d="m188 61-14 5q-7 4-10-1t6-9l13-6" fill="#b88263" stroke="#90654f" stroke-width="1.5"/>
             </g>
-            <path d="M64 73h48v27H64z" fill="#d29e67"/><rect x="69" y="65" width="38" height="40" rx="5" fill="#15211c" stroke="#b4c3a9"/><path d="M80 84h16m-8-8v16" stroke="#749982" stroke-width="2"/>
           </svg>
-          <span class="chip-caption">CHIP BAJO EL QR</span>
+          <div class="proximidad">
+            <label for="nfc-posicion">Posición del celular</label><span id="nfc-zona" aria-hidden="true">Lejos</span>
+            <input id="nfc-posicion" type="range" min="0" max="100" value="0" aria-valuetext="Lejos" aria-describedby="nfc-posicion-ayuda">
+            <small id="nfc-posicion-ayuda">Deslizá para acercarlo o alejarlo.</small>
+          </div>
         </div>
         <div class="nfc-signal" aria-hidden="true"><span></span><span></span><span></span></div>
-        <div class="nfc-phone" id="nfc-display" role="status" aria-atomic="true">
-          <div class="nfc-screen-top"><span>Safe.Ride</span><span class="offline-badge"><i aria-hidden="true"></i> Sin internet</span></div>
-          <div class="nfc-wait" id="nfc-wait">
+        <div class="nfc-phone" id="nfc-display" aria-label="Pantalla del celular simulado" role="group">
+          <div class="nfc-screen-top"><span id="nfc-barra">NFC activado</span><span class="offline-badge"><i aria-hidden="true"></i> Sin internet</span></div>
+          <div class="nfc-wait" id="nfc-wait" role="status" aria-atomic="true">
             <div class="nfc-reader-icon"><svg class="icon" aria-hidden="true"><use href="#icon-nfc"/></svg></div>
             <h3 id="nfc-status-title">Listo para leer</h3>
             <p id="nfc-status-copy">Acercá el celular al módulo de la pulsera.</p>
           </div>
+          <div class="nfc-aviso" id="nfc-aviso" hidden>
+            <div class="aviso-origen"><svg class="icon" aria-hidden="true"><use href="#icon-nfc"/></svg> Lector NFC <small>Ahora</small></div>
+            <h3>Etiqueta de Safe.Ride</h3><p>Datos de emergencia leídos de la pulsera.</p>
+            <button type="button" id="nfc-abrir">Abrir ficha <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+          </div>
+          <span class="nfc-solo-lector" id="nfc-anuncio" role="status"></span>
           <div class="nfc-result" id="nfc-result" hidden>
             <span class="nfc-confirm"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Leído desde la pulsera</span>
-            <h3>Datos esenciales</h3>
+            <h3 tabindex="-1">Datos esenciales</h3>
             <dl>
               <div><dt>Grupo sanguíneo</dt><dd>O positivo</dd></div>
               <div><dt>Alergias</dt><dd>Penicilina</dd></div>

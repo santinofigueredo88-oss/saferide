@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#153b31">
   <title>Simulador de lectura · Safe.Ride</title>
+  <script src="./pulsera-3d/tema.js"></script>
   <style>
     :root{color-scheme:light;--paper:#f6f8f4;--white:#fff;--ink:#153b31;--muted:#46635a;--line:#d3e1d8;--teal:#a8e4d5;--soft:#e7f4ef;--radius:22px}
     *{box-sizing:border-box}
@@ -75,7 +76,47 @@
     @media(max-width:760px){.wrap{width:calc(100% - 32px)}.workbench{grid-template-columns:1fr}.art>svg{max-height:300px}}
     @media(max-width:380px){.wrap{width:calc(100% - 24px)}.brand{font-size:19px}.method{gap:6px;padding-inline:7px;font-size:.91rem}.phone{width:calc(100% - 24px)}}
     @media(prefers-reduced-motion:reduce){.zone{transition:none}}
+    .controls{gap:12px}
+    .reader-links{display:flex;align-items:center;gap:clamp(7px,1.4vw,18px)}
+    html[data-theme=dark]{--white:var(--sr-surface);--soft:var(--sr-raised)}
+    html[data-theme=dark] :is(.eyebrow,.panel-label span,.back,.bottom a){color:var(--sr-accent)}
+    html[data-theme=dark] :is(.methods,.reader,.notice svg,.screen-tag){background:var(--sr-raised);color:var(--sr-text);border-color:var(--line)}
+    html[data-theme=dark] .method[aria-pressed=true]{background:#bfe6b8;color:#133821;border-color:#bfe6b8}
+    html[data-theme=dark] .method[aria-pressed=true] svg{color:#194e2d}
+    html[data-theme=dark] .method:hover:not([aria-pressed=true]){background:#314c3a}
+    html[data-theme=dark] .phone{background:#122018;border-color:#56715c;box-shadow:0 14px 36px #080f0b66}
+    html[data-theme=dark] .profile-data>div{border-color:var(--line)}
+    html[data-theme=dark] .allergy dd{color:#ffbd89}
+    html[data-theme=dark] .art{background-color:#243e2f;background-image:radial-gradient(#79ab862e 1px,transparent 1px),radial-gradient(ellipse,#355b42,#182c20)}
+    html[data-theme=dark] .art text{fill:#e3f1dd}
+    html[data-theme=dark] .art g[stroke="#447264"]{stroke:#add4ab}
+    html[data-theme=dark] .connection input:checked{background:#415f47;border-color:#8abb94}
+    html[data-theme=dark] .reset:disabled{color:#9db4a2}
+    html[data-theme=dark] .reset:not(:disabled):hover{color:var(--sr-accent)}
+    html[data-theme=dark] :is(.notice[data-blocked=true] svg,.phone[data-online=false][data-method=qr] .screen-tag){background:#4a3224;color:#ffd099}
+    @media(max-width:380px){.reader-links .back{font-size:.75rem}.top .wrap{gap:5px}}
+    .methods{gap:5px;border:1px solid var(--line);border-radius:15px;padding:4px;background:#ebf2ec}
+    .method{border-color:transparent;background:transparent;touch-action:manipulation}
+    .method[aria-pressed=true] svg{color:#d4fa96}
+    .connection,.reset{min-height:44px}
+    .connection input{appearance:none;position:relative;width:36px;height:22px;border:1px solid #768b80;border-radius:15px;background:#e2eae4}
+    .connection input::before{content:"";position:absolute;width:14px;height:14px;border-radius:50%;inset:3px auto auto 3px;background:#587263}
+    .connection input:checked{background:var(--ink);border-color:var(--ink)}
+    .connection input:checked::before{transform:translateX(14px);background:#d4fa96}
+    @media(forced-colors:active){.connection input{appearance:auto}.connection input::before{display:none}}
+    .reset:not(:disabled):hover{color:#27724c}
+    .read-effect{opacity:0;pointer-events:none}
+    .art[data-reading=true][data-method=qr] .qr-sweep,.art[data-reading=true][data-method=nfc] .nfc-wave{opacity:1}
+    @media(prefers-reduced-motion:no-preference){
+      .connection input::before,.method{transition:transform .15s ease-out,background-color .15s,color .15s}
+      .method:active{transform:scale(.98)}
+      .art[data-reading=true][data-method=qr] .qr-sweep{animation:scan .65s ease-in-out both}
+      .art[data-reading=true][data-method=nfc] .nfc-wave{transform-box:fill-box;transform-origin:center;animation:induct .65s ease-out both}
+      @keyframes scan{from{transform:translateY(-18px)}to{transform:translateY(18px)}}
+      @keyframes induct{from{transform:scale(.85);opacity:1}to{transform:scale(1.45);opacity:.18}}
+    }
   </style>
+  <link rel="stylesheet" href="./pulsera-3d/tema.css">
 </head>
 <body>
   <header class="top">
@@ -89,7 +130,7 @@
         </svg>
         Safe.Ride
       </div>
-      <a class="back" href="./maqueta.html">← Volver al visor 3D</a>
+      <nav class="reader-links" aria-label="Visor y apariencia"><a class="back" href="./maqueta.html">Volver al visor 3D</a><button class="tema" type="button" data-tema aria-label="Modo oscuro" aria-pressed="false" hidden><span>Modo oscuro</span></button></nav>
     </div>
   </header>
   <main class="wrap">
@@ -137,6 +178,8 @@
               </g>
               <path d="M-50-13h4v4h-4z M-29-13h4v4h-4z M-50 8h4v4h-4z M-39-15h4v8h-4z M-38-4h7v4h-7z M-53-2h12v4h-12z M-39 4h4v11h-4z M-29 4h7v4h-7z M-26 11h4v4h-4z M-34 10h4v5h-4z M-27-3h5v4h-5z" fill="#102e25"/>
               <rect class="zone zone-nfc" x="-69" y="-32" width="63" height="63" rx="10" style="stroke:#eecc88"/>
+              <path class="read-effect qr-sweep" d="M-60 0h45" fill="none" stroke="#338454" stroke-width="4" stroke-linecap="round"/>
+              <rect class="read-effect nfc-wave" x="-69" y="-32" width="63" height="63" rx="11" fill="none" stroke="#fccd76" stroke-width="3"/>
             </g>
             <g fill="none" stroke="#447264" stroke-width="1.2">
               <path d="M128 226 89 247H58"/><path d="M151 241 188 292H237"/>
@@ -160,7 +203,7 @@
           </div>
           <div class="options">
             <label class="connection"><input id="connection" type="checkbox" checked> Celular con internet</label>
-            <button class="reset" id="reset" type="button" disabled>Reiniciar demo</button>
+            <button class="reset" id="reset" type="button" disabled>Reiniciar simulación</button>
           </div>
         </div>
       </section>
@@ -198,7 +241,7 @@
     </div>
     <footer class="bottom">
       <span>Lectura simulada: no usa la cámara ni el NFC del dispositivo.</span>
-      <a href="./hardware/preview.png">Ver el modelo 3D del repositorio ↗</a>
+      <a href="./hardware/preview.png">Ver una imagen de la pulsera ↗</a>
     </footer>
     <noscript>Activá JavaScript en el navegador para probar los controles de la maqueta.</noscript>
   </main>
@@ -218,7 +261,8 @@
     const profileCopy = document.querySelector('#profile-copy');
     const profileNote = document.querySelector('#profile-note');
     const webFields = document.querySelectorAll('[data-web-only]');
-    let method = '';
+    let method = '', pending = 0;
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
 
     function render() {
       const online = connection.checked;
@@ -229,6 +273,16 @@
       network.textContent = online ? 'Con internet' : 'Sin internet';
       buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.read === method)));
       reset.disabled = !method && online;
+      art.dataset.reading = String(!!pending);
+      if (pending) {
+        notice.hidden = false;
+        notice.dataset.blocked = 'false';
+        profile.hidden = true;
+        tag.textContent = `${method.toUpperCase()} · Leyendo…`;
+        noticeTitle.textContent = method === 'qr' ? 'Escaneando el código…' : 'Leyendo el chip…';
+        noticeCopy.textContent = method === 'qr' ? 'La cámara reconoce el enlace de la pulsera.' : 'El celular detecta la antena bajo el QR.';
+        return;
+      }
 
       notice.hidden = showProfile;
       profile.hidden = !showProfile;
@@ -253,15 +307,20 @@
     }
 
     buttons.forEach(button => button.addEventListener('click', () => {
+      if (pending && method === button.dataset.read) return;
+      clearTimeout(pending);
       method = button.dataset.read;
+      pending = motion.matches ? 0 : setTimeout(finishReading, 680);
       render();
     }));
-    connection.addEventListener('change', render);
+    function finishReading() { clearTimeout(pending); pending = 0; render(); }
+    motion.addEventListener('change', () => { if (motion.matches && pending) finishReading(); });
+    connection.addEventListener('change', finishReading);
     reset.addEventListener('click', () => {
       method = '';
       connection.checked = true;
       buttons[0].focus();
-      render();
+      finishReading();
     });
     render();
   </script>
