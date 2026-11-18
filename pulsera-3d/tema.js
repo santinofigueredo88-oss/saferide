@@ -14,8 +14,14 @@
     const boton = document.querySelector('[data-tema]');
     if (!boton) return;
     boton.hidden = false;
-    boton.setAttribute('aria-pressed', String(oscuro));
+    // El botón dice a qué modo se pasa, no en cuál se está.
+    const texto = oscuro ? 'Modo claro' : 'Modo oscuro';
+    boton.removeAttribute('aria-pressed');
+    boton.dataset.modo = oscuro ? 'oscuro' : 'claro';
+    boton.setAttribute('aria-label', texto);
     boton.title = oscuro ? 'Cambiar al modo claro' : 'Cambiar al modo oscuro';
+    const etiqueta = boton.querySelector('span');
+    if (etiqueta) etiqueta.textContent = texto;
   }
   leer(); aplicar(); // Antes del primer dibujo, aun al abrir directamente la maqueta.
   document.addEventListener('DOMContentLoaded', () => {
