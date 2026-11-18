@@ -1,0 +1,16 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json",
+    "location": "southamerica-east1"
+  },
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Safe.Ride",
+        "supportEmail": "santinofigueredo88@gmail.com",
+        "authorizedRedirectUris": ["https://saferide-fichas.firebaseapp.com/__/auth/handler"]
+      }
+    }
+  }
+}

@@ -4451,23 +4451,17 @@ html:not([data-theme="dark"]) .hero {
         </div>
 
         <div style="text-align:center;margin:24px 0">
-          <p style="font-weight:600;font-size:0.88rem;margin-bottom:12px;color:var(--text-primary)" data-i18n="modal.qrFicticio">Tu código QR (abre tu ficha):</p>
+          <p style="font-weight:600;font-size:0.88rem;margin-bottom:12px;color:var(--text-primary)" data-i18n="modal.qrFicticio">Vista previa de tu QR:</p>
           <canvas id="qrCodeCanvas" width="200" height="200" style="border-radius:12px;border:2px solid var(--surface-border);background:#fff"></canvas>
-          <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px" data-i18n="modal.simulacionNota">Escanealo con la cámara del celular: abre tu ficha. Este QR va impreso en tu pulsera.</p>
+          <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px" data-i18n="modal.simulacionNota">El QR definitivo te lo damos al guardar tu ficha.</p>
         </div>
 
         <div class="chip-link" style="margin:0 0 18px;padding:14px;border:1px solid var(--surface-border);border-radius:12px">
-          <p style="font-weight:700;font-size:0.92rem;margin:0 0 4px;color:var(--text-primary)" data-i18n="modal.chipTitulo">Link para grabar en el chip NFC</p>
-          <p style="font-size:0.8rem;color:var(--text-secondary);margin:0 0 10px" data-i18n="modal.chipNota">Es el mismo link del QR. Copialo y grabalo en el chip con la app NFC Tools (Escribir → URL / URI).</p>
-          <input type="text" id="protoChipLink" readonly aria-label="Link de tu ficha" data-i18n-aria-label="modal.chipTitulo" style="width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--surface-border);border-radius:10px;font:0.78rem ui-monospace,Menlo,monospace;background:transparent;color:var(--text-primary)" />
-          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
-            <button type="button" class="btn btn-primary" id="protoCopyLink" style="flex:1 1 140px">
-              <span data-i18n="modal.copiarLink">Copiar link</span>
-            </button>
-            <a class="btn btn-outline" id="protoOpenFicha" href="./ficha.html" target="_blank" rel="noopener" style="flex:1 1 140px">
-              <span data-i18n="modal.abrirFicha">Abrir mi ficha</span>
-            </a>
-          </div>
+          <p style="font-weight:700;font-size:0.92rem;margin:0 0 4px;color:var(--text-primary)" data-i18n="modal.chipTitulo">Guardá tu ficha para la pulsera</p>
+          <p style="font-size:0.85rem;color:var(--text-secondary);margin:0 0 12px" data-i18n="modal.chipNota">Entrá con tu cuenta de Google y te damos el QR y el link del chip definitivos. Después vas a poder cambiar tus datos médicos sin cambiar la pulsera.</p>
+          <a class="btn btn-primary btn-block" id="protoGuardar" href="./editar.html">
+            <span data-i18n="modal.guardarFicha">Guardar mi ficha</span>
+          </a>
         </div>
         <p class="modal-disclaimer" data-i18n="modal.resultDisclaimer">Así se ve tu ficha pública al escanear el QR o acercar la pulsera por NFC. Descargala para guardarla en tu celular o imprimirla junto con tu pedido.</p>
 
@@ -4792,13 +4786,11 @@ const translations = {
     },
     modal: {
       rellenar: "Rellenar ejemplo",
-      qrFicticio: "Tu código QR (abre tu ficha):",
-      simulacionNota: "Escanealo con la cámara del celular: abre tu ficha. Este QR va impreso en tu pulsera.",
-      chipTitulo: "Link para grabar en el chip NFC",
-      chipNota: "Es el mismo link del QR. Copialo y grabalo en el chip con la app NFC Tools (Escribir → URL / URI).",
-      copiarLink: "Copiar link",
-      copiado: "¡Copiado!",
-      abrirFicha: "Abrir mi ficha",
+      qrFicticio: "Vista previa de tu QR:",
+      simulacionNota: "El QR definitivo te lo damos al guardar tu ficha.",
+      chipTitulo: "Guardá tu ficha para la pulsera",
+      chipNota: "Entrá con tu cuenta de Google y te damos el QR y el link del chip definitivos. Después vas a poder cambiar tus datos médicos sin cambiar la pulsera.",
+      guardarFicha: "Guardar mi ficha",
       cerrar: "Cerrar",
       eyebrow: "Tu ficha",
       title: "Creá tu ficha de emergencia",
@@ -5146,13 +5138,11 @@ const translations = {
     },
     modal: {
       rellenar: "Fill in example",
-      qrFicticio: "Your QR code (opens your ID):",
-      simulacionNota: "Scan it with your phone camera: it opens your ID. This QR is printed on your bracelet.",
-      chipTitulo: "Link to write on the NFC chip",
-      chipNota: "It is the same link as the QR. Copy it and write it on the chip with the NFC Tools app (Write → URL / URI).",
-      copiarLink: "Copy link",
-      copiado: "Copied!",
-      abrirFicha: "Open my ID",
+      qrFicticio: "Preview of your QR:",
+      simulacionNota: "You get the final QR when you save your ID.",
+      chipTitulo: "Save your ID for the bracelet",
+      chipNota: "Sign in with your Google account and get your final QR and chip link. Later you can change your medical data without changing the bracelet.",
+      guardarFicha: "Save my ID",
       cerrar: "Close",
       eyebrow: "Your ID",
       title: "Create your emergency ID",
@@ -6054,25 +6044,12 @@ function initPrototypeModal() {
     const qrCanvas = document.getElementById("qrCodeCanvas");
     if (qrCanvas) {
       const fichaLink = buildFichaLink(data);
-      document.getElementById("protoChipLink").value = fichaLink;
-      document.getElementById("protoOpenFicha").href = fichaLink;
+      document.getElementById("protoGuardar").href = "./editar.html#nuevo=1&" + fichaLink.split("#")[1];
       if (!drawRealQR(qrCanvas, fichaLink)) generateFictitiousQR(qrCanvas, fichaLink);
     }
 
     showResultView();
   });
-
-  const copyBtn = document.getElementById("protoCopyLink");
-  if (copyBtn) {
-    copyBtn.addEventListener("click", async () => {
-      const input = document.getElementById("protoChipLink");
-      const label = copyBtn.querySelector("span");
-      try { await navigator.clipboard.writeText(input.value); }
-      catch (e) { input.select(); document.execCommand("copy"); }
-      label.textContent = t("modal.copiado");
-      setTimeout(() => { label.textContent = t("modal.copiarLink"); }, 1800);
-    });
-  }
 
   if (editBtn) {
     editBtn.addEventListener("click", () => {

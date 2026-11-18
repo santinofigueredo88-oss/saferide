@@ -1,0 +1,43 @@
+rules_version = '2';
+// Safe.Ride: cada ficha es pública para quien tenga el link (QR o chip),
+// pero solo su titular la puede cambiar, y el nombre no se puede cambiar nunca.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /fichas/{id} {
+      function campos() {
+        return ['uid', 'nombre', 'g', 'a', 'c', 'm', 'cn', 'ct', 'o', 'l', 'd', 'actualizado'];
+      }
+      function texto(campo, max) {
+        return !(campo in request.resource.data)
+          || (request.resource.data[campo] is string && request.resource.data[campo].size() <= max);
+      }
+      function datosValidos() {
+        return request.resource.data.keys().hasOnly(campos())
+          && texto('g', 10) && texto('a', 80) && texto('c', 100) && texto('m', 80)
+          && texto('cn', 40) && texto('ct', 25) && texto('o', 40) && texto('l', 40) && texto('d', 60)
+          && request.resource.data.actualizado == request.time;
+      }
+      function esTitular() {
+        return request.auth != null && resource.data.uid == request.auth.uid;
+      }
+
+      // Leer una ficha conociendo su código: sí. Listar todas: solo las propias.
+      allow get: if true;
+      allow list: if request.auth != null && resource.data.uid == request.auth.uid;
+
+      allow create: if request.auth != null
+        && id.size() >= 8 && id.size() <= 20
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.nombre is string
+        && request.resource.data.nombre.size() > 0 && request.resource.data.nombre.size() <= 40
+        && datosValidos();
+
+      allow update: if esTitular()
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.nombre == resource.data.nombre
+        && datosValidos();
+
+      allow delete: if esTitular();
+    }
+  }
+}

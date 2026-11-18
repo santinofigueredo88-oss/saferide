@@ -91,6 +91,7 @@
       <span class="emergencia"><svg class="icon" aria-hidden="true"><use href="#icon-alert"/></svg> FICHA DE EMERGENCIA</span>
       <h1 id="f-nombre"></h1>
       <p class="lede" id="f-sub"></p>
+      <p class="medida" id="f-estado" role="status"></p>
 
       <section class="tarjeta" aria-labelledby="t-esenciales">
         <div class="tarjeta-titulo"><h2 id="t-esenciales">Lo más importante</h2><span>DATOS MÉDICOS</span></div>
@@ -122,97 +123,43 @@
         </dl>
       </section>
 
-      <p class="nota">Datos cargados por la persona o su familia. Safe.Ride no es un servicio médico: ante una emergencia llamá al <a href="tel:107">107</a>. Los datos viajan dentro del link de la pulsera y esta página no los guarda.</p>
+      <p class="nota">Datos cargados por la persona o su familia. Safe.Ride no es un servicio médico: ante una emergencia llamá al <a href="tel:107">107</a>. Con internet se ven los datos actualizados por su titular; sin internet, los esenciales guardados en la pulsera.</p>
     </div>
 
-    <!-- Para armar el link que se graba en el chip -->
+    <!-- Sin datos: invita a crear la ficha -->
     <div class="ficha" id="vista-crear" hidden>
-      <p class="eyebrow"><span></span> GRABAR EL CHIP NFC</p>
-      <h1>Armá la ficha<br><em>de tu pulsera.</em></h1>
-      <p class="lede">Completá los datos y grabá el link en el chip. Al acercar un celular con internet, se abre esta ficha con todo cargado.</p>
-
-      <form id="form" class="tarjeta" novalidate>
-        <div class="tarjeta-titulo"><h2>Tus datos</h2><span>01 · COMPLETAR</span></div>
-        <div class="campos">
-          <label class="campo ancho"><span>Nombre y apellido</span><input name="n" maxlength="40" required autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="Ej.: Juan Gómez"></label>
-          <label class="campo"><span>Grupo sanguíneo</span>
-            <select name="g" required>
-              <option value="">Elegir…</option>
-              <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
-              <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
-              <option>No sé</option>
-            </select>
-          </label>
-          <label class="campo"><span>Alergias</span><input name="a" maxlength="60" list="allergiesList" autocomplete="off" enterkeyhint="next" placeholder="Ej.: Penicilina, o ninguna"></label>
-          <label class="campo ancho"><span>Condiciones médicas</span><input name="c" maxlength="70" list="conditionsList" autocomplete="off" enterkeyhint="next" placeholder="Ej.: diabetes, epilepsia"></label>
-          <label class="campo ancho"><span>Medicación</span><input name="m" maxlength="60" list="medsList" autocomplete="off" enterkeyhint="next" placeholder="Ej.: Enalapril, o ninguna"></label>
-          <label class="campo"><span>Contacto de emergencia</span><input name="cn" maxlength="30" list="contactosList" autocomplete="off" autocapitalize="words" enterkeyhint="next" placeholder="Ej.: Mamá"></label>
-          <label class="campo"><span>Teléfono del contacto</span><input name="ct" type="tel" maxlength="20" autocomplete="off" enterkeyhint="next" placeholder="Ej.: 3329 123456"></label>
-          <label class="campo"><span>Obra social</span><input name="o" maxlength="25" list="insuranceList" autocomplete="off" enterkeyhint="next" placeholder="Ej.: IOMA, PAMI, OSDE"></label>
-          <label class="campo"><span>Localidad</span><input name="l" maxlength="30" list="localidadesList" autocomplete="address-level2" enterkeyhint="next" placeholder="Ej.: Baradero"></label>
-          <label class="campo ancho"><span>Domicilio <small>· opcional, para llevar a la persona a su casa</small></span><input name="d" maxlength="45" autocomplete="street-address" enterkeyhint="done" placeholder="Ej.: Mitre 350"></label>
-          <datalist id="conditionsList"><option value="Ninguna"><option value="Diabetes tipo 1"><option value="Diabetes tipo 2"><option value="Hipertensión arterial"><option value="Asma"><option value="Epilepsia"><option value="Cardiopatía"><option value="Insuficiencia renal crónica"><option value="ACV previo"><option value="Cáncer (en tratamiento)"><option value="Enfermedad celíaca"><option value="VIH/SIDA"><option value="Hepatitis B"><option value="Hepatitis C"><option value="Anemia severa"><option value="Hemofilia"><option value="Enfermedad autoinmune"><option value="Trasplante de órgano"><option value="Marcapasos / Desfibrilador"><option value="Artritis reumatoide"><option value="Lupus"><option value="Enfermedad de Crohn"><option value="Colitis ulcerosa"><option value="Miastenia gravis"><option value="Apnea obstructiva del sueño"><option value="Glaucoma"><option value="Cataratas"><option value="Osteoporosis"><option value="Artrosis"><option value="Fibromialgia"><option value="Esclerosis múltiple"><option value="Parkinson"><option value="Alzheimer"><option value="Enfermedad pulmonar (EPOC)">
-              </datalist><datalist id="allergiesList"><option value="Ninguna"><option value="Penicilina"><option value="Amoxicilina"><option value="Ibuprofeno"><option value="Aspirina (ácido acetilsalicílico)"><option value="Paracetamol"><option value="Sulfamidas"><option value="Anestésicos locales (lidocaína)"><option value="Látex"><option value="Mariscos"><option value="Frutos secos"><option value="Huevo"><option value="Leche"><option value="Gluten"><option value="Picaduras de abeja / avispas"><option value="Contraste yodado"><option value="Alopurinol"><option value="Carboplatino"><option value="Ciprofloxacino"><option value="Metformina"><option value="Enalapril"><option value="Omeprazol"><option value=" Naproxeno"><option value="Diclofenac"><option value="Cefalosporinas">
-              </datalist><datalist id="medsList"><option value="Ninguna"><option value="Metformina"><option value="Insulina"><option value="Enalapril"><option value="Losartán"><option value="Amlodipino"><option value="Aspirina (ácido acetilsalicílico)"><option value="Clopidogrel"><option value="Sintrom (acenocumarol)"><option value="Levotiroxina"><option value="Omeprazol"><option value="Salbutamol (inhalador)"><option value="Prednisona"><option value="Metotrexato"><option value="Diazepam"><option value="Fluoxetina"><option value="Ibuprofeno"><option value="Diclofenac"><option value="Rivaroxabán"><option value="Warfarina"><option value="Atorvastatina"><option value="Rosuvastatina"><option value="Bisoprolol"><option value="Carvedilol"><option value="Furosemida"><option value="Espironolactona"><option value="Pantoprazol"><option value="Ranitidina"><option value="Sertralina"><option value="Escitalopram"><option value="Tramadol"><option value="Morfina"><option value="Gabapentina"><option value="Pregabalina">
-              </datalist><datalist id="insuranceList"><option value="Sin cobertura"><option value="OSDE"><option value="OSDE (210/310/410)"><option value="Swiss Medical"><option value="Swiss Medical (SMG)"><option value="Galeno"><option value="Galeno (Gold/Platino)"><option value="OMINT"><option value="FEMISAN"><option value="Solar Salud"><option value="APROSALUD"><option value="GLA (Grupo Los Andes)"><option value="IOMA"><option value="IOMA (Plan integral)"><option value="OSECAC"><option value="OSPECON"><option value="UOCRA"><option value="AMUR"><option value="PAMI"><option value="INSSJyP"><option value="Osprera"><option value="Puerto Medico"><option value="Luis Pasteur"><option value="OAAPP"><option value="UPCN"><option value="OSBA"><option value="SUTOCOR"><option value="Osigrav"><option value="OSPRE"><option value="Ninguna (prepaga)"><option value="Particular"><option value="Otra prepaga">
-              </datalist><datalist id="localidadesList"><option value="Baradero"><option value="San Pedro"><option value="Zárate"><option value="Campana"><option value="Ramallo"><option value="San Nicolás"><option value="Arrecifes"><option value="Capitán Sarmiento"><option value="San Antonio de Areco"><option value="Pilar"><option value="Escobar"><option value="Lima"><option value="Pergamino"></datalist><datalist id="contactosList"><option value="Mamá"><option value="Papá"><option value="Madre"><option value="Padre"><option value="Hermana"><option value="Hermano"><option value="Pareja"><option value="Esposa"><option value="Esposo"><option value="Hija"><option value="Hijo"><option value="Abuela"><option value="Abuelo"><option value="Tía"><option value="Tío"><option value="Tutor/a"><option value="Amiga"><option value="Amigo"></datalist>
-        </div>
-        <label class="acepto"><input type="checkbox" id="consentimiento" required> <span>Acepto que estos datos queden en la pulsera y que cualquiera que la lea pueda verlos (Ley 25.326). Si la ficha es de un menor, la completa su madre, padre o tutor.</span></label>
-        <div class="hero-actions"><button class="hero-primary" type="submit">Crear el link <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
-      </form>
-
-      <section class="tarjeta" id="resultado" hidden aria-labelledby="t-resultado">
-        <div class="tarjeta-titulo"><h2 id="t-resultado">Este es el link para el chip</h2><span>02 · GRABAR</span></div>
-        <textarea id="link" readonly aria-label="Link de la ficha"></textarea>
-        <p class="medida" id="medida" role="status"></p>
-        <div class="hero-actions">
-          <button class="hero-primary" type="button" id="copiar"><svg class="icon" aria-hidden="true"><use href="#icon-copy"/></svg> <span>Copiar link</span></button>
-          <a class="hero-secondary" id="probar" href="#" target="_blank" rel="noopener">Ver cómo queda <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a>
-        </div>
-        <div class="tarjeta-titulo" style="margin-top:18px"><h2>Cómo grabarlo con NFC Tools</h2></div>
-        <ol class="pasos">
-          <li><span>Copiá el link y mandátelo al celular, por ejemplo por WhatsApp a vos mismo.</span></li>
-          <li><span>En NFC Tools: <b>Escribir</b> → <b>Añadir un registro</b> → <b>URL / URI</b> y pegá el link.</span></li>
-          <li><span>Agregá un registro de <b>Texto</b> con lo esencial, para leerlo sin internet.</span></li>
-          <li><span>Tocá <b>Escribir</b> y apoyá el chip hasta que diga “Escritura completa”.</span></li>
-        </ol>
-      </section>
+      <p class="eyebrow"><span></span> FICHA DE EMERGENCIA</p>
+      <h1>Creá la ficha<br><em>de tu pulsera.</em></h1>
+      <p class="lede" id="crear-texto">Guardala con tu cuenta de Google y grabá su QR y su chip una sola vez. Después podés cambiar tus datos médicos cuando quieras.</p>
+      <div class="hero-actions"><a class="hero-primary" href="./editar.html">Ir a Mi ficha <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a></div>
     </div>
 
     <footer class="footer">
       <p>Safe.Ride <span>·</span> EEST N.º 1 «Vuelta de Obligado», Baradero</p>
-      <nav aria-label="Enlaces del proyecto"><a href="./maqueta.html">Ver la pulsera</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
+      <nav aria-label="Enlaces del proyecto"><a href="./editar.html">Mi ficha</a><a href="./maqueta.html">Ver la pulsera</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
     </footer>
   </main>
 
 <script>
 (() => {
-  // Cada dato tiene una letra corta para que el link entre en el chip.
-  const CAMPOS = ['n','g','a','c','m','cn','ct','o','l','d'];
-  // Lugar libre aproximado para el link en cada chip, en bytes.
-  const CHIPS = [['NTAG213', 132], ['NTAG215', 490], ['NTAG216', 860]];
   const $ = id => document.getElementById(id);
 
-  function leerLink() {
-    // Los datos van después del #. Algunas apps lo graban como %23 o como ?, así que se aceptan las tres formas.
-    let hash = location.hash.slice(1);
-    if (!hash) {
-      const ruta = location.pathname + location.search;
-      const marca = ruta.search(/%23|\?/i);
-      if (marca >= 0) hash = ruta.slice(marca).replace(/^(%23|\?)/i, '');
-    }
-    if (!hash) return null;
-    if (!hash.includes('=') && /%3D/i.test(hash)) { try { hash = decodeURIComponent(hash); } catch {} }
-    const p = new URLSearchParams(hash);
-    if (!p.get('n')) return null;
-    const datos = {};
-    for (const k of CAMPOS) datos[k] = (p.get(k) || '').trim();
-    return datos;
+  // El link puede venir como ficha.html?id=CODIGO#datos-esenciales, o como los links viejos con todo
+  // después del #. Algunas apps graban el # como %23, así que se aceptan las dos formas.
+  function partes() {
+    const ruta = (location.pathname + location.search + location.hash).replace(/%23/gi, '#');
+    const i = ruta.indexOf('#');
+    const antes = i >= 0 ? ruta.slice(0, i) : ruta;
+    let despues = i >= 0 ? ruta.slice(i + 1) : '';
+    const consulta = antes.includes('?') ? antes.slice(antes.indexOf('?') + 1) : '';
+    const id = (new URLSearchParams(consulta).get('id') || '').trim();
+    if (!despues && !id && consulta) despues = consulta;
+    if (!despues.includes('=') && /%3D/i.test(despues)) { try { despues = decodeURIComponent(despues); } catch {} }
+    return { id, p: new URLSearchParams(despues) };
   }
 
-  function poner(id, texto, vacio) {
-    $(id).textContent = texto || vacio;
-  }
+  function poner(id, texto, vacio) { $(id).textContent = texto || vacio; }
+  function estado(texto) { $('f-estado').textContent = texto; }
 
   function mostrarFicha(d) {
     document.title = `Ficha de emergencia · ${d.n}`;
@@ -224,73 +171,58 @@
     poner('f-medicacion', d.m, 'Ninguna informada');
     poner('f-contacto', d.cn, 'No informado');
     poner('f-telefono', d.ct, 'No informado');
-    const numero = d.ct.replace(/[^\d+]/g, '');
+    const numero = (d.ct || '').replace(/[^\d+]/g, '');
+    $('f-llamar').hidden = !numero;
     if (numero) {
       $('f-llamar').href = `tel:${numero}`;
       $('f-llamar').querySelector('span').textContent = `Llamar a ${d.cn || 'su contacto'}`;
-    } else {
-      $('f-llamar').hidden = true;
     }
     poner('f-obra', d.o, '—');
     poner('f-localidad', d.l, '—');
     poner('f-domicilio', d.d, '—');
-    if (!d.o && !d.l && !d.d) $('bloque-otros').hidden = true;
+    $('bloque-otros').hidden = !d.o && !d.l && !d.d;
     $('vista-ficha').hidden = false;
     $('vista-crear').hidden = true;
-    scrollTo(0, 0); // La ficha siempre arranca arriba, con el nombre y el grupo a la vista.
   }
 
-  function armarLink(form) {
-    const p = new URLSearchParams();
-    for (const k of CAMPOS) {
-      const v = (form.elements[k].value || '').trim();
-      if (v) p.set(k, v);
+  function desdeLink(p) {
+    const d = {};
+    for (const k of ['n','g','a','c','m','cn','ct','o','l','d']) d[k] = (p.get(k) || '').trim();
+    return d;
+  }
+
+  async function iniciar() {
+    const { id, p } = partes();
+    const esencial = desdeLink(p);
+    if (esencial.n) { mostrarFicha(esencial); scrollTo(0, 0); }
+    if (!id) {
+      if (!esencial.n) $('vista-crear').hidden = false;
+      return;
     }
-    return `${location.origin}${location.pathname}#${p.toString()}`;
-  }
-
-  function medir(link) {
-    // NFC Tools ya pone el "https://" aparte, así que no ocupa lugar.
-    const bytes = new TextEncoder().encode(link.replace(/^https:\/\//, '')).length;
-    const entra = CHIPS.filter(([, max]) => bytes <= max).map(([nombre]) => nombre);
-    const el = $('medida');
-    if (entra.length) {
-      el.className = 'medida';
-      el.textContent = `OCUPA ${bytes} BYTES · ENTRA EN: ${entra.join(', ')}`;
-    } else {
-      el.className = 'medida mal';
-      el.textContent = `OCUPA ${bytes} BYTES · NO ENTRA EN NINGÚN CHIP COMÚN. ACORTÁ ALGUNOS DATOS.`;
-    }
-  }
-
-  function iniciarFormulario() {
-    $('vista-crear').hidden = false;
-    const form = $('form');
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      if (!form.reportValidity()) return;
-      const link = armarLink(form);
-      $('link').value = link;
-      $('probar').href = link;
-      medir(link);
-      $('resultado').hidden = false;
-      $('resultado').scrollIntoView({ block: 'start' });
-    });
-    $('copiar').addEventListener('click', async () => {
-      const texto = $('copiar').querySelector('span');
-      try {
-        await navigator.clipboard.writeText($('link').value);
-      } catch {
-        $('link').select();
-        document.execCommand('copy');
+    if (esencial.n) estado('BUSCANDO LOS DATOS MÁS NUEVOS…');
+    try {
+      const { leerFicha } = await import('./pulsera-3d/fichas.mjs?v=1');
+      const f = await leerFicha(id);
+      if (!f) {
+        $('vista-ficha').hidden = true;
+        $('vista-crear').hidden = false;
+        $('crear-texto').textContent = 'Esta ficha ya no existe: su titular la borró. Si es tuya, podés crear una nueva.';
+        return;
       }
-      texto.textContent = '¡Copiado!';
-      setTimeout(() => { texto.textContent = 'Copiar link'; }, 1800);
-    });
+      mostrarFicha({ n: f.nombre, g: f.g, a: f.a, c: f.c, m: f.m, cn: f.cn, ct: f.ct, o: f.o, l: f.l, d: f.d });
+      const cuando = f.actualizado && f.actualizado.toDate ? f.actualizado.toDate() : null;
+      estado(cuando ? `DATOS ACTUALIZADOS EL ${cuando.toLocaleDateString('es-AR')}` : 'DATOS ACTUALIZADOS');
+    } catch (e) {
+      if (esencial.n) {
+        estado('SIN INTERNET · SE VEN LOS DATOS ESENCIALES GUARDADOS EN LA PULSERA');
+      } else {
+        $('vista-crear').hidden = false;
+        $('crear-texto').textContent = 'No se pudo cargar la ficha. Revisá la conexión a internet y volvé a acercar el celular.';
+      }
+    }
   }
 
-  const datos = leerLink();
-  if (datos) mostrarFicha(datos); else iniciarFormulario();
+  iniciar();
   // Si se abre otro link en la misma pestaña, se muestra esa ficha.
   window.addEventListener('hashchange', () => location.reload());
 })();
