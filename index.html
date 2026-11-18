@@ -3939,11 +3939,11 @@ html:not([data-theme="dark"]) .hero {
               </div>
               <div class="form-field">
                 <label for="orderEmail" data-i18n="field.mail">Mail</label>
-                <input type="email" id="orderEmail" name="email" required placeholder="tu@mail.com" autocomplete="email" />
+                <input type="email" id="orderEmail" name="email" required placeholder="tu@mail.com" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" />
               </div>
               <div class="form-field">
                 <label for="orderPhone" data-i18n="field.telefono">Teléfono</label>
-                <input type="tel" id="orderPhone" name="phone" required placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" autocomplete="tel" />
+                <input type="tel" id="orderPhone" name="phone" required placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" autocomplete="tel" enterkeyhint="next" />
               </div>
               <div class="form-field">
                 <label for="orderProduct" data-i18n="field.producto">Producto</label>
@@ -3967,19 +3967,19 @@ html:not([data-theme="dark"]) .hero {
               </div>
               <div class="form-field">
                 <label for="orderCity" data-i18n="field.ciudad">Ciudad</label>
-                <input type="text" id="orderCity" name="city" required placeholder="Ej: Baradero" data-i18n-placeholder="ph.ciudad" autocomplete="address-level2" />
+                <input type="text" id="orderCity" name="city" required list="ciudadesList" placeholder="Ej: Baradero" data-i18n-placeholder="ph.ciudad" autocomplete="address-level2" />
               </div>
               <div class="form-field">
                 <label for="orderState" data-i18n="field.provincia">Provincia / Estado</label>
-                <input type="text" id="orderState" name="state" placeholder="Ej: Buenos Aires" data-i18n-placeholder="ph.provincia" autocomplete="address-level1" />
+                <input type="text" id="orderState" name="state" list="provinciasList" placeholder="Ej: Buenos Aires" data-i18n-placeholder="ph.provincia" autocomplete="address-level1" /><datalist id="ciudadesList"><option value="Baradero"><option value="San Pedro"><option value="Zárate"><option value="Campana"><option value="Ramallo"><option value="San Nicolás"><option value="Arrecifes"><option value="Capitán Sarmiento"><option value="San Antonio de Areco"><option value="Pilar"><option value="Escobar"><option value="Lima"><option value="Pergamino"></datalist><datalist id="provinciasList"><option value="Buenos Aires"><option value="Ciudad de Buenos Aires"><option value="Catamarca"><option value="Chaco"><option value="Chubut"><option value="Córdoba"><option value="Corrientes"><option value="Entre Ríos"><option value="Formosa"><option value="Jujuy"><option value="La Pampa"><option value="La Rioja"><option value="Mendoza"><option value="Misiones"><option value="Neuquén"><option value="Río Negro"><option value="Salta"><option value="San Juan"><option value="San Luis"><option value="Santa Cruz"><option value="Santa Fe"><option value="Santiago del Estero"><option value="Tierra del Fuego"><option value="Tucumán"></datalist>
               </div>
               <div class="form-field">
                 <label for="orderZip" data-i18n="field.codigoPostal">Código postal</label>
-                <input type="text" id="orderZip" name="zip" required placeholder="Ej: 2942" data-i18n-placeholder="ph.codigoPostal" autocomplete="postal-code" />
+                <input type="text" id="orderZip" name="zip" required placeholder="Ej: 2942" data-i18n-placeholder="ph.codigoPostal" autocomplete="postal-code" inputmode="numeric" />
               </div>
               <div class="form-field">
                 <label for="orderCountry" data-i18n="field.pais">País</label>
-                <input type="text" id="orderCountry" name="country" required placeholder="Ej: Argentina" data-i18n-placeholder="ph.pais" autocomplete="country-name" />
+                <input type="text" id="orderCountry" name="country" required value="Argentina" placeholder="Ej: Argentina" data-i18n-placeholder="ph.pais" autocomplete="country-name" />
               </div>
             </div>
 
@@ -4208,15 +4208,15 @@ html:not([data-theme="dark"]) .hero {
           <div class="form-grid">
             <div class="form-field">
               <label for="protoName" data-i18n="field.nombreCompleto">Nombre completo</label>
-              <input type="text" id="protoName" name="fullName" required placeholder="Ej: Juan Gómez" data-i18n-placeholder="ph.nombre" autocomplete="off" />
+              <input type="text" id="protoName" name="fullName" required placeholder="Ej: Juan Gómez" data-i18n-placeholder="ph.nombre" autocomplete="name" autocapitalize="words" enterkeyhint="next" />
             </div>
             <div class="form-field">
               <label for="protoEmail" data-i18n="field.mail">Mail</label>
-              <input type="email" id="protoEmail" name="email" required placeholder="tu@mail.com" autocomplete="off" />
+              <input type="email" id="protoEmail" name="email" required placeholder="tu@mail.com" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" />
             </div>
             <div class="form-field">
               <label for="protoBirthdate" data-i18n="field.fechaNacimiento">Fecha de nacimiento</label>
-              <input type="date" id="protoBirthdate" name="birthdate" />
+              <input type="date" id="protoBirthdate" name="birthdate" autocomplete="bday" />
             </div>
             <div class="form-field">
               <label for="protoBlood" data-i18n="field.grupoSanguineo">Grupo sanguíneo</label>
@@ -4228,7 +4228,7 @@ html:not([data-theme="dark"]) .hero {
             </div>
             <div class="form-field">
               <label for="protoConditions">Enfermedades / condiciones preexistentes</label>
-              <input type="text" id="protoConditions" name="conditions" list="conditionsList" placeholder="Ej: Diabetes tipo 2, o escribí la tuya" />
+              <input type="text" id="protoConditions" autocomplete="off" enterkeyhint="next" name="conditions" list="conditionsList" placeholder="Ej: Diabetes tipo 2, o escribí la tuya" />
               <datalist id="conditionsList">
                 <option value="Ninguna">
                 <option value="Diabetes tipo 1">
@@ -4268,7 +4268,7 @@ html:not([data-theme="dark"]) .hero {
             </div>
             <div class="form-field">
               <label for="protoAllergies">Alergias</label>
-              <input type="text" id="protoAllergies" name="allergies" list="allergiesList" placeholder="Ej: Penicilina, o escribí la tuya" />
+              <input type="text" id="protoAllergies" autocomplete="off" enterkeyhint="next" name="allergies" list="allergiesList" placeholder="Ej: Penicilina, o escribí la tuya" />
               <datalist id="allergiesList">
                 <option value="Ninguna">
                 <option value="Penicilina">
@@ -4299,7 +4299,7 @@ html:not([data-theme="dark"]) .hero {
             </div>
             <div class="form-field">
               <label for="protoMeds">Medicación habitual</label>
-              <input type="text" id="protoMeds" name="meds" list="medsList" placeholder="Ej: Ninguna, o escribí tu medicación" />
+              <input type="text" id="protoMeds" autocomplete="off" enterkeyhint="next" name="meds" list="medsList" placeholder="Ej: Ninguna, o escribí tu medicación" />
               <datalist id="medsList">
                 <option value="Ninguna">
                 <option value="Metformina">
@@ -4339,7 +4339,7 @@ html:not([data-theme="dark"]) .hero {
             </div>
             <div class="form-field">
               <label for="protoInsurance">Obra social / cobertura médica</label>
-              <input type="text" id="protoInsurance" name="insurance" list="insuranceList" placeholder="Ej: OSDE, Swiss Medical, o escribí la tuya" />
+              <input type="text" id="protoInsurance" autocomplete="off" enterkeyhint="next" name="insurance" list="insuranceList" placeholder="Ej: OSDE, Swiss Medical, o escribí la tuya" />
               <datalist id="insuranceList">
                 <option value="Sin cobertura">
                 <option value="OSDE">
@@ -4377,23 +4377,24 @@ html:not([data-theme="dark"]) .hero {
             </div>
             <div class="form-field">
               <label for="protoPhone" data-i18n="field.telefonoPropio">Teléfono propio</label>
-              <input type="tel" id="protoPhone" name="ownPhone" placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" />
+              <input type="tel" id="protoPhone" name="ownPhone" placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" autocomplete="tel" enterkeyhint="next" />
             </div>
             <div class="form-field">
               <label for="protoLocality" data-i18n="field.localidad">Localidad / provincia</label>
-              <input type="text" id="protoLocality" name="locality" placeholder="Ej: Baradero, Buenos Aires" data-i18n-placeholder="ph.localidad" autocomplete="address-level2" />
+              <input type="text" id="protoLocality" name="locality" list="localidadesList" placeholder="Ej: Baradero, Buenos Aires" data-i18n-placeholder="ph.localidad" autocomplete="address-level2" enterkeyhint="next" />
             </div>
             <div class="form-field">
               <label for="protoAddress" data-i18n="field.domicilio">Domicilio (dónde vive)</label>
-              <input type="text" id="protoAddress" name="homeAddress" placeholder="Ej: Mitre 350" data-i18n-placeholder="ph.domicilio" autocomplete="street-address" />
+              <input type="text" id="protoAddress" name="homeAddress" placeholder="Ej: Mitre 350" data-i18n-placeholder="ph.domicilio" autocomplete="street-address" enterkeyhint="next" />
             </div>
             <div class="form-field">
               <label for="protoContactName" data-i18n="field.contactoNombre">Contacto de emergencia (nombre)</label>
-              <input type="text" id="protoContactName" name="contactName" required placeholder="Ej: Ana Pérez" data-i18n-placeholder="ph.contactoNombre" />
+              <input type="text" id="protoContactName" name="contactName" required list="contactosList" placeholder="Ej: Ana Pérez" data-i18n-placeholder="ph.contactoNombre" autocomplete="off" autocapitalize="words" enterkeyhint="next" />
             </div>
             <div class="form-field">
               <label for="protoContactPhone" data-i18n="field.contactoTelefono">Contacto de emergencia (teléfono)</label>
-              <input type="tel" id="protoContactPhone" name="contactPhone" required placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" />
+              <input type="tel" id="protoContactPhone" name="contactPhone" required placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" autocomplete="off" enterkeyhint="done" />
+              <datalist id="localidadesList"><option value="Baradero, Buenos Aires"><option value="San Pedro, Buenos Aires"><option value="Zárate, Buenos Aires"><option value="Campana, Buenos Aires"><option value="Ramallo, Buenos Aires"><option value="San Nicolás, Buenos Aires"><option value="Arrecifes, Buenos Aires"><option value="Capitán Sarmiento, Buenos Aires"><option value="San Antonio de Areco, Buenos Aires"><option value="Exaltación de la Cruz, Buenos Aires"><option value="Pilar, Buenos Aires"><option value="Escobar, Buenos Aires"><option value="Lima, Buenos Aires"><option value="Pergamino, Buenos Aires"><option value="Rosario, Santa Fe"><option value="Ciudad de Buenos Aires"></datalist><datalist id="contactosList"><option value="Mamá"><option value="Papá"><option value="Madre"><option value="Padre"><option value="Hermana"><option value="Hermano"><option value="Pareja"><option value="Esposa"><option value="Esposo"><option value="Hija"><option value="Hijo"><option value="Abuela"><option value="Abuelo"><option value="Tía"><option value="Tío"><option value="Tutor/a"><option value="Amiga"><option value="Amigo"></datalist>
             </div>
           </div>
 
