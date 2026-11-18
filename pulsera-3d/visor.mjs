@@ -79,6 +79,16 @@ function disk(radius, depth, mat) {
   return mesh;
 }
 
+// Sección de la muñeca en y=0: radios 27 × 24 y centro z=3. Se deja espacio
+// para el espesor del TPU y se solapan las puntas por el lado de la palma.
+const wornSweep = 388 / 300;
+const wristX = 29.7, wristZ = 25.9, wristCenter = 3;
+function wornPoint(angle, depth, y) {
+  const a = angle * wornSweep;
+  const overlap = 2.85 * THREE.MathUtils.smoothstep(a, 2.65, 2.92);
+  return [(wristX + depth + overlap) * Math.sin(a), y, wristCenter + (wristZ + depth + overlap) * Math.cos(a)];
+}
+
 // Bend an extruded strip into a bracelet. Subdivide its planar faces first so
 // no triangle cuts straight through the wrist opening; preserve edge normals.
 function bandGeometry() {
@@ -89,11 +99,16 @@ function bandGeometry() {
   const strip = plate(shape, 1.8, .56, null).geometry;
   const first = strip.getAttribute('position');
   const normals = strip.getAttribute('normal');
-  const positions = [], resultNormals = [], uv = [];
+  const positions = [], fitted = [], fittedNormals = [], resultNormals = [], uv = [];
   const vertex = i => [first.getX(i), first.getY(i), first.getZ(i) - .9, normals.getX(i), normals.getY(i), normals.getZ(i)];
   function push([s, y, d, ns, ny, nd]) {
     const sin = Math.sin(s / radius), cos = Math.cos(s / radius);
     positions.push((radius + d) * sin, y, (radius + d) * cos);
+    fitted.push(...wornPoint(s / radius, d, y));
+    const a = s / radius * wornSweep, sn = Math.sin(a), cs = Math.cos(a);
+    const fx = (ns * cs + nd * sn) / (wristX / radius), fz = (-ns * sn + nd * cs) / (wristZ / radius);
+    const norm = Math.hypot(fx,ny,fz) || 1;
+    fittedNormals.push(fx/norm,ny/norm,fz/norm);
     uv.push(s / length + .5, y / 16 + .5);
     const nx = ns * cos + nd * sin, nz = -ns * sin + nd * cos;
     const normalLength = Math.hypot(nx, ny, nz) || 1;
@@ -113,6 +128,8 @@ function bandGeometry() {
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
   geometry.setAttribute('normal', new THREE.Float32BufferAttribute(resultNormals, 3));
   geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(fitted,3)];
+  geometry.morphAttributes.normal = [new THREE.Float32BufferAttribute(fittedNormals,3)];
   return geometry;
 }
 
@@ -181,11 +198,14 @@ function wordmark() {
   });
   const geometry = new THREE.PlaneGeometry(23, 13, 30, 1);
   const position = geometry.getAttribute('position');
+  const fitted = [];
   for (let i = 0; i < position.count; i++) {
     const angle = 1.23 + position.getX(i) / 30.7;
+    fitted.push(...wornPoint(angle,1.54,position.getY(i)-.6));
     position.setXYZ(i, 32.20 * Math.sin(angle), position.getY(i) - .6, 32.20 * Math.cos(angle));
   }
   geometry.computeVertexNormals();
+  geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(fitted,3)];
   return new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map: texture, transparent: true, alphaTest: .4, roughness: .76 }));
 }
 
@@ -330,7 +350,8 @@ function createViewer() {
   const separation = $('#separation');
   const fullscreen = $('#fullscreen');
   const presets = [...document.querySelectorAll('[data-view]')];
-  const angles = { perspective: V(70, 57, 124), front: V(0, 7, 120), inside: V(-55, 100, -100), worn: V(12,36,160) };
+  const angles = { perspective: V(70, 57, 124), front: V(0, 7, 120), inside: V(-55, 100, -100), worn: V(8,20,160) };
+  const claspWorn = V(...wornPoint(claspAngle,.7,0));
   let wrist, worn = false, wearPhase = 0;
   let view = 'perspective', exploded = false, labels = false, phase = 0, zoom = 1;
   let width = 1, height = 1, frame = 0, previousTime = 0, failed = false, cameraInput = false;
@@ -383,7 +404,7 @@ function createViewer() {
   }
 
   function fitDistance() {
-    if (worn) return 185 * Math.max(1, 1.52 / camera.aspect);
+    if (worn) return 202 * Math.max(1, 1.52 / camera.aspect);
     if (!exploded) return 99 * Math.max(1, 1.16 / camera.aspect);
     // Leave room for the two columns on wide stages and the label rows on narrow ones.
     const labelRows = labels && width <= labelRowsMaxWidth;
@@ -533,7 +554,8 @@ function createViewer() {
       // El brazo entra por el eje interior y queda quieto al terminar el encuadre.
       wrist.position.y = (wearPhase - 1) * 165;
     }
-    parts.clasp.group.rotation.y = THREE.MathUtils.lerp(claspAngle, .35, phase * spread);
+    for (const mesh of parts.band.group.children) mesh.morphTargetInfluences[0] = wearPhase;
+    parts.clasp.group.rotation.y = THREE.MathUtils.lerp(claspAngle, .35, phase * spread) + (claspAngle*wornSweep-claspAngle)*wearPhase;
     floor.visible = phase < .5 && wearPhase < .01;
     floor.material.opacity = .55 * Math.max(0, 1 - 2 * phase);
     for (const [id, part] of Object.entries(parts)) {
@@ -541,6 +563,8 @@ function createViewer() {
       const delay = id === 'chip' ? .34 : id === 'film' ? .17 : 0;
       const layer = THREE.MathUtils.smoothstep(phase, delay, 1) * spread;
       part.group.position.copy(part.position).addScaledVector(part.offset, layer);
+      if (id === 'clasp') part.group.position.lerp(claspWorn,wearPhase);
+      else if (id !== 'band') part.group.position.z += (wristCenter + wristZ - 30.7) * wearPhase;
       part.guide.visible = phase > .05;
       if (part.guide.visible) {
         const p = part.guide.geometry.attributes.position;
@@ -659,6 +683,9 @@ function createViewer() {
   new ResizeObserver(() => { if (!failed) resize(); }).observe(stage);
   reduceMotion.addEventListener('change', () => { orbit.enableDamping = !reduceMotion.matches; schedule(); });
   resize(); frameCamera(angles.perspective); updateButtonStates();
+  if (new URLSearchParams(location.search).get('vista') === 'muneca') {
+    applyView('worn'); wearPhase = 1; frameCamera(angles.worn);
+  }
   return {
     showTourStep(step) {
       if (failed) return;
