@@ -5915,8 +5915,11 @@ function drawRealQR(canvas, text) {
     qr.addData(text);
     qr.make();
     const count = qr.getModuleCount();
+    // Se dibuja con más resolución y se muestra al mismo tamaño, así la cámara lo lee mejor.
+    canvas.width = canvas.height = 480;
+    canvas.style.width = canvas.style.height = "220px";
     const ctx = canvas.getContext("2d");
-    const quiet = 4;
+    const quiet = 2;
     const cell = Math.floor(canvas.width / (count + quiet * 2));
     const offset = Math.floor((canvas.width - cell * count) / 2);
     ctx.fillStyle = "#ffffff";
