@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf5ef">
+  <meta name="robots" content="noindex">
+  <title>Safe.Ride · Ficha de emergencia</title>
+  <script src="./pulsera-3d/tema.js?v=2"></script>
+  <link rel="stylesheet" href="./pulsera-3d/tema.css?v=2">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--sr-text); font: 400 1rem/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    .shell { width: min(640px, 100% - 32px); margin: 0 auto; padding: 18px 0 48px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+    .brand { display: inline-flex; align-items: center; gap: 9px; color: inherit; text-decoration: none; font-weight: 750; font-size: 1.06rem; }
+    .brand svg { width: 32px; height: 32px; }
+    .brand b { color: var(--sr-accent); }
+    h1 { margin: 0 0 4px; font-size: clamp(1.6rem, 6vw, 2.1rem); line-height: 1.15; letter-spacing: -.01em; }
+    .sub { margin: 0 0 20px; color: var(--sr-secondary); }
+    .card { background: var(--sr-surface); border: 1px solid var(--sr-edge); border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+    .alerta { display: flex; gap: 10px; align-items: center; background: #b3261e; color: #fff; border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; font-weight: 700; }
+    .alerta svg { width: 26px; height: 26px; flex: none; }
+    .esenciales { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .dato { background: var(--sr-raised); border-radius: 10px; padding: 12px; }
+    .dato.ancho { grid-column: 1 / -1; }
+    .dato dt { font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--sr-secondary); }
+    .dato dd { margin: 2px 0 0; font-size: 1.12rem; font-weight: 650; overflow-wrap: anywhere; }
+    .dato.grande dd { font-size: 1.9rem; line-height: 1.1; }
+    h2 { margin: 0 0 12px; font-size: 1.05rem; }
+    .llamar { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; min-height: 52px; margin-top: 12px; border-radius: 12px; background: var(--sr-accent); color: var(--sr-page); font-weight: 750; font-size: 1.05rem; text-decoration: none; }
+    .llamar svg { width: 20px; height: 20px; }
+    .aviso { font-size: .84rem; color: var(--sr-secondary); margin: 16px 0 0; }
+    form { display: grid; gap: 12px; }
+    label { display: grid; gap: 4px; font-size: .88rem; font-weight: 650; }
+    label small { font-weight: 400; color: var(--sr-secondary); }
+    input, select, textarea { width: 100%; min-height: 44px; padding: 9px 11px; border: 1px solid var(--sr-edge); border-radius: 10px; background: var(--sr-page); color: var(--sr-text); font: inherit; }
+    .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; }
+    .check input { width: 20px; min-height: 20px; margin-top: 2px; flex: none; }
+    button.principal { min-height: 50px; border: 0; border-radius: 12px; background: var(--sr-accent); color: var(--sr-page); font: 750 1rem system-ui, sans-serif; cursor: pointer; }
+    .resultado textarea { min-height: 110px; font: .82rem/1.4 ui-monospace, Menlo, monospace; resize: vertical; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .acciones button, .acciones a { min-height: 44px; padding: 0 14px; border: 1px solid var(--sr-edge); border-radius: 10px; background: var(--sr-raised); color: var(--sr-text); font: 650 .92rem system-ui, sans-serif; text-decoration: none; display: inline-flex; align-items: center; cursor: pointer; }
+    .medida { margin: 10px 0 0; font-size: .88rem; }
+    .medida.mal { color: #c62828; font-weight: 650; }
+    :root[data-theme=dark] .medida.mal { color: #ff8a80; }
+    ol.pasos { margin: 0; padding-left: 20px; }
+    ol.pasos li { margin-bottom: 4px; }
+    [hidden] { display: none !important; }
+    @media (max-width: 460px) { .fila, .esenciales { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <a class="brand" href="./index.html" aria-label="Safe.Ride · Ir al inicio">
+        <svg viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#142b24"/><path d="M18 8l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11v-6l8-3z" fill="none" stroke="#a8e4c8" stroke-width="2.2" stroke-linejoin="round"/><path d="M14 18l3 3 5-6" fill="none" stroke="#a8e4c8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Safe<b>.</b>Ride</span>
+      </a>
+      <button class="tema" type="button" data-tema aria-label="Modo oscuro" hidden><span>Modo oscuro</span></button>
+    </header>
+
+    <!-- Lo que ve quien acerca el celular a la pulsera -->
+    <main id="vista-ficha" hidden>
+      <div class="alerta" role="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 3l10 18H2L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>
+        Ficha de emergencia Safe.Ride
+      </div>
+      <h1 id="f-nombre"></h1>
+      <p class="sub" id="f-sub"></p>
+
+      <section class="card" aria-labelledby="t-esenciales">
+        <h2 id="t-esenciales">Lo más importante</h2>
+        <dl class="esenciales">
+          <div class="dato grande"><dt>Grupo sanguíneo</dt><dd id="f-grupo"></dd></div>
+          <div class="dato"><dt>Alergias</dt><dd id="f-alergias"></dd></div>
+          <div class="dato ancho"><dt>Condiciones médicas</dt><dd id="f-condiciones"></dd></div>
+          <div class="dato ancho"><dt>Medicación</dt><dd id="f-medicacion"></dd></div>
+        </dl>
+      </section>
+
+      <section class="card" aria-labelledby="t-contacto" id="bloque-contacto">
+        <h2 id="t-contacto">Contacto de emergencia</h2>
+        <dl class="esenciales">
+          <div class="dato ancho"><dt>Nombre</dt><dd id="f-contacto"></dd></div>
+          <div class="dato ancho"><dt>Teléfono</dt><dd id="f-telefono"></dd></div>
+        </dl>
+        <a class="llamar" id="f-llamar" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+          <span>Llamar al contacto</span>
+        </a>
+      </section>
+
+      <section class="card" aria-labelledby="t-otros" id="bloque-otros">
+        <h2 id="t-otros">Otros datos</h2>
+        <dl class="esenciales">
+          <div class="dato"><dt>Obra social</dt><dd id="f-obra"></dd></div>
+          <div class="dato"><dt>Localidad</dt><dd id="f-localidad"></dd></div>
+          <div class="dato ancho"><dt>Domicilio</dt><dd id="f-domicilio"></dd></div>
+        </dl>
+      </section>
+
+      <p class="aviso">Datos cargados por la persona o su familia. Safe.Ride no es un servicio médico: ante una emergencia llamá al <a href="tel:107">107</a>. Los datos viajan dentro del link de la pulsera y esta página no los guarda.</p>
+    </main>
+
+    <!-- Para armar el link que se graba en el chip -->
+    <main id="vista-crear" hidden>
+      <h1>Armá el link de tu pulsera</h1>
+      <p class="sub">Completá la ficha y grabá el link en el chip NFC. Al acercar un celular, se abre esta página con tus datos.</p>
+
+      <form id="form" class="card" novalidate>
+        <label>Nombre y apellido <input name="n" maxlength="40" required autocomplete="name"></label>
+        <div class="fila">
+          <label>Grupo sanguíneo
+            <select name="g" required>
+              <option value="">Elegir…</option>
+              <option>0+</option><option>0−</option><option>A+</option><option>A−</option>
+              <option>B+</option><option>B−</option><option>AB+</option><option>AB−</option>
+              <option>No sé</option>
+            </select>
+          </label>
+          <label>Alergias <input name="a" maxlength="60" placeholder="Ninguna"></label>
+        </div>
+        <label>Condiciones médicas <input name="c" maxlength="70" placeholder="Ej.: diabetes, epilepsia"></label>
+        <label>Medicación <input name="m" maxlength="60" placeholder="Ninguna"></label>
+        <div class="fila">
+          <label>Contacto de emergencia <input name="cn" maxlength="30" placeholder="Ej.: Mamá"></label>
+          <label>Teléfono del contacto <input name="ct" maxlength="20" inputmode="tel" placeholder="3329 123456"></label>
+        </div>
+        <div class="fila">
+          <label>Obra social <input name="o" maxlength="25"></label>
+          <label>Localidad <input name="l" maxlength="30" placeholder="Baradero"></label>
+        </div>
+        <label>Domicilio <small>Opcional. Sirve para llevar a la persona a su casa.</small> <input name="d" maxlength="45"></label>
+        <label class="check"><input type="checkbox" id="consentimiento" required> <span>Acepto que estos datos queden en la pulsera y que cualquiera que la lea pueda verlos (Ley 25.326). Si la ficha es de un menor, la completa su madre, padre o tutor.</span></label>
+        <button class="principal" type="submit">Crear el link</button>
+      </form>
+
+      <section class="card resultado" id="resultado" hidden aria-labelledby="t-resultado">
+        <h2 id="t-resultado">Este es el link para el chip</h2>
+        <textarea id="link" readonly aria-label="Link de la ficha"></textarea>
+        <p class="medida" id="medida" role="status"></p>
+        <div class="acciones">
+          <button type="button" id="copiar">Copiar link</button>
+          <a id="probar" href="#" target="_blank" rel="noopener">Ver cómo queda</a>
+        </div>
+        <h2 style="margin-top:18px">Cómo grabarlo con NFC Tools</h2>
+        <ol class="pasos">
+          <li>Copiá el link y mandátelo al celular (por WhatsApp a vos mismo, por ejemplo).</li>
+          <li>En NFC Tools: <b>Escribir</b> → <b>Añadir un registro</b> → <b>URL / URI</b> y pegá el link.</li>
+          <li>Opcional: agregá un registro de <b>Texto</b> con lo esencial para leerlo sin internet.</li>
+          <li>Tocá <b>Escribir</b> y apoyá el chip en el celular hasta que diga “Escritura completa”.</li>
+        </ol>
+      </section>
+    </main>
+  </div>
+
+<script>
+(() => {
+  // Cada dato tiene una letra corta para que el link entre en el chip.
+  const CAMPOS = ['n','g','a','c','m','cn','ct','o','l','d'];
+  // Lugar libre aproximado para el link en cada chip, en bytes.
+  const CHIPS = [['NTAG213', 132], ['NTAG215', 490], ['NTAG216', 860]];
+  const $ = id => document.getElementById(id);
+
+  function leerLink() {
+    const hash = location.hash.slice(1);
+    if (!hash) return null;
+    const p = new URLSearchParams(hash);
+    if (!p.get('n')) return null;
+    const datos = {};
+    for (const k of CAMPOS) datos[k] = (p.get(k) || '').trim();
+    return datos;
+  }
+
+  function poner(id, texto, vacio) {
+    $(id).textContent = texto || vacio;
+  }
+
+  function mostrarFicha(d) {
+    document.title = `Ficha de emergencia · ${d.n}`;
+    $('f-nombre').textContent = d.n;
+    $('f-sub').textContent = d.l ? `Vive en ${d.l}` : 'Ficha de emergencia';
+    poner('f-grupo', d.g, 'No informado');
+    poner('f-alergias', d.a, 'Ninguna informada');
+    poner('f-condiciones', d.c, 'Ninguna informada');
+    poner('f-medicacion', d.m, 'Ninguna informada');
+    poner('f-contacto', d.cn, 'No informado');
+    poner('f-telefono', d.ct, 'No informado');
+    const numero = d.ct.replace(/[^\d+]/g, '');
+    if (numero) {
+      $('f-llamar').href = `tel:${numero}`;
+      $('f-llamar').querySelector('span').textContent = `Llamar a ${d.cn || 'su contacto'}`;
+    } else {
+      $('f-llamar').hidden = true;
+    }
+    poner('f-obra', d.o, '—');
+    poner('f-localidad', d.l, '—');
+    poner('f-domicilio', d.d, '—');
+    if (!d.o && !d.l && !d.d) $('bloque-otros').hidden = true;
+    $('vista-ficha').hidden = false;
+    $('vista-crear').hidden = true;
+  }
+
+  function armarLink(form) {
+    const p = new URLSearchParams();
+    for (const k of CAMPOS) {
+      const v = (form.elements[k].value || '').trim();
+      if (v) p.set(k, v);
+    }
+    const base = location.origin + location.pathname;
+    return `${base}#${p.toString()}`;
+  }
+
+  function medir(link) {
+    // NFC Tools ya pone el "https://" aparte, así que no ocupa lugar.
+    const bytes = new TextEncoder().encode(link.replace(/^https:\/\//, '')).length;
+    const entra = CHIPS.filter(([, max]) => bytes <= max).map(([nombre]) => nombre);
+    const el = $('medida');
+    if (entra.length) {
+      el.className = 'medida';
+      el.textContent = `Ocupa ${bytes} bytes. Entra en: ${entra.join(', ')}.`;
+    } else {
+      el.className = 'medida mal';
+      el.textContent = `Ocupa ${bytes} bytes y no entra en ningún chip común. Acortá algunos datos.`;
+    }
+  }
+
+  function iniciarFormulario() {
+    $('vista-crear').hidden = false;
+    const form = $('form');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      const link = armarLink(form);
+      $('link').value = link;
+      $('probar').href = link;
+      medir(link);
+      $('resultado').hidden = false;
+      $('resultado').scrollIntoView({ block: 'start' });
+    });
+    $('copiar').addEventListener('click', async () => {
+      const boton = $('copiar');
+      try {
+        await navigator.clipboard.writeText($('link').value);
+      } catch {
+        $('link').select();
+        document.execCommand('copy');
+      }
+      boton.textContent = '¡Copiado!';
+      setTimeout(() => { boton.textContent = 'Copiar link'; }, 1800);
+    });
+  }
+
+  const datos = leerLink();
+  if (datos) mostrarFicha(datos); else iniciarFormulario();
+  // Si se abre otro link en la misma pestaña, se muestra esa ficha.
+  window.addEventListener('hashchange', () => location.reload());
+})();
+</script>
+</body>
+</html>
