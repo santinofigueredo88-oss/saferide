@@ -29,3 +29,4 @@ body::before {
 :is(button,a,input,canvas):focus-visible { outline-color:var(--sr-accent); }
 @media(max-width:650px) { .tema { padding:6px; } .tema span { display:none; } }
 @media(prefers-reduced-motion:no-preference) { .tema:active::before { transform:rotate(-15deg); } .tema::before { transition:transform .16s ease-out; } }
+@media(max-width:700px) { .nav-ficha { display:none; } }

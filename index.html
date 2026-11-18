@@ -3143,6 +3143,7 @@ html:not([data-theme="dark"]) .hero {
 }
 
 </style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -3889,7 +3890,10 @@ html:not([data-theme="dark"]) .hero {
             <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-qr-code"></use></svg>
             <span data-i18n="demo.scanHint">Con la pulsera, esta pantalla aparece al escanear tu código QR real.</span>
           </div>
-          <a class="btn btn-primary" style="margin-top:14px" href="./maqueta.html" data-i18n="demo.maqueta">Explorar la pulsera en 3D y probar NFC</a>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+            <a class="btn btn-primary" href="./maqueta.html" data-i18n="demo.maqueta">Explorar la pulsera en 3D y probar NFC</a>
+            <button type="button" class="btn btn-outline" data-prototype-trigger data-i18n="demo.armarFicha">Armar mi ficha para el chip</button>
+          </div>
         </div>
       </div>
     </div>
@@ -4446,11 +4450,24 @@ html:not([data-theme="dark"]) .hero {
         </div>
 
         <div style="text-align:center;margin:24px 0">
-          <p style="font-weight:600;font-size:0.88rem;margin-bottom:12px;color:var(--text-primary)" data-i18n="modal.qrFicticio">Tu código QR de ejemplo:</p>
+          <p style="font-weight:600;font-size:0.88rem;margin-bottom:12px;color:var(--text-primary)" data-i18n="modal.qrFicticio">Tu código QR (abre tu ficha):</p>
           <canvas id="qrCodeCanvas" width="200" height="200" style="border-radius:12px;border:2px solid var(--surface-border);background:#fff"></canvas>
-          <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px" data-i18n="modal.simulacionNota">Esto es una simulación. El QR real va grabado en tu pulsera.</p>
+          <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px" data-i18n="modal.simulacionNota">Escanealo con la cámara del celular: abre tu ficha. Este QR va impreso en tu pulsera.</p>
         </div>
 
+        <div class="chip-link" style="margin:0 0 18px;padding:14px;border:1px solid var(--surface-border);border-radius:12px">
+          <p style="font-weight:700;font-size:0.92rem;margin:0 0 4px;color:var(--text-primary)" data-i18n="modal.chipTitulo">Link para grabar en el chip NFC</p>
+          <p style="font-size:0.8rem;color:var(--text-secondary);margin:0 0 10px" data-i18n="modal.chipNota">Es el mismo link del QR. Copialo y grabalo en el chip con la app NFC Tools (Escribir → URL / URI).</p>
+          <input type="text" id="protoChipLink" readonly aria-label="Link de tu ficha" data-i18n-aria-label="modal.chipTitulo" style="width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--surface-border);border-radius:10px;font:0.78rem ui-monospace,Menlo,monospace;background:transparent;color:var(--text-primary)" />
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <button type="button" class="btn btn-primary" id="protoCopyLink" style="flex:1 1 140px">
+              <span data-i18n="modal.copiarLink">Copiar link</span>
+            </button>
+            <a class="btn btn-outline" id="protoOpenFicha" href="./ficha.html" target="_blank" rel="noopener" style="flex:1 1 140px">
+              <span data-i18n="modal.abrirFicha">Abrir mi ficha</span>
+            </a>
+          </div>
+        </div>
         <p class="modal-disclaimer" data-i18n="modal.resultDisclaimer">Así se ve tu ficha pública al escanear el QR o acercar la pulsera por NFC. Descargala para guardarla en tu celular o imprimirla junto con tu pedido.</p>
 
         <button type="button" class="btn btn-primary btn-block" id="prototypeDownloadBtn">
@@ -4634,6 +4651,7 @@ const translations = {
       aviso: "Safe.Ride no reemplaza la atención médica ni hace diagnósticos: solo muestra los datos que carga cada persona.",
       scanHint: "Con la pulsera, esta pantalla aparece al escanear tu código QR real.",
       maqueta: "Explorar la pulsera en 3D y probar NFC",
+      armarFicha: "Armar mi ficha para el chip",
     },
     privacidad: {
       eyebrow: "Privacidad y seguridad",
@@ -4773,8 +4791,13 @@ const translations = {
     },
     modal: {
       rellenar: "Rellenar ejemplo",
-      qrFicticio: "Tu código QR de ejemplo:",
-      simulacionNota: "Esto es una simulación. El QR real va grabado en tu pulsera.",
+      qrFicticio: "Tu código QR (abre tu ficha):",
+      simulacionNota: "Escanealo con la cámara del celular: abre tu ficha. Este QR va impreso en tu pulsera.",
+      chipTitulo: "Link para grabar en el chip NFC",
+      chipNota: "Es el mismo link del QR. Copialo y grabalo en el chip con la app NFC Tools (Escribir → URL / URI).",
+      copiarLink: "Copiar link",
+      copiado: "¡Copiado!",
+      abrirFicha: "Abrir mi ficha",
       cerrar: "Cerrar",
       eyebrow: "Tu ficha",
       title: "Creá tu ficha de emergencia",
@@ -4982,6 +5005,7 @@ const translations = {
       aviso: "Safe.Ride doesn't replace medical care or make diagnoses: it only shows the data each person enters.",
       scanHint: "With the bracelet, this screen appears when your real QR code is scanned.",
       maqueta: "Explore the 3D bracelet and try NFC (in Spanish)",
+      armarFicha: "Build my ID for the chip",
     },
     privacidad: {
       eyebrow: "Privacy & security",
@@ -5121,8 +5145,13 @@ const translations = {
     },
     modal: {
       rellenar: "Fill in example",
-      qrFicticio: "Your example QR code:",
-      simulacionNota: "This is a simulation. The real QR is engraved on your bracelet.",
+      qrFicticio: "Your QR code (opens your ID):",
+      simulacionNota: "Scan it with your phone camera: it opens your ID. This QR is printed on your bracelet.",
+      chipTitulo: "Link to write on the NFC chip",
+      chipNota: "It is the same link as the QR. Copy it and write it on the chip with the NFC Tools app (Write → URL / URI).",
+      copiarLink: "Copy link",
+      copiado: "Copied!",
+      abrirFicha: "Open my ID",
       cerrar: "Close",
       eyebrow: "Your ID",
       title: "Create your emergency ID",
@@ -5866,6 +5895,42 @@ function generateFictitiousQR(canvas, dataString) {
   ctx.fill();
 }
 
+// ============ LINK REAL DE LA FICHA (mismo formato que ficha.html) ============
+// Los datos viajan después del # del link: no se mandan a ningún servidor.
+function buildFichaLink(data) {
+  const map = { n: "fullName", g: "blood", a: "allergies", c: "conditions", m: "meds", cn: "contactName", ct: "contactPhone", o: "insurance", l: "locality", d: "homeAddress" };
+  const params = new URLSearchParams();
+  for (const [key, field] of Object.entries(map)) {
+    const value = (data.get(field) || "").toString().trim();
+    if (value) params.set(key, value);
+  }
+  return new URL("./ficha.html", location.href).href.split("#")[0] + "#" + params.toString();
+}
+
+// QR de verdad con la librería qrcode-generator; si no cargó, devuelve false.
+function drawRealQR(canvas, text) {
+  if (typeof qrcode !== "function") return false;
+  try {
+    const qr = qrcode(0, "M");
+    qr.addData(text);
+    qr.make();
+    const count = qr.getModuleCount();
+    const ctx = canvas.getContext("2d");
+    const quiet = 4;
+    const cell = Math.floor(canvas.width / (count + quiet * 2));
+    const offset = Math.floor((canvas.width - cell * count) / 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#0f2218";
+    for (let r = 0; r < count; r++) for (let c = 0; c < count; c++) {
+      if (qr.isDark(r, c)) ctx.fillRect(offset + c * cell, offset + r * cell, cell, cell);
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 function initPrototypeModal() {
   const overlay = document.getElementById("prototypeModal");
   const closeBtn = document.getElementById("prototypeModalClose");
@@ -5984,12 +6049,26 @@ function initPrototypeModal() {
     // Generate fictitious QR
     const qrCanvas = document.getElementById("qrCodeCanvas");
     if (qrCanvas) {
-      const qrData = `${getText("fullName", "")}|${getText("email", "")}|${data.get("blood")}|${conditions}|${allergies}|${meds}`;
-      generateFictitiousQR(qrCanvas, qrData);
+      const fichaLink = buildFichaLink(data);
+      document.getElementById("protoChipLink").value = fichaLink;
+      document.getElementById("protoOpenFicha").href = fichaLink;
+      if (!drawRealQR(qrCanvas, fichaLink)) generateFictitiousQR(qrCanvas, fichaLink);
     }
 
     showResultView();
   });
+
+  const copyBtn = document.getElementById("protoCopyLink");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async () => {
+      const input = document.getElementById("protoChipLink");
+      const label = copyBtn.querySelector("span");
+      try { await navigator.clipboard.writeText(input.value); }
+      catch (e) { input.select(); document.execCommand("copy"); }
+      label.textContent = t("modal.copiado");
+      setTimeout(() => { label.textContent = t("modal.copiarLink"); }, 1800);
+    });
+  }
 
   if (editBtn) {
     editBtn.addEventListener("click", () => {
