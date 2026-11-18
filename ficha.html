@@ -282,5 +282,9 @@
   window.addEventListener('hashchange', () => location.reload());
 })();
 </script>
+<script>
+  // Deja guardada la ficha en este celular para que abra aunque no haya internet.
+  if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+</script>
 </body>
 </html>

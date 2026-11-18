@@ -230,5 +230,9 @@
       <nav aria-label="Enlaces del proyecto"><a href="./index.html#proyecto">Conocé el proyecto</a><a href="#inicio">Volver al inicio ↑</a></nav>
     </footer>
   </main>
+<script>
+  // Deja guardada la ficha en este celular para que abra aunque no haya internet.
+  if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+</script>
 </body>
 </html>
