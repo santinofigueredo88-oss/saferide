@@ -1,6 +1,6 @@
 // Guarda la ficha en el celular para que abra aunque no haya internet.
 // Los datos de la persona no se guardan: vienen dentro del link del chip (después del #).
-const CACHE = 'saferide-ficha-v5';
+const CACHE = 'saferide-ficha-v6';
 const ARCHIVOS = [
   './ficha.html',
   './pulsera-3d/visor.css?v=4',

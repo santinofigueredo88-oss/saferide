@@ -2,7 +2,7 @@
 import { cargarFirebase, cargarAuth, CAMPOS, nuevoCodigo, linkDeFicha } from './fichas.mjs?v=1';
 
 const $ = id => document.getElementById(id);
-const vistas = ['v-entrar', 'v-lista', 'form', 'v-listo'];
+const vistas = ['v-entrar', 'v-lista', 'form', 'v-listo', 'f-pedido', 'v-pedido-ok'];
 function mostrar(id) {
   for (const v of vistas) $(v).hidden = v !== id;
   $(id).scrollIntoView({ block: 'nearest' });
@@ -15,6 +15,13 @@ function estado(el, texto, mal = false) {
 let usuario = null;
 let editando = null; // { id, datos } cuando se cambia una ficha existente
 let fichas = [];
+let quierePedir = false; // vino desde "Pedí tu pulsera" de la portada
+const ESTADOS = { nuevo: 'Recibido · lo estamos preparando', grabado: 'Pulsera grabada · por enviar', enviado: 'Enviada', cancelado: 'Cancelado' };
+
+// Datos de envío que el cliente ya escribió en la portada (quedan solo en esta pestaña).
+function envioGuardado() {
+  try { return JSON.parse(sessionStorage.getItem('saferide-pedido') || 'null'); } catch { return null; }
+}
 
 const { fs, db } = await cargarFirebase();
 const { auth, sesion } = await cargarAuth();
@@ -46,10 +53,10 @@ auth.onAuthStateChanged(sesion, async u => {
   await cargarLista();
   // Si se llega desde "Creá tu ficha" de la portada, los datos vienen en el link.
   const previo = new URLSearchParams(location.hash.slice(1));
-  if (previo.get('nuevo') === '1') {
-    history.replaceState(null, '', location.pathname);
-    abrirFormulario(null, previo);
-  }
+  if (previo.get('pedir') === '1') quierePedir = true;
+  if (previo.get('nuevo') === '1' || previo.get('pedir') === '1') history.replaceState(null, '', location.pathname);
+  if (previo.get('nuevo') === '1') abrirFormulario(null, previo);
+  else if (quierePedir) fichas.length ? abrirPedido() : abrirFormulario(null);
 });
 
 // ---------- Lista ----------
@@ -77,14 +84,101 @@ async function cargarLista() {
     const qr = document.createElement('button');
     qr.type = 'button'; qr.textContent = 'QR y chip';
     qr.addEventListener('click', () => mostrarListo(f.id, f.datos));
-    acciones.append(editar, qr);
+    const pedir = document.createElement('button');
+    pedir.type = 'button'; pedir.textContent = 'Pedir pulsera';
+    pedir.addEventListener('click', () => abrirPedido(f.id));
+    acciones.append(editar, qr, pedir);
     li.append(texto, acciones);
     lista.append(li);
   }
   $('lista-vacia').hidden = fichas.length > 0;
   $('cantidad').textContent = fichas.length ? `${String(fichas.length).padStart(2, '0')} FICHA${fichas.length > 1 ? 'S' : ''}` : '';
+  await cargarPedidos();
   mostrar('v-lista');
 }
+async function cargarPedidos() {
+  const consulta = fs.query(fs.collection(db, 'pedidos'), fs.where('uid', '==', usuario.uid));
+  const res = await fs.getDocs(consulta);
+  const pedidos = res.docs.map(d => d.data()).sort((a, b) => (b.creado?.seconds || 0) - (a.creado?.seconds || 0));
+  const ul = $('pedidos');
+  ul.replaceChildren();
+  for (const p of pedidos) {
+    const li = document.createElement('li');
+    const texto = document.createElement('div');
+    const titulo = document.createElement('strong');
+    titulo.textContent = `${p.cantidad} pulsera${p.cantidad > 1 ? 's' : ''} · ${p.nombreFicha}`;
+    const detalle = document.createElement('small');
+    const cuando = p.creado?.toDate?.();
+    detalle.textContent = `${ESTADOS[p.estado] || p.estado}${cuando ? ' · pedido el ' + cuando.toLocaleDateString('es-AR') : ''}`;
+    texto.append(titulo, detalle);
+    li.append(texto);
+    ul.append(li);
+  }
+  $('bloque-pedidos').hidden = pedidos.length === 0;
+}
+
+// ---------- Pedido ----------
+function abrirPedido(fichaId) {
+  const form = $('f-pedido');
+  const select = $('pedido-ficha');
+  select.replaceChildren();
+  for (const f of fichas) {
+    const op = document.createElement('option');
+    op.value = f.id; op.textContent = f.datos.nombre;
+    select.append(op);
+  }
+  if (fichaId) select.value = fichaId;
+  const previo = envioGuardado();
+  if (previo) {
+    for (const k of ['nombre', 'telefono', 'direccion', 'ciudad', 'provincia', 'cp']) if (previo[k]) form.elements[k].value = previo[k];
+    if (previo.cantidad) form.elements.cantidad.value = String(previo.cantidad);
+  }
+  actualizarPrecio();
+  estado($('estado-pedido'), '');
+  mostrar('f-pedido');
+}
+function actualizarPrecio() {
+  const n = Number($('f-pedido').elements.cantidad.value || 1);
+  $('pedido-precio').textContent = `$${(8000 * n).toLocaleString('es-AR')}`;
+}
+$('f-pedido').elements.cantidad.addEventListener('change', actualizarPrecio);
+$('cancelar-pedido').addEventListener('click', () => cargarLista());
+$('ok-volver').addEventListener('click', () => cargarLista());
+
+$('f-pedido').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  if (!form.reportValidity()) return;
+  const ficha = fichas.find(f => f.id === form.elements.ficha.value);
+  if (!ficha) return;
+  const envio = {};
+  for (const k of ['nombre', 'telefono', 'direccion', 'ciudad', 'provincia', 'cp']) {
+    const v = form.elements[k].value.trim();
+    if (v) envio[k] = v;
+  }
+  const pedido = {
+    uid: usuario.uid, email: usuario.email, fichaId: ficha.id, nombreFicha: ficha.datos.nombre,
+    cantidad: Number(form.elements.cantidad.value), envio, estado: 'nuevo',
+    creado: fs.serverTimestamp(), cambiado: fs.serverTimestamp(),
+  };
+  const nota = form.elements.nota.value.trim();
+  if (nota) pedido.nota = nota;
+  $('enviar-pedido').disabled = true;
+  estado($('estado-pedido'), 'ENVIANDO EL PEDIDO…');
+  try {
+    await fs.addDoc(fs.collection(db, 'pedidos'), pedido);
+    try { sessionStorage.removeItem('saferide-pedido'); } catch {}
+    quierePedir = false;
+    $('ok-nombre').textContent = ficha.datos.nombre;
+    mostrar('v-pedido-ok');
+  } catch (err) {
+    console.error(err);
+    estado($('estado-pedido'), 'NO SE PUDO ENVIAR EL PEDIDO. REVISÁ TU CONEXIÓN Y PROBÁ DE NUEVO.', true);
+  } finally {
+    $('enviar-pedido').disabled = false;
+  }
+});
+
 $('nueva').addEventListener('click', () => abrirFormulario(null));
 $('volver-lista').addEventListener('click', () => cargarLista());
 $('cancelar').addEventListener('click', () => mostrar('v-lista'));
@@ -137,7 +231,12 @@ $('form').addEventListener('submit', async e => {
       completo = { uid: usuario.uid, nombre: form.elements.nombre.value.trim(), ...datos };
       await fs.setDoc(fs.doc(db, 'fichas', id), completo);
     }
-    mostrarListo(id, completo);
+    if (quierePedir) {
+      fichas.push({ id, datos: completo });
+      abrirPedido(id);
+    } else {
+      mostrarListo(id, completo);
+    }
   } catch (err) {
     console.error(err);
     estado($('estado-form'), 'NO SE PUDO GUARDAR. REVISÁ TU CONEXIÓN Y PROBÁ DE NUEVO.', true);

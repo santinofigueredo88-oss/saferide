@@ -126,6 +126,10 @@
         <ul class="lista" id="lista"></ul>
         <p class="nota" id="lista-vacia" hidden>Todavía no tenés fichas. Creá la primera.</p>
         <div class="hero-actions"><button class="hero-primary" type="button" id="nueva">Crear una ficha nueva <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
+        <div id="bloque-pedidos" hidden>
+          <div class="tarjeta-titulo" style="margin-top:18px"><h2>Mis pedidos</h2></div>
+          <ul class="lista" id="pedidos"></ul>
+        </div>
         <div class="cuenta" style="margin-top:14px"><span>Entraste como <b id="quien"></b></span><button type="button" class="linkboton" id="salir">Salir</button></div>
       </section>
 
@@ -165,6 +169,37 @@
         <p class="estado" id="estado-form" role="status"></p>
       </form>
 
+      <!-- Pedir la pulsera -->
+      <form id="f-pedido" class="tarjeta" hidden novalidate aria-labelledby="t-pedido">
+        <div class="tarjeta-titulo"><h2 id="t-pedido">Pedir la pulsera</h2><span>03 · ENVÍO</span></div>
+        <p class="lede" style="margin:0 0 12px">Nosotros grabamos el QR y el chip con tu ficha y te la mandamos lista para usar. Por ahora enviamos a Baradero y zona norte de Buenos Aires.</p>
+        <div class="campos">
+          <label class="campo ancho"><span>Ficha de la pulsera</span><select name="ficha" id="pedido-ficha" required></select></label>
+          <label class="campo"><span>Cantidad</span><select name="cantidad"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+          <div class="campo"><span>Precio</span><div class="fijo" id="pedido-precio">$8.000</div></div>
+          <label class="campo"><span>Quién la recibe</span><input name="nombre" maxlength="60" required autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="Ej.: Juan Gómez"></label>
+          <label class="campo"><span>Teléfono</span><input name="telefono" type="tel" maxlength="25" required autocomplete="tel" enterkeyhint="next" placeholder="Ej.: 3329 123456"></label>
+          <label class="campo ancho"><span>Dirección</span><input name="direccion" maxlength="80" required autocomplete="street-address" enterkeyhint="next" placeholder="Ej.: Mitre 350"></label>
+          <label class="campo"><span>Ciudad</span><input name="ciudad" maxlength="40" required list="localidadesList" autocomplete="address-level2" enterkeyhint="next" placeholder="Ej.: Baradero"></label>
+          <label class="campo"><span>Provincia</span><input name="provincia" maxlength="40" list="provinciasList" autocomplete="address-level1" enterkeyhint="next" value="Buenos Aires"></label>
+          <label class="campo"><span>Código postal</span><input name="cp" maxlength="10" required inputmode="numeric" autocomplete="postal-code" enterkeyhint="next" placeholder="Ej.: 2942"></label>
+          <label class="campo ancho"><span>Nota <small>· opcional, por ejemplo un horario para recibirla</small></span><input name="nota" maxlength="200" enterkeyhint="done"></label>
+          <datalist id="provinciasList"><option value="Buenos Aires"><option value="Ciudad de Buenos Aires"><option value="Catamarca"><option value="Chaco"><option value="Chubut"><option value="Córdoba"><option value="Corrientes"><option value="Entre Ríos"><option value="Formosa"><option value="Jujuy"><option value="La Pampa"><option value="La Rioja"><option value="Mendoza"><option value="Misiones"><option value="Neuquén"><option value="Río Negro"><option value="Salta"><option value="San Juan"><option value="San Luis"><option value="Santa Cruz"><option value="Santa Fe"><option value="Santiago del Estero"><option value="Tierra del Fuego"><option value="Tucumán"></datalist>
+        </div>
+        <div class="hero-actions">
+          <button class="hero-primary" type="submit" id="enviar-pedido">Confirmar pedido <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+          <button type="button" id="cancelar-pedido">Volver</button>
+        </div>
+        <p class="estado" id="estado-pedido" role="status"></p>
+      </form>
+
+      <!-- Pedido confirmado -->
+      <section class="tarjeta" id="v-pedido-ok" hidden aria-labelledby="t-pedido-ok">
+        <div class="tarjeta-titulo"><h2 id="t-pedido-ok">¡Pedido recibido!</h2><span>LISTO</span></div>
+        <p class="lede" style="margin:0">Vamos a grabar tu pulsera con la ficha de <b id="ok-nombre"></b> y te escribimos al teléfono que dejaste para coordinar el pago y la entrega. Mientras tanto, podés cambiar tus datos médicos cuando quieras.</p>
+        <div class="hero-actions"><button class="hero-primary" type="button" id="ok-volver">Ver mis fichas y pedidos</button></div>
+      </section>
+
       <!-- QR y chip -->
       <section class="tarjeta" id="v-listo" hidden aria-labelledby="t-listo">
         <div class="tarjeta-titulo"><h2 id="t-listo">QR y chip de tu ficha</h2><span>03 · GRABAR</span></div>
@@ -191,6 +226,6 @@
       <nav aria-label="Enlaces del proyecto"><a href="./editar.html">Mi ficha</a><a href="./maqueta.html">Ver la pulsera</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
     </footer>
   </main>
-  <script type="module" src="./pulsera-3d/editar.mjs?v=1"></script>
+  <script type="module" src="./pulsera-3d/editar.mjs?v=2"></script>
 </body>
 </html>

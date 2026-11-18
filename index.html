@@ -3985,12 +3985,12 @@ html:not([data-theme="dark"]) .hero {
 
             <button type="submit" class="btn btn-primary btn-block">
               <svg class="icon" aria-hidden="true"><use href="#icon-package"></use></svg>
-              <span data-i18n="pedido.confirmar">Confirmar pedido</span>
+              <span data-i18n="pedido.confirmar">Seguir: cargar mi ficha</span>
             </button>
 
             <p class="modal-disclaimer">
               <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
-              <span data-i18n="pedido.disclaimer">Usamos tu mail únicamente para avisarte por correo las novedades de tu envío.</span>
+              <span data-i18n="pedido.disclaimer">En el paso siguiente entrás con tu cuenta de Google y cargás tu ficha. Nosotros grabamos el QR y el chip y te mandamos la pulsera lista.</span>
             </p>
           </form>
         </div>
@@ -4738,8 +4738,8 @@ const translations = {
       eyebrow: "Entregas en Baradero y zona norte",
       title: "Pedí tu pulsera",
       subtitle: "Por ahora entregamos en Baradero y la zona norte de Buenos Aires. Completá tus datos y te avisamos cuándo la recibís. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.",
-      confirmar: "Confirmar pedido",
-      disclaimer: "Usamos tu mail únicamente para avisarte por correo las novedades de tu envío.",
+      confirmar: "Seguir: cargar mi ficha",
+      disclaimer: "En el paso siguiente entrás con tu cuenta de Google y cargás tu ficha. Nosotros grabamos el QR y el chip y te mandamos la pulsera lista.",
       confirmado: "Pedido confirmado",
       pedidoSaferide: "Pedido Safe.Ride",
       enviarA: "Enviar a",
@@ -5090,8 +5090,8 @@ const translations = {
       eyebrow: "Delivery in Baradero and northern Buenos Aires",
       title: "Order your bracelet",
       subtitle: "For now we deliver in Baradero and northern Buenos Aires. Fill in your details and we'll let you know when it arrives. We only ask for your email to notify you about your order — no password needed.",
-      confirmar: "Confirm order",
-      disclaimer: "We use your email only to notify you by mail about your shipment updates.",
+      confirmar: "Next: fill in my ID",
+      disclaimer: "In the next step you sign in with Google and fill in your ID. We write the QR and the chip and send you the bracelet ready to use.",
       confirmado: "Order confirmed",
       pedidoSaferide: "Safe.Ride Order",
       enviarA: "Ship to",
@@ -6099,6 +6099,17 @@ function initOrderForm() {
       getText("zip", ""),
       getText("country", ""),
     ].filter(Boolean);
+
+    // El pedido se termina en "Mi ficha": ahí se elige la ficha que se graba en la pulsera.
+    try {
+      sessionStorage.setItem("saferide-pedido", JSON.stringify({
+        nombre: getText("fullName", ""), telefono: getText("phone", ""), direccion: getText("address", ""),
+        ciudad: getText("city", ""), provincia: getText("state", ""), cp: getText("zip", ""),
+        cantidad: Number(data.get("quantity")) || 1,
+      }));
+    } catch (err) { /* sin almacenamiento: se completan de nuevo en Mi ficha */ }
+    location.href = "./editar.html#pedir=1";
+    return;
 
     const productCode = data.get("product");
     document.getElementById("orderResultName").textContent = getText("fullName", t("pedido.pedidoSaferide"));

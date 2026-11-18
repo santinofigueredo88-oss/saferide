@@ -3,6 +3,12 @@ rules_version = '2';
 // pero solo su titular la puede cambiar, y el nombre no se puede cambiar nunca.
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Equipo de Safe.Ride: ve los pedidos y graba las pulseras.
+    function esEquipo() {
+      return request.auth != null
+        && request.auth.token.email == 'santinofigueredo88@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
     match /fichas/{id} {
       function campos() {
         return ['uid', 'nombre', 'g', 'a', 'c', 'm', 'cn', 'ct', 'o', 'l', 'd', 'actualizado'];
@@ -23,7 +29,7 @@ service cloud.firestore {
 
       // Leer una ficha conociendo su código: sí. Listar todas: solo las propias.
       allow get: if true;
-      allow list: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow list: if esEquipo() || (request.auth != null && resource.data.uid == request.auth.uid);
 
       allow create: if request.auth != null
         && id.size() >= 8 && id.size() <= 20
@@ -38,6 +44,45 @@ service cloud.firestore {
         && datosValidos();
 
       allow delete: if esTitular();
+    }
+
+    // Pedidos: el cliente pide la pulsera para una ficha suya; el equipo la graba y la envía.
+    match /pedidos/{id} {
+      function textoEnvio(campo, max, obligatorio) {
+        return obligatorio
+          ? (request.resource.data.envio[campo] is string && request.resource.data.envio[campo].size() > 0 && request.resource.data.envio[campo].size() <= max)
+          : (!(campo in request.resource.data.envio) || (request.resource.data.envio[campo] is string && request.resource.data.envio[campo].size() <= max));
+      }
+      function esDueno() {
+        return request.auth != null && resource.data.uid == request.auth.uid;
+      }
+
+      allow get, list: if esEquipo() || esDueno();
+
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'fichaId', 'nombreFicha', 'cantidad', 'envio', 'nota', 'estado', 'creado', 'cambiado'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.fichaId is string
+        && get(/databases/$(database)/documents/fichas/$(request.resource.data.fichaId)).data.uid == request.auth.uid
+        && request.resource.data.nombreFicha == get(/databases/$(database)/documents/fichas/$(request.resource.data.fichaId)).data.nombre
+        && request.resource.data.cantidad is int && request.resource.data.cantidad >= 1 && request.resource.data.cantidad <= 5
+        && request.resource.data.envio is map
+        && request.resource.data.envio.keys().hasOnly(['nombre', 'telefono', 'direccion', 'ciudad', 'provincia', 'cp'])
+        && textoEnvio('nombre', 60, true) && textoEnvio('telefono', 25, true) && textoEnvio('direccion', 80, true)
+        && textoEnvio('ciudad', 40, true) && textoEnvio('provincia', 40, false) && textoEnvio('cp', 10, true)
+        && (!('nota' in request.resource.data) || (request.resource.data.nota is string && request.resource.data.nota.size() <= 200))
+        && request.resource.data.estado == 'nuevo'
+        && request.resource.data.creado == request.time
+        && request.resource.data.cambiado == request.time;
+
+      // Solo el equipo cambia el estado (nuevo → grabado → enviado).
+      allow update: if esEquipo()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado', 'cambiado'])
+        && request.resource.data.estado in ['nuevo', 'grabado', 'enviado', 'cancelado']
+        && request.resource.data.cambiado == request.time;
+
+      allow delete: if esEquipo();
     }
   }
 }
