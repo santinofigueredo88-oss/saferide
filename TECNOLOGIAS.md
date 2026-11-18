@@ -67,5 +67,4 @@ preprocesadores). Todo el HTML, el CSS y el JavaScript están dentro de ese arch
   **TPU flexible**.
 
 ---
-*Proyecto escolar — Santino Figueredo y Elena Avogadro — Escuela Secundaria Técnica
-N.º 1 «Vuelta de Obligado», Baradero.*
+*Proyecto escolar — Santino Figueredo y Elena Avogadro — EEST N.º 1 «Vuelta de Obligado», Baradero.*

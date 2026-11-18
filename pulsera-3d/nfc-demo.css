@@ -1,82 +1,473 @@
 .nfc-section {
+  --nfc-forest: #0d2119;
+  --nfc-teal: #2e684f;
+  --nfc-lime: #d4fa96;
+  --nfc-text: #eff7ee;
+  --nfc-muted: #bbd0c2;
+  --nfc-line: #426453;
+  --nfc-radius: clamp(20px, 3vw, 30px);
+  --nfc-mono: var(--mono, ui-monospace, Consolas, monospace);
+  container: saferide-nfc / inline-size;
   display: grid;
-  grid-template-columns: minmax(0, .87fr) minmax(0, 1.13fr);
-  overflow: hidden;
-  align-items: stretch;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
   margin-block: clamp(18px, 3vw, 34px) 4px;
   scroll-margin-top: 18px;
-  border: 1px solid #284c3c;
-  border-radius: 25px;
-  background: #11251d;
-  color: #f3faf3;
+  border: 1px solid var(--nfc-line);
+  border-radius: var(--nfc-radius);
+  background: radial-gradient(ellipse at 0 0, #1c3d2d, transparent 55%), var(--nfc-forest);
+  color: var(--nfc-text);
+  box-shadow: 0 20px 48px -30px #071a12b3;
+  overflow-wrap: anywhere;
 }
-.nfc-copy { padding: clamp(23px, 4vw, 57px); align-self: center; }
-.nfc-kicker { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 14px; color: #c7efa8; font: 700 .72rem/1.2 var(--mono); letter-spacing: .075em; }
-.nfc-copy h2 { font-size: clamp(2.1rem, 4.4vw, 4.05rem); line-height: 1.02; letter-spacing: -.066em; text-wrap: balance; }
-.nfc-copy h2 span { color: #bce686; }
-.nfc-copy > p:not(.nfc-note) { max-width: 42ch; margin-top: 17px; color: #c2d8ca; font-size: .96rem; }
-.nfc-trigger { display: inline-flex; justify-content: center; align-items: center; gap: 9px; min-height: 48px; margin-top: 23px; padding: 8px 13px; border: 1px solid #bde286; border-radius: 13px; background: #d1f788; color: #152c1b; font-size: .86rem; font-weight: 760; }
-.nfc-trigger:hover { background: #dfffaa; }
-.nfc-trigger:focus-visible { outline-color: #d1f788; }
-.nfc-trigger[aria-disabled=true] { cursor: progress; background: #d8e9c5; }
-.nfc-note { margin-top: 8px; color: #a7c1b2; font-size: .76rem; }
-.nfc-steps { display: flex; flex-wrap: wrap; gap: 8px 15px; align-items: center; margin: 24px 0 0; padding: 0; list-style: none; }
-.nfc-steps li { display: inline-flex; align-items: center; gap: 5px; color: #b0c9bc; font-size: .76rem; }
-.nfc-steps li span { display: grid; place-items: center; min-width: 23px; height: 23px; border: 1px solid #4a6c5c; border-radius: 50%; font: 700 .61rem var(--mono); }
-.nfc-steps [aria-current=step] { color: #f9fff7; }
-.nfc-steps [aria-current=step] span, .nfc-steps [data-complete=true] span { background: #d1f788; border-color: #d1f788; color: #152c1b; }
 
-.nfc-stage { position: relative; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); place-items: center; gap: 14px; min-height: 390px; padding: 23px clamp(14px, 3vw, 36px); overflow: hidden; isolation: isolate; background: radial-gradient(ellipse at 35% 42%, #315847 0%, #244535 42%, #182c23 100%); }
-.nfc-stage::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(#92c0a36b .8px, transparent 1px) 0 0 / 17px 17px; opacity: .48; mask-image: radial-gradient(ellipse at center, #000 8%, transparent 84%); }
-.chip-rig { display: grid; justify-items: center; position: relative; z-index: 1; width: 100%; max-width: 185px; }
-.chip-art { display: block; width: 100%; filter: drop-shadow(0 18px 16px #071b13b8); transform: rotate(-12deg); }
-.chip-caption { margin-top: 9px; padding: 5px 8px; color: #cce4d5; border: 1px solid #547464; border-radius: 999px; background: #162f25; white-space: nowrap; font: 700 .62rem var(--mono); letter-spacing: .04em; }
-.nfc-signal { position: absolute; left: 34%; top: 50%; z-index: 0; width: 115px; height: 115px; translate: -50% -50%; pointer-events: none; }
-.nfc-signal span { position: absolute; inset: 0; border: 1.5px solid #d6fd94; border-radius: 50%; opacity: 0; }
-.nfc-phone { align-self: center; position: relative; z-index: 2; display: flex; flex-direction: column; width: min(100%, 254px); min-height: 325px; padding: 13px; border: 5px solid #0b1f16; border-radius: 29px; overflow: hidden; background: #f9fdf7; color: #193629; box-shadow: 0 14px 31px #061910a3, 0 0 0 1px #9db7a7; transform: translateX(22px) rotate(6deg); }
-.nfc-screen-top { display: flex; justify-content: space-between; align-items: center; gap: 5px; padding-bottom: 9px; border-bottom: 1px solid #dde9df; font-size: .68rem; font-weight: 790; }
-.offline-badge { display: flex; align-items: center; gap: 4px; padding: 3px 5px; border-radius: 999px; white-space: nowrap; color: #6a4a20; background: #f4ecd6; font-size: .58rem; font-weight: 710; }
-.offline-badge i { width: 5px; height: 5px; border-radius: 50%; background: #a47636; }
-.nfc-wait { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; }
-.nfc-reader-icon { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 6px; border-radius: 14px; background: #e1f0df; color: #286046; }
-.nfc-reader-icon .icon { width: 24px; height: 24px; }
-.nfc-phone h3 { font-size: 1.17rem; font-weight: 800; line-height: 1.1; letter-spacing: -.04em; }
-.nfc-phone p { color: #466158; font-size: .73rem; line-height: 1.32; }
-.nfc-result { padding-top: 11px; }
-.nfc-confirm { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 6px; color: #35744e; font-size: .66rem; font-weight: 770; }
-.nfc-confirm .icon { width: 13px; height: 13px; }
-.nfc-result dl { display: grid; gap: 4px; margin-block: 8px; }
-.nfc-result dl div { padding: 4px 7px; border-radius: 7px; background: #eaf3e8; }
-.nfc-result dt { color: #466658; font-size: .62rem; }
-.nfc-result dd { margin: 0; font-size: .77rem; font-weight: 760; }
-.nfc-result dl div:nth-child(2) { background: #fbf0e0; }
-.nfc-result dl div:nth-child(2) dd { color: #793f29; }
-.nfc-result > p { font-size: .64rem; }
-.nfc-section:is([data-nfc-state=approach], [data-nfc-state=read], [data-nfc-state=done]) .nfc-phone { transform: translateX(-16px); }
-.nfc-section:is([data-nfc-state=read], [data-nfc-state=done]) .chip-art { filter: drop-shadow(0 0 15px #b8ef8a60) drop-shadow(0 14px 16px #0a2117a0); }
+.nfc-section,
+.nfc-section *,
+.nfc-section *::before,
+.nfc-section *::after { box-sizing: border-box; }
 
-@media (max-width: 780px) {
-  .nfc-section { grid-template-columns: 1fr; border-radius: 19px; }
-  .nfc-copy { padding-block: 24px; }
-  .nfc-steps { margin-top: 16px; }
-  .nfc-stage { min-height: 340px; }
+.nfc-section > :is(.nfc-copy, .nfc-stage) { grid-column: 1 / -1; min-width: 0; }
+.nfc-section :is(.nfc-wait, .nfc-result)[hidden] { display: none; }
+
+.nfc-section .nfc-copy {
+  align-self: center;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+  padding: clamp(1.25rem, 4.2cqi, 3.5rem);
 }
-@media (max-width: 440px) {
-  .nfc-stage { grid-template-columns: minmax(0, .53fr) minmax(0, 1.47fr); gap: 7px; min-height: 295px; padding: 11px; }
-  .chip-caption { padding: 3px; font-size: .45rem; }
-  .nfc-phone { min-height: 258px; border-radius: 21px; border-width: 4px; padding: 9px; transform: translateX(4px) rotate(4deg); }
-  .nfc-section:is([data-nfc-state=approach], [data-nfc-state=read], [data-nfc-state=done]) .nfc-phone { transform: none; }
+
+.nfc-section .nfc-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  margin-block-end: 1rem;
+  color: var(--nfc-lime);
+  font: 700 .71rem/1.3 var(--nfc-mono);
+  letter-spacing: .1em;
 }
+
+.nfc-section .nfc-kicker .icon {
+  width: 2rem;
+  height: 2rem;
+  padding: .38rem;
+  border: 1px solid #527b62;
+  border-radius: .6rem;
+  background: #294b36;
+}
+
+.nfc-section .nfc-copy h2 {
+  margin: 0;
+  color: var(--nfc-text);
+  font-size: clamp(1.85rem, 4vw, 3.85rem);
+  font-size: clamp(1.85rem, 1.15rem + 3.05cqi, 3.85rem);
+  font-weight: 770;
+  line-height: 1.02;
+  letter-spacing: -.052em;
+  text-wrap: balance;
+}
+
+.nfc-section .nfc-copy h2 span { color: var(--nfc-lime); }
+
+.nfc-section .nfc-copy > p:not(.nfc-note) {
+  max-width: 46ch;
+  margin: 1rem 0 0;
+  color: var(--nfc-muted);
+  font-size: .97rem;
+  line-height: 1.58;
+}
+
+.nfc-section .nfc-trigger {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .6rem;
+  width: min(100%, 16rem);
+  min-height: 52px;
+  margin-top: 1.4rem;
+  padding: .65rem .85rem;
+  border: 1px solid var(--nfc-lime);
+  border-radius: .8rem;
+  background: var(--nfc-lime);
+  color: var(--nfc-forest);
+  font: inherit;
+  font-size: .91rem;
+  font-weight: 760;
+  line-height: 1.2;
+  text-align: start;
+  cursor: pointer;
+}
+
+.nfc-section .nfc-trigger .icon { width: 1.125rem; height: 1.125rem; }
+.nfc-section .nfc-trigger:not([aria-disabled=true]):hover { background: #e7ffbe; }
+.nfc-section .nfc-trigger:focus-visible { outline: 3px solid var(--nfc-lime); outline-offset: 4px; }
+.nfc-section .nfc-trigger[aria-disabled=true] {
+  border-color: #759984;
+  background: #234433;
+  color: var(--nfc-text);
+  cursor: progress;
+}
+
+.nfc-section .nfc-note {
+  margin: .55rem 0 0;
+  color: var(--nfc-muted);
+  font-size: .8rem;
+  line-height: 1.4;
+}
+
+.nfc-section .nfc-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .55rem;
+  max-width: 26rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nfc-section .nfc-steps li {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: .38rem;
+  padding-top: .62rem;
+  border-top: 2px solid var(--nfc-line);
+  color: var(--nfc-muted);
+  font-size: .8rem;
+  line-height: 1.25;
+}
+
+.nfc-section .nfc-steps li span {
+  display: grid;
+  place-items: center;
+  min-width: 1.85rem;
+  min-height: 1.5rem;
+  padding: .15rem .28rem;
+  border: 1px solid #608572;
+  border-radius: .4rem;
+  font: 700 .69rem/1 var(--nfc-mono);
+}
+
+.nfc-section .nfc-steps [data-complete=true] { border-color: #83ac83; color: var(--nfc-text); }
+.nfc-section .nfc-steps [data-complete=true] span { background: #284c38; color: var(--nfc-lime); }
+.nfc-section .nfc-steps [aria-current=step] { border-color: var(--nfc-lime); color: var(--nfc-text); font-weight: 740; }
+.nfc-section .nfc-steps [aria-current=step] span { border-color: var(--nfc-lime); background: var(--nfc-lime); color: var(--nfc-forest); }
+
+/* The field owns a grid track, so the pulses stay between both objects. */
+.nfc-section .nfc-stage {
+  --nfc-guide: #82af9666;
+  --nfc-axis: to bottom;
+  --nfc-away-x: 0px;
+  --nfc-away-y: 10px;
+  --nfc-away-angle: 0deg;
+  --nfc-near-x: 0px;
+  --nfc-near-y: -17px;
+  --nfc-chip-x: 0px;
+  --nfc-chip-y: 6px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 17.25rem);
+  grid-template-rows: auto 3.85rem auto;
+  place-content: center;
+  place-items: center;
+  padding: 1.75rem 1rem 2.1rem;
+  border-block-start: 1px solid var(--nfc-line);
+  border-radius: 0 0 calc(var(--nfc-radius) - 1px) calc(var(--nfc-radius) - 1px);
+  background: radial-gradient(ellipse at 45% 38%, var(--nfc-teal), #16392b 53%, transparent 82%), var(--nfc-forest);
+}
+
+.nfc-section .nfc-stage::before,
+.nfc-section .nfc-stage::after { content: ""; position: absolute; z-index: -1; pointer-events: none; }
+
+.nfc-section .nfc-stage::before {
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle, #c5edce54 1px, transparent 1.5px) center / 18px 18px;
+  mask-image: radial-gradient(ellipse at center, #000, transparent 76%);
+}
+
+.nfc-section .nfc-stage::after {
+  inset: .8rem;
+  --nfc-tick: linear-gradient(var(--nfc-guide), var(--nfc-guide));
+  background:
+    var(--nfc-tick) top left / .85rem 1px no-repeat,
+    var(--nfc-tick) top left / 1px .85rem no-repeat,
+    var(--nfc-tick) top right / .85rem 1px no-repeat,
+    var(--nfc-tick) top right / 1px .85rem no-repeat,
+    var(--nfc-tick) bottom left / .85rem 1px no-repeat,
+    var(--nfc-tick) bottom left / 1px .85rem no-repeat,
+    var(--nfc-tick) bottom right / .85rem 1px no-repeat,
+    var(--nfc-tick) bottom right / 1px .85rem no-repeat;
+}
+
+.nfc-section .chip-rig {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  width: min(100%, 7.5rem);
+}
+
+.nfc-section .chip-art {
+  display: block;
+  width: 100%;
+  filter: drop-shadow(0 14px 12px #071b13ba);
+  transform: rotate(-10deg);
+}
+
+.nfc-section .chip-caption {
+  max-width: 100%;
+  margin-top: .5rem;
+  padding: .32rem .46rem;
+  border: 1px solid #729583;
+  border-radius: .35rem;
+  background: #102b20;
+  color: #e0eddf;
+  font: 700 .64rem/1.3 var(--nfc-mono);
+  letter-spacing: .045em;
+  text-align: center;
+}
+
+.nfc-section .nfc-signal {
+  --nfc-signal-size: 3.5rem;
+  --nfc-signal-ink: #abd4ae;
+  --nfc-axis-width: 1px;
+  --nfc-axis-height: var(--nfc-signal-size);
+  display: grid;
+  position: relative;
+  place-items: center;
+  width: var(--nfc-signal-size);
+  aspect-ratio: 1;
+  color: var(--nfc-signal-ink);
+  pointer-events: none;
+}
+
+.nfc-section .nfc-signal::before {
+  content: "";
+  grid-area: 1 / 1;
+  width: var(--nfc-axis-width);
+  height: var(--nfc-axis-height);
+  background: repeating-linear-gradient(var(--nfc-axis), currentColor 0 3px, transparent 3px 7px);
+  opacity: .68;
+}
+
+.nfc-section .nfc-signal::after {
+  content: "";
+  grid-area: 1 / 1;
+  width: .45rem;
+  height: .45rem;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px #244d37, 0 0 0 5px currentColor;
+}
+
+.nfc-section .nfc-signal span {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--nfc-lime);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.nfc-section .nfc-phone {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: .75rem;
+  width: min(100%, 17.25rem);
+  min-width: 0;
+  min-height: 24.5rem;
+  padding: 1.5rem clamp(.65rem, 1.5vw, 1rem) 1.45rem;
+  border: 6px solid transparent;
+  border-radius: 1.85rem;
+  background: linear-gradient(160deg, #f5faf2, #e8f2e8) padding-box,
+    linear-gradient(145deg, #89a693, #355645 27%, #0b2118 73%, #567763) border-box;
+  color: #132c20;
+  box-shadow: 0 0 0 1px #9dbeab9c, 0 16px 32px #06170eb3, 0 4px 9px #06170e8c;
+  transform: translate(var(--nfc-away-x), var(--nfc-away-y)) rotate(var(--nfc-away-angle));
+}
+
+.nfc-section .nfc-phone::before,
+.nfc-section .nfc-phone::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  border-radius: 999px;
+  transform: translateX(-50%);
+}
+
+.nfc-section .nfc-phone::before {
+  top: .38rem;
+  width: 2.55rem;
+  height: .46rem;
+  background: radial-gradient(circle at 83% 50%, #6e9d86 1px, transparent 2px), #132820;
+}
+
+.nfc-section .nfc-phone::after { bottom: .42rem; width: 26%; height: 3px; background: #527062; }
+
+.nfc-section .nfc-screen-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .25rem .4rem;
+  padding-bottom: .55rem;
+  border-bottom: 1px solid #c6d9ca;
+  font-size: .9rem;
+  font-weight: 810;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}
+
+.nfc-section .offline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .25rem .42rem;
+  border: 1px solid #bad2bd;
+  border-radius: 999px;
+  background: #e0efdd;
+  color: #264936;
+  font-size: .69rem;
+  font-weight: 750;
+  letter-spacing: 0;
+}
+
+.nfc-section .offline-badge i { flex: none; width: .36rem; height: .36rem; border-radius: 50%; background: #397452; }
+
+.nfc-section .nfc-wait {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .45rem;
+  padding: .85rem .15rem;
+  text-align: center;
+}
+
+.nfc-section .nfc-reader-icon {
+  display: grid;
+  place-items: center;
+  width: 3.65rem;
+  height: 3.65rem;
+  margin-bottom: .6rem;
+  border: 1px solid #53846b;
+  border-radius: 1.14rem;
+  background: linear-gradient(145deg, #27563e, #142f23);
+  color: var(--nfc-lime);
+  box-shadow: 0 0 0 .34rem #d9e9da;
+}
+
+.nfc-section .nfc-reader-icon .icon { width: 1.65rem; height: 1.65rem; }
+.nfc-section .nfc-phone h3 { margin: 0; color: #132c20; font-size: 1.23rem; font-weight: 800; line-height: 1.12; letter-spacing: -.035em; }
+.nfc-section .nfc-phone p { margin: 0; color: #395649; font-size: .81rem; line-height: 1.4; }
+.nfc-section .nfc-wait p { max-width: 24ch; }
+
+.nfc-section .nfc-result { align-self: center; min-width: 0; }
+.nfc-section .nfc-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .23rem .46rem;
+  margin-bottom: .48rem;
+  border: 1px solid #b4cfae;
+  border-radius: .4rem;
+  background: #dff2cf;
+  color: #234731;
+  font-size: .72rem;
+  font-weight: 760;
+  line-height: 1.25;
+}
+
+.nfc-section .nfc-confirm .icon { width: .95rem; height: .95rem; }
+.nfc-section .nfc-result dl { display: grid; gap: .32rem; margin: .6rem 0 .5rem; }
+.nfc-section .nfc-result dl div {
+  display: grid;
+  gap: .14rem;
+  padding: .38rem .53rem;
+  border: 1px solid #c9dccc;
+  border-inline-start: 3px solid #588369;
+  border-radius: .46rem;
+  background: #f6fbf3;
+}
+
+.nfc-section .nfc-result dt { color: #395649; font-size: .72rem; font-weight: 610; line-height: 1.2; }
+.nfc-section .nfc-result dd { margin: 0; font-size: .9rem; font-weight: 760; line-height: 1.2; }
+.nfc-section .nfc-result dl div:nth-child(2) { border-color: #e4c3a7; border-inline-start-color: #9b532f; background: #fbefe2; }
+.nfc-section .nfc-result dl div:nth-child(2) dt { color: #69452f; }
+.nfc-section .nfc-result dl div:nth-child(2) dd { color: #713b21; }
+.nfc-section .nfc-result > p { padding-top: .4rem; border-top: 1px solid #c6d9ca; font-size: .71rem; }
+
+.nfc-section:is([data-nfc-state=approach], [data-nfc-state=read]) .nfc-phone {
+  transform: translate(var(--nfc-near-x), var(--nfc-near-y));
+}
+.nfc-section:is([data-nfc-state=approach], [data-nfc-state=read]) .chip-rig {
+  transform: translate(var(--nfc-chip-x), var(--nfc-chip-y));
+}
+.nfc-section:is([data-nfc-state=approach], [data-nfc-state=read]) .chip-art { transform: rotate(-4deg); }
+.nfc-section[data-nfc-state=read] .chip-art { filter: drop-shadow(0 0 11px #d4fa968c) drop-shadow(0 12px 10px #071b13ba); }
+.nfc-section[data-nfc-state=read] .nfc-signal { --nfc-signal-ink: var(--nfc-lime); }
+.nfc-section[data-nfc-state=read] .nfc-signal span:first-child { opacity: .85; transform: scale(.68); }
+.nfc-section[data-nfc-state=read] .nfc-reader-icon { background: var(--nfc-lime); color: var(--nfc-forest); box-shadow: 0 0 0 .34rem #d2e9c7; }
+.nfc-section[data-nfc-state=done] .nfc-phone { transform: translate(var(--nfc-away-x), var(--nfc-away-y)); }
+.nfc-section[data-nfc-state=done] .chip-art { filter: drop-shadow(0 0 7px #d4fa9644) drop-shadow(0 14px 12px #071b13ba); }
+.nfc-section[data-nfc-state=done] .nfc-signal { --nfc-signal-ink: #c5eab0; }
+
+@container saferide-nfc (min-width: 34rem) {
+  .nfc-section .nfc-stage {
+    --nfc-axis: to right;
+    --nfc-away-x: 17px;
+    --nfc-away-y: 0px;
+    --nfc-away-angle: 2.5deg;
+    --nfc-near-x: -20px;
+    --nfc-near-y: 0px;
+    --nfc-chip-x: 8px;
+    --nfc-chip-y: 0px;
+    grid-template-columns: minmax(0, 1fr) clamp(3.25rem, 5vw, 4.75rem) minmax(0, 1.6fr);
+    grid-template-rows: auto;
+    padding-block: clamp(2rem, 4vw, 3.25rem);
+    padding-inline: max(clamp(2.1rem, 3vw, 3rem), calc((100% - 36rem) / 2));
+  }
+  .nfc-section .chip-rig { justify-self: end; width: min(100%, 11.5rem); }
+  .nfc-section .nfc-signal {
+    --nfc-signal-size: clamp(3.75rem, 6vw, 5rem);
+    --nfc-axis-width: var(--nfc-signal-size);
+    --nfc-axis-height: 1px;
+  }
+  .nfc-section .nfc-phone { justify-self: start; }
+}
+
+@container saferide-nfc (min-width: 54rem) {
+  .nfc-section > .nfc-copy { grid-column: 1 / 10; }
+  .nfc-section > .nfc-stage {
+    grid-column: 10 / -1;
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--nfc-line);
+    border-radius: 0 calc(var(--nfc-radius) - 1px) calc(var(--nfc-radius) - 1px) 0;
+  }
+}
+
+/* Match the 650 ms approach and 780 ms read in nfc-demo.mjs. */
 @media (prefers-reduced-motion: no-preference) {
-  .nfc-phone { transition: transform .5s cubic-bezier(.2,.75,.25,1); }
-  .chip-art { transition: filter .3s ease; }
-  .nfc-section[data-nfc-state=read] .nfc-signal span { animation: nfc-wave .78s ease-out both; }
-  .nfc-section[data-nfc-state=read] .nfc-signal span:nth-child(2) { animation-delay: .11s; }
-  .nfc-section[data-nfc-state=read] .nfc-signal span:nth-child(3) { animation-delay: .22s; }
-  .nfc-result:not([hidden]) { animation: nfc-pop .36s ease-out both; }
-  .nfc-result:not([hidden]) dl div { animation: nfc-pop .36s ease-out both; }
-  .nfc-result:not([hidden]) dl div:nth-child(2) { animation-delay: .07s; }
-  .nfc-result:not([hidden]) dl div:nth-child(3) { animation-delay: .14s; }
-  @keyframes nfc-wave { 0% { opacity: 0; transform: scale(.35); } 25% { opacity: .85; } 100% { opacity: 0; transform: scale(1.7); } }
-  @keyframes nfc-pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .nfc-section :is(.nfc-phone, .chip-rig) { transition: transform .48s cubic-bezier(.24, .74, .26, 1); }
+  .nfc-section .chip-art { transition: transform .48s cubic-bezier(.24, .74, .26, 1), filter .22s ease-out; }
+  .nfc-section[data-nfc-state=done] :is(.nfc-phone, .chip-rig, .chip-art) { transition-duration: .3s; }
+  .nfc-section[data-nfc-state=read] .nfc-signal span { animation: saferide-nfc-wave .55s ease-out both; }
+  .nfc-section[data-nfc-state=read] .nfc-signal span:nth-child(2) { animation-delay: .105s; }
+  .nfc-section[data-nfc-state=read] .nfc-signal span:nth-child(3) { animation-delay: .21s; }
+  .nfc-section .nfc-result:not([hidden]) :is(.nfc-confirm, h3, dl div, p) { animation: saferide-nfc-reveal .27s ease-out both; }
+  .nfc-section .nfc-result h3 { animation-delay: .04s; }
+  .nfc-section .nfc-result dl div:nth-child(1) { animation-delay: .09s; }
+  .nfc-section .nfc-result dl div:nth-child(2) { animation-delay: .14s; }
+  .nfc-section .nfc-result dl div:nth-child(3) { animation-delay: .19s; }
+  .nfc-section .nfc-result > p { animation-delay: .23s; }
+
+  @keyframes saferide-nfc-wave {
+    0% { opacity: 0; transform: scale(.22); }
+    24% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.5); }
+  }
+
+  @keyframes saferide-nfc-reveal {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }

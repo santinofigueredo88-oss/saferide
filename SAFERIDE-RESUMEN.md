@@ -7,7 +7,7 @@ Landing page profesional con modo claro/oscuro, bilingüe (ES/EN), y animaciones
 ## Creadores
 - **Santino Figueredo**
 - **Elena Avogadro**
-- Escuela Secundaria Técnica N.º 1 «Vuelta de Obligado», Baradero
+- EEST N.º 1 «Vuelta de Obligado», Baradero
 
 ## URLs
 - **GitHub**: https://github.com/santinofigueredo88-oss/saferide

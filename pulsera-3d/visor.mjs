@@ -9,16 +9,18 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const svgNS = 'http://www.w3.org/2000/svg';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const internalParts = new Set(['chip', 'film']);
+const labelRowsMaxWidth = 560;
+const claspAngle = THREE.MathUtils.degToRad(-145);
 
 // The SCAD integrates the module into the band. We separate them, and show an
 // optional pin closure, for the conceptual assembly (not a print-ready CAD).
 const definitions = {
-  band: { name: 'Correa de TPU', short: 'Correa TPU', type: '01 / CUERPO FLEXIBLE', copy: 'Banda curva impresa en TPU. Los siete orificios de una punta permiten regular el ajuste.', side: 'left', offset: [-7, -4, -10], anchor: [-24, 4, 16] },
-  housing: { name: 'Carcasa central', short: 'Carcasa', type: '02 / ALOJAMIENTO', copy: 'Una sola cavidad aloja las capas del módulo y las mantiene alineadas sobre la correa.', side: 'left', offset: [-8, -8, 13], anchor: [0, -4, 5] },
-  qr: { name: 'Placa QR', short: 'Placa QR', type: '03 / CAPA EXTERIOR', copy: 'Cuadrado visible en el frente. La cámara lo lee para abrir la ficha web. Para usar NFC, acercá el celular a este mismo punto.', side: 'left', offset: [-10, 18, 33], anchor: [0, 0, 1] },
-  chip: { name: 'Chip y antena NFC', short: 'Chip NFC', type: '04 / DEBAJO DEL QR', copy: 'Pieza cuadrada más chica, centrada debajo del QR. La antena rodea al chip y permite leer los datos esenciales sin internet con un dispositivo compatible.', side: 'right', offset: [19, -9, 26], anchor: [0, 0, 1] },
-  film: { name: 'Lámina protectora', short: 'Protección', type: '05 / CAPA INTERMEDIA', copy: 'Lámina no metálica situada entre el QR y el NFC. Se muestra como una pieza independiente para que se entienda cómo se arman las capas.', side: 'right', offset: [15, 14, 30], anchor: [0, 0, .25] },
-  clasp: { name: 'Cierre de ajuste', short: 'Cierre', type: '06 / PROPUESTA DE CIERRE', copy: 'Dos pernos a presión se encastran en los orificios de la otra punta. El modelo CAD del repositorio propone este cierre como una opción.', side: 'right', offset: [16, -1, -6], anchor: [1, 0, 0] },
+  band: { name: 'Correa de TPU', short: 'Correa TPU', type: '01 / CUERPO FLEXIBLE', copy: 'Banda curva impresa en TPU. Los siete orificios de una punta permiten regular el ajuste.', side: 'left', offset: [-8, 8, -9], anchor: [-24, 4, 16] },
+  housing: { name: 'Carcasa central', short: 'Carcasa', type: '02 / ALOJAMIENTO', copy: 'Una sola cavidad aloja las capas del módulo y las mantiene alineadas sobre la correa.', side: 'left', offset: [-14, -14, 12], anchor: [-7.2, -4, 4.5] },
+  qr: { name: 'Placa QR', short: 'Placa QR', type: '03 / CAPA EXTERIOR', copy: 'Cuadrado visible en el frente. La cámara lo lee para abrir la ficha web. Para usar NFC, acercá el celular a este mismo punto.', side: 'left', offset: [-13, 19, 30], anchor: [-4.6, 0, .75] },
+  chip: { name: 'Chip y antena NFC', short: 'Chip NFC', type: '04 / DEBAJO DEL QR', copy: 'Pieza cuadrada más chica, centrada debajo del QR. La antena rodea al chip y permite leer los datos esenciales sin internet con un dispositivo compatible.', side: 'right', offset: [20, -7, 25], anchor: [0, 0, 1] },
+  film: { name: 'Lámina protectora', short: 'Protección', type: '05 / CAPA INTERMEDIA', copy: 'Lámina no metálica situada entre el QR y el NFC. Se muestra como una pieza independiente para que se entienda cómo se arman las capas.', side: 'right', offset: [30, 7, 17], anchor: [0, 0, .25] },
+  clasp: { name: 'Cierre de ajuste', short: 'Cierre', type: '06 / PROPUESTA DE CIERRE', copy: 'Dos pernos a presión se encastran en los orificios de la otra punta. El modelo CAD del repositorio propone este cierre como una opción.', side: 'right', offset: [21, 28, -3], anchor: [0, 0, 1.53] },
 };
 
 const catalogButtons = [...document.querySelectorAll('[data-part]')];
@@ -159,10 +161,10 @@ function bandFinish() {
   texture.colorSpace = THREE.NoColorSpace;
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(7, 1);
-  const finish = material(0x285645, .67, .02);
+  const finish = material(0x2b5947, .73, .02);
   finish.bumpMap = texture;
-  finish.bumpScale = .085;
-  finish.sheen = .26;
+  finish.bumpScale = .06;
+  finish.sheen = .22;
   finish.sheenColor.setHex(0x6cbca0);
   finish.sheenRoughness = .8;
   return finish;
@@ -205,8 +207,8 @@ function makeModel(scene) {
   housing.add(backing);
   const face = roundedRect(24, 17, 5.2);
   face.holes.push(roundedRect(11.65, 11.65, 1.04));
-  const shellFinish = material(0x194436, .36, .07);
-  shellFinish.clearcoat = .32;
+  const shellFinish = material(0x194436, .42, .07);
+  shellFinish.clearcoat = .22;
   shellFinish.clearcoatRoughness = .46;
   const rim = plate(face, 2.85, .47, shellFinish);
   rim.position.z = 1.18; housing.add(rim);
@@ -235,16 +237,15 @@ function makeModel(scene) {
   }
 
   const film = part('film', 0, 0, 33.03);
-  const filmFinish = material(0xafe1d3, .32, 0);
+  const filmFinish = material(0xafe1d3, .42, 0);
   filmFinish.transparent = true;
-  filmFinish.opacity = .66;
+  filmFinish.opacity = .75;
   filmFinish.depthWrite = false;
   film.add(plate(roundedRect(9.4, 9.4, .78), .23, .14, filmFinish));
 
   // The optional fastening sits on the end opposite the adjustment holes.
-  const angle = -145 * Math.PI / 180;
-  const clasp = part('clasp', 31.1 * Math.sin(angle), 0, 31.1 * Math.cos(angle));
-  clasp.rotation.y = angle;
+  const clasp = part('clasp', 31.1 * Math.sin(claspAngle), 0, 31.1 * Math.cos(claspAngle));
+  clasp.rotation.y = claspAngle;
   const base = plate(roundedRect(10.8, 12.4, 3.3), 1, .53, material(0x5b796d, .34, .25));
   clasp.add(base);
   for (const x of [-2.8, 2.8]) {
@@ -272,21 +273,23 @@ function lightModel(scene, renderer) {
   const room = new RoomEnvironment();
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(room, .045).texture;
-  scene.environmentIntensity = .72;
+  scene.environmentIntensity = .66;
   room.dispose();
   pmrem.dispose();
-  scene.add(new THREE.HemisphereLight(0xf4f8f4, 0x778e7f, 1.1));
-  for (const [color, intensity, position] of [[0xfff7e6, 2.75, [-48, 92, 88]], [0xc1f0e0, 2.1, [10, 65, -78]], [0xdbedff, .8, [80, 16, 51]]]) {
+  scene.add(new THREE.HemisphereLight(0xf4f8f4, 0x778e7f, .88));
+  // A warm key and a grazing rim light separate the green finishes from the stage.
+  for (const [color, intensity, position] of [[0xfff7e6, 2.65, [-56, 72, 82]], [0xd2f3e5, 2.45, [24, 43, -82]], [0xdbedff, .72, [80, 16, 51]]]) {
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(...position); scene.add(light);
   }
   const shadow = graphicTexture(128, (ctx, size) => {
     const shade = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-    shade.addColorStop(0, '#233b2eb8'); shade.addColorStop(.48, '#35534375'); shade.addColorStop(.77, '#43625229'); shade.addColorStop(1, '#43625200');
+    shade.addColorStop(0, '#071b14c4'); shade.addColorStop(.48, '#071b1470'); shade.addColorStop(1, '#071b1400');
     ctx.fillStyle = shade; ctx.fillRect(0, 0, size, size);
   });
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 85), new THREE.MeshBasicMaterial({ map: shadow, transparent: true, depthWrite: false, opacity: .55, toneMapped: false }));
   floor.rotation.x = -Math.PI / 2; floor.position.set(2, -15, 4); scene.add(floor);
+  return floor;
 }
 
 function createViewer() {
@@ -308,23 +311,26 @@ function createViewer() {
   orbit.enableDamping = !reduceMotion.matches;
   orbit.dampingFactor = .14;
   orbit.rotateSpeed = .67;
+  orbit.autoRotateSpeed = 2.2;
   orbit.minPolarAngle = .035;
   orbit.maxPolarAngle = Math.PI - .035;
   orbit.minDistance = 50;
   orbit.maxDistance = 380;
 
   const parts = makeModel(scene);
-  lightModel(scene, renderer);
+  const floor = lightModel(scene, renderer);
   const shell = $('#callouts');
   const leaders = $('#leaders');
   const explodeButton = $('#explode');
   const labelButton = $('#toggle-labels');
+  const spinButton = $('#spin');
   const separation = $('#separation');
   const fullscreen = $('#fullscreen');
   const presets = [...document.querySelectorAll('[data-view]')];
   const angles = { perspective: V(70, 57, 124), front: V(0, 7, 120), inside: V(-55, 100, -100) };
   let view = 'perspective', exploded = false, labels = false, phase = 0, zoom = 1;
   let width = 1, height = 1, frame = 0, previousTime = 0, failed = false, cameraInput = false;
+  let spinning = false, stageVisible = true;
   const world = V(0, 0, 0);
 
   for (const [id, part] of Object.entries(parts)) {
@@ -350,6 +356,7 @@ function createViewer() {
 
   function updateButtonStates() {
     stage.dataset.mode = exploded ? 'exploded' : 'assembled';
+    stage.dataset.labels = String(labels);
     $('#assembly-state').textContent = exploded ? 'Vista desarmada' : 'Armada';
     explodeButton.lastChild.textContent = exploded ? ' Volver a armar' : ' Desarmar';
     explodeButton.setAttribute('aria-pressed', String(exploded));
@@ -369,14 +376,16 @@ function createViewer() {
   }
 
   function fitDistance() {
-    const fitAspect = exploded && labels ? (width <= 485 ? 1.68 : 1.15) : 1.16;
-    const scale = Math.max(1, fitAspect / camera.aspect);
-    return (exploded ? 127 : 99) * scale;
+    if (!exploded) return 99 * Math.max(1, 1.16 / camera.aspect);
+    // Leave room for the two columns on wide stages and the label rows on narrow ones.
+    const labelRows = labels && width <= labelRowsMaxWidth;
+    const usableWidth = Math.max(1, width - (labels && !labelRows ? 220 : 28));
+    return 151 * Math.max(labelRows ? 1.22 : 1, 1.04 * height / usableWidth);
   }
 
   function frameCamera(direction) {
     const oldDirection = camera.position.clone().sub(orbit.target).normalize();
-    orbit.target.set(exploded ? 0 : 1, exploded ? -5 : -4, exploded ? 21 : 8);
+    orbit.target.set(exploded ? -3 : 1, exploded ? -3 : -4, exploded ? 12 : 8);
     const distance = fitDistance() * zoom;
     orbit.minDistance = fitDistance() * .50;
     orbit.maxDistance = fitDistance() * 2.3;
@@ -385,6 +394,7 @@ function createViewer() {
   }
 
   function applyView(name) {
+    setSpin(false);
     view = name;
     zoom = 1;
     frameCamera(angles[name]);
@@ -393,6 +403,7 @@ function createViewer() {
 
   function setExploded(on) {
     if (exploded === on) return;
+    setSpin(false);
     exploded = on;
     labels = on;
     zoom = 1;
@@ -402,6 +413,7 @@ function createViewer() {
   }
 
   function changeZoom(factor) {
+    setSpin(false);
     zoom = THREE.MathUtils.clamp(camera.position.distanceTo(orbit.target) / fitDistance() * factor, .50, 2.3);
     frameCamera();
   }
@@ -437,7 +449,7 @@ function createViewer() {
 
     // On narrow screens the names sit above and below the model rather than
     // covering it. Sorting anchors keeps the leaders from crossing each other.
-    if (width <= 485) {
+    if (width <= labelRowsMaxWidth) {
       const split = Math.ceil(anchors.length / 2);
       anchors.sort((a, b) => a.y - b.y);
       [anchors.slice(0, split), anchors.slice(split)].forEach((row, rowIndex) => {
@@ -481,6 +493,9 @@ function createViewer() {
     const goal = exploded ? separation.valueAsNumber / 100 : 0;
     phase = reduceMotion.matches ? goal : THREE.MathUtils.lerp(phase, goal, 1 - Math.exp(-step / 100));
     if (Math.abs(phase - goal) < .002) phase = goal;
+    parts.clasp.group.rotation.y = THREE.MathUtils.lerp(claspAngle, .35, phase);
+    floor.visible = phase < .5;
+    floor.material.opacity = .55 * Math.max(0, 1 - 2 * phase);
     for (const part of Object.values(parts)) {
       part.group.position.copy(part.position).addScaledVector(part.offset, phase);
       part.guide.visible = phase > .05;
@@ -491,15 +506,26 @@ function createViewer() {
         p.needsUpdate = true;
       }
     }
-    orbit.update();
+    orbit.autoRotate = spinning && stageVisible && !document.hidden;
+    orbit.update(step / 1000);
     renderer.render(scene, camera);
     updateCallouts();
-    if (phase !== goal) schedule();
+    if (phase !== goal || orbit.autoRotate) schedule();
   }
 
   function schedule() { if (!frame && !failed) frame = requestAnimationFrame(draw); }
 
-  orbit.addEventListener('start', () => { cameraInput = true; });
+  function setSpin(on) {
+    if (on === spinning) return;
+    spinning = on;
+    orbit.autoRotate = on && stageVisible && !document.hidden;
+    spinButton.setAttribute('aria-pressed', String(on));
+    spinButton.title = on ? 'Pausar giro' : 'Girar automáticamente';
+    if (on) { view = ''; updateButtonStates(); }
+    schedule();
+  }
+
+  orbit.addEventListener('start', () => { cameraInput = true; setSpin(false); });
   orbit.addEventListener('end', () => { cameraInput = false; });
   orbit.addEventListener('change', () => {
     if (cameraInput && view) { view = ''; updateButtonStates(); }
@@ -527,6 +553,7 @@ function createViewer() {
     else if (key === '-') changeZoom(1.22);
     else if (key === 'Home') applyView('perspective');
     else if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(key)) {
+      setSpin(false);
       const spherical = new THREE.Spherical().setFromVector3(camera.position.clone().sub(orbit.target));
       spherical.theta += key === 'ArrowLeft' ? -.15 : key === 'ArrowRight' ? .15 : 0;
       spherical.phi = THREE.MathUtils.clamp(spherical.phi + (key === 'ArrowUp' ? -.12 : key === 'ArrowDown' ? .12 : 0), orbit.minPolarAngle, orbit.maxPolarAngle);
@@ -543,6 +570,12 @@ function createViewer() {
     showFallback();
   });
   explodeButton.addEventListener('click', () => setExploded(!exploded));
+  spinButton.addEventListener('click', () => setSpin(!spinning));
+  new IntersectionObserver(([entry]) => {
+    stageVisible = entry.isIntersecting;
+    if (!failed && spinning) schedule();
+  }).observe(stage);
+  document.addEventListener('visibilitychange', () => { if (!failed && spinning) schedule(); });
   function updateSeparation() {
     const text = `${separation.value} %`;
     $('#separation-value').value = text;
@@ -595,6 +628,7 @@ function createViewer() {
     },
     selectionChanged() {
       if (failed) return;
+      setSpin(false);
       if (internalParts.has(selectedPart) && !exploded) setExploded(true);
       updateButtonStates(); schedule();
     },
