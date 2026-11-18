@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "ficha.html"
+        ],
+        "createdAt": "2026-11-18T14:44:03.019Z",
+        "reason": "Claude: eyebrow and red emergency badge copied from maqueta.html; user asked for the same interface"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "ficha.html"
+        ],
+        "createdAt": "2026-11-18T14:44:03.035Z",
+        "reason": "Claude: .tarjeta has 14-22px padding, verified in browser screenshots; detector measures hidden sections"
+      },
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "ficha.html"
+        ],
+        "createdAt": "2026-11-18T14:44:03.047Z",
+        "reason": "Claude: grid comes from shared visor.css .stage, not used on ficha; site-wide red.svg pattern is the existing brand look"
+      }
+    ]
+  }
+}
