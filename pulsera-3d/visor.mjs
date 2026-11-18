@@ -16,7 +16,7 @@ const claspAngle = THREE.MathUtils.degToRad(-145);
 // The SCAD integrates the module into the band. We separate them, and show an
 // optional pin closure, for the conceptual assembly (not a print-ready CAD).
 const definitions = {
-  band: { name: 'Correa de TPU', short: 'Correa TPU', type: '01 / CUERPO FLEXIBLE', copy: 'Banda curva impresa en TPU. Los siete orificios de una punta permiten regular el ajuste.', side: 'left', offset: [-8, 8, -9], anchor: [-24, 4, 16] },
+  band: { name: 'Correa de TPU', short: 'Correa TPU', type: '01 / CUERPO FLEXIBLE', copy: 'Banda curva impresa en TPU. En un costado lleva impresos el grupo sanguíneo, las alergias y un teléfono de emergencia, para que cualquiera los lea sin celular ni internet. Los siete orificios permiten regular el ajuste.', side: 'left', offset: [-8, 8, -9], anchor: [-24, 4, 16] },
   housing: { name: 'Carcasa central', short: 'Carcasa', type: '02 / ALOJAMIENTO', copy: 'Una sola cavidad aloja las capas del módulo y las mantiene alineadas sobre la correa.', side: 'left', offset: [-14, -14, 12], anchor: [-7.2, -4, 4.5] },
   qr: { name: 'Placa QR', short: 'Placa QR', type: '03 / CAPA EXTERIOR', copy: 'Cuadrado visible en el frente. La cámara lo lee para abrir la ficha web. Para usar NFC, acercá el celular a este mismo punto.', side: 'left', offset: [-13, 19, 30], anchor: [-4.6, 0, .75] },
   chip: { name: 'Chip y antena NFC', short: 'Chip NFC', type: '04 / DEBAJO DEL QR', copy: 'Pieza cuadrada más chica, centrada debajo del QR. La antena rodea al chip y permite leer los datos esenciales sin internet con un dispositivo compatible.', side: 'right', offset: [20, -7, 25], anchor: [0, 0, 1] },
@@ -209,6 +209,38 @@ function wordmark() {
   return new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map: texture, transparent: true, alphaTest: .4, roughness: .76 }));
 }
 
+// Datos esenciales impresos en el costado: se leen sin celular ni internet.
+function printedData() {
+  const texture = graphicTexture(1024, (ctx, size) => {
+    // La textura es cuadrada pero la placa es 23 × 13: se estira el dibujo para compensar.
+    ctx.save(); ctx.translate(size / 2, size / 2); ctx.scale(1, 23 / 13);
+    ctx.fillStyle = '#d7f0e2'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '800 150px system-ui, sans-serif';
+    ctx.fillText('0+', -300, -60);
+    ctx.font = '700 72px system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('ALERGIA:', -150, -100, 620);
+    ctx.fillText('PENICILINA', -150, -25, 620);
+    ctx.fillRect(-440, 50, 880, 6);
+    ctx.textAlign = 'center';
+    ctx.font = '700 70px system-ui, sans-serif';
+    ctx.fillText('EMERG. 3329 000000', 0, 125, 880);
+    ctx.restore();
+  });
+  const geometry = new THREE.PlaneGeometry(23, 13, 30, 1);
+  const position = geometry.getAttribute('position');
+  const fitted = [];
+  for (let i = 0; i < position.count; i++) {
+    const angle = -1.23 + position.getX(i) / 30.7;
+    fitted.push(...wornPoint(angle,1.54,position.getY(i)-.6));
+    position.setXYZ(i, 32.20 * Math.sin(angle), position.getY(i) - .6, 32.20 * Math.cos(angle));
+  }
+  geometry.computeVertexNormals();
+  geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(fitted,3)];
+  const map = texture; map.anisotropy = 8;
+  return new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map, transparent: true, alphaTest: .35, roughness: .76 }));
+}
+
 function makeModel(scene) {
   const parts = {};
   function part(id, x, y, z) {
@@ -222,7 +254,7 @@ function makeModel(scene) {
   }
 
   const band = part('band', 0, 0, 0);
-  band.add(new THREE.Mesh(bandGeometry(), bandFinish()), wordmark());
+  band.add(new THREE.Mesh(bandGeometry(), bandFinish()), wordmark(), printedData());
 
   const housing = part('housing', 0, 0, 29.6);
   const backing = plate(roundedRect(23.8, 16.4, 4.8), 1.05, .59, material(0x24483c, .72));
