@@ -201,6 +201,7 @@
     if (!d.o && !d.l && !d.d) $('bloque-otros').hidden = true;
     $('vista-ficha').hidden = false;
     $('vista-crear').hidden = true;
+    scrollTo(0, 0); // La ficha siempre arranca arriba, con el nombre y el grupo a la vista.
   }
 
   function armarLink(form) {
