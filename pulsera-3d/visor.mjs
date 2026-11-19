@@ -32,8 +32,56 @@ function camino(radio, arriba) {
     return [x + d * Math.sin(f), z + d * Math.cos(f), f];
   };
 }
-const ARRIBA = 30.7, ARRIBA_PUESTA = 28.9;            // altura de la correa en el centro
-const suelta = camino(27, ARRIBA), puesta = camino(25, ARRIBA_PUESTA);
+// Puesta: la correa abraza la muñeca. Es la envolvente de la muñeca (elipse) y del centro plano,
+// como una cinta tirante alrededor de un cuerpo con una placa rígida arriba.
+function envolver(a, b, cz, flat) {
+  const arriba = cz + b, pts = [];
+  for (let i = 0; i < 720; i++) { const t = i / 720 * Math.PI * 2; pts.push([a * Math.cos(t), cz + b * Math.sin(t)]); }
+  pts.push([-flat, arriba], [flat, arriba]);
+  pts.sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+  const cruz = (o, p, q) => (p[0] - o[0]) * (q[1] - o[1]) - (p[1] - o[1]) * (q[0] - o[0]);
+  const lado = lista => { const h = []; for (const p of lista) { while (h.length > 1 && cruz(h[h.length - 2], h[h.length - 1], p) <= 0) h.pop(); h.push(p); } h.pop(); return h; };
+  const casco = [...lado(pts), ...lado([...pts].reverse())];   // antihorario
+  // arrancar arriba en el medio y recorrer en sentido horario (x crece por arriba)
+  let k = casco.findIndex(p => p[0] === flat && p[1] === arriba);
+  const anillo = [[0, arriba]];
+  for (let j = 0; j < casco.length; j++) anillo.push(casco[(k - j + casco.length) % casco.length]);
+  anillo.push([0, arriba]);
+  { // repartir puntos cada 0,5 mm para poder suavizar
+    const denso = [anillo[0]];
+    for (let i = 1; i < anillo.length; i++) {
+      const A = anillo[i - 1], B = anillo[i], n = Math.max(1, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1]) / .5));
+      for (let j = 1; j <= n; j++) denso.push([A[0] + (B[0] - A[0]) * j / n, A[1] + (B[1] - A[1]) * j / n]);
+    }
+    anillo.length = 0; anillo.push(...denso);
+  }
+  // suavizar las esquinas (la cinta no hace quiebres): promedios sucesivos, sin mover el centro plano
+  for (let pasada = 0; pasada < 40; pasada++) {
+    const copia = anillo.map(p => [...p]);
+    for (let i = 1; i < anillo.length - 1; i++) {
+      if (Math.abs(copia[i][0]) < flat - 2 && copia[i][1] > arriba - .01) continue;
+      anillo[i] = [(copia[i - 1][0] + 2 * copia[i][0] + copia[i + 1][0]) / 4, (copia[i - 1][1] + 2 * copia[i][1] + copia[i + 1][1]) / 4];
+    }
+  }
+  const largo = [0];
+  for (let i = 1; i < anillo.length; i++) largo.push(largo[i - 1] + Math.hypot(anillo[i][0] - anillo[i - 1][0], anillo[i][1] - anillo[i - 1][1]));
+  const P = largo[largo.length - 1];
+  const punto = u => {
+    u = ((u % P) + P) % P;
+    let i = 1; while (largo[i] < u) i++;
+    const r = (u - largo[i - 1]) / (largo[i] - largo[i - 1] || 1), A = anillo[i - 1], B = anillo[i];
+    return [A[0] + (B[0] - A[0]) * r, A[1] + (B[1] - A[1]) * r];
+  };
+  return (s, d = 0) => {
+    const [x, z] = punto(s), [x1, z1] = punto(s + .4), [x0, z0] = punto(s - .4);
+    const f = Math.atan2(-(z1 - z0), x1 - x0);
+    return [x + d * Math.sin(f), z + d * Math.cos(f), f];
+  };
+}
+// muñeca del modelo: elipse de 27,6 × 24,2 mm centrada en z = 3; la correa queda a 0,5 mm de la piel
+const HOLGURA = .5;
+const ARRIBA = 30.7, ARRIBA_PUESTA = 3 + 24.2 + HOLGURA + ESPESOR / 2;
+const suelta = camino(27, ARRIBA), puesta = envolver(27.6 + HOLGURA + ESPESOR / 2, 24.2 + HOLGURA + ESPESOR / 2, 3, FLAT);
 const S_CIERRE = -(LH - 6);
 const claspAngle = suelta(S_CIERRE)[2], claspAngleWorn = puesta(S_CIERRE)[2];
 const enCorrea = (s, y, d) => { const [x, z] = suelta(s, d); return [x, y, z]; };
