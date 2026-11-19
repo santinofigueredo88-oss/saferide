@@ -88,6 +88,13 @@
     .pedido .meta { color: var(--muted); font-size: .82rem; }
     .pedido dl { display: grid; gap: 4px; margin-top: 8px; font-size: .86rem; }
     .pedido dl div { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px; }
+    .buscar input { width: 100%; margin: 0 0 12px; padding: 10px 12px; border: 1px solid #d3e1d8; border-radius: 10px; font: inherit; background: #fff; color: inherit; }
+    :root[data-theme=dark] .buscar input { background: var(--sr-raised); border-color: var(--line); }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .chip-estado[data-e=sin] { background: #fdf1d6; color: #7a5300; }
+    .chip-estado[data-e=con] { background: #dff3e2; color: #1d6131; }
+    .chip-estado[data-e=revisar] { background: #f6dedd; color: #8b211b; margin-left: 6px; }
+    .pedido .tam { font: 600 .75rem/1.4 var(--mono); color: var(--muted); }
     .pedido dt { color: #35664b; font: 700 .7rem/1.6 var(--mono); text-transform: uppercase; }
     .pedido dd { overflow-wrap: anywhere; }
     .pedido canvas { width: 170px; height: 170px; border-radius: 10px; background: #fff; }
@@ -135,8 +142,8 @@
   <main class="shell">
     <div class="ficha" style="width:min(980px,100%)">
       <p class="eyebrow"><span></span> PANEL DEL EQUIPO</p>
-      <h1>Pedidos<br><em>para grabar.</em></h1>
-      <p class="lede">Cada pedido trae su ficha. Imprimí el QR, grabá el chip con NFC Tools y marcá el avance.</p>
+      <h1>Pedidos y fichas<br><em>para grabar.</em></h1>
+      <p class="lede">Mirá qué pulseras pidieron y qué fichas hay cargadas. De cada una sacás el QR, grabás el chip NFC y marcás el avance.</p>
 
       <section class="tarjeta" id="v-entrar" hidden>
         <div class="tarjeta-titulo"><h2>Solo para el equipo</h2><span>INGRESAR</span></div>
@@ -159,6 +166,21 @@
         <p class="nota" id="vacio" hidden>No hay pedidos en esta lista.</p>
         <div class="cuenta" style="margin-top:14px"><span>Entraste como <b id="quien"></b></span><button type="button" class="linkboton" id="salir">Salir</button></div>
       </section>
+
+      <section class="tarjeta" id="v-fichas" hidden aria-labelledby="t-fichas">
+        <div class="tarjeta-titulo"><h2 id="t-fichas">Fichas</h2><span id="total-fichas"></span></div>
+        <p class="nota" style="margin:0 0 10px">Todas las fichas cargadas, tengan pedido o no. Desde acá generás el QR y el link para grabar el chip NFC.</p>
+        <div class="filtros" role="group" aria-label="Filtrar fichas">
+          <button type="button" data-ff="sin" aria-pressed="true">Sin pedido</button>
+          <button type="button" data-ff="con" aria-pressed="false">Con pedido</button>
+          <button type="button" data-ff="revisar" aria-pressed="false">Para revisar</button>
+          <button type="button" data-ff="todas" aria-pressed="false">Todas</button>
+        </div>
+        <label class="buscar"><span class="sr-only">Buscar ficha por nombre</span><input id="buscar" type="search" placeholder="Buscar por nombre…" autocomplete="off"></label>
+        <div class="lista" id="lista-fichas" style="display:grid;gap:10px"></div>
+        <p class="nota" id="vacio-fichas" hidden>No hay fichas en esta lista.</p>
+        <p class="nota" id="nfc-ayuda"></p>
+      </section>
     </div>
 
     <footer class="footer">
@@ -166,6 +188,6 @@
       <nav aria-label="Enlaces del proyecto"><a href="./editar.html">Mi ficha</a><a href="./maqueta.html">Ver la pulsera</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
     </footer>
   </main>
-  <script type="module" src="./pulsera-3d/equipo.mjs?v=2"></script>
+  <script type="module" src="./pulsera-3d/equipo.mjs?v=3"></script>
 </body>
 </html>

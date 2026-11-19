@@ -10,7 +10,10 @@ const $ = id => document.getElementById(id);
 const { fs, db } = await cargarFirebase();
 const { auth, sesion } = await cargarAuth();
 let pedidos = [];
+let fichas = [];
 let filtro = 'pendientes';
+let filtroFichas = 'sin';
+const hayNFC = 'NDEFReader' in window;
 
 $('entrar').addEventListener('click', async () => {
   $('estado-entrar').textContent = 'ABRIENDO GOOGLE…';
@@ -26,6 +29,7 @@ $('salir').addEventListener('click', () => auth.signOut(sesion));
 
 auth.onAuthStateChanged(sesion, async u => {
   $('v-panel').hidden = true;
+  $('v-fichas').hidden = true;
   $('v-entrar').hidden = false;
   if (!u) return;
   if (!EQUIPO.includes(u.email)) {
@@ -36,6 +40,7 @@ auth.onAuthStateChanged(sesion, async u => {
   $('quien').textContent = u.email;
   $('v-entrar').hidden = true;
   $('v-panel').hidden = false;
+  $('v-fichas').hidden = false;
   await cargar();
 });
 
@@ -57,6 +62,117 @@ async function cargar() {
     p.ficha = f.exists() ? f.data() : null;
   }));
   pintar();
+  await cargarFichas();
+}
+
+// ---------- Fichas: todas, con o sin pedido ----------
+for (const b of document.querySelectorAll('[data-ff]')) {
+  b.addEventListener('click', () => {
+    filtroFichas = b.dataset.ff;
+    for (const o of document.querySelectorAll('[data-ff]')) o.setAttribute('aria-pressed', String(o === b));
+    pintarFichas();
+  });
+}
+$('buscar').addEventListener('input', () => pintarFichas());
+$('nfc-ayuda').textContent = hayNFC
+  ? 'Este celular puede grabar chips: tocá «Grabar en el chip» y apoyá la pulsera en la parte de atrás del teléfono.'
+  : 'Para grabar el chip desde acá, abrí este panel en un celular Android con Chrome. Si no, copiá el link y grabalo con NFC Tools.';
+
+async function cargarFichas() {
+  const res = await fs.getDocs(fs.collection(db, 'fichas'));
+  fichas = res.docs.map(d => ({ id: d.id, datos: d.data() }))
+    .sort((a, b) => (b.datos.actualizado?.seconds || 0) - (a.datos.actualizado?.seconds || 0));
+  pintarFichas();
+}
+
+function conPedido(id) { return pedidos.some(p => p.fichaId === id && p.estado !== 'cancelado'); }
+
+// Un link de URL en el chip: NTAG213 guarda unos 130 bytes útiles, NTAG215 unos 490.
+function tamanioChip(link) {
+  const bytes = new TextEncoder().encode(link.replace(/^https:\/\//, '')).length + 1;
+  if (bytes <= 130) return `Ocupa ${bytes} bytes: entra en NTAG213 o más grande.`;
+  if (bytes <= 490) return `Ocupa ${bytes} bytes: necesita NTAG215 o NTAG216.`;
+  return `Ocupa ${bytes} bytes: necesita NTAG216.`;
+}
+
+async function grabarChip(link, b) {
+  const original = b.textContent;
+  try {
+    b.disabled = true; b.textContent = 'Apoyá el chip en el celular…';
+    await new NDEFReader().write({ records: [{ recordType: 'url', data: link }] });
+    b.textContent = '¡Chip grabado!';
+  } catch (e) {
+    b.textContent = e.name === 'NotAllowedError' ? 'Falta permiso de NFC' : 'No se pudo grabar';
+  }
+  setTimeout(() => { b.disabled = false; b.textContent = original; }, 2500);
+}
+
+function accionesDeLink(acciones, canvas, link, nombre) {
+  dibujarQR(canvas, link);
+  canvas.setAttribute('aria-label', `QR de la ficha de ${nombre}`);
+  if (hayNFC) acciones.append(boton('Grabar en el chip', true, ev => grabarChip(link, ev.target)));
+  acciones.append(boton('Copiar link del chip', false, async ev => {
+    try { await navigator.clipboard.writeText(link); ev.target.textContent = '¡Copiado!'; }
+    catch { ev.target.textContent = 'No se pudo copiar'; }
+    setTimeout(() => { ev.target.textContent = 'Copiar link del chip'; }, 1800);
+  }));
+  acciones.append(boton('Descargar QR', false, () => {
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = `qr-saferide-${nombre.replace(/\s+/g, '-').toLowerCase()}.png`;
+    a.click();
+  }));
+}
+
+function pintarFichas() {
+  const q = $('buscar').value.trim().toLowerCase();
+  const visibles = fichas.filter(f => {
+    if (q && !f.datos.nombre.toLowerCase().includes(q)) return false;
+    if (filtroFichas === 'sin') return !conPedido(f.id);
+    if (filtroFichas === 'con') return conPedido(f.id);
+    if (filtroFichas === 'revisar') return fichaVieja(f.datos);
+    return true;
+  });
+  const sin = fichas.filter(f => !conPedido(f.id)).length;
+  $('total-fichas').textContent = `${fichas.length} EN TOTAL · ${sin} SIN PEDIDO`;
+  const lista = $('lista-fichas');
+  lista.replaceChildren();
+  $('vacio-fichas').hidden = visibles.length > 0;
+  for (const f of visibles) {
+    const d = f.datos;
+    const art = document.createElement('article');
+    art.className = 'pedido';
+    const izq = document.createElement('div');
+    const h = document.createElement('h3'); h.textContent = d.nombre;
+    const meta = document.createElement('p'); meta.className = 'meta';
+    const cuando = fechaDeFicha(d);
+    meta.textContent = `Ficha ${f.id.slice(0, 6).toUpperCase()}${cuando ? ' · actualizada el ' + cuando.toLocaleDateString('es-AR') : ''}`;
+    const chip = document.createElement('span');
+    const tiene = conPedido(f.id);
+    chip.className = 'chip-estado'; chip.dataset.e = tiene ? 'con' : 'sin';
+    chip.textContent = tiene ? 'CON PEDIDO' : 'SIN PEDIDO';
+    izq.append(h, meta, chip);
+    if (fichaVieja(d)) {
+      const r = document.createElement('span');
+      r.className = 'chip-estado'; r.dataset.e = 'revisar'; r.textContent = 'MÁS DE UN AÑO';
+      izq.append(r);
+    }
+    const dl = document.createElement('dl');
+    fila(dl, 'Grupo', d.g);
+    fila(dl, 'Alergias', d.a);
+    fila(dl, 'Contacto', [d.cn, d.ct].filter(Boolean).join(' · '));
+    fila(dl, 'Localidad', d.l);
+    const link = linkDeFicha(f.id, d);
+    const tam = document.createElement('p'); tam.className = 'tam'; tam.textContent = tamanioChip(link);
+    izq.append(dl, tam);
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 480;
+    const acciones = document.createElement('div');
+    acciones.className = 'hero-actions';
+    accionesDeLink(acciones, canvas, link, d.nombre);
+    art.append(izq, canvas, acciones);
+    lista.append(art);
+  }
 }
 
 function resumen() {
@@ -148,19 +264,9 @@ function pintar() {
     acciones.className = 'hero-actions';
     if (p.ficha) {
       const link = linkDeFicha(p.fichaId, p.ficha);
-      dibujarQR(canvas, link);
-      canvas.setAttribute('aria-label', `QR de la ficha de ${p.nombreFicha}`);
-      acciones.append(boton('Copiar link del chip', false, async ev => {
-        try { await navigator.clipboard.writeText(link); ev.target.textContent = '¡Copiado!'; }
-        catch { ev.target.textContent = 'No se pudo copiar'; }
-        setTimeout(() => { ev.target.textContent = 'Copiar link del chip'; }, 1800);
-      }));
-      acciones.append(boton('Descargar QR', false, () => {
-        const a = document.createElement('a');
-        a.href = canvas.toDataURL('image/png');
-        a.download = `qr-saferide-${p.nombreFicha.replace(/\s+/g, '-').toLowerCase()}.png`;
-        a.click();
-      }));
+      accionesDeLink(acciones, canvas, link, p.nombreFicha);
+      const tam = document.createElement('p'); tam.className = 'tam'; tam.textContent = tamanioChip(link);
+      izq.append(tam);
     }
     const sig = SIGUIENTE[p.estado];
     if (sig && p.ficha) acciones.append(boton(sig[1], true, () => cambiarEstado(p, sig[0])));
