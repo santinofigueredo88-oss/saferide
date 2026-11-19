@@ -6,7 +6,7 @@ export function initTour({ showModel, startReading }) {
   const stepLinks = [...document.querySelectorAll('[data-tour-step]')];
   const steps = {
     bracelet: { target: '#visor', message: 'Paso 1 de 3 · Girá la pulsera para conocerla.', next: 'chip', label: 'Descubrir el chip' },
-    chip: { target: '#visor', message: 'Paso 2 de 3 · El chip cuadrado va justo debajo del QR.', next: 'read', label: 'Simular una lectura' },
+    chip: { target: '#visor', message: 'Paso 2 de 3 · La etiqueta NFC va justo debajo del QR, protegida por la tapa.', next: 'read', label: 'Simular una lectura' },
     read: { target: '#demo-nfc' },
   };
 

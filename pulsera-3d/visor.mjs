@@ -9,19 +9,42 @@ const $ = (selector) => document.querySelector(selector);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const svgNS = 'http://www.w3.org/2000/svg';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-const internalParts = new Set(['chip', 'film']);
+const internalParts = new Set(['chip']);
 const labelRowsMaxWidth = 560;
-const claspAngle = THREE.MathUtils.degToRad(-145);
+// Pulsera v2 (hardware/v2): correa deportiva de TPU impresa plana, centro redondo
+// de 35 mm, etiqueta NFC de 30 mm debajo de una tapa al ras con el QR.
+// La correa se arma plana y se curva siguiendo un camino: el centro queda plano.
+const LH = 85, FLAT = 17.5, ESPESOR = 2.6;
+function camino(radio, arriba) {
+  const paso = .25, n = Math.round(LH / paso), xs = [], zs = [], fs = [];
+  for (const sg of [1, -1]) {
+    let x = 0, z = 0, f = 0;
+    for (let i = 0; i <= n; i++) {
+      const k = sg > 0 ? n + i : n - i;
+      xs[k] = x; zs[k] = z + arriba; fs[k] = f;
+      f += sg * (i * paso < FLAT ? 0 : 1 / radio) * paso;
+      x += sg * Math.cos(f) * paso; z -= Math.sin(sg * f) * paso;
+    }
+  }
+  return (s, d = 0) => {
+    const t = THREE.MathUtils.clamp((s + LH) / paso, 0, 2 * n), i = Math.min(Math.floor(t), 2 * n - 1), u = t - i;
+    const x = xs[i] + (xs[i + 1] - xs[i]) * u, z = zs[i] + (zs[i + 1] - zs[i]) * u, f = fs[i] + (fs[i + 1] - fs[i]) * u;
+    return [x + d * Math.sin(f), z + d * Math.cos(f), f];
+  };
+}
+const ARRIBA = 30.7, ARRIBA_PUESTA = 28.9;            // altura de la correa en el centro
+const suelta = camino(27, ARRIBA), puesta = camino(25, ARRIBA_PUESTA);
+const S_CIERRE = -(LH - 6);
+const claspAngle = suelta(S_CIERRE)[2], claspAngleWorn = puesta(S_CIERRE)[2];
+const enCorrea = (s, y, d) => { const [x, z] = suelta(s, d); return [x, y, z]; };
 
-// The SCAD integrates the module into the band. We separate them, and show an
-// optional pin closure, for the conceptual assembly (not a print-ready CAD).
 const definitions = {
-  band: { name: 'Correa de TPU', short: 'Correa TPU', type: '01 / CUERPO FLEXIBLE', copy: 'Banda curva impresa en TPU. En un costado lleva impresos el grupo sanguíneo, las alergias y un teléfono de emergencia, para que cualquiera los lea sin celular ni internet. Los siete orificios permiten regular el ajuste.', side: 'left', offset: [-8, 8, -9], anchor: [-24, 4, 16] },
-  housing: { name: 'Carcasa central', short: 'Carcasa', type: '02 / ALOJAMIENTO', copy: 'Una sola cavidad aloja las capas del módulo y las mantiene alineadas sobre la correa.', side: 'left', offset: [-14, -14, 12], anchor: [-7.2, -4, 4.5] },
-  qr: { name: 'Placa QR', short: 'Placa QR', type: '03 / CAPA EXTERIOR', copy: 'Cuadrado visible en el frente. La cámara lo lee para abrir la ficha web. Para usar NFC, acercá el celular a este mismo punto.', side: 'left', offset: [-13, 19, 30], anchor: [-4.6, 0, .75] },
-  chip: { name: 'Chip y antena NFC', short: 'Chip NFC', type: '04 / DEBAJO DEL QR', copy: 'Pieza cuadrada más chica, centrada debajo del QR. La antena rodea al chip y permite leer los datos esenciales sin internet con un dispositivo compatible.', side: 'right', offset: [20, -7, 25], anchor: [0, 0, 1] },
-  film: { name: 'Lámina protectora', short: 'Protección', type: '05 / CAPA INTERMEDIA', copy: 'Lámina no metálica situada entre el QR y el NFC. Se muestra como una pieza independiente para que se entienda cómo se arman las capas.', side: 'right', offset: [30, 7, 17], anchor: [0, 0, .25] },
-  clasp: { name: 'Cierre de ajuste', short: 'Cierre', type: '06 / PROPUESTA DE CIERRE', copy: 'Dos pernos a presión se encastran en los orificios de la otra punta. El modelo CAD del repositorio propone este cierre como una opción.', side: 'right', offset: [21, 28, -3], anchor: [0, 0, 1.53] },
+  band: { name: 'Correa de TPU', short: 'Correa TPU', type: '01 / CUERPO FLEXIBLE', copy: 'Correa deportiva de 16 mm impresa plana en TPU flexible: se curva sola al ponerla. En un costado lleva impresos el grupo sanguíneo, las alergias y un teléfono de emergencia. Siete agujeros cada 5 mm: sirve para muñecas de 15 a 18 cm.', side: 'left', offset: [-8, 8, -9], anchor: enCorrea(-44, 4, 1.3) },
+  housing: { name: 'Centro redondo', short: 'Centro', type: '02 / ALOJAMIENTO', copy: 'Centro de 35 mm y bajito, de 4,4 mm. La correa se ensancha de a poco hasta él y forma una sola pieza. Adentro tiene un hueco de 31,2 mm donde se pega la etiqueta NFC sin doblarla.', side: 'left', offset: [0, 0, 6], anchor: enCorrea(-26, -7, 2.6) },
+  qr: { name: 'QR adhesivo', short: 'QR', type: '03 / CAPA EXTERIOR', copy: 'Código de 20 × 20 mm pegado sobre la tapa, visible con la pulsera puesta. La cámara lo lee para abrir la ficha web. Para usar NFC, acercá el celular a este mismo punto.', side: 'left', offset: [-13, 19, 34], anchor: [-7, 0, .2] },
+  chip: { name: 'Etiqueta NFC', short: 'NFC', type: '04 / DEBAJO DEL QR', copy: 'Etiqueta adhesiva redonda de 30 mm con chip y antena. Va pegada en el fondo del centro, debajo de la tapa, y permite leer los datos esenciales sin internet.', side: 'right', offset: [22, -7, 14], anchor: [6, 0, .2] },
+  film: { name: 'Tapa al ras', short: 'Tapa', type: '05 / PROTECCIÓN', copy: 'Tapa de 31 mm que entra a presión y queda al ras del centro. Protege la etiqueta NFC y ningún borde roza la muñeca. Arriba lleva el QR.', side: 'right', offset: [28, 9, 24], anchor: [12, 4, .6] },
+  clasp: { name: 'Cierre a presión', short: 'Cierre', type: '06 / AJUSTE', copy: 'Un perno con cabeza entra a presión en el agujero que corresponda y queda trabado. La trabita sostiene la punta que sobra para que no se enganche.', side: 'right', offset: [-6, 26, -6], anchor: [0, 0, 3.4] },
 };
 
 const catalogButtons = [...document.querySelectorAll('[data-part]')];
@@ -79,57 +102,94 @@ function disk(radius, depth, mat) {
   return mesh;
 }
 
-// Sección de la muñeca en y=0: radios 27 × 24 y centro z=3. Se deja espacio
-// para el espesor del TPU y se solapan las puntas por el lado de la palma.
-const wornSweep = 388 / 300;
-const wristX = 29.7, wristZ = 25.9, wristCenter = 3;
-function wornPoint(angle, depth, y) {
-  const a = angle * wornSweep;
-  const overlap = 2.85 * THREE.MathUtils.smoothstep(a, 2.65, 2.92);
-  return [(wristX + depth + overlap) * Math.sin(a), y, wristCenter + (wristZ + depth + overlap) * Math.cos(a)];
+// Contorno visto desde arriba: la correa de 16 mm se ensancha en línea recta
+// hasta tocar el círculo del centro (como si se estirara un elástico).
+function mitadAncho(s, R, L, w) {
+  s = Math.abs(s);
+  if (s >= L) return w;
+  const a = Math.atan2(w, L) + Math.acos(R / Math.hypot(L, w));
+  const tx = R * Math.cos(a), ty = R * Math.sin(a);
+  if (s <= tx) return Math.sqrt(R * R - s * s);
+  return ty + (w - ty) * (s - tx) / (L - tx);
+}
+function contorno(desde, hasta, R, L, w, punta) {
+  const shape = new THREE.Shape();
+  shape.moveTo(desde, mitadAncho(desde, R, L, w));
+  for (let s = desde; s <= hasta; s += .5) shape.lineTo(s, mitadAncho(s, R, L, w));
+  if (punta) shape.absarc(hasta, 0, w, Math.PI / 2, -Math.PI / 2, true);
+  for (let s = hasta; s >= desde; s -= .5) shape.lineTo(s, -mitadAncho(s, R, L, w));
+  if (punta) shape.absarc(desde, 0, w, -Math.PI / 2, Math.PI / 2, true);
+  return shape;
 }
 
-// Bend an extruded strip into a bracelet. Subdivide its planar faces first so
-// no triangle cuts straight through the wrist opening; preserve edge normals.
-function bandGeometry() {
-  const radius = 30.7;
-  const length = radius * Math.PI * 300 / 180;
-  const shape = roundedRect(length, 14.8, 3.2);
-  for (let i = 0; i < 7; i++) shape.holes.push(circleHole(length / 2 - 7 - i * 4, 0, 1.48));
-  const strip = plate(shape, 1.8, .56, null).geometry;
-  const first = strip.getAttribute('position');
-  const normals = strip.getAttribute('normal');
+// Curva una pieza plana (x = largo, y = ancho, z = espesor) sobre la correa.
+// Se subdividen los triángulos largos para que sigan bien la curva, y se
+// guarda la forma "puesta en la muñeca" como morph.
+function curvar(plana, dz) {
+  const first = plana.getAttribute('position');
+  const normals = plana.getAttribute('normal');
   const positions = [], fitted = [], fittedNormals = [], resultNormals = [], uv = [];
-  const vertex = i => [first.getX(i), first.getY(i), first.getZ(i) - .9, normals.getX(i), normals.getY(i), normals.getZ(i)];
+  const vertex = i => [first.getX(i), first.getY(i), first.getZ(i) + dz, normals.getX(i), normals.getY(i), normals.getZ(i)];
+  const giro = (f, ns, ny, nd) => {
+    const nx = ns * Math.cos(f) + nd * Math.sin(f), nz = -ns * Math.sin(f) + nd * Math.cos(f);
+    const L = Math.hypot(nx, ny, nz) || 1;
+    return [nx / L, ny / L, nz / L];
+  };
   function push([s, y, d, ns, ny, nd]) {
-    const sin = Math.sin(s / radius), cos = Math.cos(s / radius);
-    positions.push((radius + d) * sin, y, (radius + d) * cos);
-    fitted.push(...wornPoint(s / radius, d, y));
-    const a = s / radius * wornSweep, sn = Math.sin(a), cs = Math.cos(a);
-    const fx = (ns * cs + nd * sn) / (wristX / radius), fz = (-ns * sn + nd * cs) / (wristZ / radius);
-    const norm = Math.hypot(fx,ny,fz) || 1;
-    fittedNormals.push(fx/norm,ny/norm,fz/norm);
-    uv.push(s / length + .5, y / 16 + .5);
-    const nx = ns * cos + nd * sin, nz = -ns * sin + nd * cos;
-    const normalLength = Math.hypot(nx, ny, nz) || 1;
-    resultNormals.push(nx / normalLength, ny / normalLength, nz / normalLength);
+    const [x, z, f] = suelta(s, d), [xw, zw, fw] = puesta(s, d);
+    positions.push(x, y, z); fitted.push(xw, y, zw);
+    resultNormals.push(...giro(f, ns, ny, nd)); fittedNormals.push(...giro(fw, ns, ny, nd));
+    uv.push(s / (2 * LH) + .5, y / 16 + .5);
   }
   function triangle(a, b, c) {
     const ab = Math.abs(a[0] - b[0]), bc = Math.abs(b[0] - c[0]), ca = Math.abs(c[0] - a[0]);
-    if (Math.max(ab, bc, ca) <= 2.3) { push(a); push(b); push(c); return; }
+    if (Math.max(ab, bc, ca) <= 2) { push(a); push(b); push(c); return; }
     if (bc > ab && bc >= ca) [a, b, c] = [b, c, a];
     else if (ca > ab) [a, b, c] = [c, a, b];
     const mid = a.map((value, i) => (value + b[i]) * .5);
     triangle(a, mid, c); triangle(mid, b, c);
   }
   for (let i = 0; i < first.count; i += 3) triangle(vertex(i), vertex(i + 1), vertex(i + 2));
-  strip.dispose();
+  plana.dispose();
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
   geometry.setAttribute('normal', new THREE.Float32BufferAttribute(resultNormals, 3));
   geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-  geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(fitted,3)];
-  geometry.morphAttributes.normal = [new THREE.Float32BufferAttribute(fittedNormals,3)];
+  geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(fitted, 3)];
+  geometry.morphAttributes.normal = [new THREE.Float32BufferAttribute(fittedNormals, 3)];
+  return geometry;
+}
+
+// Correa: 16 mm de ancho, 2,6 mm de espesor, se ensancha hasta el centro de 35 mm.
+// El bisel agranda la pieza 0,45 mm, por eso el contorno va un poco más chico.
+function bandGeometry() {
+  const b = .45;
+  const shape = contorno(-(LH - 8), LH - 8, 17.5 - b, 35.5, 8 - b, true);
+  for (let i = 0; i < 7; i++) shape.holes.push(circleHole(LH - 7 - i * 5, 0, 1.6 + b));
+  return curvar(plate(shape, ESPESOR - 2 * b, b, null).geometry, -ESPESOR / 2 + b);
+}
+
+// Centro: sube 1,8 mm sobre la correa en rampa suave y deja el hueco de 31,2 mm.
+function housingGeometry() {
+  const b = .45;
+  const shape = contorno(-30, 30, 17.5 - b, 30, 6, false);
+  shape.holes.push(circleHole(0, 0, 15.6 + b));
+  return curvar(plate(shape, 1.8 - 2 * b, b, null).geometry, ESPESOR / 2 - .05 + b);
+}
+
+// Un cartel plano apoyado sobre la cara de afuera de la correa, centrado en s.
+function sobreCorrea(ancho, alto, centro) {
+  const geometry = new THREE.PlaneGeometry(ancho, alto, 30, 1);
+  const position = geometry.getAttribute('position');
+  const fitted = [];
+  for (let i = 0; i < position.count; i++) {
+    const s = centro + position.getX(i), y = position.getY(i) * Math.min(1, 13 / alto) - .3;
+    const [x, z] = suelta(s, ESPESOR / 2 + .03), [xw, zw] = puesta(s, ESPESOR / 2 + .03);
+    fitted.push(xw, y, zw);
+    position.setXYZ(i, x, y, z);
+  }
+  geometry.computeVertexNormals();
+  geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(fitted, 3)];
   return geometry;
 }
 
@@ -196,16 +256,7 @@ function wordmark() {
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText('Safe.Ride', size / 2, size / 2, 460);
   });
-  const geometry = new THREE.PlaneGeometry(23, 13, 30, 1);
-  const position = geometry.getAttribute('position');
-  const fitted = [];
-  for (let i = 0; i < position.count; i++) {
-    const angle = 1.23 + position.getX(i) / 30.7;
-    fitted.push(...wornPoint(angle,1.54,position.getY(i)-.6));
-    position.setXYZ(i, 32.20 * Math.sin(angle), position.getY(i) - .6, 32.20 * Math.cos(angle));
-  }
-  geometry.computeVertexNormals();
-  geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(fitted,3)];
+  const geometry = sobreCorrea(11, 8, 41.5);
   return new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map: texture, transparent: true, alphaTest: .4, roughness: .76 }));
 }
 
@@ -227,16 +278,7 @@ function printedData() {
     ctx.fillText('EMERG. 3329 000000', 0, 125, 880);
     ctx.restore();
   });
-  const geometry = new THREE.PlaneGeometry(23, 13, 30, 1);
-  const position = geometry.getAttribute('position');
-  const fitted = [];
-  for (let i = 0; i < position.count; i++) {
-    const angle = -1.23 + position.getX(i) / 30.7;
-    fitted.push(...wornPoint(angle,1.54,position.getY(i)-.6));
-    position.setXYZ(i, 32.20 * Math.sin(angle), position.getY(i) - .6, 32.20 * Math.cos(angle));
-  }
-  geometry.computeVertexNormals();
-  geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(fitted,3)];
+  const geometry = sobreCorrea(23, 13, -50);
   const map = texture; map.anisotropy = 8;
   return new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map, transparent: true, alphaTest: .35, roughness: .76 }));
 }
@@ -256,56 +298,52 @@ function makeModel(scene) {
   const band = part('band', 0, 0, 0);
   band.add(new THREE.Mesh(bandGeometry(), bandFinish()), wordmark(), printedData());
 
-  const housing = part('housing', 0, 0, 29.6);
-  const backing = plate(roundedRect(23.8, 16.4, 4.8), 1.05, .59, material(0x24483c, .72));
-  housing.add(backing);
-  const face = roundedRect(24, 17, 5.2);
-  face.holes.push(roundedRect(11.65, 11.65, 1.04));
-  const shellFinish = material(0x194436, .42, .07);
-  shellFinish.clearcoat = .22;
-  shellFinish.clearcoatRoughness = .46;
-  const rim = plate(face, 2.85, .47, shellFinish);
-  rim.position.z = 1.18; housing.add(rim);
+  // El centro es parte de la correa: mismo TPU, se curva con ella.
+  const housing = part('housing', 0, 0, 0);
+  const centro = bandFinish();
+  centro.color.setHex(0x2b5e44);
+  housing.add(new THREE.Mesh(housingGeometry(), centro));
 
-  // The four front-module parts share one axis: QR, film, NFC, housing.
-  const qr = part('qr', 0, 0, 33.7);
-  qr.add(plate(roundedRect(10.95, 10.95, .83), .55, .19, material(0xf0f2e7, .48, .01)));
-  const qrDecal = new THREE.Mesh(new THREE.PlaneGeometry(10.57, 10.57), new THREE.MeshStandardMaterial({ map: qrGraphic(), roughness: .65 }));
-  qrDecal.position.z = .749; qr.add(qrDecal);
+  // Capas del centro, de afuera hacia adentro: QR, tapa, etiqueta NFC.
+  const tope = ARRIBA + ESPESOR / 2 + 1.8;          // cara de arriba del centro
+  const qr = part('qr', 0, 0, tope);
+  qr.add(plate(roundedRect(19.4, 19.4, .7), .06, .05, material(0xf0f2e7, .48, .01)));
+  const qrDecal = new THREE.Mesh(new THREE.PlaneGeometry(19, 19), new THREE.MeshStandardMaterial({ map: qrGraphic(), roughness: .65 }));
+  qrDecal.position.z = .17; qr.add(qrDecal);
 
-  const chip = part('chip', 0, 0, 31.8);
-  chip.add(plate(roundedRect(8.1, 8.1, .68), .42, .11, material(0x273d30, .62, .04)));
+  const film = part('film', 0, 0, tope - 1.2);
+  const tapa = new THREE.Mesh(new THREE.CylinderGeometry(15.2, 15.5, 1.2, 72), material(0xe9ece2, .55, 0));
+  tapa.rotation.x = Math.PI / 2; tapa.position.z = .6; film.add(tapa);
+
+  const chip = part('chip', 0, 0, ARRIBA + ESPESOR / 2);
+  const etiqueta = new THREE.Mesh(new THREE.CylinderGeometry(15, 15, .3, 72), material(0xf3f1e6, .7, 0));
+  etiqueta.rotation.x = Math.PI / 2; etiqueta.position.z = .15; chip.add(etiqueta);
   const copper = material(0xe79b59, .28, .74);
-  for (let i = 0; i < 4; i++) {
-    const size = 7.38 - i * .64;
-    const line = roundedRect(size, size, .53);
-    line.holes.push(roundedRect(size - .27, size - .27, .43));
-    const track = plate(line, .035, 0, copper);
-    track.position.z = .55; chip.add(track);
+  for (let i = 0; i < 5; i++) {
+    const r = 13.6 - i * .9;
+    const vuelta = new THREE.Shape(); vuelta.absarc(0, 0, r, 0, Math.PI * 2, false);
+    vuelta.holes.push(circleHole(0, 0, r - .4));
+    const track = plate(vuelta, .03, 0, copper);
+    track.position.z = .31; chip.add(track);
   }
-  const die = plate(roundedRect(2.15, 2.15, .22), .33, .11, material(0x232e29, .48));
-  die.position.z = .55; chip.add(die);
-  for (const x of [-1.42, 1.42]) for (const y of [-.48, .48]) {
-    const contact = plate(roundedRect(.35, .23, .07), .08, .02, copper);
-    contact.position.set(x, y, .58); chip.add(contact);
-  }
+  const die = plate(roundedRect(2.4, 2.4, .25), .3, .1, material(0x232e29, .48));
+  die.position.z = .31; chip.add(die);
 
-  const film = part('film', 0, 0, 33.03);
-  const filmFinish = material(0xafe1d3, .42, 0);
-  filmFinish.transparent = true;
-  filmFinish.opacity = .75;
-  filmFinish.depthWrite = false;
-  film.add(plate(roundedRect(9.4, 9.4, .78), .23, .14, filmFinish));
-
-  // The optional fastening sits on the end opposite the adjustment holes.
-  const clasp = part('clasp', 31.1 * Math.sin(claspAngle), 0, 31.1 * Math.cos(claspAngle));
+  // Cierre: perno con cabeza en una punta y la trabita que sostiene la otra.
+  const [cx, cz] = suelta(S_CIERRE, ESPESOR / 2);
+  const clasp = part('clasp', cx, 0, cz);
   clasp.rotation.y = claspAngle;
-  const base = plate(roundedRect(10.8, 12.4, 3.3), 1, .53, material(0x5b796d, .34, .25));
-  clasp.add(base);
-  for (const x of [-2.8, 2.8]) {
-    const pin = disk(1.18, 1.75, material(0x86a597, .29, .36)); pin.position.set(x, 0, 1.8); clasp.add(pin);
-    const head = disk(1.84, .68, material(0xa4bcb0, .31, .48)); head.position.set(x, 0, 2.65); clasp.add(head);
+  const metal = material(0x7f9b8f, .4, .1);
+  const pin = disk(1.5, 2.6, metal); pin.position.set(0, 0, 1.3); clasp.add(pin);
+  const head = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 2.2, 1.3, 40), metal);
+  head.rotation.x = Math.PI / 2; head.position.set(0, 0, 3.25); clasp.add(head);
+  const traba = material(0x28573f, .85, 0);
+  for (const y of [-9.2, 9.2]) {
+    const poste = plate(roundedRect(6, 1.6, .5), 7, 0, traba);
+    poste.position.set(9, y, -ESPESOR); clasp.add(poste);
   }
+  const techo = plate(roundedRect(6, 20, .6), 1.4, 0, traba);
+  techo.position.set(9, 0, 3); clasp.add(techo);
 
   for (const [id, item] of Object.entries(parts)) {
     item.group.traverse(mesh => {
@@ -383,7 +421,7 @@ function createViewer() {
   const fullscreen = $('#fullscreen');
   const presets = [...document.querySelectorAll('[data-view]')];
   const angles = { perspective: V(70, 57, 124), front: V(0, 7, 120), inside: V(-55, 100, -100), worn: V(8,20,160) };
-  const claspWorn = V(...wornPoint(claspAngle,.7,0));
+  const claspWorn = (() => { const [x, z] = puesta(S_CIERRE, ESPESOR / 2); return V(x, 0, z); })();
   let wrist, worn = false, wearPhase = 0;
   let view = 'perspective', exploded = false, labels = false, phase = 0, zoom = 1;
   let width = 1, height = 1, frame = 0, previousTime = 0, failed = false, cameraInput = false;
@@ -437,7 +475,7 @@ function createViewer() {
 
   function fitDistance() {
     if (worn) return 202 * Math.max(1, 1.52 / camera.aspect);
-    if (!exploded) return 99 * Math.max(1, 1.16 / camera.aspect);
+    if (!exploded) return 116 * Math.max(1, 1.16 / camera.aspect);
     // Leave room for the two columns on wide stages and the label rows on narrow ones.
     const labelRows = labels && width <= labelRowsMaxWidth;
     const usableWidth = Math.max(1, width - (labels && !labelRows ? 220 : 28));
@@ -586,8 +624,8 @@ function createViewer() {
       // El brazo entra por el eje interior y queda quieto al terminar el encuadre.
       wrist.position.y = (wearPhase - 1) * 165;
     }
-    for (const mesh of parts.band.group.children) mesh.morphTargetInfluences[0] = wearPhase;
-    parts.clasp.group.rotation.y = THREE.MathUtils.lerp(claspAngle, .35, phase * spread) + (claspAngle*wornSweep-claspAngle)*wearPhase;
+    for (const mesh of [...parts.band.group.children, ...parts.housing.group.children]) mesh.morphTargetInfluences[0] = wearPhase;
+    parts.clasp.group.rotation.y = THREE.MathUtils.lerp(claspAngle, .35, phase * spread) + (claspAngleWorn - claspAngle) * wearPhase;
     floor.visible = phase < .5 && wearPhase < .01;
     floor.material.opacity = .55 * Math.max(0, 1 - 2 * phase);
     for (const [id, part] of Object.entries(parts)) {
@@ -596,7 +634,7 @@ function createViewer() {
       const layer = THREE.MathUtils.smoothstep(phase, delay, 1) * spread;
       part.group.position.copy(part.position).addScaledVector(part.offset, layer);
       if (id === 'clasp') part.group.position.lerp(claspWorn,wearPhase);
-      else if (id !== 'band') part.group.position.z += (wristCenter + wristZ - 30.7) * wearPhase;
+      else if (id !== 'band' && id !== 'housing') part.group.position.z += (ARRIBA_PUESTA - ARRIBA) * wearPhase;
       part.guide.visible = phase > .05;
       if (part.guide.visible) {
         const p = part.guide.geometry.attributes.position;

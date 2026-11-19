@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="./pulsera-3d/visor.css?v=4">
   <link rel="stylesheet" href="./pulsera-3d/nfc-demo.css?v=5">
   <link rel="stylesheet" href="./pulsera-3d/tema.css?v=3">
-  <script defer src="./pulsera-3d/visor.bundle.js?v=7"></script>
+  <script defer src="./pulsera-3d/visor.bundle.js?v=8"></script>
 </head>
 <body id="inicio">
   <svg class="symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +83,7 @@
           <div class="stage-label"><span></span> <span id="assembly-state" role="status">Armada</span></div>
           <div class="stage-hint" id="stage-hint">Arrastrá para girar <span>·</span> Usá la rueda o dos dedos para acercar</div>
           <div class="fallback" id="fallback" hidden>
-            <img src="./hardware/preview.png" alt="Vista estática del cuerpo curvo de la pulsera Safe.Ride">
+            <img src="./hardware/v2/vista_arriba.png" alt="Vista de arriba de la pulsera Safe.Ride con el centro redondo y el QR">
             <p>El visor 3D no está disponible en este navegador. Podés consultar las piezas en la ficha técnica.</p>
           </div>
           <noscript><p class="no-js">Activá JavaScript para usar el visor 3D.</p></noscript>
@@ -130,19 +130,19 @@
         </div>
         <ul id="part-list" class="part-list">
           <li><button type="button" data-part="band" aria-pressed="false"><span class="part-index">01</span><span>Correa de TPU</span><span class="swatch band" aria-hidden="true"></span></button></li>
-          <li><button type="button" data-part="housing" aria-pressed="false"><span class="part-index">02</span><span>Carcasa central</span><span class="swatch housing" aria-hidden="true"></span></button></li>
-          <li><button type="button" data-part="qr" aria-pressed="false"><span class="part-index">03</span><span>Placa QR</span><span class="swatch qr" aria-hidden="true"></span></button></li>
-          <li><button type="button" data-part="chip" aria-pressed="false"><span class="part-index">04</span><span>Chip y antena NFC</span><span class="swatch chip" aria-hidden="true"></span></button></li>
-          <li><button type="button" data-part="film" aria-pressed="false"><span class="part-index">05</span><span>Lámina protectora</span><span class="swatch film" aria-hidden="true"></span></button></li>
-          <li><button type="button" data-part="clasp" aria-pressed="false"><span class="part-index">06</span><span>Cierre de ajuste</span><span class="swatch clasp" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-part="housing" aria-pressed="false"><span class="part-index">02</span><span>Centro redondo</span><span class="swatch housing" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-part="qr" aria-pressed="false"><span class="part-index">03</span><span>QR adhesivo</span><span class="swatch qr" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-part="chip" aria-pressed="false"><span class="part-index">04</span><span>Etiqueta NFC</span><span class="swatch chip" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-part="film" aria-pressed="false"><span class="part-index">05</span><span>Tapa al ras</span><span class="swatch film" aria-hidden="true"></span></button></li>
+          <li><button type="button" data-part="clasp" aria-pressed="false"><span class="part-index">06</span><span>Cierre a presión</span><span class="swatch clasp" aria-hidden="true"></span></button></li>
         </ul>
         <div class="catalog-detail">
         <div class="part-card" id="part-card" role="status" aria-atomic="true">
           <p class="part-type" id="part-type">VISTA GENERAL</p>
           <h3 id="part-title">Dos lecturas, una pulsera</h3>
-          <p id="part-description">El QR queda visible por fuera. Debajo, en el mismo punto, se aloja el chip NFC cuadrado.</p>
+          <p id="part-description">El QR queda visible por fuera, sobre la tapa. Debajo, en el mismo punto, va la etiqueta NFC redonda.</p>
         </div>
-        <div class="stack-order" aria-label="Capas desde el exterior: QR, lámina protectora, NFC y carcasa"><span data-layer="qr">QR</span><span aria-hidden="true">→</span><span data-layer="film">Lámina</span><span aria-hidden="true">→</span><span data-layer="chip">NFC</span><span aria-hidden="true">→</span><span data-layer="housing">Carcasa</span></div>
+        <div class="stack-order" aria-label="Capas desde el exterior: QR, tapa, etiqueta NFC y centro"><span data-layer="qr">QR</span><span aria-hidden="true">→</span><span data-layer="film">Tapa</span><span aria-hidden="true">→</span><span data-layer="chip">NFC</span><span aria-hidden="true">→</span><span data-layer="housing">Centro</span></div>
         <a class="part-demo" id="part-demo" href="#demo-nfc" data-tour="read" hidden>Probar la lectura del chip <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a>
         </div>
       </aside>
