@@ -306,7 +306,7 @@ function pintar() {
     fila(dl, 'Recibe', e.nombre);
     fila(dl, 'Teléfono', e.telefono);
     if (!esRetiro(p)) fila(dl, 'Dirección', [e.direccion, e.ciudad].filter(Boolean).join(', '));
-    fila(dl, 'Referencia', e.referencia);
+    fila(dl, 'Nota', e.referencia);
     fila(dl, 'Mail', p.email);
     fila(dl, 'Nota', p.nota);
     if (p.ficha) {

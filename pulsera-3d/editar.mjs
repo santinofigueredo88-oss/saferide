@@ -173,7 +173,7 @@ $('f-pedido').addEventListener('submit', async e => {
   if (!ficha) return;
   const entrega = form.elements.entrega.value === 'retiro' ? 'retiro' : 'domicilio';
   const envio = { entrega };
-  const campos = entrega === 'domicilio' ? ['nombre', 'telefono', 'direccion', 'referencia'] : ['nombre', 'telefono'];
+  const campos = entrega === 'domicilio' ? ['nombre', 'telefono', 'direccion', 'referencia'] : ['nombre', 'telefono', 'referencia'];
   for (const k of campos) {
     const v = form.elements[k].value.trim();
     if (v) envio[k] = v;
