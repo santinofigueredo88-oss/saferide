@@ -2,9 +2,24 @@
 import { cargarFirebase, cargarAuth, linkDeFicha, fichaVieja, fechaDeFicha } from './fichas.mjs?v=2';
 
 const EQUIPO = ['santinofigueredo88@gmail.com'];
-const ESTADOS = { nuevo: 'NUEVO', grabado: 'GRABADO', enviado: 'ENVIADO', cancelado: 'CANCELADO' };
-const SIGUIENTE = { nuevo: ['grabado', 'Marcar como grabada'], grabado: ['enviado', 'Marcar como enviada'] };
+const ESTADOS = { nuevo: 'NUEVO', grabado: 'GRABADO', enviado: 'ENTREGADO', cancelado: 'CANCELADO' };
 const PRECIO = 8000;
+const ENVIO = 1000; // envío a domicilio, solo en Baradero
+const esRetiro = p => p.envio?.entrega === 'retiro';
+const totalDe = p => p.cantidad * PRECIO + (esRetiro(p) ? 0 : ENVIO);
+function siguiente(p) {
+  if (p.estado === 'nuevo') return ['grabado', 'Marcar como grabada'];
+  if (p.estado === 'grabado') return ['enviado', esRetiro(p) ? 'Marcar como retirada' : 'Marcar como entregada'];
+  return null;
+}
+
+// Última vez que el equipo miró el panel (solo en este navegador): lo que llegó después se marca como NUEVO.
+const CLAVE_VISTO = 'saferide-equipo-visto';
+function leerVisto() { try { return Number(localStorage.getItem(CLAVE_VISTO)) || 0; } catch { return 0; } }
+function guardarVisto(ms) { try { localStorage.setItem(CLAVE_VISTO, String(ms)); } catch {} }
+let visto = leerVisto();
+const ms = t => (t?.seconds || 0) * 1000;
+const esNuevo = t => ms(t) > visto;
 
 const $ = id => document.getElementById(id);
 const { fs, db } = await cargarFirebase();
@@ -41,8 +56,43 @@ auth.onAuthStateChanged(sesion, async u => {
   $('v-entrar').hidden = true;
   $('v-panel').hidden = false;
   $('v-fichas').hidden = false;
-  await cargar();
+  $('v-novedades').hidden = false;
+  escuchar();
 });
+
+// ---------- Novedades: qué llegó desde la última visita ----------
+let avisados = null; // ids ya conocidos, para avisar solo lo que llega con el panel abierto
+function pintarNovedades() {
+  const pn = pedidos.filter(p => esNuevo(p.creado));
+  const fn = fichas.filter(f => esNuevo(f.datos.actualizado));
+  const pendientes = pedidos.filter(p => p.estado === 'nuevo').length;
+  const partes = [];
+  if (pn.length) partes.push(`${pn.length} pedido${pn.length > 1 ? 's' : ''} nuevo${pn.length > 1 ? 's' : ''}`);
+  if (fn.length) partes.push(`${fn.length} ficha${fn.length > 1 ? 's' : ''} nueva${fn.length > 1 ? 's' : ''} o cambiada${fn.length > 1 ? 's' : ''}`);
+  const caja = $('v-novedades');
+  caja.dataset.hay = String(partes.length > 0);
+  $('novedades-titulo').textContent = partes.length ? `¡Llegó algo! ${partes.join(' y ')}.` : 'No llegó nada nuevo.';
+  $('novedades-texto').textContent = (visto ? `Desde tu última visita (${new Date(visto).toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' })}). ` : 'Es tu primera visita desde este navegador. ')
+    + (pendientes ? `Hay ${pendientes} pedido${pendientes > 1 ? 's' : ''} por grabar.` : 'No hay pedidos por grabar.')
+    + ' Esta página se actualiza sola mientras la tengas abierta.';
+  $('ya-visto').hidden = partes.length === 0;
+  document.title = `${partes.length ? `(${pn.length + fn.length}) ` : ''}Safe.Ride · Equipo`;
+}
+$('ya-visto').addEventListener('click', () => {
+  visto = Date.now(); guardarVisto(visto);
+  pintar(); pintarFichas(); pintarNovedades();
+});
+const puedeAvisar = 'Notification' in window;
+$('avisarme').hidden = !puedeAvisar || Notification.permission === 'granted';
+$('avisarme').addEventListener('click', async () => {
+  const r = await Notification.requestPermission();
+  $('avisarme').hidden = r === 'granted';
+  $('estado-avisos').textContent = r === 'granted' ? 'LISTO: TE AVISAMOS CON UN CARTEL MIENTRAS ESTA PÁGINA ESTÉ ABIERTA.' : 'EL NAVEGADOR NO DIO PERMISO PARA AVISAR.';
+});
+function avisar(titulo, texto) {
+  if (!puedeAvisar || Notification.permission !== 'granted') return;
+  try { new Notification(titulo, { body: texto, icon: './og.png' }); } catch {}
+}
 
 for (const b of document.querySelectorAll('[data-f]')) {
   b.addEventListener('click', () => {
@@ -52,17 +102,28 @@ for (const b of document.querySelectorAll('[data-f]')) {
   });
 }
 
-async function cargar() {
-  const res = await fs.getDocs(fs.collection(db, 'pedidos'));
-  pedidos = res.docs.map(d => ({ id: d.id, ...d.data() }))
-    .sort((a, b) => (b.creado?.seconds || 0) - (a.creado?.seconds || 0));
-  // Cada pedido necesita los datos de su ficha para armar el link del chip.
-  await Promise.all(pedidos.map(async p => {
-    const f = await fs.getDoc(fs.doc(db, 'fichas', p.fichaId));
-    p.ficha = f.exists() ? f.data() : null;
-  }));
-  pintar();
-  await cargarFichas();
+// Escucha la base de datos: si entra un pedido o una ficha, aparece sin recargar.
+let fichasPorId = new Map();
+function unir() { for (const p of pedidos) p.ficha = fichasPorId.get(p.fichaId) || null; }
+function escuchar() {
+  fs.onSnapshot(fs.collection(db, 'pedidos'), res => {
+    pedidos = res.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => ms(b.creado) - ms(a.creado));
+    if (avisados) {
+      for (const p of pedidos) if (!avisados.has(p.id)) avisar('Nuevo pedido de Safe.Ride', `${p.cantidad} × pulsera para ${p.nombreFicha} · ${esRetiro(p) ? 'retiro' : 'envío a domicilio'}`);
+    }
+    avisados = new Set(pedidos.map(p => p.id));
+    unir(); pintar(); pintarFichas(); pintarNovedades();
+  }, err => { console.error(err); $('novedades-titulo').textContent = 'No se pudieron leer los pedidos. Revisá la conexión.'; });
+  let primeraVez = true;
+  fs.onSnapshot(fs.collection(db, 'fichas'), res => {
+    if (!primeraVez) for (const c of res.docChanges()) if (c.type === 'added') avisar('Nueva ficha médica en Safe.Ride', c.doc.data().nombre || '');
+    primeraVez = false;
+    fichas = res.docs.map(d => ({ id: d.id, datos: d.data() }))
+      .sort((a, b) => ms(b.datos.actualizado) - ms(a.datos.actualizado));
+    fichasPorId = new Map(fichas.map(f => [f.id, f.datos]));
+    unir(); pintar(); pintarFichas(); pintarNovedades();
+  }, err => console.error(err));
 }
 
 // ---------- Fichas: todas, con o sin pedido ----------
@@ -78,12 +139,6 @@ $('nfc-ayuda').textContent = hayNFC
   ? 'Este celular puede grabar chips: tocá «Grabar en el chip» y apoyá la pulsera en la parte de atrás del teléfono.'
   : 'Para grabar el chip desde acá, abrí este panel en un celular Android con Chrome. Si no, copiá el link y grabalo con NFC Tools.';
 
-async function cargarFichas() {
-  const res = await fs.getDocs(fs.collection(db, 'fichas'));
-  fichas = res.docs.map(d => ({ id: d.id, datos: d.data() }))
-    .sort((a, b) => (b.datos.actualizado?.seconds || 0) - (a.datos.actualizado?.seconds || 0));
-  pintarFichas();
-}
 
 function conPedido(id) { return pedidos.some(p => p.fichaId === id && p.estado !== 'cancelado'); }
 
@@ -152,6 +207,7 @@ function pintarFichas() {
     chip.className = 'chip-estado'; chip.dataset.e = tiene ? 'con' : 'sin';
     chip.textContent = tiene ? 'CON PEDIDO' : 'SIN PEDIDO';
     izq.append(h, meta, chip);
+    if (esNuevo(d.actualizado)) izq.append(chipNuevo());
     if (fichaVieja(d)) {
       const r = document.createElement('span');
       r.className = 'chip-estado'; r.dataset.e = 'revisar'; r.textContent = 'MÁS DE UN AÑO';
@@ -175,10 +231,16 @@ function pintarFichas() {
   }
 }
 
+function chipNuevo() {
+  const c = document.createElement('span');
+  c.className = 'chip-estado'; c.dataset.e = 'novedad'; c.textContent = 'NUEVO DESDE TU ÚLTIMA VISITA';
+  return c;
+}
+
 function resumen() {
   const cuenta = e => pedidos.filter(p => p.estado === e).length;
-  const vendidas = pedidos.filter(p => p.estado !== 'cancelado').reduce((t, p) => t + p.cantidad, 0);
-  const datos = [['Nuevos', cuenta('nuevo')], ['Grabados', cuenta('grabado')], ['Enviados', cuenta('enviado')], ['Facturado', `$${(vendidas * PRECIO).toLocaleString('es-AR')}`]];
+  const facturado = pedidos.filter(p => p.estado !== 'cancelado').reduce((t, p) => t + totalDe(p), 0);
+  const datos = [['Por grabar', cuenta('nuevo')], ['Por entregar', cuenta('grabado')], ['Entregados', cuenta('enviado')], ['Facturado', `$${facturado.toLocaleString('es-AR')}`]];
   $('resumen').replaceChildren(...datos.map(([t, v]) => {
     const d = document.createElement('div');
     const b = document.createElement('b'); b.textContent = v;
@@ -217,8 +279,6 @@ function boton(texto, primario, accion) {
 
 async function cambiarEstado(p, estado) {
   await fs.updateDoc(fs.doc(db, 'pedidos', p.id), { estado, cambiado: fs.serverTimestamp() });
-  p.estado = estado;
-  pintar();
 }
 
 function pintar() {
@@ -237,14 +297,16 @@ function pintar() {
     const meta = document.createElement('p');
     meta.className = 'meta';
     const cuando = p.creado?.toDate?.();
-    meta.textContent = `Pedido ${p.id.slice(0, 6).toUpperCase()}${cuando ? ' · ' + cuando.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' }) : ''} · $${(p.cantidad * PRECIO).toLocaleString('es-AR')}`;
+    meta.textContent = `Pedido ${p.id.slice(0, 6).toUpperCase()}${cuando ? ' · ' + cuando.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' }) : ''} · Total $${totalDe(p).toLocaleString('es-AR')}`;
     const chip = document.createElement('span');
     chip.className = 'chip-estado'; chip.dataset.e = p.estado; chip.textContent = ESTADOS[p.estado] || p.estado;
     const dl = document.createElement('dl');
     const e = p.envio || {};
+    fila(dl, 'Entrega', esRetiro(p) ? 'Retiro por el local · escribile para acordar dónde y cuándo' : `Envío a domicilio (+$${ENVIO.toLocaleString('es-AR')})`);
     fila(dl, 'Recibe', e.nombre);
     fila(dl, 'Teléfono', e.telefono);
-    fila(dl, 'Dirección', [e.direccion, e.ciudad, e.provincia, e.cp && `CP ${e.cp}`].filter(Boolean).join(', '));
+    if (!esRetiro(p)) fila(dl, 'Dirección', [e.direccion, e.ciudad].filter(Boolean).join(', '));
+    fila(dl, 'Referencia', e.referencia);
     fila(dl, 'Mail', p.email);
     fila(dl, 'Nota', p.nota);
     if (p.ficha) {
@@ -257,7 +319,9 @@ function pintar() {
     } else {
       fila(dl, 'Ficha', 'El cliente borró la ficha');
     }
-    izq.append(h, meta, chip, dl);
+    izq.append(h, meta, chip);
+    if (esNuevo(p.creado)) izq.append(chipNuevo());
+    izq.append(dl);
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = 480;
     const acciones = document.createElement('div');
@@ -268,8 +332,9 @@ function pintar() {
       const tam = document.createElement('p'); tam.className = 'tam'; tam.textContent = tamanioChip(link);
       izq.append(tam);
     }
-    const sig = SIGUIENTE[p.estado];
+    const sig = siguiente(p);
     if (sig && p.ficha) acciones.append(boton(sig[1], true, () => cambiarEstado(p, sig[0])));
+    if (e.telefono) acciones.append(boton('Llamar', false, () => { location.href = `tel:${e.telefono.replace(/[^\d+]/g, '')}`; }));
     if (p.estado === 'nuevo') acciones.append(boton('Cancelar', false, () => cambiarEstado(p, 'cancelado')));
     art.append(izq, canvas, acciones);
     lista.append(art);

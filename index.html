@@ -2226,6 +2226,24 @@ html:not([data-theme="dark"]) .beneficiary-card:hover {
   border-color: var(--accent-fg);
 }
 
+
+.entrega-field { grid-column: 1 / -1; border: 0; padding: 0; margin: 0; min-width: 0; }
+.entrega-field legend { font-family: var(--font-heading); font-weight: 600; font-size: 0.85rem; color: var(--text-primary); margin-bottom: 6px; padding: 0; }
+.entrega-opciones { display: grid; gap: 10px; }
+@media (min-width: 520px) { .entrega-opciones { grid-template-columns: 1fr 1fr; } }
+.entrega-opcion { text-align: left; display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1.5px solid var(--surface-border); border-radius: var(--radius-sm); background: var(--surface); cursor: pointer; }
+.entrega-opcion:has(input:checked) { border-color: var(--accent-fg); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15); }
+.entrega-opcion input { width: 18px; height: 18px; margin-top: 2px; flex: none; accent-color: var(--accent-fg); }
+.entrega-opcion b { display: block; font-family: var(--font-heading); font-size: 0.95rem; color: var(--text-primary); }
+.entrega-opcion small { display: block; margin-top: 2px; font-size: 0.8rem; line-height: 1.4; color: var(--text-secondary); }
+.entrega-nota { grid-column: 1 / -1; margin: -6px 0 0; font-size: 0.8rem; color: var(--text-secondary); }
+.pedido-total-fila { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; padding: 12px 14px; border-radius: var(--radius-sm); background: rgba(var(--accent-rgb), 0.08); }
+.pedido-total-fila span { font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
+.pedido-total-fila strong { font-family: var(--font-heading); font-size: 1.35rem; color: var(--text-primary); }
+[data-solo-domicilio][hidden] { display: none !important; }
+
+.footer-equipo { color: rgba(255,255,255,0.82); text-decoration: underline; text-underline-offset: 3px; }
+
 .modal-disclaimer {
   display: flex;
   align-items: flex-start;
@@ -3686,7 +3704,7 @@ html:not([data-theme="dark"]) .hero {
         <div class="panel reveal" id="futuro">
           <span class="eyebrow" data-i18n="futuro.eyebrow">Mirando hacia adelante</span>
           <h2 data-i18n="futuro.title">Un proyecto pensado para crecer</h2>
-          <p data-i18n="futuro.body">Empezamos con un lote piloto en Baradero y la zona norte, y buscamos alianzas con el municipio, centros de jubilados, clubes, escuelas de manejo, empresas y ART. A futuro queremos sumar avisos a la familia cuando se escanea la pulsera, conexión con los servicios de emergencia (SAME), la ficha en varios idiomas y pulseras de distintos tamaños y colores.</p>
+          <p data-i18n="futuro.body">Empezamos con un lote piloto en Baradero, y buscamos alianzas con el municipio, centros de jubilados, clubes, escuelas de manejo, empresas y ART. A futuro queremos sumar avisos a la familia cuando se escanea la pulsera, conexión con los servicios de emergencia (SAME), la ficha en varios idiomas y pulseras de distintos tamaños y colores.</p>
         </div>
         <div class="panel reveal" id="proyecto">
           <span class="eyebrow" data-i18n="proyecto.eyebrow">Quiénes lo hacemos</span>
@@ -3811,7 +3829,7 @@ html:not([data-theme="dark"]) .hero {
             <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f3">TPU flexible, liviana (8 a 10 g)</span></li>
             <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f4">Sin contraseña y sin apps</span></li>
             <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f5">Dura entre 12 y 18 meses de uso diario</span></li>
-            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f6">Entrega en Baradero y zona norte</span></li>
+            <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="precios.f6">Envío a domicilio en Baradero o retiro</span></li>
           </ul>
           <a href="#pedido" class="btn btn-primary btn-block btn-lg" data-i18n="precios.boton">Pedir mi pulsera →</a>
         </div>
@@ -3903,9 +3921,9 @@ html:not([data-theme="dark"]) .hero {
   <section class="section bg-light" id="pedido" aria-labelledby="pedido-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> <span data-i18n="pedido.eyebrow">Entregas en Baradero y zona norte</span></span>
+        <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> <span data-i18n="pedido.eyebrow">Envíos en Baradero</span></span>
         <h2 id="pedido-title" data-i18n="pedido.title">Pedí tu pulsera</h2>
-        <p data-i18n="pedido.subtitle">Por ahora entregamos en Baradero y la zona norte de Buenos Aires. Completá tus datos y te avisamos cuándo la recibís. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.</p>
+        <p data-i18n="pedido.subtitle">Por ahora entregamos solo en Baradero: te la llevamos a tu casa o la retirás sin costo. Completá tus datos y te avisamos cuándo está lista. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.</p>
       </div>
 
       <div class="pedido-layout">
@@ -3913,7 +3931,7 @@ html:not([data-theme="dark"]) .hero {
           <div class="pedido-info-card">
             <h3 data-i18n="pedido.porQue">Lo que incluye</h3>
             <ul class="pedido-benefits">
-              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i1">Entrega en Baradero y zona norte</span></li>
+              <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i1">Envío a domicilio en Baradero o retiro</span></li>
               <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i2">Instructivo y ayuda para cargar tu ficha</span></li>
               <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i3">Actualización de datos gratis</span></li>
               <li><svg class="icon" aria-hidden="true" style="color:var(--accent-fg)"><use href="#icon-check"></use></svg> <span data-i18n="pedido.i4">Consultas por Instagram</span></li>
@@ -3943,7 +3961,7 @@ html:not([data-theme="dark"]) .hero {
               </div>
               <div class="form-field">
                 <label for="orderPhone" data-i18n="field.telefono">Teléfono</label>
-                <input type="tel" id="orderPhone" name="phone" required placeholder="Ej: 011 4444-5566" data-i18n-placeholder="ph.telefono" autocomplete="tel" enterkeyhint="next" />
+                <input type="tel" id="orderPhone" name="phone" required placeholder="Ej: 3329 123456" data-i18n-placeholder="ph.telefono" autocomplete="tel" enterkeyhint="next" />
               </div>
               <div class="form-field">
                 <label for="orderProduct" data-i18n="field.producto">Producto</label>
@@ -3961,25 +3979,31 @@ html:not([data-theme="dark"]) .hero {
                   <option value="5">5</option>
                 </select>
               </div>
-              <div class="form-field">
+              <fieldset class="form-field entrega-field">
+                <legend data-i18n="field.entrega">¿Cómo la querés recibir?</legend>
+                <div class="entrega-opciones">
+                  <label class="entrega-opcion">
+                    <input type="radio" name="delivery" value="domicilio" checked />
+                    <span><b data-i18n="entrega.domicilio">Envío a domicilio</b><small data-i18n="entrega.domicilioDet">Solo dentro de Baradero · $1.000. Te la lleva una persona del equipo.</small></span>
+                  </label>
+                  <label class="entrega-opcion">
+                    <input type="radio" name="delivery" value="retiro" />
+                    <span><b data-i18n="entrega.retiro">Retiro por el local</b><small data-i18n="entrega.retiroDet">Sin costo. Te escribimos para acordar dónde y cuándo retirarla.</small></span>
+                  </label>
+                </div>
+              </fieldset>
+              <div class="form-field" data-solo-domicilio>
                 <label for="orderAddress" data-i18n="field.direccion">Dirección (calle y número)</label>
-                <input type="text" id="orderAddress" name="address" required placeholder="Ej: Av. Siempre Viva 742" data-i18n-placeholder="ph.direccion" autocomplete="street-address" />
+                <input type="text" id="orderAddress" name="address" required placeholder="Ej: Mitre 350" data-i18n-placeholder="ph.direccion" autocomplete="street-address" enterkeyhint="next" />
               </div>
-              <div class="form-field">
-                <label for="orderCity" data-i18n="field.ciudad">Ciudad</label>
-                <input type="text" id="orderCity" name="city" required list="ciudadesList" placeholder="Ej: Baradero" data-i18n-placeholder="ph.ciudad" autocomplete="address-level2" />
+              <div class="form-field" data-solo-domicilio>
+                <label for="orderReference" data-i18n="field.referencia">Entre calles o referencia (opcional)</label>
+                <input type="text" id="orderReference" name="reference" maxlength="80" placeholder="Ej: casa con rejas verdes" data-i18n-placeholder="ph.referencia" enterkeyhint="done" />
               </div>
-              <div class="form-field">
-                <label for="orderState" data-i18n="field.provincia">Provincia / Estado</label>
-                <input type="text" id="orderState" name="state" list="provinciasList" placeholder="Ej: Buenos Aires" data-i18n-placeholder="ph.provincia" autocomplete="address-level1" /><datalist id="ciudadesList"><option value="Baradero"><option value="San Pedro"><option value="Zárate"><option value="Campana"><option value="Ramallo"><option value="San Nicolás"><option value="Arrecifes"><option value="Capitán Sarmiento"><option value="San Antonio de Areco"><option value="Pilar"><option value="Escobar"><option value="Lima"><option value="Pergamino"></datalist><datalist id="provinciasList"><option value="Buenos Aires"><option value="Ciudad de Buenos Aires"><option value="Catamarca"><option value="Chaco"><option value="Chubut"><option value="Córdoba"><option value="Corrientes"><option value="Entre Ríos"><option value="Formosa"><option value="Jujuy"><option value="La Pampa"><option value="La Rioja"><option value="Mendoza"><option value="Misiones"><option value="Neuquén"><option value="Río Negro"><option value="Salta"><option value="San Juan"><option value="San Luis"><option value="Santa Cruz"><option value="Santa Fe"><option value="Santiago del Estero"><option value="Tierra del Fuego"><option value="Tucumán"></datalist>
-              </div>
-              <div class="form-field">
-                <label for="orderZip" data-i18n="field.codigoPostal">Código postal</label>
-                <input type="text" id="orderZip" name="zip" required placeholder="Ej: 2942" data-i18n-placeholder="ph.codigoPostal" autocomplete="postal-code" inputmode="numeric" />
-              </div>
-              <div class="form-field">
-                <label for="orderCountry" data-i18n="field.pais">País</label>
-                <input type="text" id="orderCountry" name="country" required value="Argentina" placeholder="Ej: Argentina" data-i18n-placeholder="ph.pais" autocomplete="country-name" />
+              <p class="entrega-nota" data-solo-domicilio data-i18n="entrega.soloBaradero">Por ahora solo hacemos envíos dentro de Baradero.</p>
+              <div class="pedido-total-fila">
+                <span data-i18n="pedido.total">Total</span>
+                <strong id="orderTotal">$9.000</strong>
               </div>
             </div>
 
@@ -3990,7 +4014,7 @@ html:not([data-theme="dark"]) .hero {
 
             <p class="modal-disclaimer">
               <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
-              <span data-i18n="pedido.disclaimer">En el paso siguiente entrás con tu cuenta de Google y cargás tu ficha. Nosotros grabamos el QR y el chip y te mandamos la pulsera lista.</span>
+              <span data-i18n="pedido.disclaimer">En el paso siguiente entrás con tu cuenta de Google y cargás tu ficha. Nosotros grabamos el QR y el chip y te entregamos la pulsera lista.</span>
             </p>
           </form>
         </div>
@@ -4086,7 +4110,7 @@ html:not([data-theme="dark"]) .hero {
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a5">La pulsera con QR y NFC cuesta $8.000 e incluye la actualización de tus datos sin límite y sin costo extra. Por ahora la entregamos en Baradero y la zona norte.</p>
+            <p data-i18n="faq.a5">La pulsera con QR y NFC cuesta $8.000 e incluye la actualización de tus datos sin límite y sin costo extra. Por ahora la entregamos solo en Baradero: envío a domicilio $1.000 o retiro sin costo.</p>
           </div></div>
         </div>
         <div class="faq-item">
@@ -4122,7 +4146,25 @@ html:not([data-theme="dark"]) .hero {
             <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
           </button>
           <div class="faq-answer-wrap"><div class="faq-answer">
-            <p data-i18n="faq.a9">Sí. El QR y el NFC abren tu ficha desde cualquier celular con internet, en cualquier país. Por ahora las pulseras se entregan en Baradero y la zona norte.</p>
+            <p data-i18n="faq.a9">Sí. El QR y el NFC abren tu ficha desde cualquier celular con internet, en cualquier país. Por ahora las pulseras se entregan solo en Baradero.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span data-i18n="faq.qEnvio">¿Cómo me llega la pulsera?</span>
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p data-i18n="faq.aEnvio">Podés elegir envío a domicilio dentro de Baradero ($1.000), que te lleva una persona del equipo de Safe.Ride, o retirarla sin costo: te escribimos para acordar dónde y cuándo. Antes de entregarla te pedimos que confirmes tu nombre, y podés pagar en efectivo, por transferencia o Mercado Pago.</p>
+          </div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span data-i18n="faq.qArrep">¿Y si me arrepiento de la compra?</span>
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+          <div class="faq-answer-wrap"><div class="faq-answer">
+            <p data-i18n="faq.aArrep">Tenés 10 días corridos desde que la recibís para arrepentirte, sin dar explicaciones (Ley 24.240 de Defensa del Consumidor). Escribinos por Instagram, devolvés la pulsera y te reintegramos lo que pagaste.</p>
           </div></div>
         </div>
         <div class="faq-item">
@@ -4187,6 +4229,7 @@ html:not([data-theme="dark"]) .hero {
       <span>© 2026 Safe.Ride — Elena Avogadro & Santino Figueredo</span>
       <span data-i18n="footer.escolar">Proyecto escolar — EEST N.º 1 «Vuelta de Obligado», Baradero</span>
       <span data-i18n="footer.aviso">Safe.Ride no reemplaza la atención médica ni hace diagnósticos.</span>
+      <a href="./equipo.html" class="footer-equipo" data-i18n="footer.equipo">Entrada del equipo</a>
     </div>
   </div>
 </footer>
@@ -4573,7 +4616,7 @@ const translations = {
     futuro: {
       eyebrow: "Mirando hacia adelante",
       title: "Un proyecto pensado para crecer",
-      body: "Empezamos con un lote piloto en Baradero y la zona norte, y buscamos alianzas con el municipio, centros de jubilados, clubes, escuelas de manejo, empresas y ART. A futuro queremos sumar avisos a la familia cuando se escanea la pulsera, conexión con los servicios de emergencia (SAME), la ficha en varios idiomas y pulseras de distintos tamaños y colores.",
+      body: "Empezamos con un lote piloto en Baradero, y buscamos alianzas con el municipio, centros de jubilados, clubes, escuelas de manejo, empresas y ART. A futuro queremos sumar avisos a la familia cuando se escanea la pulsera, conexión con los servicios de emergencia (SAME), la ficha en varios idiomas y pulseras de distintos tamaños y colores.",
     },
     proyecto: {
       eyebrow: "Quiénes lo hacemos",
@@ -4625,7 +4668,7 @@ const translations = {
       f3: "TPU flexible, liviana (8 a 10 g)",
       f4: "Sin contraseña y sin apps",
       f5: "Dura entre 12 y 18 meses de uso diario",
-      f6: "Entrega en Baradero y zona norte",
+      f6: "Envío a domicilio en Baradero o retiro",
       boton: "Pedir mi pulsera →",
       nota: "Apta para el uso diario; no sumergir por mucho tiempo. Para ver la ficha completa, el celular necesita internet; sin internet, el NFC muestra lo esencial.",
     },
@@ -4686,6 +4729,8 @@ const translations = {
       producto: "Producto",
       cantidad: "Cantidad",
       direccion: "Dirección (calle y número)",
+      entrega: "¿Cómo la querés recibir?",
+      referencia: "Entre calles o referencia (opcional)",
       ciudad: "Ciudad",
       provincia: "Provincia / Estado",
       codigoPostal: "Código postal",
@@ -4705,10 +4750,11 @@ const translations = {
     },
     ph: {
       nombre: "Ej: Juan Gómez",
-      telefono: "Ej: 011 4444-5566",
+      telefono: "Ej: 3329 123456",
       localidad: "Ej: Baradero, Buenos Aires",
       domicilio: "Ej: Mitre 350",
-      direccion: "Ej: Av. Siempre Viva 742",
+      direccion: "Ej: Mitre 350",
+      referencia: "Ej: casa con rejas verdes",
       ciudad: "Ej: Baradero",
       provincia: "Ej: Buenos Aires",
       codigoPostal: "Ej: 2942",
@@ -4726,20 +4772,28 @@ const translations = {
       nfc: "Pulsera Safe.Ride (QR + NFC)",
       pack: "Pulsera Safe.Ride (QR + NFC)",
     },
+    entrega: {
+      domicilio: "Envío a domicilio",
+      domicilioDet: "Solo dentro de Baradero · $1.000. Te la lleva una persona del equipo.",
+      retiro: "Retiro por el local",
+      retiroDet: "Sin costo. Te escribimos para acordar dónde y cuándo retirarla.",
+      soloBaradero: "Por ahora solo hacemos envíos dentro de Baradero.",
+    },
     pedido: {
       porQue: "Lo que incluye",
-      i1: "Entrega en Baradero y zona norte",
+      i1: "Envío a domicilio en Baradero o retiro",
       i2: "Instructivo y ayuda para cargar tu ficha",
       i3: "Actualización de datos gratis",
       i4: "Consultas por Instagram",
       medios: "Medios de pago",
       m1: "Transferencia",
       m3: "Efectivo",
-      eyebrow: "Entregas en Baradero y zona norte",
+      eyebrow: "Envíos en Baradero",
       title: "Pedí tu pulsera",
-      subtitle: "Por ahora entregamos en Baradero y la zona norte de Buenos Aires. Completá tus datos y te avisamos cuándo la recibís. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.",
+      subtitle: "Por ahora entregamos solo en Baradero: te la llevamos a tu casa o la retirás sin costo. Completá tus datos y te avisamos cuándo está lista. Solo pedimos tu mail para avisarte del estado del pedido: no hace falta contraseña.",
+      total: "Total",
       confirmar: "Seguir: cargar mi ficha",
-      disclaimer: "En el paso siguiente entrás con tu cuenta de Google y cargás tu ficha. Nosotros grabamos el QR y el chip y te mandamos la pulsera lista.",
+      disclaimer: "En el paso siguiente entrás con tu cuenta de Google y cargás tu ficha. Nosotros grabamos el QR y el chip y te entregamos la pulsera lista.",
       confirmado: "Pedido confirmado",
       pedidoSaferide: "Pedido Safe.Ride",
       enviarA: "Enviar a",
@@ -4749,7 +4803,11 @@ const translations = {
     },
     faq: {
       q9: "¿Funciona en otros países?",
-      a9: "Sí. El QR y el NFC abren tu ficha desde cualquier celular con internet, en cualquier país. Por ahora las pulseras se entregan en Baradero y la zona norte.",
+      a9: "Sí. El QR y el NFC abren tu ficha desde cualquier celular con internet, en cualquier país. Por ahora las pulseras se entregan solo en Baradero.",
+      qEnvio: "¿Cómo me llega la pulsera?",
+      aEnvio: "Podés elegir envío a domicilio dentro de Baradero ($1.000), que te lleva una persona del equipo de Safe.Ride, o retirarla sin costo: te escribimos para acordar dónde y cuándo. Antes de entregarla te pedimos que confirmes tu nombre, y podés pagar en efectivo, por transferencia o Mercado Pago.",
+      qArrep: "¿Y si me arrepiento de la compra?",
+      aArrep: "Tenés 10 días corridos desde que la recibís para arrepentirte, sin dar explicaciones (Ley 24.240 de Defensa del Consumidor). Escribinos por Instagram, devolvés la pulsera y te reintegramos lo que pagaste.",
       q10: "¿Qué diferencia hay con una pulsera grabada?",
       a10: "Una pulsera grabada tiene espacio limitado y, para cambiar un dato, hay que hacer otra. Con Safe.Ride cambiás tu ficha cuando quieras, sin tocar la pulsera, y se lee por QR o por NFC.",
       q11: "¿Puedo usarlo para mi familia?",
@@ -4765,7 +4823,7 @@ const translations = {
       q4: "¿Cualquier celular puede leer el QR?",
       a4: "Sí, alcanza con la cámara. No hace falta instalar ninguna aplicación.",
       q5: "¿Cuánto sale?",
-      a5: "La pulsera con QR y NFC cuesta $8.000 e incluye la actualización de tus datos sin límite y sin costo extra. Por ahora la entregamos en Baradero y la zona norte.",
+      a5: "La pulsera con QR y NFC cuesta $8.000 e incluye la actualización de tus datos sin límite y sin costo extra. Por ahora la entregamos solo en Baradero: envío a domicilio $1.000 o retiro sin costo.",
       q6: "¿Puedo actualizar mis datos cuando quiera?",
       a6: "Sí, las veces que necesites, desde tu enlace privado. No hace falta cambiar la pulsera.",
       q7: "¿Es solo para motociclistas?",
@@ -4779,6 +4837,7 @@ const translations = {
       generarQr: "Generar mi QR",
     },
     footer: {
+      equipo: "Entrada del equipo",
       instagramAria: "Safe.Ride en Instagram (se abre en una pestaña nueva)",
       escolar: "Proyecto escolar — EEST N.º 1 «Vuelta de Obligado», Baradero",
       aviso: "Safe.Ride no reemplaza la atención médica ni hace diagnósticos.",
@@ -4925,7 +4984,7 @@ const translations = {
     futuro: {
       eyebrow: "Looking ahead",
       title: "A project built to grow",
-      body: "We're starting with a pilot batch in Baradero and northern Buenos Aires, and looking for partnerships with the city, senior centers, clubs, driving schools, companies and workplace insurers. Next, we want to add alerts to the family when the bracelet is scanned, a link with emergency services (SAME), the ID in several languages and bracelets in different sizes and colors.",
+      body: "We're starting with a pilot batch in Baradero, and looking for partnerships with the city, senior centers, clubs, driving schools, companies and workplace insurers. Next, we want to add alerts to the family when the bracelet is scanned, a link with emergency services (SAME), the ID in several languages and bracelets in different sizes and colors.",
     },
     proyecto: {
       eyebrow: "Who's behind it",
@@ -4977,7 +5036,7 @@ const translations = {
       f3: "Flexible, lightweight TPU (8 to 10 g)",
       f4: "No password, no apps",
       f5: "Lasts 12 to 18 months of daily use",
-      f6: "Delivery in Baradero and northern Buenos Aires",
+      f6: "Home delivery in Baradero or pickup",
       boton: "Order my bracelet →",
       nota: "Fine for daily use; don't keep it underwater for long. To see the full ID the phone needs internet; with no internet, the NFC shows the essentials.",
     },
@@ -5038,6 +5097,8 @@ const translations = {
       producto: "Product",
       cantidad: "Quantity",
       direccion: "Address (street and number)",
+      entrega: "How do you want to get it?",
+      referencia: "Cross streets or landmark (optional)",
       ciudad: "City",
       provincia: "State / Province",
       codigoPostal: "ZIP / Postal code",
@@ -5060,7 +5121,8 @@ const translations = {
       telefono: "E.g.: +1 555 123 4567",
       localidad: "E.g.: Baradero, Buenos Aires",
       domicilio: "E.g.: 350 Mitre St",
-      direccion: "E.g.: 123 Main St",
+      direccion: "E.g.: 350 Mitre St",
+      referencia: "E.g.: house with green gates",
       ciudad: "E.g.: Baradero",
       provincia: "E.g.: Buenos Aires",
       codigoPostal: "E.g.: 2942",
@@ -5078,20 +5140,28 @@ const translations = {
       nfc: "Safe.Ride bracelet (QR + NFC)",
       pack: "Safe.Ride bracelet (QR + NFC)",
     },
+    entrega: {
+      domicilio: "Home delivery",
+      domicilioDet: "Only within Baradero · $1,000. A team member brings it to you.",
+      retiro: "Pickup",
+      retiroDet: "Free. We'll message you to agree on where and when to pick it up.",
+      soloBaradero: "For now we only deliver within Baradero.",
+    },
     pedido: {
       porQue: "What's included",
-      i1: "Delivery in Baradero and northern Buenos Aires",
+      i1: "Home delivery in Baradero or pickup",
       i2: "Instructions and help to fill in your ID",
       i3: "Free data updates",
       i4: "Questions via Instagram",
       medios: "Payment methods",
       m1: "Bank transfer",
       m3: "Cash",
-      eyebrow: "Delivery in Baradero and northern Buenos Aires",
+      eyebrow: "Delivery in Baradero",
       title: "Order your bracelet",
-      subtitle: "For now we deliver in Baradero and northern Buenos Aires. Fill in your details and we'll let you know when it arrives. We only ask for your email to notify you about your order — no password needed.",
+      subtitle: "For now we only deliver in Baradero: we bring it to your home or you pick it up for free. Fill in your details and we'll let you know when it's ready. We only ask for your email to notify you about your order — no password needed.",
+      total: "Total",
       confirmar: "Next: fill in my ID",
-      disclaimer: "In the next step you sign in with Google and fill in your ID. We write the QR and the chip and send you the bracelet ready to use.",
+      disclaimer: "In the next step you sign in with Google and fill in your ID. We write the QR and the chip and hand you the bracelet ready to use.",
       confirmado: "Order confirmed",
       pedidoSaferide: "Safe.Ride Order",
       enviarA: "Ship to",
@@ -5101,7 +5171,11 @@ const translations = {
     },
     faq: {
       q9: "Does it work in other countries?",
-      a9: "Yes. The QR and NFC open your ID from any phone with internet, in any country. For now, bracelets are delivered in Baradero and northern Buenos Aires.",
+      a9: "Yes. The QR and NFC open your ID from any phone with internet, in any country. For now, bracelets are only delivered in Baradero.",
+      qEnvio: "How do I get the bracelet?",
+      aEnvio: "You can choose home delivery within Baradero ($1,000), brought by a member of the Safe.Ride team, or free pickup: we'll message you to agree on where and when. Before handing it over we ask you to confirm your name, and you can pay in cash, by bank transfer or Mercado Pago.",
+      qArrep: "What if I change my mind?",
+      aArrep: "You have 10 calendar days from receiving it to cancel, no explanation needed (Argentine Consumer Protection Law 24,240). Message us on Instagram, return the bracelet and we refund what you paid.",
       q10: "How is it different from an engraved bracelet?",
       a10: "An engraved bracelet has limited space and, to change a detail, you need a new one. With Safe.Ride you change your ID anytime without touching the bracelet, and it can be read by QR or NFC.",
       q11: "Can I use it for my family?",
@@ -5117,7 +5191,7 @@ const translations = {
       q4: "Can any phone read the QR?",
       a4: "Yes, a camera is enough. No app needs to be installed.",
       q5: "How much is it?",
-      a5: "The bracelet with QR and NFC costs $8,000 and includes unlimited data updates at no extra cost. For now we deliver in Baradero and northern Buenos Aires.",
+      a5: "The bracelet with QR and NFC costs $8,000 and includes unlimited data updates at no extra cost. For now we only deliver in Baradero: home delivery $1,000 or free pickup.",
       q6: "Can I update my data whenever I want?",
       a6: "Yes, as many times as you need, from your private link. No need to change the bracelet.",
       q7: "Is it only for motorcyclists?",
@@ -5131,6 +5205,7 @@ const translations = {
       generarQr: "Generate my QR",
     },
     footer: {
+      equipo: "Team login",
       instagramAria: "Safe.Ride on Instagram (opens in a new tab)",
       escolar: "School project — EEST N.º 1 «Vuelta de Obligado», Baradero, Argentina",
       aviso: "Safe.Ride doesn't replace medical care or make diagnoses.",
@@ -6078,6 +6153,19 @@ function initOrderForm() {
     resultView.scrollIntoView({ behavior: "smooth", block: "nearest" });
   };
 
+  // Envío a domicilio (solo Baradero, $1.000) o retiro sin costo.
+  const PRECIO = 8000, ENVIO = 1000;
+  const actualizarEntrega = () => {
+    const domicilio = form.elements.delivery.value !== "retiro";
+    form.querySelectorAll("[data-solo-domicilio]").forEach((el) => { el.hidden = !domicilio; });
+    form.elements.address.required = domicilio;
+    const total = PRECIO * (Number(form.elements.quantity.value) || 1) + (domicilio ? ENVIO : 0);
+    document.getElementById("orderTotal").textContent = "$" + total.toLocaleString("es-AR");
+  };
+  form.querySelectorAll('input[name="delivery"]').forEach((r) => r.addEventListener("change", actualizarEntrega));
+  form.elements.quantity.addEventListener("change", actualizarEntrega);
+  actualizarEntrega();
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -6092,19 +6180,15 @@ function initOrderForm() {
       return value || fallback;
     };
 
-    const addressParts = [
-      getText("address", ""),
-      getText("city", ""),
-      getText("state", ""),
-      getText("zip", ""),
-      getText("country", ""),
-    ].filter(Boolean);
+    const entrega = data.get("delivery") === "retiro" ? "retiro" : "domicilio";
+    const addressParts = entrega === "domicilio" ? [getText("address", ""), "Baradero"] : [t("entrega.retiro")];
 
     // El pedido se termina en "Mi ficha": ahí se elige la ficha que se graba en la pulsera.
     try {
       sessionStorage.setItem("saferide-pedido", JSON.stringify({
-        nombre: getText("fullName", ""), telefono: getText("phone", ""), direccion: getText("address", ""),
-        ciudad: getText("city", ""), provincia: getText("state", ""), cp: getText("zip", ""),
+        entrega, nombre: getText("fullName", ""), telefono: getText("phone", ""),
+        direccion: entrega === "domicilio" ? getText("address", "") : "",
+        referencia: entrega === "domicilio" ? getText("reference", "") : "",
         cantidad: Number(data.get("quantity")) || 1,
       }));
     } catch (err) { /* sin almacenamiento: se completan de nuevo en Mi ficha */ }

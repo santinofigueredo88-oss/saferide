@@ -112,6 +112,10 @@
     :root[data-theme=dark] :is(.pedido dt, .resumen span) { color: var(--sr-accent); }
     :root[data-theme=dark] .filtros button { border-color: var(--line); color: var(--sr-text); }
     :root[data-theme=dark] .filtros button[aria-pressed=true] { background: #bfe6b8; border-color: #bfe6b8; color: #133821; }
+    .chip-estado[data-e=novedad] { background: #e4dcfb; color: #3f2a86; margin-left: 6px; }
+    .novedades[data-hay=true] { border: 2px solid #2a7351; background: #eef8ef; }
+    .novedades h2 { font-size: clamp(1.2rem, 2.8vw, 1.5rem) !important; }
+    :root[data-theme=dark] .novedades[data-hay=true] { border-color: var(--sr-accent); background: var(--sr-surface); }
     @media (max-width: 560px) { .pedido { grid-template-columns: 1fr; } .pedido canvas { justify-self: center; } .resumen { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   </style>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
@@ -147,9 +151,19 @@
 
       <section class="tarjeta" id="v-entrar" hidden>
         <div class="tarjeta-titulo"><h2>Solo para el equipo</h2><span>INGRESAR</span></div>
-        <p class="lede" style="margin:0 0 4px">Entrá con la cuenta de Google del equipo de Safe.Ride.</p>
+        <p class="lede" style="margin:0 0 4px">Entrá con la cuenta de Google del equipo de Safe.Ride. Este navegador te recuerda: la próxima vez entrás directo a ver si llegó algún pedido o ficha.</p>
         <div class="hero-actions"><button class="hero-primary" type="button" id="entrar">Entrar con Google <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button></div>
         <p class="estado" id="estado-entrar" role="status"></p>
+      </section>
+
+      <section class="tarjeta novedades" id="v-novedades" hidden aria-live="polite" aria-labelledby="novedades-titulo">
+        <div class="tarjeta-titulo"><h2 id="novedades-titulo">Buscando novedades…</h2><span>NOVEDADES</span></div>
+        <p class="nota" id="novedades-texto" style="margin:0"></p>
+        <div class="hero-actions">
+          <button class="hero-primary" type="button" id="ya-visto" hidden>Ya lo vi</button>
+          <button type="button" id="avisarme" hidden>Avisarme cuando llegue algo</button>
+        </div>
+        <p class="estado" id="estado-avisos" role="status"></p>
       </section>
 
       <section class="tarjeta" id="v-panel" hidden aria-labelledby="t-panel">
@@ -159,7 +173,7 @@
           <button type="button" data-f="pendientes" aria-pressed="true">Pendientes</button>
           <button type="button" data-f="nuevo" aria-pressed="false">Nuevos</button>
           <button type="button" data-f="grabado" aria-pressed="false">Grabados</button>
-          <button type="button" data-f="enviado" aria-pressed="false">Enviados</button>
+          <button type="button" data-f="enviado" aria-pressed="false">Entregados</button>
           <button type="button" data-f="todos" aria-pressed="false">Todos</button>
         </div>
         <div class="lista" id="lista" style="display:grid;gap:10px"></div>
@@ -185,9 +199,9 @@
 
     <footer class="footer">
       <p>Safe.Ride <span>·</span> EEST N.º 1 «Vuelta de Obligado», Baradero</p>
-      <nav aria-label="Enlaces del proyecto"><a href="./editar.html">Mi ficha</a><a href="./maqueta.html">Ver la pulsera</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
+      <nav aria-label="Enlaces del proyecto"><a href="./editar.html">Mi ficha</a><a href="./index.html#pedido">Página de pedidos</a><a href="./maqueta.html">Ver la pulsera</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
     </footer>
   </main>
-  <script type="module" src="./pulsera-3d/equipo.mjs?v=3"></script>
+  <script type="module" src="./pulsera-3d/equipo.mjs?v=4"></script>
 </body>
 </html>

@@ -16,7 +16,7 @@ let usuario = null;
 let editando = null; // { id, datos } cuando se cambia una ficha existente
 let fichas = [];
 let quierePedir = false; // vino desde "Pedí tu pulsera" de la portada
-const ESTADOS = { nuevo: 'Recibido · lo estamos preparando', grabado: 'Pulsera grabada · por enviar', enviado: 'Enviada', cancelado: 'Cancelado' };
+const ESTADOS = { nuevo: 'Recibido · lo estamos preparando', grabado: 'Pulsera grabada · lista para entregar', enviado: 'Entregada', cancelado: 'Cancelado' };
 
 // Datos de envío que el cliente ya escribió en la portada (quedan solo en esta pestaña).
 function envioGuardado() {
@@ -142,18 +142,26 @@ function abrirPedido(fichaId) {
   if (fichaId) select.value = fichaId;
   const previo = envioGuardado();
   if (previo) {
-    for (const k of ['nombre', 'telefono', 'direccion', 'ciudad', 'provincia', 'cp']) if (previo[k]) form.elements[k].value = previo[k];
+    for (const k of ['nombre', 'telefono', 'direccion', 'referencia']) if (previo[k]) form.elements[k].value = previo[k];
+    if (previo.entrega) form.elements.entrega.value = previo.entrega;
     if (previo.cantidad) form.elements.cantidad.value = String(previo.cantidad);
   }
   actualizarPrecio();
   estado($('estado-pedido'), '');
   mostrar('f-pedido');
 }
+// Envío a domicilio solo en Baradero ($1.000) o retiro sin costo.
+const PRECIO = 8000, ENVIO = 1000;
 function actualizarPrecio() {
-  const n = Number($('f-pedido').elements.cantidad.value || 1);
-  $('pedido-precio').textContent = `$${(8000 * n).toLocaleString('es-AR')}`;
+  const form = $('f-pedido');
+  const domicilio = form.elements.entrega.value !== 'retiro';
+  for (const el of form.querySelectorAll('[data-solo-domicilio]')) el.hidden = !domicilio;
+  form.elements.direccion.required = domicilio;
+  const n = Number(form.elements.cantidad.value || 1);
+  $('pedido-precio').textContent = `$${(PRECIO * n + (domicilio ? ENVIO : 0)).toLocaleString('es-AR')}`;
 }
 $('f-pedido').elements.cantidad.addEventListener('change', actualizarPrecio);
+for (const r of $('f-pedido').elements.entrega) r.addEventListener('change', actualizarPrecio);
 $('cancelar-pedido').addEventListener('click', () => cargarLista());
 $('ok-volver').addEventListener('click', () => cargarLista());
 
@@ -163,11 +171,14 @@ $('f-pedido').addEventListener('submit', async e => {
   if (!form.reportValidity()) return;
   const ficha = fichas.find(f => f.id === form.elements.ficha.value);
   if (!ficha) return;
-  const envio = {};
-  for (const k of ['nombre', 'telefono', 'direccion', 'ciudad', 'provincia', 'cp']) {
+  const entrega = form.elements.entrega.value === 'retiro' ? 'retiro' : 'domicilio';
+  const envio = { entrega };
+  const campos = entrega === 'domicilio' ? ['nombre', 'telefono', 'direccion', 'referencia'] : ['nombre', 'telefono'];
+  for (const k of campos) {
     const v = form.elements[k].value.trim();
     if (v) envio[k] = v;
   }
+  if (entrega === 'domicilio') { envio.ciudad = 'Baradero'; envio.provincia = 'Buenos Aires'; envio.cp = '2942'; }
   const pedido = {
     uid: usuario.uid, email: usuario.email, fichaId: ficha.id, nombreFicha: ficha.datos.nombre,
     cantidad: Number(form.elements.cantidad.value), envio, estado: 'nuevo',

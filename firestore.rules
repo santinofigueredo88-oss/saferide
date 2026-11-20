@@ -68,9 +68,13 @@ service cloud.firestore {
         && request.resource.data.nombreFicha == get(/databases/$(database)/documents/fichas/$(request.resource.data.fichaId)).data.nombre
         && request.resource.data.cantidad is int && request.resource.data.cantidad >= 1 && request.resource.data.cantidad <= 5
         && request.resource.data.envio is map
-        && request.resource.data.envio.keys().hasOnly(['nombre', 'telefono', 'direccion', 'ciudad', 'provincia', 'cp'])
-        && textoEnvio('nombre', 60, true) && textoEnvio('telefono', 25, true) && textoEnvio('direccion', 80, true)
-        && textoEnvio('ciudad', 40, true) && textoEnvio('provincia', 40, false) && textoEnvio('cp', 10, true)
+        && request.resource.data.envio.keys().hasOnly(['entrega', 'nombre', 'telefono', 'direccion', 'referencia', 'ciudad', 'provincia', 'cp'])
+        && request.resource.data.envio.get('entrega', 'domicilio') in ['domicilio', 'retiro']
+        && textoEnvio('nombre', 60, true) && textoEnvio('telefono', 25, true)
+        // Envío a domicilio (solo Baradero): necesita dirección. Retiro por el local: no.
+        && textoEnvio('direccion', 80, request.resource.data.envio.get('entrega', 'domicilio') == 'domicilio')
+        && textoEnvio('referencia', 80, false) && textoEnvio('ciudad', 40, false)
+        && textoEnvio('provincia', 40, false) && textoEnvio('cp', 10, false)
         && (!('nota' in request.resource.data) || (request.resource.data.nota is string && request.resource.data.nota.size() <= 200))
         && request.resource.data.estado == 'nuevo'
         && request.resource.data.creado == request.time

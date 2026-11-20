@@ -86,6 +86,17 @@
     :root[data-theme=dark] .estado.mal { color: #ff8a80; }
     :root[data-theme=dark] .fijo { border-color: var(--line); }
     :root[data-theme=dark] .cuenta b { color: var(--sr-text); }
+    .entrega { border: 0; padding: 0; margin: 0; }
+    .entrega legend { margin-bottom: 6px; padding: 0; color: #35664b; font: 750 .72rem/1.25 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .entrega-opciones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .entrega-opcion { padding: 11px 12px; border: 1px solid #d5e3d6; border-radius: 11px; background: #f6faf6; cursor: pointer; line-height: 1.4; }
+    .entrega-opcion:has(input:checked) { border-color: #2a7351; outline: 2px solid #2a7351; }
+    .entrega-opcion b { color: var(--ink); font-size: .92rem; }
+    [data-solo-domicilio][hidden] { display: none !important; }
+    :root[data-theme=dark] .entrega-opcion { background: var(--sr-raised); border-color: var(--line); }
+    :root[data-theme=dark] .entrega-opcion b { color: var(--sr-text); }
+    :root[data-theme=dark] .entrega legend { color: var(--sr-accent); }
+    @media (max-width: 520px) { .entrega-opciones { grid-template-columns: 1fr; } }
   </style>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 </head>
@@ -179,19 +190,22 @@
       <!-- Pedir la pulsera -->
       <form id="f-pedido" class="tarjeta" hidden novalidate aria-labelledby="t-pedido">
         <div class="tarjeta-titulo"><h2 id="t-pedido">Pedir la pulsera</h2><span>03 · ENVÍO</span></div>
-        <p class="lede" style="margin:0 0 12px">Nosotros grabamos el QR y el chip con tu ficha y te la mandamos lista para usar. Por ahora enviamos a Baradero y zona norte de Buenos Aires.</p>
+        <p class="lede" style="margin:0 0 12px">Nosotros grabamos el QR y el chip con tu ficha y te la entregamos lista para usar. Por ahora entregamos solo en Baradero.</p>
         <div class="campos">
           <label class="campo ancho"><span>Ficha de la pulsera</span><select name="ficha" id="pedido-ficha" required></select></label>
           <label class="campo"><span>Cantidad</span><select name="cantidad"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
-          <div class="campo"><span>Precio</span><div class="fijo" id="pedido-precio">$8.000</div></div>
+          <div class="campo"><span>Total</span><div class="fijo" id="pedido-precio">$9.000</div></div>
           <label class="campo"><span>Quién la recibe</span><input name="nombre" maxlength="60" required autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="Ej.: Juan Gómez"></label>
           <label class="campo"><span>Teléfono</span><input name="telefono" type="tel" maxlength="25" required autocomplete="tel" enterkeyhint="next" placeholder="Ej.: 3329 123456"></label>
-          <label class="campo ancho"><span>Dirección</span><input name="direccion" maxlength="80" required autocomplete="street-address" enterkeyhint="next" placeholder="Ej.: Mitre 350"></label>
-          <label class="campo"><span>Ciudad</span><input name="ciudad" maxlength="40" required list="localidadesList" autocomplete="address-level2" enterkeyhint="next" placeholder="Ej.: Baradero"></label>
-          <label class="campo"><span>Provincia</span><input name="provincia" maxlength="40" list="provinciasList" autocomplete="address-level1" enterkeyhint="next" value="Buenos Aires"></label>
-          <label class="campo"><span>Código postal</span><input name="cp" maxlength="10" required inputmode="numeric" autocomplete="postal-code" enterkeyhint="next" placeholder="Ej.: 2942"></label>
-          <label class="campo ancho"><span>Nota <small>· opcional, por ejemplo un horario para recibirla</small></span><input name="nota" maxlength="200" enterkeyhint="done"></label>
-          <datalist id="provinciasList"><option value="Buenos Aires"><option value="Ciudad de Buenos Aires"><option value="Catamarca"><option value="Chaco"><option value="Chubut"><option value="Córdoba"><option value="Corrientes"><option value="Entre Ríos"><option value="Formosa"><option value="Jujuy"><option value="La Pampa"><option value="La Rioja"><option value="Mendoza"><option value="Misiones"><option value="Neuquén"><option value="Río Negro"><option value="Salta"><option value="San Juan"><option value="San Luis"><option value="Santa Cruz"><option value="Santa Fe"><option value="Santiago del Estero"><option value="Tierra del Fuego"><option value="Tucumán"></datalist>
+          <fieldset class="campo ancho entrega"><legend>¿Cómo la querés recibir?</legend>
+            <div class="entrega-opciones">
+              <label class="acepto entrega-opcion"><input type="radio" name="entrega" value="domicilio" checked><span><b>Envío a domicilio</b><br>Solo dentro de Baradero · $1.000. Te la lleva una persona del equipo.</span></label>
+              <label class="acepto entrega-opcion"><input type="radio" name="entrega" value="retiro"><span><b>Retiro por el local</b><br>Sin costo. Te escribimos para acordar dónde y cuándo retirarla.</span></label>
+            </div>
+          </fieldset>
+          <label class="campo" data-solo-domicilio><span>Dirección en Baradero</span><input name="direccion" maxlength="80" required autocomplete="street-address" enterkeyhint="next" placeholder="Ej.: Mitre 350"></label>
+          <label class="campo" data-solo-domicilio><span>Entre calles o referencia <small>· opcional</small></span><input name="referencia" maxlength="80" enterkeyhint="next" placeholder="Ej.: casa con rejas verdes"></label>
+          <label class="campo ancho"><span>Nota <small>· opcional, por ejemplo un horario para recibirla o retirarla</small></span><input name="nota" maxlength="200" enterkeyhint="done"></label>
         </div>
         <div class="hero-actions">
           <button class="hero-primary" type="submit" id="enviar-pedido">Confirmar pedido <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
@@ -203,7 +217,7 @@
       <!-- Pedido confirmado -->
       <section class="tarjeta" id="v-pedido-ok" hidden aria-labelledby="t-pedido-ok">
         <div class="tarjeta-titulo"><h2 id="t-pedido-ok">¡Pedido recibido!</h2><span>LISTO</span></div>
-        <p class="lede" style="margin:0">Vamos a grabar tu pulsera con la ficha de <b id="ok-nombre"></b> y te escribimos al teléfono que dejaste para coordinar el pago y la entrega. Mientras tanto, podés cambiar tus datos médicos cuando quieras.</p>
+        <p class="lede" style="margin:0">Vamos a grabar tu pulsera con la ficha de <b id="ok-nombre"></b> y te escribimos al teléfono que dejaste para coordinar el pago y la entrega (o el retiro). Mientras tanto, podés cambiar tus datos médicos cuando quieras.</p>
         <div class="hero-actions"><button class="hero-primary" type="button" id="ok-volver">Ver mis fichas y pedidos</button></div>
       </section>
 
@@ -230,9 +244,9 @@
 
     <footer class="footer">
       <p>Safe.Ride <span>·</span> EEST N.º 1 «Vuelta de Obligado», Baradero</p>
-      <nav aria-label="Enlaces del proyecto"><a href="./editar.html">Mi ficha</a><a href="./maqueta.html">Ver la pulsera</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
+      <nav aria-label="Enlaces del proyecto"><a href="./editar.html">Mi ficha</a><a href="./maqueta.html">Ver la pulsera</a><a href="./equipo.html">Equipo</a><a href="./index.html#proyecto">Conocé el proyecto</a></nav>
     </footer>
   </main>
-  <script type="module" src="./pulsera-3d/editar.mjs?v=3"></script>
+  <script type="module" src="./pulsera-3d/editar.mjs?v=4"></script>
 </body>
 </html>
