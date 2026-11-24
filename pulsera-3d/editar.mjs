@@ -261,9 +261,28 @@ function abrirFormulario(ficha, previo) {
     form.elements.nombre.value = previo.get('n') || '';
     for (const k of CAMPOS) if (previo.get(k)) form.elements[k].value = previo.get(k);
   }
+  $('es-menor').checked = false;
+  $('ver-domicilio').checked = !!form.elements.d.value.trim();
+  pintarDomicilio();
   mostrar('form');
   (nueva ? form.elements.nombre : form.elements.g).focus({ preventScroll: true });
 }
+
+// Domicilio: solo se guarda (y se ve en la ficha) si la persona lo elige.
+// Para menores arranca oculto.
+function pintarDomicilio() {
+  const ver = $('ver-domicilio').checked;
+  $('campo-domicilio').hidden = !ver;
+  $('aviso-menor').hidden = !$('es-menor').checked || ver;
+}
+$('es-menor')?.addEventListener('change', e => {
+  if (e.target.checked) $('ver-domicilio').checked = false;
+  pintarDomicilio();
+});
+$('ver-domicilio')?.addEventListener('change', e => {
+  pintarDomicilio();
+  if (e.target.checked) $('form').elements.d.focus({ preventScroll: true });
+});
 
 $('form').addEventListener('submit', async e => {
   e.preventDefault();
@@ -274,6 +293,7 @@ $('form').addEventListener('submit', async e => {
     const v = form.elements[k].value.trim();
     if (v) datos[k] = v;
   }
+  if (!$('ver-domicilio').checked) delete datos.d;
   datos.actualizado = fs.serverTimestamp();
   $('guardar').disabled = true;
   estado($('estado-form'), 'GUARDANDO…');

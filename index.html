@@ -4097,6 +4097,22 @@ html:not([data-theme="dark"]) .hero {
   .btn:active, .card:hover, .pedido-info-card:hover, .price-card:hover { transform: none; }
 }
 
+/* Domicilio opcional (y oculto para menores salvo que lo elijan) */
+.sr3d .mf-domicilio { border: 1px solid var(--surface-border); border-radius: 14px; padding: 14px 16px 16px; margin: 4px 0 0; display: grid; gap: 10px; background: rgba(var(--accent-rgb), .04); }
+.sr3d .mf-domicilio legend { padding: 0 6px; font-weight: 600; font-size: .9rem; }
+.sr3d .mf-domicilio legend small { font-weight: 400; color: var(--text-secondary); }
+.sr3d .mf-check { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; padding: 10px 12px; border-radius: 10px; border: 1px solid transparent; transition: background .2s, border-color .2s; }
+.sr3d .mf-check:hover { background: rgba(var(--accent-rgb), .06); }
+.sr3d .mf-check:has(input:checked) { border-color: rgba(var(--accent-rgb), .45); background: rgba(var(--accent-rgb), .08); }
+.sr3d .mf-check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent-fg); flex: none; }
+.sr3d .mf-check span { display: grid; gap: 2px; }
+.sr3d .mf-check b { font-weight: 600; font-size: .92rem; }
+.sr3d .mf-check small { color: var(--text-secondary); font-size: .8rem; line-height: 1.4; }
+.sr3d .mf-aviso { margin: 0; display: flex; gap: 8px; align-items: center; font-size: .82rem; color: var(--accent-fg); padding: 8px 12px; border-radius: 10px; background: rgba(var(--accent-rgb), .1); }
+.sr3d .mf-aviso .icon { width: 16px; height: 16px; flex: none; }
+.sr3d .mf-dato { display: grid; gap: 6px; }
+.sr3d .mf-dato span { font-size: .82rem; color: var(--text-secondary); }
+
 /* ===== Aprovechar el ancho de cada pantalla ===== */
 /* Tablet: las grillas se abren antes y el precio queda al lado de su explicación */
 @media (min-width: 900px) {
@@ -4660,7 +4676,7 @@ html:not([data-theme="dark"]) .hero {
           <div>
             <svg class="icon timeline-step-icon" aria-hidden="true"><use href="#icon-heart-pulse"></use></svg>
             <h3 data-i18n="comoFunciona.step2.title">Cargá tus datos médicos</h3>
-            <p data-i18n="comoFunciona.step2.desc">Grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia.</p>
+            <p data-i18n="comoFunciona.step2.desc">Grupo sanguíneo, alergias, medicación, condiciones y un contacto de emergencia. Tu domicilio aparece solo si vos lo elegís (en menores, queda oculto).</p>
           </div>
         </li>
         <li class="timeline-step reveal">
@@ -4791,7 +4807,7 @@ html:not([data-theme="dark"]) .hero {
         <div class="privacy-card reveal">
           <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-eye"></use></svg></div>
           <h3 data-i18n="privacidad.c1.title">Solo lo esencial es público</h3>
-          <p data-i18n="privacidad.c1.desc">La ficha muestra grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia. No pedimos DNI ni datos bancarios.</p>
+          <p data-i18n="privacidad.c1.desc">La ficha muestra grupo sanguíneo, alergias, medicación, condiciones y un contacto de emergencia. Tu domicilio aparece solo si vos lo elegís (en menores, queda oculto). No pedimos DNI ni datos bancarios.</p>
         </div>
         <div class="privacy-card reveal">
           <div class="privacy-card-icon"><svg aria-hidden="true"><use href="#icon-pencil"></use></svg></div>
@@ -5204,7 +5220,13 @@ html:not([data-theme="dark"]) .hero {
           <label class="campo"><span>Teléfono del contacto</span><input name="ct" type="tel" maxlength="25" autocomplete="off" enterkeyhint="next" placeholder="Ej.: 3329 123456"></label>
           <label class="campo"><span>Obra social</span><input name="o" maxlength="40" list="insuranceList" autocomplete="off" enterkeyhint="next" placeholder="Ej.: IOMA, PAMI, OSDE"></label>
           <label class="campo"><span>Localidad</span><input name="l" maxlength="40" list="localidadesList" autocomplete="address-level2" enterkeyhint="next" placeholder="Ej.: Baradero"></label>
-          <label class="campo ancho"><span>Domicilio <small>· opcional, para llevar a la persona a su casa</small></span><input name="d" maxlength="60" autocomplete="street-address" enterkeyhint="done" placeholder="Ej.: Mitre 350"></label>
+          <fieldset class="campo ancho mf-domicilio" id="bloque-domicilio">
+            <legend>Domicilio <small>· vos elegís si se ve</small></legend>
+            <label class="mf-check"><input type="checkbox" id="es-menor"> <span><b>Es para alguien menor de 18 años</b><small>La carga y la autoriza su madre, padre o tutor.</small></span></label>
+            <label class="mf-check"><input type="checkbox" id="ver-domicilio"> <span><b>Mostrar el domicilio en la ficha</b><small id="ayuda-domicilio">Sirve para que puedan llevar a la persona a su casa. Si no lo marcás, no se guarda ni se muestra.</small></span></label>
+            <p class="mf-aviso" id="aviso-menor" hidden><svg class="icon" aria-hidden="true"><use href="#icon-shield-check"/></svg> Para cuidar a los menores, el domicilio queda oculto. Mostralo solo si vos querés.</p>
+            <label class="mf-dato" id="campo-domicilio" hidden><span>Calle y número</span><input name="d" maxlength="60" autocomplete="street-address" enterkeyhint="done" placeholder="Ej.: Mitre 350"></label>
+          </fieldset>
         </div>
         <label class="acepto" id="campo-acepto"><input type="checkbox" id="consentimiento" required> <span>Acepto que estos datos se muestren a quien escanee mi pulsera o acerque un celular al chip (Ley 25.326). Puedo cambiarlos o borrarlos cuando quiera. Si la ficha es de un menor, la completa su madre, padre o tutor.</span></label>
         <div class="hero-actions">
@@ -5794,7 +5816,7 @@ const translations = {
       title: "Cómo funciona",
       subtitle: "De la carga de tus datos a la lectura del QR, en seis pasos simples.",
       step1: { title: "Dejá tu mail", desc: "Sin contraseñas: te mandamos tu enlace privado para cargar y editar tu ficha." },
-      step2: { title: "Cargá tus datos médicos", desc: "Grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia." },
+      step2: { title: "Cargá tus datos médicos", desc: "Grupo sanguíneo, alergias, medicación, condiciones y un contacto de emergencia. Tu domicilio aparece solo si vos lo elegís (en menores, queda oculto)." },
       step3: { title: "Generá tu QR", desc: "El sistema arma tu código único al instante." },
       step4: { title: "Grabamos tu pulsera", desc: "Tu QR va en la pulsera y el chip NFC se graba con el mismo enlace." },
       step5: { title: "Listo para una emergencia", desc: "Cualquiera escanea el QR o acerca un celular compatible al mismo punto para leer el NFC, sin instalar una app propia." },
@@ -5920,7 +5942,7 @@ const translations = {
       eyebrow: "Privacidad y seguridad",
       title: "Tus datos, siempre bajo tu control",
       subtitle: "Safe.Ride muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.",
-      c1: { title: "Solo lo esencial es público", desc: "La ficha muestra grupo sanguíneo, alergias, medicación, condiciones, dónde vivís y un contacto de emergencia. No pedimos DNI ni datos bancarios." },
+      c1: { title: "Solo lo esencial es público", desc: "La ficha muestra grupo sanguíneo, alergias, medicación, condiciones y un contacto de emergencia. Tu domicilio aparece solo si vos lo elegís (en menores, queda oculto). No pedimos DNI ni datos bancarios." },
       c2: { title: "Vos decidís qué se muestra", desc: "Ves, corregís o borrás tu ficha cuando quieras desde tu enlace privado. Antes de publicarla te pedimos tu consentimiento." },
       c3: { title: "Sin rastreo ni publicidad", desc: "No vendemos tus datos ni los usamos para otra cosa que no sea mostrar tu ficha de emergencia." },
       c4: { title: "Código que se puede revocar", desc: "Si perdés la pulsera, avisás: desactivamos ese código y te damos uno nuevo." },
@@ -6167,7 +6189,7 @@ const translations = {
       title: "How it works",
       subtitle: "From loading your data to scanning the QR, in six simple steps.",
       step1: { title: "Leave your email", desc: "No passwords: we send you your private link to fill in and edit your ID." },
-      step2: { title: "Add your medical data", desc: "Blood type, allergies, medication, conditions, where you live and an emergency contact." },
+      step2: { title: "Add your medical data", desc: "Blood type, allergies, medication, conditions and an emergency contact. Your home address only shows if you choose it (for minors, it stays hidden)." },
       step3: { title: "Generate your QR", desc: "The system builds your unique code instantly." },
       step4: { title: "We program your bracelet", desc: "Your QR goes on the bracelet and the NFC chip gets the same link." },
       step5: { title: "Ready for an emergency", desc: "Scan the QR code or hold a compatible phone over the same spot to read NFC, without a dedicated app." },
@@ -6293,7 +6315,7 @@ const translations = {
       eyebrow: "Privacy & security",
       title: "Your data, always under your control",
       subtitle: "Safe.Ride only shows what's useful in an emergency. Everything else stays private and you manage it.",
-      c1: { title: "Only the essentials are public", desc: "The ID shows blood type, allergies, medication, conditions, where you live and an emergency contact. We don't ask for ID numbers or bank details." },
+      c1: { title: "Only the essentials are public", desc: "The ID shows blood type, allergies, medication, conditions and an emergency contact. Your home address only shows if you choose it (for minors, it stays hidden). We don't ask for ID numbers or bank details." },
       c2: { title: "You decide what's shown", desc: "View, correct or delete your ID anytime from your private link. We ask for your consent before publishing it." },
       c3: { title: "No tracking, no ads", desc: "We don't sell your data or use it for anything other than showing your emergency ID." },
       c4: { title: "A code you can revoke", desc: "If you lose the bracelet, let us know: we deactivate that code and give you a new one." },
@@ -7576,7 +7598,7 @@ function initDownloads() {
   if (!zona) return;
   window.cargarMiFicha = function () {
     if (window.__fichaCargada) return; window.__fichaCargada = true;
-    var sc = document.createElement("script"); sc.type = "module"; sc.src = "./pulsera-3d/editar.mjs?v=6"; document.body.appendChild(sc);
+    var sc = document.createElement("script"); sc.type = "module"; sc.src = "./pulsera-3d/editar.mjs?v=7"; document.body.appendChild(sc);
   };
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (e) { if (e.some(function (x) { return x.isIntersecting; })) { io.disconnect(); window.cargarMiFicha(); } }, { rootMargin: "900px 0px" });

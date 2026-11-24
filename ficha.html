@@ -180,6 +180,7 @@
     poner('f-obra', d.o, '—');
     poner('f-localidad', d.l, '—');
     poner('f-domicilio', d.d, '—');
+    $('f-domicilio').parentElement.hidden = !d.d;
     $('bloque-otros').hidden = !d.o && !d.l && !d.d;
     $('vista-ficha').hidden = false;
     $('vista-crear').hidden = true;
