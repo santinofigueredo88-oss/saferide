@@ -4127,6 +4127,14 @@ html:not([data-theme="dark"]) .hero {
 @media (max-width: 560px) { .sr3d .cine-texto { left: 10px; right: 10px; bottom: 10px; min-width: 0; max-width: none; padding: 9px 12px 11px; } }
 
 @media (max-width: 560px) { .sr3d .viewer-actions { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 8px; } .sr3d .viewer-actions .viewer-button { justify-content: center; } }
+/* Teléfono del inicio: botón de llamar y pie con NFC */
+.phone-call { margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 12px; border-radius: 12px; background: linear-gradient(180deg, #3f9a5c, #2c7a45); color: #fff; font-weight: 600; font-size: .82rem; box-shadow: 0 8px 20px -10px rgba(63,154,92,.8); }
+.phone-call .icon { width: 15px; height: 15px; }
+.phone-foot { margin-top: auto; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: .68rem; color: var(--text-secondary); border-top: 1px solid var(--surface-border); }
+.phone-nfc { display: inline-flex; align-items: center; gap: 5px; color: var(--accent-fg); font-weight: 600; }
+.phone-nfc .icon { width: 13px; height: 13px; }
+.phone-ficha { display: flex; flex-direction: column; }
+
 /* ===== Aprovechar el ancho de cada pantalla ===== */
 /* Tablet: las grillas se abren antes y el precio queda al lado de su explicación */
 @media (min-width: 900px) {
@@ -4320,7 +4328,7 @@ html:not([data-theme="dark"]) .hero {
         </span>
         <h1 class="hero-title"><span class="logo-safe">Safe</span><span class="logo-separator"></span><span class="logo-ride">Ride</span></h1>
         <p class="hero-tagline" data-i18n="hero.tagline">Tu información, a tiempo.</p>
-        <p class="hero-desc" data-i18n="hero.desc">Una pulsera de TPU con código QR y chip NFC en la misma pieza, con tus datos médicos esenciales. Ante cualquier accidente —en la calle, en el trabajo, en casa o haciendo deporte— quien te ayude escanea el QR o acerca el celular y ve al instante tu grupo sanguíneo, tus alergias, tu medicación y a quién avisar.</p>
+        <p class="hero-desc" data-i18n="hero.desc">Una pulsera con código QR y chip NFC que guarda tus datos médicos esenciales. Si te pasa algo, quien te ayude acerca el celular y ve al instante tu grupo sanguíneo, tus alergias, tu medicación y a quién avisar.</p>
         <div class="hero-actions">
           <a href="#como-funciona" class="btn btn-primary" data-i18n="hero.ctaPrimary">Ver cómo funciona</a>
           <button type="button" class="btn btn-outline" data-prototype-trigger data-i18n="hero.ctaSecondary">Creá tu ficha</button>
@@ -4368,6 +4376,8 @@ html:not([data-theme="dark"]) .hero {
                 <div class="phone-row"><dt data-i18n="field.localidad">Localidad / provincia</dt><dd>Baradero, Bs. As.</dd></div>
                 <div class="phone-row"><dt data-i18n="field.contactoEmergencia">Contacto de emergencia</dt><dd>Ana Pérez</dd></div>
               </dl>
+              <div class="phone-call" aria-hidden="true"><svg class="icon"><use href="#icon-smartphone"></use></svg> <span data-i18n="hero.llamar">Llamar a Ana Pérez</span></div>
+              <div class="phone-foot" aria-hidden="true"><span class="phone-nfc"><svg class="icon"><use href="#icon-nfc"></use></svg> <span data-i18n="hero.leido">Leída por NFC</span></span><span data-i18n="hero.actualizada">Actualizada hace 2 días</span></div>
             </div>
           </div>
         </div>
@@ -5814,9 +5824,12 @@ const translations = {
     hero: {
       badge: "Protección médica siempre con vos",
       tagline: "Tu información, a tiempo.",
-      desc: "Una pulsera de TPU con código QR y chip NFC en la misma pieza, con tus datos médicos esenciales. Ante cualquier accidente —en la calle, en el trabajo, en casa o haciendo deporte— quien te ayude escanea el QR o acerca el celular y ve al instante tu grupo sanguíneo, tus alergias, tu medicación y a quién avisar.",
+      desc: "Una pulsera con código QR y chip NFC que guarda tus datos médicos esenciales. Si te pasa algo, quien te ayude acerca el celular y ve al instante tu grupo sanguíneo, tus alergias, tu medicación y a quién avisar.",
       ctaPrimary: "Ver cómo funciona",
       ctaSecondary: "Creá tu ficha",
+      llamar: "Llamar a Ana Pérez",
+      leido: "Leída por NFC",
+      actualizada: "Actualizada hace 2 días",
       qrIllustration: "Ilustración de una pulsera con un colgante de código QR",
       phoneAria: "Vista de la ficha médica de emergencia en un celular",
       trust1: "Sin apps ni contraseñas",
@@ -6187,9 +6200,12 @@ const translations = {
     hero: {
       badge: "Medical protection always with you",
       tagline: "Your information, in time.",
-      desc: "A TPU bracelet with a QR code and an NFC chip in the same piece, carrying your essential medical data. In any accident —on the street, at work, at home or doing sports— whoever helps you scans the QR or taps their phone and instantly sees your blood type, allergies, medication and who to call.",
+      desc: "A bracelet with a QR code and an NFC chip that carries your essential medical data. If something happens, whoever helps you taps their phone and instantly sees your blood type, allergies, medication and who to call.",
       ctaPrimary: "See how it works",
       ctaSecondary: "Create your ID",
+      llamar: "Call Ana Pérez",
+      leido: "Read by NFC",
+      actualizada: "Updated 2 days ago",
       qrIllustration: "Illustration of a bracelet with a QR code charm",
       phoneAria: "Emergency medical ID shown on a phone",
       trust1: "No apps, no passwords",
