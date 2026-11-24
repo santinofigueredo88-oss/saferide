@@ -63,6 +63,8 @@
     // página siempre se arranca desde arriba (en el celular a veces quedaba
     // abierta abajo de todo).
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    // Cada parte de la página se ve en su propia pantalla (ver "Pantallas").
+    document.documentElement.classList.add("con-vistas");
   } catch (e) {}
   try {
     var savedTheme = localStorage.getItem("saferide-theme");
@@ -4135,6 +4137,56 @@ html:not([data-theme="dark"]) .hero {
 .phone-nfc .icon { width: 13px; height: 13px; }
 .phone-ficha { display: flex; flex-direction: column; }
 
+/* ===== Pantallas: cada parte se ve sola ===== */
+.con-vistas h2[tabindex="-1"]:focus, .con-vistas main:focus { outline: none; }
+.con-vistas [data-vista]:not(.vista-activa) { display: none !important; }
+.con-vistas .vista-activa { animation: vistaEntra .4s ease both; }
+@keyframes vistaEntra { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .con-vistas .vista-activa { animation: none; } }
+.con-vistas main { min-height: calc(100vh - var(--nav-height, 76px)); }
+
+/* Tarjetas del inicio */
+.hub { padding: clamp(24px, 4vw, 48px) 0 clamp(56px, 6vw, 88px); }
+.hub-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.hub-card { position: relative; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 14px; row-gap: 4px; align-items: center; padding: 20px 46px 20px 20px; border-radius: var(--radius-md, 16px); border: 1px solid var(--surface-border); background: linear-gradient(180deg, var(--surface-raise, rgba(255,255,255,.03)), transparent 60%), var(--surface); color: var(--text-primary); text-decoration: none; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.hub-card:hover { transform: translateY(-3px); border-color: rgba(var(--accent-rgb), .45); box-shadow: 0 18px 40px -26px rgba(var(--accent-rgb), .7); }
+.hub-card:active { transform: scale(.98); }
+.hub-icon { grid-row: 1 / span 2; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(var(--accent-rgb), .12); color: var(--accent-fg); }
+.hub-icon .icon { width: 22px; height: 22px; }
+.hub-num { position: absolute; top: 14px; right: 16px; font: 600 .68rem/1 ui-monospace, Menlo, monospace; color: var(--text-secondary); letter-spacing: .1em; opacity: .7; }
+.hub-card strong { font-size: 1.02rem; font-weight: 650; }
+.hub-card small { color: var(--text-secondary); font-size: .85rem; line-height: 1.4; }
+.hub-arrow { position: absolute; right: 16px; bottom: 18px; width: 16px; height: 16px; color: var(--accent-fg); transition: transform .25s ease; }
+.hub-card:hover .hub-arrow { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) { .hub-card, .hub-arrow { transition: none; } .hub-card:hover { transform: none; } }
+
+/* Anterior / Siguiente */
+.vista-pager { padding: 8px 0 clamp(48px, 6vw, 80px); }
+.pager-in { display: flex; justify-content: space-between; gap: 14px; border-top: 1px solid var(--surface-border); padding-top: 28px; }
+.pager-btn { display: inline-flex; align-items: center; gap: 14px; padding: 14px 20px; border-radius: 14px; border: 1px solid var(--surface-border); background: var(--surface); color: var(--text-primary); text-decoration: none; min-width: 0; transition: border-color .2s ease, transform .2s ease, background .2s ease; }
+.pager-btn span { display: grid; gap: 2px; }
+.pager-btn small { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-secondary); }
+.pager-btn strong { font-size: 1rem; font-weight: 650; }
+.pager-btn .icon { width: 18px; height: 18px; color: var(--accent-fg); flex: none; transition: transform .2s ease; }
+.pager-prev .icon { transform: scaleX(-1); }
+.pager-next { margin-left: auto; text-align: right; border-color: rgba(var(--accent-rgb), .4); background: rgba(var(--accent-rgb), .1); }
+.pager-btn:hover { border-color: rgba(var(--accent-rgb), .55); }
+.pager-next:hover .icon { transform: translateX(3px); }
+.pager-prev:hover .icon { transform: scaleX(-1) translateX(3px); }
+.pager-btn:active { transform: scale(.98); }
+@media (max-width: 560px) { .pager-btn { padding: 12px 14px; gap: 10px; } .pager-btn strong { font-size: .92rem; } }
+
+.hub-icon .icon, .hub-arrow, .pager-btn .icon { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.hub-grid { grid-template-columns: 1fr; }
+@media (min-width: 620px) { .hub-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .hub-grid { grid-template-columns: repeat(4, 1fr); } }
+.hub-card-cta { border-color: rgba(var(--accent-rgb), .5); background: linear-gradient(160deg, rgba(var(--accent-rgb), .22), rgba(var(--accent-rgb), .06)), var(--surface); }
+.hub-card-cta .hub-icon { background: var(--accent-fg); color: var(--bg, #0d140f); }
+/* La primera parte de cada pantalla deja lugar para el menú fijo de arriba */
+.con-vistas .vista-primera > .section.grupo:first-child { padding-top: calc(var(--nav-height, 76px) + clamp(28px, 4vw, 52px)); }
+/* El cierre "¿Querés tener tu información...?" va solo en el inicio */
+.con-vistas body:not([data-vista-actual="inicio"]) #contacto { display: none; }
+
 /* ===== Aprovechar el ancho de cada pantalla ===== */
 /* Tablet: las grillas se abren antes y el precio queda al lado de su explicación */
 @media (min-width: 900px) {
@@ -4279,6 +4331,7 @@ html:not([data-theme="dark"]) .hero {
     <nav class="nav-links" id="navLinks" aria-label="Navegación principal" data-i18n-aria-label="nav.mainAria">
       <a href="#el-problema" data-i18n="nav.problema">El problema</a>
       <a href="#pulsera" data-i18n="nav.pulsera">La pulsera</a>
+      <a href="#como-funciona" data-i18n="nav.comoFunciona">Cómo funciona</a>
       <a href="#tus-datos" data-i18n="nav.datos">Tus datos</a>
       <a href="#para-quien-es" data-i18n="nav.paraQuien">Para quién es</a>
       <a href="#pedila" data-i18n="nav.precios">Precio</a>
@@ -4319,6 +4372,7 @@ html:not([data-theme="dark"]) .hero {
 <main id="top">
 
   <!-- ============ HERO ============ -->
+  <div class="vista-inicio" id="inicio" data-vista="inicio">
   <section class="hero" aria-label="Presentación de Safe.Ride">
     <div class="container hero-inner">
       <div class="hero-text">
@@ -4385,14 +4439,36 @@ html:not([data-theme="dark"]) .hero {
     </div>
   </section>
 
+
+  <section class="section hub" id="explorar" aria-labelledby="hub-title">
+    <div class="container">
+      <div class="section-heading">
+        <span class="eyebrow" data-i18n="hub.eyebrow">Explorá</span>
+        <h2 id="hub-title" data-i18n="hub.title">Todo sobre Safe.Ride, por partes</h2>
+        <p data-i18n="hub.subtitle">Elegí qué querés ver. Cada parte se abre sola, sin tener que bajar por toda la página.</p>
+      </div>
+      <div class="hub-grid">
+        <a class="hub-card" href="#el-problema"><span class="hub-icon"><svg class="icon" aria-hidden="true"><use href="#icon-alert-triangle"></use></svg></span><span class="hub-num">01</span><strong data-i18n="nav.problema">El problema</strong><small data-i18n="hub.c1">Por qué conviene tener tus datos médicos a mano.</small><svg class="icon hub-arrow" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+        <a class="hub-card" href="#pulsera"><span class="hub-icon"><svg class="icon" aria-hidden="true"><use href="#icon-layers"></use></svg></span><span class="hub-num">02</span><strong data-i18n="nav.pulsera">La pulsera</strong><small data-i18n="hub.c2">Mirala en 3D, por dentro y con todas sus medidas.</small><svg class="icon hub-arrow" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+        <a class="hub-card" href="#como-funciona"><span class="hub-icon"><svg class="icon" aria-hidden="true"><use href="#icon-qr-code"></use></svg></span><span class="hub-num">03</span><strong data-i18n="nav.comoFunciona">Cómo funciona</strong><small data-i18n="hub.c3">Los pasos, y lo que ve quien te ayuda.</small><svg class="icon hub-arrow" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+        <a class="hub-card" href="#tus-datos"><span class="hub-icon"><svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg></span><span class="hub-num">04</span><strong data-i18n="nav.datos">Tus datos</strong><small data-i18n="hub.c4">Qué se muestra y cómo lo controlás vos.</small><svg class="icon hub-arrow" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+        <a class="hub-card" href="#para-quien-es"><span class="hub-icon"><svg class="icon" aria-hidden="true"><use href="#icon-user-round"></use></svg></span><span class="hub-num">05</span><strong data-i18n="nav.paraQuien">Para quién es</strong><small data-i18n="hub.c5">A quién le sirve y por qué elegirla.</small><svg class="icon hub-arrow" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+        <a class="hub-card" href="#pedila"><span class="hub-icon"><svg class="icon" aria-hidden="true"><use href="#icon-package"></use></svg></span><span class="hub-num">06</span><strong data-i18n="nav.precios">Precio</strong><small data-i18n="hub.c6">Cuánto sale y cómo pedirla en pocos pasos.</small><svg class="icon hub-arrow" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+        <a class="hub-card" href="#preguntas"><span class="hub-icon"><svg class="icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></span><span class="hub-num">07</span><strong data-i18n="nav.faq">Preguntas</strong><small data-i18n="hub.c7">Las dudas más comunes, respondidas.</small><svg class="icon hub-arrow" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+        <a class="hub-card hub-card-cta" href="#pedido"><span class="hub-icon"><svg class="icon" aria-hidden="true"><use href="#icon-check"></use></svg></span><span class="hub-num">08</span><strong data-i18n="hub.c8t">Pedí tu pulsera</strong><small data-i18n="hub.c8">Entrás con Google, completás tu ficha y listo.</small><svg class="icon hub-arrow" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+      </div>
+    </div>
+  </section>
+  </div>
+
   <!-- ================= GRUPO: el-problema ================= -->
-  <div class="grupo-wrap" id="el-problema">
+  <div class="grupo-wrap" id="el-problema" data-vista="el-problema">
   <!-- ============ EL PROBLEMA ============ -->
   <section data-grupo="el-problema" class="section grupo" id="problema" aria-labelledby="problema-title">
     <div class="container section-narrow reveal">
       <div class="section-heading">
         <span class="eyebrow" data-i18n="problema.eyebrow">El problema</span>
-        <h2 id="problema-title" data-i18n="problema.title">Cuando más se necesita, es cuando menos se tiene</h2>
+        <h2 id="problema-title" data-i18n="problema.title">En una emergencia, cada minuto cuenta</h2>
       </div>
       <p data-i18n="problema.body">En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico: si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar — ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica, en cualquier país. Las pulseras grabadas y las tarjetas de emergencia ayudan, pero se quedan cortas: no se pueden actualizar y tienen espacio limitado. Safe.Ride combina un accesorio simple con una plataforma digital que se actualiza cuando vos quieras, pensada para cualquier persona, no solo para quienes andan en moto.</p>
     </div>
@@ -4402,9 +4478,9 @@ html:not([data-theme="dark"]) .hero {
   <section class="section stats-section sub" id="estadisticas" aria-labelledby="estadisticas-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="stats.eyebrow">Contexto</span>
-        <h2 id="estadisticas-title" data-i18n="stats.title">Los números no mienten</h2>
-        <p data-i18n="stats.subtitle">Y esto no le pasa solo a quienes andan en moto: cualquier persona puede necesitar ayuda médica urgente, en cualquier lugar.</p>
+        <span class="eyebrow" data-i18n="stats.eyebrow">En números</span>
+        <h2 id="estadisticas-title" data-i18n="stats.title">Le puede pasar a cualquiera, todos los días</h2>
+        <p data-i18n="stats.subtitle">No es solo un tema de motos: los accidentes en la calle, en el trabajo y en casa pasan todo el tiempo.</p>
       </div>
 
       <div class="stats-grid">
@@ -4435,15 +4511,18 @@ html:not([data-theme="dark"]) .hero {
 
   </div>
 
+
+  <nav class="vista-pager" data-vista="el-problema" aria-label="Cambiar de parte"><div class="container"><div class="pager-in"><a class="pager-btn pager-prev" href="#top"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg><span><small data-i18n="vista.anterior">Anterior</small><strong data-i18n="nav.inicio">Inicio</strong></span></a><a class="pager-btn pager-next" href="#pulsera"><span><small data-i18n="vista.siguiente">Siguiente</small><strong data-i18n="nav.pulsera">La pulsera</strong></span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a></div></div></nav>
+
   <!-- ================= GRUPO: pulsera ================= -->
-  <div class="grupo-wrap bg-light" id="pulsera">
+  <div class="grupo-wrap bg-light" id="pulsera" data-vista="pulsera">
   <!-- ============ UNA PULSERA, DOS FORMAS DE LEERLA ============ -->
   <section data-grupo="pulsera" class="section grupo" id="formatos" aria-labelledby="formatos-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="formatos.eyebrow">Una pulsera, dos tecnologías</span>
-        <h2 id="formatos-title" data-i18n="formatos.title">QR y chip NFC, juntos en la misma pulsera</h2>
-        <p data-i18n="formatos.subtitle">No hace falta elegir: la pulsera Safe.Ride trae las dos. Si el QR está rayado se usa el NFC, y si el celular no tiene NFC se usa el QR. Las dos abren la misma ficha.</p>
+        <span class="eyebrow" data-i18n="formatos.eyebrow">Una pulsera, dos lecturas</span>
+        <h2 id="formatos-title" data-i18n="formatos.title">QR y chip NFC en la misma pulsera</h2>
+        <p data-i18n="formatos.subtitle">Si el QR se raya, se lee por NFC. Si el celular no tiene NFC, se escanea el QR. Las dos formas abren la misma ficha.</p>
       </div>
 
       <div class="card-grid">
@@ -4464,9 +4543,9 @@ html:not([data-theme="dark"]) .hero {
   <section class="section sub" id="pulsera-3d" aria-labelledby="pulsera-3d-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="p3d.eyebrow">Mirala por dentro</span>
-        <h2 id="pulsera-3d-title" data-i18n="p3d.title">Girá la pulsera y descubrí el chip</h2>
-        <p data-i18n="p3d.subtitle">Arrastrá para girarla, desarmala para ver dónde va el chip NFC y probá cómo la lee un celular en la guardia.</p>
+        <span class="eyebrow" data-i18n="p3d.eyebrow">En 3D</span>
+        <h2 id="pulsera-3d-title" data-i18n="p3d.title">Mirala por dentro</h2>
+        <p data-i18n="p3d.subtitle">Girala con el dedo, desarmala para ver el chip o tocá «Presentación» y te la mostramos paso a paso.</p>
       </div>
       <div class="sr3d">
     <div id="visor" class="viewer-wrap">
@@ -4642,8 +4721,8 @@ html:not([data-theme="dark"]) .hero {
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="tec.eyebrow">Ficha técnica</span>
-        <h2 id="ficha-tecnica-title" data-i18n="tec.title">Medidas y especificaciones</h2>
-        <p data-i18n="tec.subtitle">Así es la pulsera que entregamos, pieza por pieza.</p>
+        <h2 id="ficha-tecnica-title" data-i18n="tec.title">Medidas y materiales</h2>
+        <p data-i18n="tec.subtitle">Todo lo que tiene la pulsera que te entregamos.</p>
       </div>
       <div class="tec">
         <figure class="tec-foto">
@@ -4680,13 +4759,20 @@ html:not([data-theme="dark"]) .hero {
     </div>
   </section>
 
+  </div>
+
+
+  <nav class="vista-pager" data-vista="pulsera" aria-label="Cambiar de parte"><div class="container"><div class="pager-in"><a class="pager-btn pager-prev" href="#el-problema"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg><span><small data-i18n="vista.anterior">Anterior</small><strong data-i18n="nav.problema">El problema</strong></span></a><a class="pager-btn pager-next" href="#como-funciona"><span><small data-i18n="vista.siguiente">Siguiente</small><strong data-i18n="nav.comoFunciona">Cómo funciona</strong></span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a></div></div></nav>
+
+  <!-- ================= GRUPO: funciona ================= -->
+  <div class="grupo-wrap" id="funciona" data-vista="funciona">
   <!-- ============ CÓMO FUNCIONA ============ -->
-  <section class="section sub" id="como-funciona" aria-labelledby="como-funciona-title">
+  <section data-grupo="funciona" class="section grupo" id="como-funciona" aria-labelledby="como-funciona-title">
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="comoFunciona.eyebrow">Paso a paso</span>
-        <h2 id="como-funciona-title" data-i18n="comoFunciona.title">Cómo funciona</h2>
-        <p data-i18n="comoFunciona.subtitle">De la carga de tus datos a la lectura del QR, en seis pasos simples.</p>
+        <h2 id="como-funciona-title" data-i18n="comoFunciona.title">De tu ficha a tu pulsera, en seis pasos</h2>
+        <p data-i18n="comoFunciona.subtitle">Cargás tus datos una vez y los cambiás cuando quieras.</p>
       </div>
 
       <ol class="timeline">
@@ -4747,8 +4833,8 @@ html:not([data-theme="dark"]) .hero {
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="demo.eyebrow">Vista previa</span>
-        <h2 id="demo-title" data-i18n="demo.title">Mirá cómo se ve en una emergencia</h2>
-        <p data-i18n="demo.subtitle">Esta es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.</p>
+        <h2 id="demo-title" data-i18n="demo.title">Lo que ve quien te ayuda</h2>
+        <p data-i18n="demo.subtitle">Así aparece tu ficha en el celular de quien escanea la pulsera. Los datos son de ejemplo.</p>
       </div>
 
       <div class="demo-showcase">
@@ -4819,15 +4905,18 @@ html:not([data-theme="dark"]) .hero {
 
   </div>
 
+
+  <nav class="vista-pager" data-vista="funciona" aria-label="Cambiar de parte"><div class="container"><div class="pager-in"><a class="pager-btn pager-prev" href="#pulsera"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg><span><small data-i18n="vista.anterior">Anterior</small><strong data-i18n="nav.pulsera">La pulsera</strong></span></a><a class="pager-btn pager-next" href="#tus-datos"><span><small data-i18n="vista.siguiente">Siguiente</small><strong data-i18n="nav.datos">Tus datos</strong></span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a></div></div></nav>
+
   <!-- ================= GRUPO: tus-datos ================= -->
-  <div class="grupo-wrap" id="tus-datos">
+  <div class="grupo-wrap" id="tus-datos" data-vista="tus-datos">
   <!-- ============ PRIVACIDAD Y SEGURIDAD ============ -->
   <section data-grupo="tus-datos" class="section privacy-section grupo" id="privacidad" aria-labelledby="privacidad-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="privacidad.eyebrow">Privacidad y seguridad</span>
-        <h2 id="privacidad-title" data-i18n="privacidad.title">Tus datos, siempre bajo tu control</h2>
-        <p data-i18n="privacidad.subtitle">Safe.Ride muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.</p>
+        <span class="eyebrow" data-i18n="privacidad.eyebrow">Privacidad</span>
+        <h2 id="privacidad-title" data-i18n="privacidad.title">Vos decidís qué se ve</h2>
+        <p data-i18n="privacidad.subtitle">La ficha muestra solo lo que sirve en una emergencia. El resto queda privado.</p>
       </div>
 
       <div class="privacy-grid">
@@ -4864,9 +4953,9 @@ html:not([data-theme="dark"]) .hero {
   <section class="section sub" id="titularidad" aria-labelledby="titularidad-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="titularidad.eyebrow">Tus datos</span>
-        <h2 id="titularidad-title" data-i18n="titularidad.title">La pulsera es la misma. Tu ficha, siempre al día.</h2>
-        <p data-i18n="titularidad.subtitle">Cambiar un dato no obliga a hacer otra pulsera.</p>
+        <span class="eyebrow" data-i18n="titularidad.eyebrow">Siempre al día</span>
+        <h2 id="titularidad-title" data-i18n="titularidad.title">Cambiás tus datos, no la pulsera</h2>
+        <p data-i18n="titularidad.subtitle">Actualizar tu ficha es gratis y no hace falta una pulsera nueva.</p>
       </div>
 
       <div class="split-panel">
@@ -4891,15 +4980,18 @@ html:not([data-theme="dark"]) .hero {
 
   </div>
 
+
+  <nav class="vista-pager" data-vista="tus-datos" aria-label="Cambiar de parte"><div class="container"><div class="pager-in"><a class="pager-btn pager-prev" href="#como-funciona"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg><span><small data-i18n="vista.anterior">Anterior</small><strong data-i18n="nav.comoFunciona">Cómo funciona</strong></span></a><a class="pager-btn pager-next" href="#para-quien-es"><span><small data-i18n="vista.siguiente">Siguiente</small><strong data-i18n="nav.paraQuien">Para quién es</strong></span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a></div></div></nav>
+
   <!-- ================= GRUPO: para-quien-es ================= -->
-  <div class="grupo-wrap bg-light" id="para-quien-es">
+  <div class="grupo-wrap bg-light" id="para-quien-es" data-vista="para-quien-es">
   <!-- ============ PARA QUIÉN ES ============ -->
   <section data-grupo="para-quien-es" class="section grupo" id="para-quien" aria-labelledby="para-quien-title">
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="paraQuien.eyebrow">Para quién es</span>
-        <h2 id="para-quien-title" data-i18n="paraQuien.title">Un accidente le puede pasar a cualquiera</h2>
-        <p data-i18n="paraQuien.subtitle">En la calle, en el trabajo, en casa o haciendo deporte. Safe.Ride sirve para cualquier persona, de cualquier edad.</p>
+        <h2 id="para-quien-title" data-i18n="paraQuien.title">Para cualquier persona, de cualquier edad</h2>
+        <p data-i18n="paraQuien.subtitle">En la calle, en el trabajo, en casa o haciendo deporte.</p>
       </div>
 
       <div class="beneficiary-grid">
@@ -4975,8 +5067,8 @@ html:not([data-theme="dark"]) .hero {
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="beneficios.eyebrow">Ventajas</span>
-        <h2 id="beneficios-title" data-i18n="beneficios.title">¿Por qué elegir Safe.Ride?</h2>
-        <p data-i18n="beneficios.subtitle">Safe.Ride combina simplicidad, accesibilidad y diseño pensado para emergencias reales.</p>
+        <h2 id="beneficios-title" data-i18n="beneficios.title">¿Por qué Safe.Ride?</h2>
+        <p data-i18n="beneficios.subtitle">Simple de usar, rápida de leer y pensada para emergencias reales.</p>
       </div>
 
       <div class="benefits-grid">
@@ -5035,8 +5127,8 @@ html:not([data-theme="dark"]) .hero {
   <section class="section sub" id="historia" aria-labelledby="historia-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="historia.eyebrow">Un ejemplo</span>
-        <h2 id="historia-title" data-i18n="historia.title">La historia de Nico</h2>
+        <span class="eyebrow" data-i18n="historia.eyebrow">Un caso</span>
+        <h2 id="historia-title" data-i18n="historia.title">La noche que Nico no pudo hablar</h2>
       </div>
 
       <div class="story-card reveal">
@@ -5053,13 +5145,13 @@ html:not([data-theme="dark"]) .hero {
   </div>
 
   <!-- ================= GRUPO: por-que ================= -->
-  <div class="grupo-wrap" id="por-que">
+  <div class="grupo-wrap" id="por-que" data-vista="para-quien-es">
   <!-- ============ COMPARATIVA ============ -->
   <section data-grupo="por-que" class="section grupo" id="comparativa" aria-labelledby="comparativa-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="comparativa.eyebrow">Comparativa</span>
-        <h2 id="comparativa-title" data-i18n="comparativa.title">¿Por qué Safe.Ride y no otra opción?</h2>
+        <span class="eyebrow" data-i18n="comparativa.eyebrow">Comparación</span>
+        <h2 id="comparativa-title" data-i18n="comparativa.title">Safe.Ride frente a otras opciones</h2>
       </div>
 
       <div class="comparativa-table-wrap reveal">
@@ -5111,12 +5203,12 @@ html:not([data-theme="dark"]) .hero {
     <div class="container">
       <div class="split-panel">
         <div class="panel reveal" id="futuro">
-          <span class="eyebrow" data-i18n="futuro.eyebrow">Mirando hacia adelante</span>
+          <span class="eyebrow" data-i18n="futuro.eyebrow">Lo que viene</span>
           <h2 data-i18n="futuro.title">Un proyecto pensado para crecer</h2>
           <p data-i18n="futuro.body">Empezamos con un lote piloto en Baradero, y buscamos alianzas con el municipio, centros de jubilados, clubes, escuelas de manejo, empresas y ART. A futuro queremos sumar avisos a la familia cuando se escanea la pulsera, conexión con los servicios de emergencia (SAME), la ficha en varios idiomas y pulseras de distintos tamaños y colores.</p>
         </div>
         <div class="panel reveal" id="proyecto">
-          <span class="eyebrow" data-i18n="proyecto.eyebrow">Quiénes lo hacemos</span>
+          <span class="eyebrow" data-i18n="proyecto.eyebrow">Quiénes somos</span>
           <h2 data-i18n="proyecto.title">Sobre el proyecto</h2>
           <p data-i18n-html="proyecto.body">Safe.Ride es un proyecto de Elena Avogadro y Santino Figueredo, de 7mo 4ta Programación de la EEST N.º 1 «Vuelta de Obligado», en Baradero, para la materia Proyecto de Diseño e Implementación de Sistemas Computacionales (profesores Azul Saladín y Gonzalo Santín). En el camino escuchamos a usuarios y docentes y cambiamos tres cosas: el botón pasó a ser la zona de lectura NFC, la banda pasó de PLA rígido a TPU flexible, y la idea pasó de ser solo para motociclistas a ser para todo público.</p>
         </div>
@@ -5126,15 +5218,18 @@ html:not([data-theme="dark"]) .hero {
 
   </div>
 
+
+  <nav class="vista-pager" data-vista="para-quien-es" aria-label="Cambiar de parte"><div class="container"><div class="pager-in"><a class="pager-btn pager-prev" href="#tus-datos"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg><span><small data-i18n="vista.anterior">Anterior</small><strong data-i18n="nav.datos">Tus datos</strong></span></a><a class="pager-btn pager-next" href="#pedila"><span><small data-i18n="vista.siguiente">Siguiente</small><strong data-i18n="nav.precios">Precio</strong></span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a></div></div></nav>
+
   <!-- ================= GRUPO: pedila ================= -->
-  <div class="grupo-wrap bg-light" id="pedila">
+  <div class="grupo-wrap bg-light" id="pedila" data-vista="pedila">
   <!-- ============ PRECIOS ============ -->
   <section data-grupo="pedila" class="section grupo" id="precios" aria-labelledby="precios-title">
     <div class="container">
       <div class="section-heading reveal">
         <span class="eyebrow" data-i18n="precios.eyebrow">Precio</span>
-        <h2 id="precios-title" data-i18n="precios.title">Un solo producto, protección completa</h2>
-        <p data-i18n="precios.subtitle">La pulsera Safe.Ride trae el código QR y el chip NFC en una sola pieza. Si no se puede escanear el QR, se lee por NFC. La actualización de tus datos está siempre incluida.</p>
+        <h2 id="precios-title" data-i18n="precios.title">Una pulsera, todo incluido</h2>
+        <p data-i18n="precios.subtitle">QR y chip NFC en una sola pieza, y la actualización de tus datos siempre gratis.</p>
       </div>
 
       <div class="pricing-solo">
@@ -5174,7 +5269,7 @@ html:not([data-theme="dark"]) .hero {
       <div class="section-heading reveal">
         <span class="eyebrow"><svg class="icon" aria-hidden="true" style="vertical-align:-2px"><use href="#icon-globe"></use></svg> <span data-i18n="pedido.eyebrow">Envíos en Baradero</span></span>
         <h2 id="pedido-title" data-i18n="pedido.title">Pedí tu pulsera</h2>
-        <p data-i18n="pedido.subtitle">Entrá con tu cuenta de Google, completá tu ficha y elegí cómo recibirla. Nosotros grabamos el QR y el chip, y te la entregamos lista para usar. Por ahora entregamos solo en Baradero.</p>
+        <p data-i18n="pedido.subtitle">Entrá con Google, completá tu ficha y elegí cómo recibirla. Nosotros grabamos el QR y el chip, y te la damos lista para usar.</p>
       </div>
 
       <div class="pedido-layout">
@@ -5323,13 +5418,16 @@ html:not([data-theme="dark"]) .hero {
 
   </div>
 
+
+  <nav class="vista-pager" data-vista="pedila" aria-label="Cambiar de parte"><div class="container"><div class="pager-in"><a class="pager-btn pager-prev" href="#para-quien-es"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg><span><small data-i18n="vista.anterior">Anterior</small><strong data-i18n="nav.paraQuien">Para quién es</strong></span></a><a class="pager-btn pager-next" href="#preguntas"><span><small data-i18n="vista.siguiente">Siguiente</small><strong data-i18n="nav.faq">Preguntas</strong></span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a></div></div></nav>
+
   <!-- ================= GRUPO: preguntas ================= -->
-  <div class="grupo-wrap" id="preguntas">
+  <div class="grupo-wrap" id="preguntas" data-vista="preguntas">
   <!-- ============ FAQ ============ -->
   <section data-grupo="preguntas" class="section grupo" id="faq" aria-labelledby="faq-title">
     <div class="container">
       <div class="section-heading reveal">
-        <span class="eyebrow" data-i18n="faq.eyebrow">Dudas frecuentes</span>
+        <span class="eyebrow" data-i18n="faq.eyebrow">Dudas</span>
         <h2 id="faq-title" data-i18n="faq.title">Preguntas frecuentes</h2>
       </div>
 
@@ -5456,7 +5554,7 @@ html:not([data-theme="dark"]) .hero {
   </section>
 
   </div>
-
+  <nav class="vista-pager" data-vista="preguntas" aria-label="Cambiar de parte"><div class="container"><div class="pager-in"><a class="pager-btn pager-prev" href="#pedila"><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg><span><small data-i18n="vista.anterior">Anterior</small><strong data-i18n="nav.precios">Precio</strong></span></a><a class="pager-btn pager-next" href="#pedila"><span><small data-i18n="vista.listo">¿Lista para pedirla?</small><strong data-i18n="precios.boton">Pedir mi pulsera →</strong></span></a></div></div></nav>
 
 </main>
 
@@ -5796,9 +5894,10 @@ const translations = {
   es: {
     meta: { title: "Safe.Ride — Tu información, a tiempo." },
     a11y: { skip: "Saltar al contenido" },
-    tec: { eyebrow: "Ficha técnica", title: "Medidas y especificaciones", subtitle: "Así es la pulsera que entregamos, pieza por pieza.", foto: "Vista de arriba, abierta · pulsera v2", dibujoAgujeros: "7 agujeros · cada 5 mm", fotoAlt: "Vista de arriba de la pulsera Safe.Ride, con el centro redondo y el QR", material: "Material", materialDet: "Flexible, se imprime plana y se curva sola en la muñeca", muneca: "Muñecas", munecaDet: "7 agujeros, uno cada 5 mm", correa: "Correa", correaDet: "Ancho y espesor, con bordes redondeados", centro: "Centro", centroDet: "Redondo y bajo: 4,4 mm de alto", nfc: "Chip NFC", nfcDet: "Etiqueta NTAG215/216 debajo de la tapa", qr: "Código QR", qrDet: "Pegado sobre la tapa, al ras", tapa: "Tapa", tapaDet: "1,2 mm de espesor, entra a presión", largo: "Largo total", largoDet: "Con un cierre de perno a presión de 3 mm" },
-    p3d: { eyebrow: "Mirala por dentro", title: "Girá la pulsera y descubrí el chip", subtitle: "Arrastrá para girarla, desarmala para ver dónde va el chip NFC y probá cómo la lee un celular en la guardia." },
+    tec: { eyebrow: "Ficha técnica", title: "Medidas y materiales", subtitle: "Todo lo que tiene la pulsera que te entregamos.", foto: "Vista de arriba, abierta · pulsera v2", dibujoAgujeros: "7 agujeros · cada 5 mm", fotoAlt: "Vista de arriba de la pulsera Safe.Ride, con el centro redondo y el QR", material: "Material", materialDet: "Flexible, se imprime plana y se curva sola en la muñeca", muneca: "Muñecas", munecaDet: "7 agujeros, uno cada 5 mm", correa: "Correa", correaDet: "Ancho y espesor, con bordes redondeados", centro: "Centro", centroDet: "Redondo y bajo: 4,4 mm de alto", nfc: "Chip NFC", nfcDet: "Etiqueta NTAG215/216 debajo de la tapa", qr: "Código QR", qrDet: "Pegado sobre la tapa, al ras", tapa: "Tapa", tapaDet: "1,2 mm de espesor, entra a presión", largo: "Largo total", largoDet: "Con un cierre de perno a presión de 3 mm" },
+    p3d: { eyebrow: "En 3D", title: "Mirala por dentro", subtitle: "Girala con el dedo, desarmala para ver el chip o tocá «Presentación» y te la mostramos paso a paso." },
     nav: {
+      inicio: "Inicio",
       logoAria: "Safe.Ride, ir al inicio",
       mainAria: "Navegación principal",
       comoFunciona: "Cómo funciona",
@@ -5821,6 +5920,25 @@ const translations = {
       menuToggleAria: "Abrir menú de navegación",
       paletteAria: "Cambiar la paleta de colores",
     },
+    hub: {
+      eyebrow: "Explorá",
+      title: "Todo sobre Safe.Ride, por partes",
+      subtitle: "Elegí qué querés ver. Cada parte se abre sola, sin tener que bajar por toda la página.",
+      c1: "Por qué conviene tener tus datos médicos a mano.",
+      c2: "Mirala en 3D, por dentro y con todas sus medidas.",
+      c3: "Los pasos, y lo que ve quien te ayuda.",
+      c4: "Qué se muestra y cómo lo controlás vos.",
+      c5: "A quién le sirve y por qué elegirla.",
+      c6: "Cuánto sale y cómo pedirla en pocos pasos.",
+      c7: "Las dudas más comunes, respondidas.",
+      c8t: "Pedí tu pulsera",
+      c8: "Entrás con Google, completás tu ficha y listo.",
+    },
+    vista: {
+      anterior: "Anterior",
+      siguiente: "Siguiente",
+      listo: "¿Lista para pedirla?",
+    },
     hero: {
       badge: "Protección médica siempre con vos",
       tagline: "Tu información, a tiempo.",
@@ -5838,13 +5956,13 @@ const translations = {
     },
     problema: {
       eyebrow: "El problema",
-      title: "Cuando más se necesita, es cuando menos se tiene",
+      title: "En una emergencia, cada minuto cuenta",
       body: "En una emergencia, cada minuto cuenta. Pero es justo ahí cuando falta lo más básico: si la persona es alérgica, qué medicación toma, su grupo sanguíneo o a quién avisar — ya sea en la calle, en tu casa o al ingresar a la guardia de un hospital o clínica, en cualquier país. Las pulseras grabadas y las tarjetas de emergencia ayudan, pero se quedan cortas: no se pueden actualizar y tienen espacio limitado. Safe.Ride combina un accesorio simple con una plataforma digital que se actualiza cuando vos quieras, pensada para cualquier persona, no solo para quienes andan en moto.",
     },
     comoFunciona: {
       eyebrow: "Paso a paso",
-      title: "Cómo funciona",
-      subtitle: "De la carga de tus datos a la lectura del QR, en seis pasos simples.",
+      title: "De tu ficha a tu pulsera, en seis pasos",
+      subtitle: "Cargás tus datos una vez y los cambiás cuando quieras.",
       step1: { title: "Dejá tu mail", desc: "Sin contraseñas: te mandamos tu enlace privado para cargar y editar tu ficha." },
       step2: { title: "Cargá tus datos médicos", desc: "Grupo sanguíneo, alergias, medicación, condiciones y un contacto de emergencia. Tu domicilio aparece solo si vos lo elegís (en menores, queda oculto)." },
       step3: { title: "Generá tu QR", desc: "El sistema arma tu código único al instante." },
@@ -5853,17 +5971,17 @@ const translations = {
       step6: { title: "Tu información, al toque", desc: "Se muestra solo lo esencial, en una página pública de solo lectura." },
     },
     formatos: {
-      eyebrow: "Una pulsera, dos tecnologías",
-      title: "QR y chip NFC, juntos en la misma pulsera",
-      subtitle: "No hace falta elegir: la pulsera Safe.Ride trae las dos. Si el QR está rayado se usa el NFC, y si el celular no tiene NFC se usa el QR. Las dos abren la misma ficha.",
+      eyebrow: "Una pulsera, dos lecturas",
+      title: "QR y chip NFC en la misma pulsera",
+      subtitle: "Si el QR se raya, se lee por NFC. Si el celular no tiene NFC, se escanea el QR. Las dos formas abren la misma ficha.",
       qr: { title: "Código QR", desc: "Cualquiera lo escanea con la cámara del celular y accede a tu ficha en la página de Safe.Ride. El celular que escanea necesita conexión a internet." },
       nfc: { title: "Chip NFC integrado", desc: "El chip cuadrado va dentro de la pulsera, justo debajo del QR. Acercá un celular compatible a ese punto para leerlo, aunque el código esté rayado. Sin internet, muestra el grupo sanguíneo, las alergias y el contacto de emergencia." },
     },
     paraQuien: {
-      subtitle: "En la calle, en el trabajo, en casa o haciendo deporte. Safe.Ride sirve para cualquier persona, de cualquier edad.",
+      subtitle: "En la calle, en el trabajo, en casa o haciendo deporte.",
       boton: "Ver el precio",
       eyebrow: "Para quién es",
-      title: "Un accidente le puede pasar a cualquiera",
+      title: "Para cualquier persona, de cualquier edad",
       cronicas: { title: "Alergias o enfermedades crónicas", desc: "La medicación y las alergias quedan visibles antes de cualquier intervención." },
       alergicas: { title: "Trabajadores", desc: "En la obra, el campo, la industria o el reparto: sus compañeros ven alergias y a quién llamar en segundos." },
       mayores: { title: "Adultos mayores", desc: "Sobre todo quienes viven solos: si sufren una caída o una descompensación, se sabe quiénes son y dónde viven." },
@@ -5873,8 +5991,8 @@ const translations = {
     },
     beneficios: {
       eyebrow: "Ventajas",
-      title: "¿Por qué elegir Safe.Ride?",
-      subtitle: "Safe.Ride combina simplicidad, accesibilidad y diseño pensado para emergencias reales.",
+      title: "¿Por qué Safe.Ride?",
+      subtitle: "Simple de usar, rápida de leer y pensada para emergencias reales.",
       b1: { title: "Actualización permanente", desc: "Cambialo cuando quieras: grupo sanguíneo, alergias, medicación o contacto de emergencia. A diferencia de una pulsera grabada, nunca queda desactualizada." },
       b2: { title: "Sin aplicaciones", desc: "Funciona con cualquier celular con cámara, sin instalar nada. El personal de salud escanea y accede al instante." },
       b3: { title: "Liviana y accesible", desc: "Hecha en Baradero con impresión 3D en TPU flexible: pesa entre 8 y 10 gramos y se puede usar todo el día." },
@@ -5883,27 +6001,27 @@ const translations = {
       b6: { title: "Para toda tu familia", desc: "Podés crear y administrar una ficha para cada integrante: hijos, padres, abuelos. Ideal para quienes no pueden cargar sus datos solos." },
     },
     historia: {
-      eyebrow: "Un ejemplo",
-      title: "La historia de Nico",
+      eyebrow: "Un caso",
+      title: "La noche que Nico no pudo hablar",
       p1: "Nico tiene 19 años y reparte pedidos en moto todas las noches para pagarse la facultad. Una noche de lluvia, en una esquina mal iluminada, un auto no respeta el pare y lo golpea. Nico queda en el asfalto, inconsciente.",
       p2: "Llega un patrullero. El policía, que no lo conoce, ve la pulsera verde en su muñeca. Acerca el celular y, en segundos, aparecen el nombre de Nico, su grupo sanguíneo, que es alérgico a la penicilina y el teléfono de su mamá.",
       p3: "Cuando llega la ambulancia, los paramédicos ya saben qué medicación evitar, y la familia de Nico ya está avisada.",
       footer: "Historia ficticia, basada en situaciones que pasan todos los días",
     },
     futuro: {
-      eyebrow: "Mirando hacia adelante",
+      eyebrow: "Lo que viene",
       title: "Un proyecto pensado para crecer",
       body: "Empezamos con un lote piloto en Baradero, y buscamos alianzas con el municipio, centros de jubilados, clubes, escuelas de manejo, empresas y ART. A futuro queremos sumar avisos a la familia cuando se escanea la pulsera, conexión con los servicios de emergencia (SAME), la ficha en varios idiomas y pulseras de distintos tamaños y colores.",
     },
     proyecto: {
-      eyebrow: "Quiénes lo hacemos",
+      eyebrow: "Quiénes somos",
       title: "Sobre el proyecto",
       body: 'Safe.Ride es un proyecto de Elena Avogadro y Santino Figueredo, de 7mo 4ta Programación de la EEST N.º 1 «Vuelta de Obligado», en Baradero, para la materia Proyecto de Diseño e Implementación de Sistemas Computacionales (profesores Azul Saladín y Gonzalo Santín). En el camino escuchamos a usuarios y docentes y cambiamos tres cosas: el botón pasó a ser la zona de lectura NFC, la banda pasó de PLA rígido a TPU flexible, y la idea pasó de ser solo para motociclistas a ser para todo público.',
     },
     stats: {
-      eyebrow: "Contexto",
-      title: "Los números no mienten",
-      subtitle: "Y esto no le pasa solo a quienes andan en moto: cualquier persona puede necesitar ayuda médica urgente, en cualquier lugar.",
+      eyebrow: "En números",
+      title: "Le puede pasar a cualquiera, todos los días",
+      subtitle: "No es solo un tema de motos: los accidentes en la calle, en el trabajo y en casa pasan todo el tiempo.",
       n1: "11",
       stat1: "personas mueren por día en siniestros viales en Argentina (4.060 en 2025).",
       n2: "46%",
@@ -5916,8 +6034,8 @@ const translations = {
       closing: "Detrás de cada cifra hay una persona a la que, muchas veces, nadie pudo identificar a tiempo. Safe.Ride busca achicar esa distancia.",
     },
     comparativa: {
-      eyebrow: "Comparativa",
-      title: "¿Por qué Safe.Ride y no otra opción?",
+      eyebrow: "Comparación",
+      title: "Safe.Ride frente a otras opciones",
       caption: "Comparación entre Safe.Ride y otras alternativas de identificación médica",
       colOpcion: "Opción",
       colActualizable: "Actualizable",
@@ -5932,8 +6050,8 @@ const translations = {
     },
     precios: {
       eyebrow: "Precio",
-      title: "Un solo producto, protección completa",
-      subtitle: "La pulsera Safe.Ride trae el código QR y el chip NFC en una sola pieza. Si no se puede escanear el QR, se lee por NFC. La actualización de tus datos está siempre incluida.",
+      title: "Una pulsera, todo incluido",
+      subtitle: "QR y chip NFC en una sola pieza, y la actualización de tus datos siempre gratis.",
       popular: "Pulsera Safe.Ride",
       label: "QR + NFC en una",
       monto: "$8.000",
@@ -5951,8 +6069,8 @@ const translations = {
     },
     demo: {
       eyebrow: "Vista previa",
-      title: "Mirá cómo se ve en una emergencia",
-      subtitle: "Esta es la pantalla que ve el personal de salud al escanear el código. Es un ejemplo ficticio, para que veas cómo funciona.",
+      title: "Lo que ve quien te ayuda",
+      subtitle: "Así aparece tu ficha en el celular de quien escanea la pulsera. Los datos son de ejemplo.",
       verEjemplo: "Ver ejemplo",
       ocultarEjemplo: "Ocultar ejemplo",
       badge: "Ejemplo — datos ficticios",
@@ -5969,9 +6087,9 @@ const translations = {
       armarFicha: "Armar mi ficha para el chip",
     },
     privacidad: {
-      eyebrow: "Privacidad y seguridad",
-      title: "Tus datos, siempre bajo tu control",
-      subtitle: "Safe.Ride muestra únicamente lo que sirve en una emergencia. Todo lo demás queda privado y lo manejás vos.",
+      eyebrow: "Privacidad",
+      title: "Vos decidís qué se ve",
+      subtitle: "La ficha muestra solo lo que sirve en una emergencia. El resto queda privado.",
       c1: { title: "Solo lo esencial es público", desc: "La ficha muestra grupo sanguíneo, alergias, medicación, condiciones y un contacto de emergencia. Tu domicilio aparece solo si vos lo elegís (en menores, queda oculto). No pedimos DNI ni datos bancarios." },
       c2: { title: "Vos decidís qué se muestra", desc: "Ves, corregís o borrás tu ficha cuando quieras desde tu enlace privado. Antes de publicarla te pedimos tu consentimiento." },
       c3: { title: "Sin rastreo ni publicidad", desc: "No vendemos tus datos ni los usamos para otra cosa que no sea mostrar tu ficha de emergencia." },
@@ -5979,9 +6097,9 @@ const translations = {
       note: "La ficha pública es de solo lectura: nadie puede modificar tus datos escaneando el código.",
     },
     titularidad: {
-      eyebrow: "Tus datos",
-      title: "La pulsera es la misma. Tu ficha, siempre al día.",
-      subtitle: "Cambiar un dato no obliga a hacer otra pulsera.",
+      eyebrow: "Siempre al día",
+      title: "Cambiás tus datos, no la pulsera",
+      subtitle: "Actualizar tu ficha es gratis y no hace falta una pulsera nueva.",
       medicos: {
         eyebrow: "Datos médicos",
         title: "Se editan libremente, sin costo",
@@ -6067,7 +6185,7 @@ const translations = {
       m3: "Efectivo",
       eyebrow: "Envíos en Baradero",
       title: "Pedí tu pulsera",
-      subtitle: "Entrá con tu cuenta de Google, completá tu ficha y elegí cómo recibirla. Nosotros grabamos el QR y el chip, y te la entregamos lista para usar. Por ahora entregamos solo en Baradero.",
+      subtitle: "Entrá con Google, completá tu ficha y elegí cómo recibirla. Nosotros grabamos el QR y el chip, y te la damos lista para usar.",
       total: "Total",
       confirmar: "Seguir: cargar mi ficha",
       disclaimer: "En el paso siguiente entrás con tu cuenta de Google y cargás tu ficha. Nosotros grabamos el QR y el chip y te entregamos la pulsera lista.",
@@ -6089,7 +6207,7 @@ const translations = {
       a10: "Una pulsera grabada tiene espacio limitado y, para cambiar un dato, hay que hacer otra. Con Safe.Ride cambiás tu ficha cuando quieras, sin tocar la pulsera, y se lee por QR o por NFC.",
       q11: "¿Puedo usarlo para mi familia?",
       a11: "Sí. Cada persona tiene su pulsera y su ficha. Para menores de 18, la ficha la carga y la autoriza su madre, padre o tutor.",
-      eyebrow: "Dudas frecuentes",
+      eyebrow: "Dudas",
       title: "Preguntas frecuentes",
       q1: "¿Mis datos médicos quedan públicos?",
       a1: "No. Solo se muestra lo esencial para una emergencia (grupo sanguíneo, alergias, medicación, contacto). El resto de tu perfil queda privado y solo vos podés editarlo.",
@@ -6172,9 +6290,10 @@ const translations = {
   en: {
     meta: { title: "Safe.Ride — Your information, in time." },
     a11y: { skip: "Skip to content" },
-    tec: { eyebrow: "Tech specs", title: "Size and specifications", subtitle: "This is the bracelet we deliver, piece by piece.", foto: "Top view, open · bracelet v2", dibujoAgujeros: "7 holes · every 5 mm", fotoAlt: "Top view of the Safe.Ride bracelet, with the round center and the QR", material: "Material", materialDet: "Flexible, printed flat, it curves around the wrist by itself", muneca: "Wrists", munecaDet: "7 holes, one every 5 mm", correa: "Strap", correaDet: "Width and thickness, with rounded edges", centro: "Center", centroDet: "Round and low: 4.4 mm high", nfc: "NFC chip", nfcDet: "NTAG215/216 tag under the cover", qr: "QR code", qrDet: "Stuck on the cover, flush", tapa: "Cover", tapaDet: "1.2 mm thick, press-fit", largo: "Total length", largoDet: "With a 3 mm press-fit pin clasp" },
-    p3d: { eyebrow: "See it from the inside", title: "Spin the bracelet and find the chip", subtitle: "Drag to spin it, take it apart to see where the NFC chip goes, and try how a phone reads it at the ER." },
+    tec: { eyebrow: "Tech specs", title: "Sizes and materials", subtitle: "Everything in the bracelet we deliver.", foto: "Top view, open · bracelet v2", dibujoAgujeros: "7 holes · every 5 mm", fotoAlt: "Top view of the Safe.Ride bracelet, with the round center and the QR", material: "Material", materialDet: "Flexible, printed flat, it curves around the wrist by itself", muneca: "Wrists", munecaDet: "7 holes, one every 5 mm", correa: "Strap", correaDet: "Width and thickness, with rounded edges", centro: "Center", centroDet: "Round and low: 4.4 mm high", nfc: "NFC chip", nfcDet: "NTAG215/216 tag under the cover", qr: "QR code", qrDet: "Stuck on the cover, flush", tapa: "Cover", tapaDet: "1.2 mm thick, press-fit", largo: "Total length", largoDet: "With a 3 mm press-fit pin clasp" },
+    p3d: { eyebrow: "In 3D", title: "See it from the inside", subtitle: "Spin it, take it apart to see the chip, or tap “Presentación” for a step-by-step tour." },
     nav: {
+      inicio: "Home",
       logoAria: "Safe.Ride, go to homepage",
       mainAria: "Main navigation",
       comoFunciona: "How it works",
@@ -6197,6 +6316,25 @@ const translations = {
       menuToggleAria: "Open navigation menu",
       paletteAria: "Change the color palette",
     },
+    hub: {
+      eyebrow: "Explore",
+      title: "Everything about Safe.Ride, part by part",
+      subtitle: "Choose what you want to see. Each part opens on its own, no endless scrolling.",
+      c1: "Why it helps to have your medical data at hand.",
+      c2: "See it in 3D, inside out, with all its sizes.",
+      c3: "The steps, and what the person helping you sees.",
+      c4: "What is shown and how you control it.",
+      c5: "Who it's for and why choose it.",
+      c6: "How much it costs and how to order it.",
+      c7: "The most common questions, answered.",
+      c8t: "Order your bracelet",
+      c8: "Sign in with Google, fill in your profile and you are done.",
+    },
+    vista: {
+      anterior: "Previous",
+      siguiente: "Next",
+      listo: "Ready to order?",
+    },
     hero: {
       badge: "Medical protection always with you",
       tagline: "Your information, in time.",
@@ -6214,13 +6352,13 @@ const translations = {
     },
     problema: {
       eyebrow: "The problem",
-      title: "When it's needed most is when it's hardest to find",
+      title: "In an emergency, every minute counts",
       body: "In an emergency, every minute counts. But that's exactly when the most basic information is missing: whether the person has an allergy, what medication they take, their blood type, or who to call — whether it happens on the street, at home, or at the ER of a hospital or clinic, in any country. Engraved bracelets and emergency cards help, but they fall short: they can't be updated and have limited space. Safe.Ride combines a simple accessory with a digital platform you can update anytime, designed for anyone — not just motorcycle riders.",
     },
     comoFunciona: {
       eyebrow: "Step by step",
-      title: "How it works",
-      subtitle: "From loading your data to scanning the QR, in six simple steps.",
+      title: "From your profile to your bracelet, in six steps",
+      subtitle: "You enter your data once and change it whenever you want.",
       step1: { title: "Leave your email", desc: "No passwords: we send you your private link to fill in and edit your ID." },
       step2: { title: "Add your medical data", desc: "Blood type, allergies, medication, conditions and an emergency contact. Your home address only shows if you choose it (for minors, it stays hidden)." },
       step3: { title: "Generate your QR", desc: "The system builds your unique code instantly." },
@@ -6229,17 +6367,17 @@ const translations = {
       step6: { title: "Your information, in a tap", desc: "Only the essentials are shown, on a public read-only page." },
     },
     formatos: {
-      eyebrow: "One bracelet, two technologies",
-      title: "QR and NFC chip, together in the same bracelet",
-      subtitle: "No need to choose: the Safe.Ride bracelet has both. If the QR is scratched, NFC is used; if the phone has no NFC, the QR is used. Both open the same ID.",
+      eyebrow: "One bracelet, two readings",
+      title: "QR code and NFC chip in the same bracelet",
+      subtitle: "If the QR gets scratched, it's read by NFC. If the phone has no NFC, the QR is scanned. Both open the same profile.",
       qr: { title: "QR code", desc: "Anyone can scan it with a phone camera and access your ID on the Safe.Ride page. The scanning phone needs an internet connection." },
       nfc: { title: "Built-in NFC chip", desc: "The square chip sits inside the bracelet, directly under the QR code. Hold a compatible phone over that spot to read it, even if the code is scratched. Without internet, it shows blood type, allergies, and emergency contact." },
     },
     paraQuien: {
-      subtitle: "On the street, at work, at home or doing sports. Safe.Ride works for anyone, at any age.",
+      subtitle: "On the street, at work, at home or doing sports.",
       boton: "See the price",
       eyebrow: "Who it's for",
-      title: "An accident can happen to anyone",
+      title: "For anyone, of any age",
       cronicas: { title: "Allergies or chronic conditions", desc: "Medication and allergies are visible before any treatment." },
       alergicas: { title: "Workers", desc: "On construction sites, farms, factories or deliveries: coworkers see allergies and who to call in seconds." },
       mayores: { title: "Older adults", desc: "Especially those who live alone: after a fall or a sudden illness, people know who they are and where they live." },
@@ -6249,8 +6387,8 @@ const translations = {
     },
     beneficios: {
       eyebrow: "Advantages",
-      title: "Why choose Safe.Ride?",
-      subtitle: "Safe.Ride combines simplicity, accessibility and a design built for real emergencies.",
+      title: "Why Safe.Ride?",
+      subtitle: "Simple to use, quick to read and designed for real emergencies.",
       b1: { title: "Always up to date", desc: "Change it whenever you want: blood type, allergies, medication or emergency contact. Unlike an engraved bracelet, it's never outdated." },
       b2: { title: "No apps", desc: "Works with any phone that has a camera, no installs. Medical staff scan it and get in instantly." },
       b3: { title: "Light and affordable", desc: "Made in Baradero with flexible TPU 3D printing: it weighs 8 to 10 grams and can be worn all day." },
@@ -6259,27 +6397,27 @@ const translations = {
       b6: { title: "For your whole family", desc: "You can create and manage an ID for each member: kids, parents, grandparents. Ideal for those who can't fill in their own data." },
     },
     historia: {
-      eyebrow: "An example",
-      title: "Nico's story",
+      eyebrow: "A case",
+      title: "The night Nico couldn't speak",
       p1: "Nico is 19 and delivers orders on his motorcycle every night to pay for college. One rainy night, at a poorly lit corner, a car runs a stop sign and hits him. Nico lies on the asphalt, unconscious.",
       p2: "A patrol car arrives. The officer, who doesn't know him, sees the green bracelet on his wrist. He taps his phone and, within seconds, Nico's name, blood type, his penicillin allergy and his mom's phone number appear.",
       p3: "When the ambulance arrives, the paramedics already know which medication to avoid, and Nico's family has already been called.",
       footer: "Fictional story, based on situations that happen every day",
     },
     futuro: {
-      eyebrow: "Looking ahead",
+      eyebrow: "What's next",
       title: "A project built to grow",
       body: "We're starting with a pilot batch in Baradero, and looking for partnerships with the city, senior centers, clubs, driving schools, companies and workplace insurers. Next, we want to add alerts to the family when the bracelet is scanned, a link with emergency services (SAME), the ID in several languages and bracelets in different sizes and colors.",
     },
     proyecto: {
-      eyebrow: "Who's behind it",
+      eyebrow: "Who we are",
       title: "About the project",
       body: 'Safe.Ride is a project by Elena Avogadro and Santino Figueredo, from the 7th-year Programming class (4th division) at EEST N.º 1 «Vuelta de Obligado», in Baradero, Argentina, for the subject Computer Systems Design and Implementation Project (teachers Azul Saladín and Gonzalo Santín). Listening to users and teachers, we changed three things: the button became the NFC reading area, the band went from rigid PLA to flexible TPU, and the idea went from motorcyclists only to everyone.',
     },
     stats: {
-      eyebrow: "Context",
-      title: "The numbers don't lie",
-      subtitle: "And this doesn't only happen to motorcycle riders: anyone can need urgent medical help, anywhere.",
+      eyebrow: "In numbers",
+      title: "It can happen to anyone, every day",
+      subtitle: "It's not just about motorcycles: accidents on the street, at work and at home happen all the time.",
       n1: "11",
       stat1: "people die every day in road accidents in Argentina (4,060 in 2025).",
       n2: "46%",
@@ -6293,7 +6431,7 @@ const translations = {
     },
     comparativa: {
       eyebrow: "Comparison",
-      title: "Why Safe.Ride and not another option?",
+      title: "Safe.Ride vs. other options",
       caption: "Comparison between Safe.Ride and other medical identification alternatives",
       colOpcion: "Option",
       colActualizable: "Updatable",
@@ -6308,8 +6446,8 @@ const translations = {
     },
     precios: {
       eyebrow: "Price",
-      title: "One product, complete protection",
-      subtitle: "The Safe.Ride bracelet has the QR code and the NFC chip in a single piece. If the QR can't be scanned, it's read by NFC. Updating your data is always included.",
+      title: "One bracelet, everything included",
+      subtitle: "QR code and NFC chip in a single piece, and updating your data is always free.",
       popular: "Safe.Ride bracelet",
       label: "QR + NFC in one",
       monto: "$8,000",
@@ -6327,8 +6465,8 @@ const translations = {
     },
     demo: {
       eyebrow: "Preview",
-      title: "See what it looks like in an emergency",
-      subtitle: "This is the screen medical staff see when they scan the code. It's a fictional example, so you can see how it works.",
+      title: "What the person helping you sees",
+      subtitle: "This is how your profile appears on the phone of whoever scans the bracelet. The data is just an example.",
       verEjemplo: "See example",
       ocultarEjemplo: "Hide example",
       badge: "Example — fictional data",
@@ -6345,9 +6483,9 @@ const translations = {
       armarFicha: "Build my ID for the chip",
     },
     privacidad: {
-      eyebrow: "Privacy & security",
-      title: "Your data, always under your control",
-      subtitle: "Safe.Ride only shows what's useful in an emergency. Everything else stays private and you manage it.",
+      eyebrow: "Privacy",
+      title: "You decide what is shown",
+      subtitle: "Your profile only shows what helps in an emergency. Everything else stays private.",
       c1: { title: "Only the essentials are public", desc: "The ID shows blood type, allergies, medication, conditions and an emergency contact. Your home address only shows if you choose it (for minors, it stays hidden). We don't ask for ID numbers or bank details." },
       c2: { title: "You decide what's shown", desc: "View, correct or delete your ID anytime from your private link. We ask for your consent before publishing it." },
       c3: { title: "No tracking, no ads", desc: "We don't sell your data or use it for anything other than showing your emergency ID." },
@@ -6355,9 +6493,9 @@ const translations = {
       note: "The public ID is read-only: no one can change your data by scanning the code.",
     },
     titularidad: {
-      eyebrow: "Your data",
-      title: "Same bracelet. Your ID, always up to date.",
-      subtitle: "Changing a detail doesn't mean making a new bracelet.",
+      eyebrow: "Always up to date",
+      title: "Change your data, not your bracelet",
+      subtitle: "Updating your profile is free and doesn't need a new bracelet.",
       medicos: {
         eyebrow: "Medical data",
         title: "Edited freely, at no cost",
@@ -6443,7 +6581,7 @@ const translations = {
       m3: "Cash",
       eyebrow: "Delivery in Baradero",
       title: "Order your bracelet",
-      subtitle: "Sign in with Google, fill in your ID and choose how to get it. We write the QR and the chip and hand you the bracelet ready to use. For now we only deliver in Baradero.",
+      subtitle: "Sign in with Google, fill in your profile and choose how to receive it. We record the QR and the chip and hand it to you ready to use.",
       total: "Total",
       confirmar: "Next: fill in my ID",
       disclaimer: "In the next step you sign in with Google and fill in your ID. We write the QR and the chip and hand you the bracelet ready to use.",
@@ -6465,7 +6603,7 @@ const translations = {
       a10: "An engraved bracelet has limited space and, to change a detail, you need a new one. With Safe.Ride you change your ID anytime without touching the bracelet, and it can be read by QR or NFC.",
       q11: "Can I use it for my family?",
       a11: "Yes. Each person has their own bracelet and ID. For anyone under 18, a parent or guardian fills in and authorizes the ID.",
-      eyebrow: "Frequently asked questions",
+      eyebrow: "Questions",
       title: "FAQ",
       q1: "Is my medical data public?",
       a1: "No. Only the essentials for an emergency are shown (blood type, allergies, medication, contact). The rest of your profile stays private and only you can edit it.",
@@ -6748,6 +6886,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Marca en el navbar el link de la sección que se está viendo.
 function initActiveNav() {
+  if (document.documentElement.classList.contains("con-vistas")) return;
   const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
   if (!links.length || !("IntersectionObserver" in window)) return;
 
@@ -7637,6 +7776,76 @@ function initDownloads() {
     var io = new IntersectionObserver(function (e) { if (e.some(function (x) { return x.isIntersecting; })) { io.disconnect(); window.cargarMiFicha(); } }, { rootMargin: "900px 0px" });
     io.observe(zona);
   } else window.cargarMiFicha();
+})();
+</script>
+
+<script>
+// ===== Pantallas: cada parte de la página se ve sola =====
+// El menú, las tarjetas del inicio y los botones Anterior/Siguiente cambian
+// de pantalla. La dirección (#...) se actualiza, así el botón Atrás funciona.
+(function () {
+  var html = document.documentElement;
+  if (!html.classList.contains("con-vistas")) return;
+  var partes = Array.prototype.slice.call(document.querySelectorAll("[data-vista]"));
+  var menu = Array.prototype.slice.call(document.querySelectorAll(".nav-links a[href^='#']"));
+  var actual = null;
+
+  function vistaDe(el) { var w = el && el.closest("[data-vista]"); return w ? w.dataset.vista : null; }
+
+  function mostrar(v, destino) {
+    if (v !== actual) {
+      var primera = null;
+      partes.forEach(function (p) {
+        var es = p.dataset.vista === v;
+        p.classList.toggle("vista-activa", es);
+        p.classList.remove("vista-primera");
+        if (es && !primera) primera = p;
+      });
+      if (primera) primera.classList.add("vista-primera");
+      document.body.setAttribute("data-vista-actual", v);
+      actual = v;
+      menu.forEach(function (a) {
+        var t = document.getElementById(a.getAttribute("href").slice(1));
+        var es = vistaDe(t) === v;
+        a.classList.toggle("is-active", es);
+        if (es) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+      });
+      window.dispatchEvent(new Event("resize"));
+    }
+    // Al cambiar de parte se arranca desde arriba; si el link apunta a algo de adentro, se va ahí.
+    var primero = destino && (destino.matches("[data-vista]") || destino.matches(".section.grupo") || destino.id === "top" || destino.closest(".hero"));
+    if (!destino || primero) window.scrollTo(0, 0);
+    else destino.scrollIntoView({ block: "start" });
+  }
+
+  function ir() {
+    var h = decodeURIComponent(location.hash.slice(1));
+    if (/^(nuevo|pedir)=/.test(h)) { mostrar("pedila", document.getElementById("mi-ficha")); return; }
+    var el = h && h.indexOf("=") < 0 ? document.getElementById(h) : null;
+    if (el && el.id === "top") { mostrar("inicio", null); return; }
+    var v = el ? (el.dataset.vista || vistaDe(el)) : null;
+    if (!v && el) { if (!actual) mostrar("inicio", null); el.scrollIntoView({ block: "start" }); return; }
+    mostrar(v || "inicio", el);
+  }
+
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest("a[href^='#']");
+    if (!a) return;
+    var href = a.getAttribute("href");
+    if (href.length < 2) return;
+    var t = document.getElementById(href.slice(1));
+    if (!t) return;
+    e.preventDefault();
+    if (location.hash !== href) history.pushState(null, "", href);
+    ir();
+    var foco = t.querySelector("h2, h1") || t;
+    if (!foco.hasAttribute("tabindex")) foco.setAttribute("tabindex", "-1");
+    try { foco.focus({ preventScroll: true }); } catch (err) {}
+  });
+  window.addEventListener("popstate", ir);
+  window.addEventListener("hashchange", ir);
+  ir();
 })();
 </script>
 </body>
