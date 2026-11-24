@@ -421,7 +421,19 @@ function lightModel(scene, renderer) {
   for (const [color, intensity, position] of [[0xfff7e6, 2.65, [-56, 72, 82]], [0xd2f3e5, 2.45, [24, 43, -82]], [0xdbedff, .72, [80, 16, 51]]]) {
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(...position); scene.add(light);
+    if (!scene.userData.keyLight) {
+      // La luz principal proyecta una sombra suave sobre el piso.
+      scene.userData.keyLight = light;
+      light.castShadow = true;
+      light.shadow.mapSize.set(1024, 1024);
+      light.shadow.radius = 6;
+      light.shadow.bias = -.0006;
+      Object.assign(light.shadow.camera, { left: -90, right: 90, top: 90, bottom: -90, near: 10, far: 260 });
+    }
   }
+  const catcher = new THREE.Mesh(new THREE.PlaneGeometry(220, 220), new THREE.ShadowMaterial({ opacity: .15 }));
+  catcher.rotation.x = -Math.PI / 2; catcher.position.set(2, -15.2, 4); catcher.receiveShadow = true;
+  scene.add(catcher);
   const shadow = graphicTexture(128, (ctx, size) => {
     const shade = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
     shade.addColorStop(0, '#071b14c4'); shade.addColorStop(.48, '#071b1470'); shade.addColorStop(1, '#071b1400');
@@ -435,9 +447,11 @@ function lightModel(scene, renderer) {
 function createViewer() {
   const stage = $('#stage');
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.04;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.toneMapping = THREE.NeutralToneMapping ?? THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.02;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   const canvas = renderer.domElement;
   canvas.tabIndex = 0;
   canvas.setAttribute('aria-label', 'Pulsera 3D. Usá las flechas para girar, más y menos para acercar o alejar e Inicio para recentrar.');
@@ -460,6 +474,7 @@ function createViewer() {
   const rig = new THREE.Group(); scene.add(rig);
   const parts = makeModel(rig);
   const floor = lightModel(scene, renderer);
+  rig.traverse(o => { if (o.isMesh) o.castShadow = true; });
   const shell = $('#callouts');
   const leaders = $('#leaders');
   const explodeButton = $('#explode');
@@ -541,14 +556,14 @@ function createViewer() {
     to.theta = from.theta + Math.atan2(Math.sin(angle), Math.cos(angle));
     orbit.minDistance = fit * .50;
     orbit.maxDistance = fit * 2.3;
-    flight = { from, to, origin: orbit.target.clone(), target: worn ? V(8,4,1) : exploded ? V(-3,-3,12) : V(1,-4,8), start: performance.now(), duration };
+    flight = { from, to, origin: orbit.target.clone(), target: worn ? V(8,4,1) : exploded ? V(-3,-3,12) : V(1,-4,8), start: performance.now(), duration, smooth: !!cine };
     if (!duration || reduceMotion.matches) advanceCamera(1);
     schedule();
   }
 
   function advanceCamera(t) {
     const { from, to, origin, target } = flight;
-    const mix = 1 - (1 - t) ** 3;
+    const mix = flight.smooth ? (t < .5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2) : 1 - (1 - t) ** 3;
     polar.set(THREE.MathUtils.lerp(from.radius, to.radius, mix), THREE.MathUtils.lerp(from.phi, to.phi, mix), THREE.MathUtils.lerp(from.theta, to.theta, mix));
     orbit.target.lerpVectors(origin, target, mix);
     camera.position.setFromSpherical(polar).add(orbit.target);
@@ -713,6 +728,65 @@ function createViewer() {
     if (on) { flight = null; view = ''; updateButtonStates(); }
     schedule();
   }
+
+  // ---------- Presentación (cinemática) ----------
+  // Arranca solo con el botón. Cualquier toque en el visor la corta.
+  let cine = null;
+  const cineButton = $('#cine');
+  const cineBox = $('#cine-texto');
+  const PASOS = [
+    { dir: V(118, 30, 150), t: 2300, armada: true, pieza: '', paso: 'Safe.Ride', titulo: 'Una pulsera, dos formas de leerla' },
+    { dir: V(0, 7, 120), t: 2100, armada: true, pieza: 'qr', paso: 'Por fuera', titulo: 'El código QR, siempre visible' },
+    { dir: V(-55, 100, -100), t: 2300, armada: false, pieza: 'chip', paso: 'Por dentro', titulo: 'El chip NFC, debajo del QR' },
+    { dir: V(96, 44, -70), t: 2300, armada: false, pieza: '', paso: 'Pieza por pieza', titulo: 'TPU flexible, 216 mm, 8 a 10 g' },
+    { dir: V(70, 57, 124), t: 2200, armada: true, pieza: '', paso: 'Lista', titulo: 'Se cierra con un perno a presión' },
+  ];
+  const ESPERA = 1500;
+  function mostrarTexto(p, i) {
+    if (!cineBox) return;
+    cineBox.hidden = !p;
+    if (!p) return;
+    $('#cine-paso').textContent = `${String(i + 1).padStart(2, '0')} / ${String(PASOS.length).padStart(2, '0')} · ${p.paso}`;
+    $('#cine-titulo').textContent = p.titulo;
+    cineBox.style.setProperty('--avance', `${(i + 1) / PASOS.length}`);
+    cineBox.classList.remove('entra'); void cineBox.offsetWidth; cineBox.classList.add('entra');
+  }
+  function pararCine() {
+    if (!cine) return;
+    clearTimeout(cine.timer); cine = null;
+    mostrarTexto(null);
+    stage.classList.remove('en-cine');
+    cineButton?.setAttribute('aria-pressed', 'false');
+    if (cineButton) cineButton.lastChild.textContent = ' Presentación';
+  }
+  function pasoCine(i) {
+    if (!cine) return;
+    if (i >= PASOS.length) { pararCine(); highlightPart(''); view = 'perspective'; updateButtonStates(); return; }
+    const p = PASOS[i];
+    cine.i = i;
+    worn = false;
+    if (exploded === p.armada) { exploded = !p.armada; labels = false; updateButtonStates(); }
+    highlightPart(p.pieza);
+    zoom = i === 0 ? 1.18 : 1;
+    frameCamera(p.dir, reduceMotion.matches ? 0 : p.t);
+    mostrarTexto(p, i);
+    cine.timer = setTimeout(() => pasoCine(i + 1), (reduceMotion.matches ? 0 : p.t) + ESPERA);
+  }
+  function empezarCine() {
+    setSpin(false);
+    cine = { i: 0, timer: 0 };
+    stage.classList.add('en-cine');
+    cineButton?.setAttribute('aria-pressed', 'true');
+    if (cineButton) cineButton.lastChild.textContent = ' Detener';
+    if (worn) { worn = false; view = 'perspective'; }
+    pasoCine(0);
+  }
+  cineButton?.addEventListener('click', () => (cine ? pararCine() : empezarCine()));
+  $('#viewer').addEventListener('click', ev => {
+    if (cine && ev.target.closest('button, a, input') && !ev.target.closest('#cine')) pararCine();
+  }, true);
+  canvas.addEventListener('pointerdown', () => pararCine());
+  canvas.addEventListener('keydown', () => pararCine());
 
   orbit.addEventListener('start', () => { flight = null; cameraInput = true; setSpin(false); });
   orbit.addEventListener('end', () => { cameraInput = false; });

@@ -4113,6 +4113,20 @@ html:not([data-theme="dark"]) .hero {
 .sr3d .mf-dato { display: grid; gap: 6px; }
 .sr3d .mf-dato span { font-size: .82rem; color: var(--text-secondary); }
 
+/* Presentación del visor 3D */
+.sr3d .cine-control[aria-pressed="true"] { background: var(--accent-fg); color: var(--bg, #0d140f); border-color: transparent; }
+.sr3d .cine-texto { position: absolute; left: 24px; bottom: 22px; z-index: 4; display: grid; gap: 4px; text-align: left; padding: 12px 20px 14px; min-width: min(340px, 70%); max-width: calc(100% - 48px); border-radius: 14px; background: rgba(8, 18, 13, .72); border: 1px solid rgba(168, 221, 193, .18); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #eef6f1; pointer-events: none; overflow: hidden; }
+.sr3d .cine-texto span { font: 600 .7rem/1 ui-monospace, "SFMono-Regular", Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; color: #9fdcbc; }
+.sr3d .cine-texto strong { font-size: clamp(1rem, 2.2vw, 1.35rem); font-weight: 650; letter-spacing: -.01em; }
+.sr3d .cine-texto i { position: absolute; left: 0; bottom: 0; height: 2px; width: calc(var(--avance, 0) * 100%); background: #9fdcbc; transition: width .6s ease; }
+.sr3d .cine-texto.entra strong, .sr3d .cine-texto.entra span { animation: cineEntra .55s cubic-bezier(.2,.7,.2,1) both; }
+.sr3d .cine-texto.entra span { animation-delay: .05s; }
+@keyframes cineEntra { from { opacity: 0; transform: translateY(8px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+.sr3d .stage.en-cine .stage-hint, .sr3d .stage.en-cine .stage-label { opacity: 0; transition: opacity .3s; }
+@media (prefers-reduced-motion: reduce) { .sr3d .cine-texto.entra strong, .sr3d .cine-texto.entra span { animation: none; } }
+@media (max-width: 560px) { .sr3d .cine-texto { left: 10px; right: 10px; bottom: 10px; min-width: 0; max-width: none; padding: 9px 12px 11px; } }
+
+@media (max-width: 560px) { .sr3d .viewer-actions { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 8px; } .sr3d .viewer-actions .viewer-button { justify-content: center; } }
 /* ===== Aprovechar el ancho de cada pantalla ===== */
 /* Tablet: las grillas se abren antes y el precio queda al lado de su explicación */
 @media (min-width: 900px) {
@@ -4243,7 +4257,8 @@ html:not([data-theme="dark"]) .hero {
     <symbol id="icon-expand" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></symbol>
     <symbol id="icon-collapse" viewBox="0 0 24 24"><path d="M4 9h5V4m11 5h-5V4M9 20v-5H4m11 5v-5h5"/></symbol>
     <symbol id="icon-spin" viewBox="0 0 24 24"><path d="M20 10a8.2 8.2 0 0 0-14-4L4 8m0-4v4h4m-4 6a8.2 8.2 0 0 0 14 4l2-2m0 4v-4h-4"/></symbol>
-    <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8 5v14m8-14v14" stroke-width="3"/></symbol>
+    <symbol id="icon-play" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></symbol>
+  <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M8 5v14m8-14v14" stroke-width="3"/></symbol>
 </svg>
 
 <!-- ============ NAVBAR ============ -->
@@ -4449,6 +4464,7 @@ html:not([data-theme="dark"]) .hero {
         <div class="viewer-top">
           <span class="viewer-id"><svg class="icon" aria-hidden="true"><use href="#icon-orbit"/></svg> Visor 3D</span>
           <div class="viewer-actions">
+            <button class="viewer-button cine-control" id="cine" type="button" aria-pressed="false" data-requires-3d><svg class="icon" aria-hidden="true"><use href="#icon-play"/></svg> Presentación</button>
             <button class="viewer-button spin-control" id="spin" type="button" aria-label="Giro 360°" title="Girar automáticamente" aria-pressed="false" data-requires-3d><svg class="icon" aria-hidden="true"><use href="#icon-spin"/></svg><span>Giro 360°</span></button>
             <button class="viewer-button label-control" id="toggle-labels" type="button" aria-pressed="false" data-requires-3d><svg class="icon" aria-hidden="true"><use href="#icon-tag"/></svg> Etiquetas</button>
             <button class="viewer-button explode" id="explode" type="button" aria-pressed="false" data-requires-3d><svg class="icon" aria-hidden="true"><use href="#icon-layers"/></svg> Desarmar</button>
@@ -4467,6 +4483,7 @@ html:not([data-theme="dark"]) .hero {
           <svg class="leaders" id="leaders" aria-hidden="true"></svg>
           <div class="callouts" id="callouts" role="group" aria-label="Piezas en el modelo" hidden></div>
           <div class="stage-label"><span></span> <span id="assembly-state" role="status">Armada</span></div>
+          <div class="cine-texto" id="cine-texto" aria-live="polite" hidden><span id="cine-paso"></span><strong id="cine-titulo"></strong><i aria-hidden="true"></i></div>
           <div class="stage-hint" id="stage-hint">Arrastrá para girar <span>·</span> Usá la rueda o dos dedos para acercar</div>
           <div class="fallback" id="fallback" hidden>
             <img src="./hardware/v2/vista_arriba.png" alt="Vista de arriba de la pulsera Safe.Ride con el centro redondo y el QR">
@@ -7583,7 +7600,7 @@ function initDownloads() {
   if (!zona) return;
   function cargar() {
     if (window.__visorCargado) return; window.__visorCargado = true;
-    var sc = document.createElement("script"); sc.src = "./pulsera-3d/visor.bundle.js?v=9"; document.body.appendChild(sc);
+    var sc = document.createElement("script"); sc.src = "./pulsera-3d/visor.bundle.js?v=10"; document.body.appendChild(sc);
   }
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (e) { if (e.some(function (x) { return x.isIntersecting; })) { io.disconnect(); cargar(); } }, { rootMargin: "900px 0px" });
