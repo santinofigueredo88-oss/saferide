@@ -1,3 +1,4 @@
+import { textoDelChip, medidaDelChip, grabarChip } from './chip.mjs';
 // Panel del equipo: ver los pedidos, imprimir el QR, grabar el chip y marcar el avance.
 import { cargarFirebase, cargarAuth, linkDeFicha, fichaVieja, fechaDeFicha } from './fichas.mjs?v=2';
 
@@ -139,40 +140,23 @@ for (const b of document.querySelectorAll('[data-ff]')) {
 $('buscar').addEventListener('input', () => pintarFichas());
 $('nfc-ayuda').textContent = hayNFC
   ? 'Este celular puede grabar chips: tocá «Grabar en el chip» y apoyá la pulsera en la parte de atrás del teléfono.'
-  : 'Para grabar el chip desde acá, abrí este panel en un celular Android con Chrome. Si no, copiá el link y grabalo con NFC Tools.';
+  : 'Para grabar el chip desde acá, abrí este panel en un celular Android con Chrome. Con NFC Tools, agregá el link como URL y los datos sin internet como Texto en la misma escritura.';
 
 
 function conPedido(id) { return pedidos.some(p => p.fichaId === id && p.estado !== 'cancelado'); }
-
-// Un link de URL en el chip: NTAG213 guarda unos 130 bytes útiles, NTAG215 unos 490.
-function tamanioChip(link) {
-  const bytes = new TextEncoder().encode(link.replace(/^https:\/\//, '')).length + 1;
-  if (bytes <= 130) return `Ocupa ${bytes} bytes: entra en NTAG213 o más grande.`;
-  if (bytes <= 490) return `Ocupa ${bytes} bytes: necesita NTAG215 o NTAG216.`;
-  return `Ocupa ${bytes} bytes: necesita NTAG216.`;
-}
-
-async function grabarChip(link, b) {
-  const original = b.textContent;
-  try {
-    b.disabled = true; b.textContent = 'Apoyá el chip en el celular…';
-    await new NDEFReader().write({ records: [{ recordType: 'url', data: link }] });
-    b.textContent = '¡Chip grabado!';
-  } catch (e) {
-    b.textContent = e.name === 'NotAllowedError' ? 'Falta permiso de NFC' : 'No se pudo grabar';
-  }
-  setTimeout(() => { b.disabled = false; b.textContent = original; }, 2500);
-}
 
 function accionesDeLink(acciones, canvas, link, nombre) {
   dibujarQR(canvas, link);
   canvas.setAttribute('aria-label', `QR de la ficha de ${nombre}`);
   if (hayNFC) acciones.append(boton('Grabar en el chip', true, ev => grabarChip(link, ev.target)));
-  acciones.append(boton('Copiar link del chip', false, async ev => {
-    try { await navigator.clipboard.writeText(link); ev.target.textContent = '¡Copiado!'; }
-    catch { ev.target.textContent = 'No se pudo copiar'; }
-    setTimeout(() => { ev.target.textContent = 'Copiar link del chip'; }, 1800);
-  }));
+  for (const [etiqueta, valor] of [['Copiar link del chip', link], ['Copiar texto sin internet', textoDelChip(link)]]) {
+    acciones.append(boton(etiqueta, false, async ev => {
+      const b = ev.currentTarget;
+      try { await navigator.clipboard.writeText(valor); b.textContent = '¡Copiado!'; }
+      catch { b.textContent = 'No se pudo copiar'; }
+      setTimeout(() => { b.textContent = etiqueta; }, 1800);
+    }));
+  }
   acciones.append(boton('Descargar QR', false, () => {
     const a = document.createElement('a');
     a.href = canvas.toDataURL('image/png');
@@ -221,7 +205,7 @@ function pintarFichas() {
     fila(dl, 'Contacto', [d.cn, d.ct].filter(Boolean).join(' · '));
     fila(dl, 'Localidad', d.l);
     const link = linkDeFicha(f.id, d);
-    const tam = document.createElement('p'); tam.className = 'tam'; tam.textContent = tamanioChip(link);
+    const tam = document.createElement('p'); tam.className = 'tam'; tam.textContent = medidaDelChip(link);
     izq.append(dl, tam);
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = 480;
@@ -331,7 +315,7 @@ function pintar() {
     if (p.ficha) {
       const link = linkDeFicha(p.fichaId, p.ficha);
       accionesDeLink(acciones, canvas, link, p.nombreFicha);
-      const tam = document.createElement('p'); tam.className = 'tam'; tam.textContent = tamanioChip(link);
+      const tam = document.createElement('p'); tam.className = 'tam'; tam.textContent = medidaDelChip(link);
       izq.append(tam);
     }
     const sig = siguiente(p);

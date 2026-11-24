@@ -1,3 +1,4 @@
+import { textoDelChip, medidaDelChip, grabarChip } from './chip.mjs';
 // Página "Mi ficha": entrar con Google, crear la ficha y cambiar los datos médicos.
 import { cargarFirebase, cargarAuth, CAMPOS, nuevoCodigo, linkDeFicha, fichaVieja } from './fichas.mjs?v=2';
 
@@ -344,9 +345,8 @@ function mostrarListo(id, datos) {
   $('link').value = link;
   $('ver').href = link;
   dibujarQR($('qr'), link);
-  const bytes = new TextEncoder().encode(link.replace(/^https:\/\//, '')).length;
-  const chip = bytes <= 132 ? 'NTAG213, NTAG215 Y NTAG216' : bytes <= 490 ? 'NTAG215 Y NTAG216' : 'NTAG216';
-  estado($('medida'), `OCUPA ${bytes} BYTES · ENTRA EN ${chip}`);
+  $('texto-chip').value = textoDelChip(link);
+  estado($('medida'), medidaDelChip(link));
   mostrar('v-listo');
 }
 
@@ -357,3 +357,7 @@ $('copiar').addEventListener('click', async () => {
   texto.textContent = '¡Copiado!';
   setTimeout(() => { texto.textContent = 'Copiar link'; }, 1800);
 });
+
+const grabar = $('grabar-chip');
+grabar.hidden = !('NDEFReader' in window);
+grabar.addEventListener('click', () => grabarChip($('link').value, grabar));
