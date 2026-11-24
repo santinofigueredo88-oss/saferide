@@ -3,10 +3,12 @@ import { cargarFirebase, cargarAuth, linkDeFicha, fichaVieja, fechaDeFicha } fro
 
 const EQUIPO = ['santinofigueredo88@gmail.com'];
 const ESTADOS = { nuevo: 'NUEVO', grabado: 'GRABADO', enviado: 'ENTREGADO', cancelado: 'CANCELADO' };
-const PRECIO = 8000;
-const ENVIO = 1000; // envío a domicilio, solo en Baradero
+// Desde el 25/11/2026: pulsera $12.000 y envío $2.500 (solo envíos en Baradero).
+// Los pedidos anteriores se cobran con los precios de ese momento ($8.000 y $1.000).
+const CAMBIO_PRECIO = Date.parse('2026-11-24T21:00:00-03:00');
 const esRetiro = p => p.envio?.entrega === 'retiro';
-const totalDe = p => p.cantidad * PRECIO + (esRetiro(p) ? 0 : ENVIO);
+const precios = p => ((p.creado?.toMillis?.() ?? Date.now()) < CAMBIO_PRECIO ? { PRECIO: 8000, ENVIO: 1000 } : { PRECIO: 12000, ENVIO: 2500 });
+const totalDe = p => { const { PRECIO, ENVIO } = precios(p); return p.cantidad * PRECIO + (esRetiro(p) ? 0 : ENVIO); };
 function siguiente(p) {
   if (p.estado === 'nuevo') return ['grabado', 'Marcar como grabada'];
   if (p.estado === 'grabado') return ['enviado', esRetiro(p) ? 'Marcar como retirada' : 'Marcar como entregada'];
@@ -302,7 +304,7 @@ function pintar() {
     chip.className = 'chip-estado'; chip.dataset.e = p.estado; chip.textContent = ESTADOS[p.estado] || p.estado;
     const dl = document.createElement('dl');
     const e = p.envio || {};
-    fila(dl, 'Entrega', esRetiro(p) ? 'Retiro por el local · escribile para acordar dónde y cuándo' : `Envío a domicilio (+$${ENVIO.toLocaleString('es-AR')})`);
+    fila(dl, 'Entrega', esRetiro(p) ? 'Retiro por el local · escribile para acordar dónde y cuándo' : `Envío a domicilio (+$${precios(p).ENVIO.toLocaleString('es-AR')})`);
     fila(dl, 'Recibe', e.nombre);
     fila(dl, 'Teléfono', e.telefono);
     if (!esRetiro(p)) fila(dl, 'Dirección', [e.direccion, e.ciudad].filter(Boolean).join(', '));

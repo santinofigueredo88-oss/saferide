@@ -177,25 +177,31 @@ function abrirPedido(fichaId) {
   const previo = envioGuardado();
   if (previo) {
     for (const k of ['nombre', 'telefono', 'direccion', 'referencia']) if (previo[k]) form.elements[k].value = previo[k];
-    if (previo.entrega) form.elements.entrega.value = previo.entrega;
     if (previo.cantidad) form.elements.cantidad.value = String(previo.cantidad);
   }
   actualizarPrecio();
   estado($('estado-pedido'), '');
   mostrar('f-pedido');
 }
-// Envío a domicilio solo en Baradero ($1.000) o retiro sin costo.
-const PRECIO = 8000, ENVIO = 1000;
+// Solo hacemos envíos a domicilio, y solo dentro de Baradero.
+const PRECIO = 12000, ENVIO = 2500;
+// Llega en 2 a 4 días hábiles (sin contar sábados ni domingos).
+function sumarHabiles(dias) {
+  const d = new Date();
+  while (dias > 0) { d.setDate(d.getDate() + 1); if (d.getDay() !== 0 && d.getDay() !== 6) dias--; }
+  return d;
+}
+function textoLlegada() {
+  const f = d => d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }).replace(',', '');
+  return `Te llega en 2 a 4 días hábiles: entre el ${f(sumarHabiles(2))} y el ${f(sumarHabiles(4))}.`;
+}
 function actualizarPrecio() {
   const form = $('f-pedido');
-  const domicilio = form.elements.entrega.value !== 'retiro';
-  for (const el of form.querySelectorAll('[data-solo-domicilio]')) el.hidden = !domicilio;
-  form.elements.direccion.required = domicilio;
   const n = Number(form.elements.cantidad.value || 1);
-  $('pedido-precio').textContent = `$${(PRECIO * n + (domicilio ? ENVIO : 0)).toLocaleString('es-AR')}`;
+  $('pedido-precio').textContent = `$${(PRECIO * n + ENVIO).toLocaleString('es-AR')}`;
+  $('pedido-llega').textContent = textoLlegada();
 }
 $('f-pedido').elements.cantidad.addEventListener('change', actualizarPrecio);
-for (const r of $('f-pedido').elements.entrega) r.addEventListener('change', actualizarPrecio);
 $('cancelar-pedido').addEventListener('click', () => cargarLista());
 $('ok-volver').addEventListener('click', () => cargarLista());
 
@@ -205,14 +211,12 @@ $('f-pedido').addEventListener('submit', async e => {
   if (!form.reportValidity()) return;
   const ficha = fichas.find(f => f.id === form.elements.ficha.value);
   if (!ficha) return;
-  const entrega = form.elements.entrega.value === 'retiro' ? 'retiro' : 'domicilio';
-  const envio = { entrega };
-  const campos = entrega === 'domicilio' ? ['nombre', 'telefono', 'direccion', 'referencia'] : ['nombre', 'telefono', 'referencia'];
-  for (const k of campos) {
+  const envio = { entrega: 'domicilio' };
+  for (const k of ['nombre', 'telefono', 'direccion', 'referencia']) {
     const v = form.elements[k].value.trim();
     if (v) envio[k] = v;
   }
-  if (entrega === 'domicilio') { envio.ciudad = 'Baradero'; envio.provincia = 'Buenos Aires'; envio.cp = '2942'; }
+  envio.ciudad = 'Baradero'; envio.provincia = 'Buenos Aires'; envio.cp = '2942';
   const pedido = {
     uid: usuario.uid, email: usuario.email, fichaId: ficha.id, nombreFicha: ficha.datos.nombre,
     cantidad: Number(form.elements.cantidad.value), envio, estado: 'nuevo',
@@ -227,6 +231,7 @@ $('f-pedido').addEventListener('submit', async e => {
     try { sessionStorage.removeItem('saferide-pedido'); } catch {}
     quierePedir = false;
     $('ok-nombre').textContent = ficha.datos.nombre;
+    $('ok-llega').textContent = textoLlegada();
     mostrar('v-pedido-ok');
   } catch (err) {
     console.error(err);
