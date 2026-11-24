@@ -1,46 +1,40 @@
-// Guarda la ficha en el celular para que abra aunque no haya internet.
-// Los datos de la persona no se guardan: vienen dentro del link del chip (después del #).
-const CACHE = 'saferide-ficha-v8';
+// Solo se almacena la plantilla pública, sin el identificador ni los datos del enlace.
+const CACHE = 'saferide-ficha-v9';
+const FICHA = new URL('ficha.html', self.registration.scope).href;
 const ARCHIVOS = [
-  './ficha.html',
-  './pulsera-3d/visor.css?v=4',
-  './pulsera-3d/tema.css?v=3',
-  './pulsera-3d/tema.js?v=2',
-  './pulsera-3d/red.svg',
+  FICHA,
+  ...['visor.css?v=4', 'tema.css?v=3', 'tema.js?v=2', 'red.svg']
+    .map(nombre => new URL('pulsera-3d/' + nombre, self.registration.scope).href),
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));
+self.addEventListener('install', evento => {
+  evento.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    await cache.addAll(ARCHIVOS.map(url => new Request(url, { cache: 'reload' })));
+    await self.skipWaiting();
+  })());
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys()
-      .then(claves => Promise.all(claves.filter(k => k.startsWith('saferide-ficha-') && k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+self.addEventListener('activate', evento => {
+  evento.waitUntil((async () => {
+    const anteriores = (await caches.keys()).filter(k => k.startsWith('saferide-ficha-') && k !== CACHE);
+    await Promise.all(anteriores.map(k => caches.delete(k)));
+    await self.clients.claim();
+  })());
 });
 
-// Solo se ocupa de los archivos de la ficha; el resto del sitio funciona como siempre.
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  const url = new URL(e.request.url);
-  if (url.origin !== location.origin) return;
-  const esFicha = /^\/ficha/i.test(url.pathname); // también /ficha, /Ficha.html o con %23
-  const esArchivo = ARCHIVOS.some(a => url.pathname.endsWith(a.slice(1).split('?')[0]));
-  if (!esFicha && !esArchivo) return;
-
-  // Primero intenta traer la versión nueva; si no hay internet, usa la guardada.
-  e.respondWith(
-    fetch(e.request)
-      .then(r => {
-        if (r.ok) {
-          const copia = r.clone();
-          caches.open(CACHE).then(c => c.put(esFicha ? './ficha.html' : e.request, copia));
-        }
-        return r;
-      })
-      .catch(() => caches.match(esFicha ? './ficha.html' : e.request)
-        .then(r => r || caches.match(e.request, { ignoreSearch: true })))
-  );
+self.addEventListener('fetch', evento => {
+  const req = evento.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
+  const esFicha = req.mode === 'navigate' && /^\/ficha(?:\.html)?\.*(?:%23.*)?\/?$/i.test(url.pathname);
+  const recurso = esFicha ? FICHA : ARCHIVOS.find(archivo => new URL(archivo).pathname === url.pathname);
+  if (!recurso) return;
+  // Safari puede usar la plantilla inmediatamente, incluso si la red tarda en fallar.
+  evento.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    const copia = await cache.match(recurso);
+    return copia || fetch(req);
+  })());
 });

@@ -92,6 +92,7 @@
       <h1 id="f-nombre"></h1>
       <p class="lede" id="f-sub"></p>
       <p class="medida" id="f-estado" role="status"></p>
+      <p class="nota" id="f-offline" role="status"></p>
 
       <section class="tarjeta" aria-labelledby="t-esenciales">
         <div class="tarjeta-titulo"><h2 id="t-esenciales">Lo más importante</h2><span>DATOS MÉDICOS</span></div>
@@ -192,12 +193,42 @@
     return d;
   }
 
+  async function prepararSinInternet() {
+    const aviso = $('f-offline');
+    aviso.textContent = 'Preparando la lectura sin internet en este navegador…';
+    let limite;
+    try {
+      const sw = navigator.serviceWorker;
+      if (!sw) throw new Error();
+      // Una visita sin red también puede usar una instalación anterior.
+      if (!sw.controller) await sw.register('/sw.js');
+      await Promise.race([
+        sw.ready,
+        new Promise((_, reject) => { limite = setTimeout(reject, 20000); }),
+      ]);
+      if (!await caches.match(new URL('/ficha.html', location.origin).href)) throw new Error();
+      aviso.textContent = 'Lista para abrir sin internet en este navegador. Podés volver a acercar la pulsera.';
+    } catch {
+      aviso.textContent = 'No se pudo preparar la lectura sin internet. Volvé a abrir este enlace con conexión.';
+    } finally {
+      clearTimeout(limite);
+    }
+  }
+
   async function iniciar() {
     const { id, p } = partes();
     const esencial = desdeLink(p);
-    if (esencial.n) { mostrarFicha(esencial); scrollTo(0, 0); }
+    if (esencial.n) {
+      mostrarFicha(esencial);
+      scrollTo(0, 0);
+      prepararSinInternet();
+    }
     if (!id) {
       if (!esencial.n) $('vista-crear').hidden = false;
+      return;
+    }
+    if (esencial.n && navigator.onLine === false) {
+      estado('SIN INTERNET · DATOS DEL ENLACE DE LA PULSERA');
       return;
     }
     if (esencial.n) estado('BUSCANDO LOS DATOS MÁS NUEVOS…');
@@ -233,7 +264,7 @@
 </script>
 <script>
   // Deja guardada la ficha en este celular para que abra aunque no haya internet.
-  if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+  if ('serviceWorker' in navigator && navigator.onLine) navigator.serviceWorker.register('/sw.js').catch(() => {});
 </script>
 </body>
 </html>
