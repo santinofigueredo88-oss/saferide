@@ -3,9 +3,21 @@ import { cargarFirebase, cargarAuth, CAMPOS, nuevoCodigo, linkDeFicha, fichaViej
 
 const $ = id => document.getElementById(id);
 const vistas = ['v-entrar', 'v-lista', 'form', 'v-listo', 'f-pedido', 'v-pedido-ok'];
+// En la página principal "Mi ficha" es una parte más: solo se mueve la pantalla
+// cuando la persona tocó algo ahí, nunca sola.
+const zona = $('mi-ficha');
+let interactuo = !zona;
+(zona || document).addEventListener('click', () => { interactuo = true; }, true);
+const PASO = { 'v-entrar': 1, 'v-lista': 2, form: 2, 'v-listo': 2, 'f-pedido': 3, 'v-pedido-ok': 4 };
 function mostrar(id) {
   for (const v of vistas) $(v).hidden = v !== id;
-  $(id).scrollIntoView({ block: 'nearest' });
+  const paso = PASO[id] || 1;
+  document.querySelectorAll('.mf-pasos [data-paso]').forEach(li => {
+    const n = Number(li.dataset.paso);
+    li.classList.toggle('hecho', n < paso);
+    li.classList.toggle('actual', n === paso);
+  });
+  if (interactuo) $(id).scrollIntoView({ block: 'nearest' });
 }
 function estado(el, texto, mal = false) {
   el.textContent = texto;
@@ -46,17 +58,39 @@ $('entrar').addEventListener('click', async () => {
 });
 $('salir').addEventListener('click', () => auth.signOut(sesion));
 
+// Si se llega desde "Creá tu ficha", los datos vienen en el link (#nuevo=1&n=...).
+let pendiente = null;
+function leerHash() {
+  const previo = new URLSearchParams(location.hash.slice(1));
+  if (previo.get('nuevo') !== '1' && previo.get('pedir') !== '1') return false;
+  pendiente = previo;
+  history.replaceState(null, '', location.pathname + (zona ? '#mi-ficha' : ''));
+  if (zona) {
+    $('prototypeModalClose')?.click();
+    interactuo = true;
+    zona.scrollIntoView({ block: 'start' });
+  }
+  return true;
+}
+function usarPendiente() {
+  if (!pendiente || !usuario) return false;
+  const previo = pendiente; pendiente = null;
+  if (previo.get('pedir') === '1') quierePedir = true;
+  if (previo.get('nuevo') === '1') abrirFormulario(null, previo);
+  else fichas.length ? abrirPedido() : abrirFormulario(null);
+  return true;
+}
+leerHash();
+addEventListener('hashchange', () => { if (leerHash()) usarPendiente(); });
+
 auth.onAuthStateChanged(sesion, async u => {
   usuario = u;
   if (!u) { mostrar('v-entrar'); return; }
   $('quien').textContent = u.email || u.displayName || 'tu cuenta';
   await cargarLista();
-  // Si se llega desde "Creá tu ficha" de la portada, los datos vienen en el link.
-  const previo = new URLSearchParams(location.hash.slice(1));
-  if (previo.get('pedir') === '1') quierePedir = true;
-  if (previo.get('nuevo') === '1' || previo.get('pedir') === '1') history.replaceState(null, '', location.pathname);
-  if (previo.get('nuevo') === '1') abrirFormulario(null, previo);
-  else if (quierePedir) fichas.length ? abrirPedido() : abrirFormulario(null);
+  if (usarPendiente()) return;
+  // La primera vez, después de entrar se completa la ficha y se sigue con el pedido.
+  if (zona && !fichas.length) { quierePedir = true; abrirFormulario(null); }
 });
 
 // ---------- Lista ----------
