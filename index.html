@@ -5398,13 +5398,16 @@ html:not([data-theme="dark"]) .hero {
           <button class="hero-primary" type="button" id="copiar"><svg class="icon" aria-hidden="true"><use href="#icon-copy"/></svg> <span>Copiar link</span></button>
           <a class="hero-secondary" id="ver" href="#" target="_blank" rel="noopener">Ver mi ficha <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a>
         </div>
-        <div class="tarjeta-titulo" style="margin-top:18px"><h2>Grabarlo en el chip con NFC Tools</h2></div>
+        <h3>Datos para leer sin internet</h3>
+        <textarea id="texto-chip" rows="5" readonly aria-label="Texto para grabar en el chip"></textarea>
+        <button type="button" id="grabar-chip" hidden>Grabar en el chip</button>
+        <div class="tarjeta-titulo" style="margin-top:18px"><h2>Grabar con NFC Tools</h2></div>
         <ol class="pasos">
-          <li><span>Copiá el link (si estás en la compu, mandátelo al celular).</span></li>
-          <li><span>En NFC Tools: <b>Escribir</b> → <b>Añadir un registro</b> → <b>URL / URI</b> y pegá el link.</span></li>
-          <li><span>Tocá <b>Escribir</b> y apoyá el chip hasta que diga “Escritura completa”.</span></li>
+          <li><span>En <b>Escribir</b>, prepará una lista nueva. Añadí un registro <b>URL / URI</b> y pegá el link de la ficha.</span></li>
+          <li><span>Añadí un segundo registro de tipo <b>Texto</b> y pegá los datos para leer sin internet.</span></li>
+          <li><span>Tocá <b>Escribir</b> para grabar ambos registros juntos. Para comprobarlo, desactivá el Wi-Fi y los datos móviles, abrí <b>Leer</b> y acercá la pulsera. Abrí el registro de texto.</span></li>
         </ol>
-        <p class="nota">El QR y el chip se graban <b>una sola vez</b>. Cuando cambies tus datos, con internet se ve lo nuevo. Sin internet se ve lo esencial del día en que lo grabaste; si cambió tu grupo, una alergia o el contacto, podés volver a grabar el chip con este link actualizado.</p>
+        <p class="nota">En iPhone, el aviso automático abre el enlace. Para ver el texto sin internet, usá una app lectora como NFC Tools. Si cambian los datos esenciales, volvé a grabar el chip.</p>
         <div class="hero-actions"><button type="button" id="volver-lista">Volver a mis fichas</button></div>
       </section>
       </div>
@@ -7764,7 +7767,7 @@ function initDownloads() {
   if (!zona) return;
   window.cargarMiFicha = function () {
     if (window.__fichaCargada) return; window.__fichaCargada = true;
-    var sc = document.createElement("script"); sc.type = "module"; sc.src = "./pulsera-3d/editar.mjs?v=7"; document.body.appendChild(sc);
+    var sc = document.createElement("script"); sc.type = "module"; sc.src = "./pulsera-3d/editar.mjs?v=8"; document.body.appendChild(sc);
   };
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (e) { if (e.some(function (x) { return x.isIntersecting; })) { io.disconnect(); window.cargarMiFicha(); } }, { rootMargin: "900px 0px" });
